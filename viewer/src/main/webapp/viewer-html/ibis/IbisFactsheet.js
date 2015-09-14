@@ -47,8 +47,6 @@ Ext.define("viewer.components.IbisFactsheet", {
             params: requestParams,
             success: function (result, request) {
                 me.appLayerList = Ext.JSON.decode(result.responseText);
-                // console.debug(me.appLayerList);
-
                 var infoComponents = me.viewerController.getComponentsByClassName("viewer.components.FeatureInfo");
                 for (var i = 0; i < infoComponents.length; i++) {
                     infoComponents[i].registerExtraLink(
@@ -349,7 +347,6 @@ Ext.define("viewer.components.IbisFactsheet", {
                                     relatedFactsheetFeature[relatedAttr[i].name] = result[f]["c" + i];
                                 }
                             }
-                            // console.debug("relatedFactsheetFeature", relatedFactsheetFeature);
                             me.factsheetFeature.related_features.bedrijven.push(relatedFactsheetFeature);
                         }
                     }
@@ -396,7 +393,7 @@ Ext.define("viewer.components.IbisFactsheet", {
      * @override
      */
     submitSettings: function (mapvalues) {
-        console.debug("submitting mapvalues: ", mapvalues);
+        // console.debug("submitting mapvalues: ", mapvalues);
         Ext.getCmp(this.name + 'formParams').setValue(Ext.JSON.encode(mapvalues));
         this.printForm.submit({
             target: '_blank'

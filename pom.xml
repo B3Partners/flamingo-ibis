@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.flamingo-mc</groupId>
+    <artifactId>ibis-flamingo-mc</artifactId>
+    <version>2.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>ibis-flamingo-mc</name>
+    <url>https://github.com/B3Partners/flamingo-ibis</url>
+    <properties>
+        <flamingo.version>4.5.7-SNAPSHOT</flamingo.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <scm>
+        <connection>scm:git:git@github.com:B3Partners/flamingo-ibis.git</connection>
+        <developerConnection>scm:git:git@github.com:B3Partners/flamingo-ibis.git</developerConnection>
+        <url>https://github.com/B3Partners/flamingo-ibis</url>
+        <tag>HEAD</tag>
+    </scm>
+    <distributionManagement>
+        <repository>
+            <id>repo.b3p.nl</id>
+            <name>B3Partners releases repository</name>
+            <url>http://repo.b3p.nl/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>repo.b3p.nl</id>
+            <name>B3Partners snapshots repository</name>
+            <url>http://repo.b3p.nl/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+    <dependencyManagement>
+    </dependencyManagement>
+    <repositories>
+        <repository>
+            <id>releases</id>
+            <name>Releases hosted by B3Partners</name>
+            <url>http://repo.b3p.nl/nexus/content/repositories/releases/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories />
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.2</version>
+                <configuration>
+                    <pushChanges>true</pushChanges>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <modules>
+        <module>viewer</module>
+        <module>viewer-admin</module>
+    </modules>
+    <developers>
+        <developer>
+            <name>Mark Prins</name>
+            <email>markprins@b3partners.nl</email>
+            <organization>B3Partners B.V.</organization>
+            <organizationUrl>http://www.b3partners.nl</organizationUrl>
+        </developer>
+    </developers>
+</project>
