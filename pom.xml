@@ -7,6 +7,11 @@
     <packaging>pom</packaging>
     <name>ibis-flamingo-mc</name>
     <url>https://github.com/B3Partners/flamingo-ibis</url>
+    <parent>
+        <groupId>org.flamingo-mc</groupId>
+        <artifactId>flamingo-mc</artifactId>
+        <version>4.5.7-SNAPSHOT</version>
+    </parent>
     <properties>
         <flamingo.version>4.5.7-SNAPSHOT</flamingo.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
