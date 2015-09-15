@@ -34,7 +34,15 @@ Ext.define("viewer.components.CustomConfiguration", {
                 name: 'allowDelete',
                 value: this.configObject.allowDelete !== undefined ? this.configObject.allowDelete : false,
                 labelWidth: this.labelWidth
-            },{
+            },
+            {
+                xtype: 'checkbox',
+                fieldLabel: 'Kopiëren toestaan',
+                name: 'allowCopy',
+                value: this.configObject.allowCopy !== undefined ? this.configObject.allowCopy : false,
+                labelWidth: this.labelWidth
+            },
+            {
                 itemId: 'prefixLabels',
                 xtype: 'panel',
                 collapsible: true,
@@ -57,11 +65,15 @@ Ext.define("viewer.components.CustomConfiguration", {
                 },
                 listeners: {
                     expand: {
-                        fn: function() { this.form.setHeight(this.form.getHeight() + 170); },
+                        fn: function () {
+                            this.form.setHeight(this.form.getHeight() + 170);
+                        },
                         scope: this
                     },
                     collapse: {
-                        fn: function() { this.form.setHeight(this.form.getHeight() - 170); },
+                        fn: function () {
+                            this.form.setHeight(this.form.getHeight() - 170);
+                        },
                         scope: this
                     }
                 }
@@ -80,15 +92,15 @@ Ext.define("viewer.components.CustomConfiguration", {
 //                value: this.configObject.workflowstatus || null
 //            }
         ]);
-        if(configObject.hasOwnProperty('prefixConfig') && configObject.prefixConfig.length !== 0) {
-            for(var i = 0; i < configObject.prefixConfig.length; i++) {
+        if (configObject.hasOwnProperty('prefixConfig') && configObject.prefixConfig.length !== 0) {
+            for (var i = 0; i < configObject.prefixConfig.length; i++) {
                 this.addPrefixLabel(configObject.prefixConfig[i]);
             }
             Ext.ComponentQuery.query('#prefixLabels')[0].expand();
         }
         this.form.setAutoScroll(true);
     },
-    addPrefixLabel: function(conf) {
+    addPrefixLabel: function (conf) {
         var container = Ext.ComponentQuery.query('#prefixLabels')[0];
         container.add({
             xtype: 'form',
@@ -100,27 +112,27 @@ Ext.define("viewer.components.CustomConfiguration", {
                 align: 'stretch'
             },
             items: [{
-                xtype: 'textfield',
-                name: 'prefix',
-                fieldLabel: 'Prefix',
-                value: conf ? conf.prefix : '',
-                maxLength: 1
-            }, {
-                xtype: 'textfield',
-                name: 'label',
-                fieldLabel: 'Label',
-                value: conf ? conf.label : '',
-                margin: '0 0 0 5'
-            }]
+                    xtype: 'textfield',
+                    name: 'prefix',
+                    fieldLabel: 'Prefix',
+                    value: conf ? conf.prefix : '',
+                    maxLength: 1
+                }, {
+                    xtype: 'textfield',
+                    name: 'label',
+                    fieldLabel: 'Label',
+                    value: conf ? conf.label : '',
+                    margin: '0 0 0 5'
+                }]
         });
     },
-    getConfiguration: function(){
+    getConfiguration: function () {
         var config = viewer.components.CustomConfiguration.superclass.getConfiguration.call(this);
         var prefixContainer = Ext.ComponentQuery.query('#prefixLabels')[0];
         var prefixes = [];
-        prefixContainer.items.each(function(row) {
+        prefixContainer.items.each(function (row) {
             var values = row.getValues();
-            if(values.prefix !== '' && values.label !== '') {
+            if (values.prefix !== '' && values.label !== '') {
                 prefixes.push(values);
             }
         });

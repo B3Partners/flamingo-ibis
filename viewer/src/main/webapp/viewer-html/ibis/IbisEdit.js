@@ -20,8 +20,6 @@
  */
 Ext.define("viewer.components.IbisEdit", {
     extend: "viewer.components.Edit",
-    //  /** (cached) workflow status. */
-    //  status: null,
     workflow_fieldname: null,
     workflowStore: null,
     tabbedFormPanels: {},
@@ -35,7 +33,7 @@ Ext.define("viewer.components.IbisEdit", {
      * @returns {viewer.components.IbisEdit}
      */
     constructor: function (conf) {
-        if(conf.hasOwnProperty('prefixConfig') && conf.prefixConfig.length !== 0) {
+        if (conf.hasOwnProperty('prefixConfig') && conf.prefixConfig.length !== 0) {
             conf.formLayout = {
                 type: 'accordion',
                 titleCollapse: true,
@@ -78,15 +76,15 @@ Ext.define("viewer.components.IbisEdit", {
         return this;
     },
     initAttributeInputs: function (appLayer) {
-        if(this.config.prefixConfig.length !== 0) {
+        if (this.config.prefixConfig.length !== 0) {
             this.inputContainer.getLayout().multi = true;
         }
         this.superclass.initAttributeInputs.call(this, appLayer);
         this.groupInputsByPrefix(appLayer);
         getNextIbisWorkflowStatus(user.roles, null, null);
     },
-    groupInputsByPrefix: function() {
-        if(this.config.prefixConfig.length === 0) {
+    groupInputsByPrefix: function () {
+        if (this.config.prefixConfig.length === 0) {
             return;
         }
         var itemList = this.inputContainer.items;
@@ -105,65 +103,72 @@ Ext.define("viewer.components.IbisEdit", {
             }
         };
         this.tabbedFormPanels = {
-            '__unprefixed__': Ext.create('Ext.panel.Panel', Ext.Object.merge({}, defaultConfig, { title: 'Algemeen', collapsed: false, dockedItems: this.getBottomBar(this.getPrefix(this.config.prefixConfig[0].prefix)) }))
+            '__unprefixed__': Ext.create('Ext.panel.Panel', Ext.Object.merge({}, defaultConfig, {title: 'Algemeen', collapsed: false, dockedItems: this.getBottomBar(this.getPrefix(this.config.prefixConfig[0].prefix))}))
         };
         var next, nextPrefix;
-        for(var i = 0; i < this.config.prefixConfig.length; i++) {
+        for (var i = 0; i < this.config.prefixConfig.length; i++) {
             next = this.config.prefixConfig[i + 1] || {};
             nextPrefix = this.getPrefix(next.prefix);
             this.tabbedFormPanels[this.getPrefix(this.config.prefixConfig[i].prefix)] = Ext.create('Ext.panel.Panel',
-                Ext.Object.merge({}, defaultConfig, {
-                    title: this.config.prefixConfig[i].label,
-                    dockedItems: nextPrefix ? this.getBottomBar(nextPrefix) : {}
-                })
-            );
+                    Ext.Object.merge({}, defaultConfig, {
+                        title: this.config.prefixConfig[i].label,
+                        dockedItems: nextPrefix ? this.getBottomBar(nextPrefix) : {}
+                    })
+                    );
         }
         var me = this;
-        itemList.each(function(item) {
+        itemList.each(function (item) {
             var fieldName = item.getName();
             var fieldPrefix = fieldName.substr(0, 2);
-            if(!me.tabbedFormPanels.hasOwnProperty(fieldPrefix)) {
+            if (!me.tabbedFormPanels.hasOwnProperty(fieldPrefix)) {
                 fieldPrefix = '__unprefixed__';
             }
             me.tabbedFormPanels[fieldPrefix].add(item);
             return true;
         });
-        for(var key in this.tabbedFormPanels) if(this.tabbedFormPanels.hasOwnProperty(key)) {
-            this.addFieldSet(this.tabbedFormPanels[key]);
-        }
+        for (var key in this.tabbedFormPanels)
+            if (this.tabbedFormPanels.hasOwnProperty(key)) {
+                this.addFieldSet(this.tabbedFormPanels[key]);
+            }
         this.inputContainer.getLayout().multi = false;
     },
-    getPrefix: function(prefix) {
+    getPrefix: function (prefix) {
         return prefix + '_';
     },
     getBottomBar: function (step) {
         return [{
-            xtype: 'toolbar',
-            dock: 'bottom',
-            border: 0,
-            items: [
-                '->',
-                {
-                    xtype: 'button',
-                    text: 'Volgende',
-                    handler: this.nextStep.bind(this, step)
-                }
-            ]
-        }];
+                xtype: 'toolbar',
+                dock: 'bottom',
+                border: 0,
+                items: [
+                    '->',
+                    {
+                        xtype: 'button',
+                        text: 'Volgende',
+                        handler: this.nextStep.bind(this, step)
+                    }
+                ]
+            }];
     },
     nextStep: function (step) {
         this.tabbedFormPanels[step].expand();
     },
-    addFieldSet: function(fieldSet) {
-        if(fieldSet.items.length === 0) {
+    addFieldSet: function (fieldSet) {
+        if (fieldSet.items.length === 0) {
             return;
         }
         this.inputContainer.add(fieldSet);
     },
     handleFeature: function (feature) {
         this.superclass.handleFeature.call(this, feature);
-        getNextIbisWorkflowStatus(user.roles, feature.workflow_status, Ext.getCmp(this.workflow_fieldname));
-        var s = this.workflowStore.getById(feature[this.workflow_fieldname]).get("label");
+        var s = "";
+        if (this.mode === "copy") {
+            getNextIbisWorkflowStatus({}, 'nieuw', Ext.getCmp(this.workflow_fieldname));
+            s = this.workflowStore.getById('nieuw').get("label");
+        } else {
+            getNextIbisWorkflowStatus(user.roles, feature.workflow_status, Ext.getCmp(this.workflow_fieldname));
+            s = this.workflowStore.getById(feature[this.workflow_fieldname]).get("label");
+        }
         Ext.getCmp(this.name + "workflowLabel").setText("Huidige workflow status: " + s);
     },
     createNew: function () {
@@ -178,7 +183,6 @@ Ext.define("viewer.components.IbisEdit", {
         var s = this.workflowStore.getById('archief').get('label');
         Ext.getCmp(this.name + "workflowLabel").setText("Huidige workflow status: " + s);
     },
-
     /**
      * copied from superclass Edit to override the actionbeanUrl.
      * @returns {undefined}
@@ -198,8 +202,11 @@ Ext.define("viewer.components.IbisEdit", {
                 feature[this.appLayer.geometryAttribute] = wkt;
             }
         }
-        if (this.mode == "edit") {
+        if (this.mode === "edit") {
             feature.__fid = this.currentFID;
+        }
+        if (this.mode === "copy") {
+            feature.__fid = null;
         }
         var me = this;
         try {
@@ -256,16 +263,21 @@ Ext.define("viewer.components.IbisEdit", {
             me.failed(error);
         });
     },
-// niet meer nodig, we gebruiken het attribuut veld
-//    /**
-//     * Set workflow status on the feature before trying to save.
-//     * @override
-//     * @return the changed feature
-//     */
-//    changeFeatureBeforeSave: function (feature) {
-//        feature.workflow_status = Ext.getCmp(this.name + "workflowStatus").getValue();
-//        return feature;
-//    },
+    /**
+     * Set workflow status on the feature before trying to save.
+     * @override
+     * @return the changed feature
+     */
+    changeFeatureBeforeSave: function (feature) {
+        if (this.mode === "copy") {
+            // in copy mode force nieuw and delete the fid
+            feature[this.workflow_fieldname] = this.workflowStore.getById('nieuw').getId();
+            this.currentFID = null;
+            delete feature.__fid;
+        }
+        
+        return feature;
+    },
     /**
      * Return the name of the superclass to inherit the css property.
      * @returns {String} base class name

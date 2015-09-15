@@ -128,8 +128,8 @@ function getNextIbisWorkflowStatus(userRoles, statusId, comboBox) {
             break;
     }
 
-    console.debug("lookup up workflows for ", workflowRole, statusId, comboBox);
-    console.debug("possibleNextStatus", possibleNextStatus);
+    //console.debug("lookup up workflows for ", workflowRole, statusId, comboBox);
+    // console.debug("possibleNextStatus", possibleNextStatus);
 
     if (possibleNextStatus) {
         // filter toepassen
