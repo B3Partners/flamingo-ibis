@@ -38,11 +38,11 @@
     </dependencyManagement>
     <repositories>
         <repository>
-            <id>releases</id>
-            <name>Releases hosted by B3Partners</name>
-            <url>http://repo.b3p.nl/nexus/content/repositories/releases/</url>
+            <id>b3p</id>
+            <name>Releases and snapshots hosted by B3Partners</name>
+            <url>http://repo.b3p.nl/nexus/content/groups/public/</url>
             <snapshots>
-                <enabled>false</enabled>
+                <enabled>true</enabled>
             </snapshots>
         </repository>
     </repositories>
