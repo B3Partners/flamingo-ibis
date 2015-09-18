@@ -16,11 +16,13 @@
  */
 /**
  * IBIS Report component.
+ * 
  * @author <a href="mailto:geertplaisier@b3partners.nl">Geert Plaisier</a>
  * @author <a href="mailto:markprins@b3partners.nl">Mark Prins</a>
  */
 Ext.define("viewer.components.IbisReport", {
     extend: "viewer.components.Component",
+    requires: ['viewer.components.GridPanel'],
     deActivatedTools: [],
     toolMapClick: null,
     step1: null,
@@ -29,6 +31,7 @@ Ext.define("viewer.components.IbisReport", {
     step4: null,
     form: null,
     terreinenStore: null,
+    reportdataStore: null,
     idColNaam: 'id',
     idVeldId: '',
     idVeldNaam: '',
@@ -79,6 +82,13 @@ Ext.define("viewer.components.IbisReport", {
         this.initConfig(conf);
         // update custom url, global var contextPath is not available until after page load
         this.config.actionbeanUrl = contextPath + "/action/ibisattributes";
+
+        Ext.define('reportdataModel', {
+            extend: 'Ext.data.Model',
+            fields: []
+        });
+
+
         this.schema = new Ext.data.schema.Schema();
         this.getDataModel();
         if (this.config.isPopup) {
@@ -204,9 +214,6 @@ Ext.define("viewer.components.IbisReport", {
                         schema: me.schema,
                         idProperty: me.idVeldNaam
                     });
-
-                    //console.debug("attributeList", me.attributeList);
-
                     if (!me.config.isPopup) {
                         me.createForms();
                     }
@@ -231,8 +238,7 @@ Ext.define("viewer.components.IbisReport", {
 
         if (this.config.isPopup) {
             this.popup.popupWin.setLoading("Bezig met ophalen van de lijst met bedrijven terreinen. <br /> Dit duurt even...");
-        }
-        else {
+        } else {
             Ext.get(this.getContentDiv()).mask("Bezig met ophalen van de lijst met bedrijventerreinen. <br /> Dit duurt even...");
         }
 
@@ -275,8 +281,6 @@ Ext.define("viewer.components.IbisReport", {
             }
         });
 
-//        console.debug(this.terreinenStore);
-
         this.step1 = Ext.create('Ext.panel.Panel', {
             title: 'Stap 1. Kies gebied',
             layout: {
@@ -293,7 +297,7 @@ Ext.define("viewer.components.IbisReport", {
                     xtype: 'combobox',
                     store: this.terreinenStore.collect(this.regioVeldNaam, true/*allowNull*/, true /*bypassFilter*/),
                     itemId: 'regio',
-                    name: this.name + 'regio',
+                    name: 'regio',
                     displayField: this.regioVeldNaam,
                     fieldLabel: 'WGR Regio',
                     value: '',
@@ -307,7 +311,7 @@ Ext.define("viewer.components.IbisReport", {
                     xtype: 'combobox',
                     store: this.terreinenStore.collect(this.gemeenteVeldNaam, true/*allowNull*/, false /*bypassFilter*/),
                     itemId: 'gemeente',
-                    name: this.name + 'gemeente',
+                    name: 'gemeente',
                     displayField: this.gemeenteVeldNaam,
                     fieldLabel: 'Gemeente',
                     value: '',
@@ -321,7 +325,7 @@ Ext.define("viewer.components.IbisReport", {
                     xtype: 'combobox',
                     store: this.terreinenStore,
                     itemId: 'terrein',
-                    name: this.name + 'terrein',
+                    name: 'terrein',
                     displayField: this.terreinVeldNaam,
                     fieldLabel: 'Bedrijventerrein',
                     value: '',
@@ -369,53 +373,56 @@ Ext.define("viewer.components.IbisReport", {
                 },
                 {
                     xtype: "combobox",
-                    store: [
-                        ['individual', 'Individuele gegevens'],
-                        ['aggregated', 'Geaggregeerde gegevens'],
-                        ['issue', 'Uitgifte']
-                    ],
                     itemId: 'reportType',
+                    name: 'reportType',
                     fieldLabel: 'Type rapport',
-                    value: 'individual',
+                    store: [
+                        ['INDIVIDUAL', 'Individuele gegevens'],
+                        ['AGGREGATED', 'Geaggregeerde gegevens'],
+                        ['ISSUE', 'Uitgifte']
+                    ],
+                    value: 'INDIVIDUAL',
                     listeners: {
                         change: this.reportTypeChange.bind(this)
                     }
                 },
                 {
                     xtype: "combobox",
-                    store: [
-                        ['area', 'Gelijk aan gebied'],
-                        ['detailed', 'Meer detail']
-                    ],
                     itemId: 'aggregationLevel',
+                    name: 'aggregationLevel',
                     fieldLabel: 'Aggregatie niveau',
-                    value: 'area',
+                    store: [
+                        ['ASAREA', 'Gelijk aan gebied'],
+                        ['MOREDETAIL', 'Meer detail']
+                    ],
+                    value: 'ASAREA',
                     hidden: true
                 },
                 {
                     xtype: 'datefield',
-                    anchor: '100%',
+                    itemId: 'fromDate',
                     fieldLabel: 'Tijdvak datum van',
                     name: 'fromDate',
-                    itemId: 'fromDate',
+                    anchor: '100%',
                     hidden: true
                 },
                 {
                     xtype: 'datefield',
+                    itemId: 'toDate',
                     fieldLabel: 'Tijdvak datum tot',
                     name: 'toDate',
-                    itemId: 'toDate',
                     hidden: true
                 },
                 {
                     xtype: "combobox",
-                    store: [
-                        ['no', 'Geen'],
-                        ['month', 'Maand']
-                    ],
                     itemId: 'aggregationLevelDate',
+                    name: 'aggregationLevelDate',
                     fieldLabel: 'Aggregatie niveau tijdvak',
-                    value: 'no',
+                    store: [
+                        ['NONE', 'Geen'],
+                        ['MONTH', 'Maand']
+                    ],
+                    value: 'NONE',
                     hidden: true
                 }
             ],
@@ -442,7 +449,8 @@ Ext.define("viewer.components.IbisReport", {
                 xtype: 'checkbox',
                 aggregationType: false,
                 boxLabel: this.attributeList[i].colName,
-                value: this.attributeList[i].colName
+                value: this.attributeList[i].colName,
+                name: this.attributeList[i].value
             });
         }
 
@@ -483,7 +491,21 @@ Ext.define("viewer.components.IbisReport", {
         this.step4 = Ext.create('Ext.grid.Panel', {
             title: 'Resultaat',
             store: null,
-            forceFit: true
+            forceFit: true,
+            dockedItems: [{
+                                    xtype: 'toolbar',
+                                    docked: 'bottom',
+                                    items: [{
+                                                xtype: 'button',
+                                                flex: 1,
+                                                text: 'Download to Excel',
+                                                handler: function (b, e) {
+                                                        b.up('grid').downloadExcelXml();
+                                                }
+                                        }]
+                            }
+
+                        ]
         });
 
         this.form = new Ext.form.FormPanel({
@@ -524,8 +546,6 @@ Ext.define("viewer.components.IbisReport", {
      * @returns {undefined}
      */
     updateRegio: function (combo, value, scope) {
-
-
         this.terreinenStore.clearFilter(false);
 
         // zoom to regio
@@ -647,7 +667,14 @@ Ext.define("viewer.components.IbisReport", {
     mapClicked: function (toolMapClick, comp) {
         var me = this;
         this.deactivateMapClick();
-        Ext.get(this.getContentDiv()).mask("Bezig met ophalen van bedrijventerrein...");
+
+        if (this.config.isPopup) {
+            this.popup.popupWin.setLoading("Bezig met ophalen van bedrijventerrein...");
+        } else {
+            Ext.get(this.getContentDiv()).mask("Bezig met ophalen van bedrijventerrein...");
+        }
+
+
         var featureInfo = Ext.create("viewer.FeatureInfo", {
             viewerController: this.config.viewerController
         });
@@ -666,16 +693,18 @@ Ext.define("viewer.components.IbisReport", {
     featuresReceived: function (features) {
         // select in dropdown
         if (features && features.length > 0) {
-            Ext.get(this.getContentDiv()).unmask();
+            if (this.config.isPopup) {
+                this.popup.popupWin.setLoading(false);
+            } else {
+                Ext.get(this.getContentDiv()).unmask();
+            }
             var feature = features[0];
             this.resetStoreFilters();
             var s = feature.__fid;
             s = s.substr(s.lastIndexOf('.') + 1);
-            //this.step1.getComponent('terrein').select(this.terreinenStore.getById(s));
+
             this.step1.getComponent('terrein').setSelection(this.terreinenStore.getById(s));
-
-
-
+            //this.step1.getComponent('terrein').select(this.terreinenStore.getById(s));
 //            try {
 //                // try to zoom in
 //                var appLayer = this.viewerController.getAppLayerById(this.config.bedrijvenTerreinLayer);
@@ -694,7 +723,11 @@ Ext.define("viewer.components.IbisReport", {
 //                var zoomFeat = Ext.create("viewer.viewercontroller.controller.Feature", {_wktgeom: feature[geomIdx]});
 //                this.config.viewerController.mapComponent.getMap().zoomToExtent(zoomFeat.getExtent());
 //            } finally {
-//                Ext.get(this.getContentDiv()).unmask();
+//                   if (this.config.isPopup) {
+//                            this.popup.popupWin.setLoading(false);
+//                        } else {
+//                            Ext.get(this.getContentDiv()).unmask();
+//                        }
 //            }
         } else {
             this.featuresFailed("Niets gevonden, probeer opnieuw of kies uit de lijst met terreinen.");
@@ -703,11 +736,15 @@ Ext.define("viewer.components.IbisReport", {
     featuresFailed: function (msg) {
         this.resetStoreFilters();
         Ext.MessageBox.alert("Foutmelding", msg);
-        Ext.get(this.getContentDiv()).unmask();
+        if (this.config.isPopup) {
+            this.popup.popupWin.setLoading(false);
+        } else {
+            Ext.get(this.getContentDiv()).unmask();
+        }
     },
     reportTypeChange: function (combo, val) {
-        var showAggregation = val === 'aggregated' || val === 'issue';
-        var showTimeslot = val === 'issue';
+        var showAggregation = val === 'AGGREGATED' || val === 'ISSUE';
+        var showTimeslot = val === 'ISSUE';
         // Step 2 details
         this.step2.getComponent('aggregationLevel').setVisible(showAggregation);
         this.step2.getComponent('fromDate').setVisible(showTimeslot);
@@ -720,48 +757,60 @@ Ext.define("viewer.components.IbisReport", {
     },
     createReport: function (step) {
         this['step' + step].expand();
-        Ext.get(this.getContentDiv()).mask("Rapport samenstellen...");
-
-        console.debug("form values", this.form.getValues(/*asString*/false, /*dirtyOnly*/ true, /*includeEmptyText*/false, /*useDataValues*/false));
+        if (this.config.isPopup) {
+            this.popup.popupWin.setLoading("Rapport samenstellen...");
+        } else {
+            Ext.get(this.getContentDiv()).mask("Rapport samenstellen...");
+        }
 
         var me = this;
+        var formData = me.form.getValues(
+                /*asString*/false,
+                /*dirtyOnly*/ false,
+                /*includeEmptyText*/false,
+                /*useDataValues*/false);
+        formData.appLayer = me.config.bedrijvenTerreinLayer;
+        formData.application = me.config.viewerController.app.id;
+
         // get data from backend
-        var reportdata = Ext.create('Ext.data.Store', {
-            //schema: new Ext.data.schema.Schema(),
-            model: new Ext.data.Model(),
+        me.reportdataStore = Ext.create('Ext.data.Store', {
+            model: reportdataModel,
             proxy: {
                 type: 'ajax',
                 timeout: 120000,
                 url: me.config.actionbeanUrl,
+                actionMethods: {read: 'POST'},
                 reader: {
                     type: 'json'
+                },
+                listeners: {
+//                    exception: function (store, request, operation, eOpts) {
+//                        console.error("FOUT:", operation.error);
+//                    }
                 }
             },
             autoLoad: {
-                params: {
-                    appLayer: me.config.bedrijvenTerreinLayer,
-                    application: me.config.viewerController.app.id,
-                    terrein: me.step1.getComponent('terrein').getValue(),
-                    type: me.step2.getComponent('reportType').getValue(),
-                    query: 1,
-                    // TODO meer
-                    fields: me.form.getValues(/*asString*/false, /*dirtyOnly*/ true, /*includeEmptyText*/false, /*useDataValues*/false)
-                }
+                params: formData
             },
             pageSize: 0,
             listeners: {
-//                load: function (store, records, success, operation) {
-//                    console.debug('store load, records', records);
-//                    console.debug('store load, operation', operation);
-//                    console.debug('store load, success', success);
-//                },
                 metachange: function (store, meta) {
+                    // reconfigur grid and update model (up2date model is required for excel download)
                     me.step4.reconfigure(store, meta.columns);
+                    me.reportdataStore.model.fields = meta.fields;
+                },
+                load: function (store, records, successful, eOpts) {
+                    if (!successful) {
+                        Ext.MessageBox.alert("Fout", "Fout tijdens opvragen van de data: " + eOpts.error);
+                    }
                 }
             }
         });
-
-        Ext.get(this.getContentDiv()).unmask();
+        if (this.config.isPopup) {
+            this.popup.popupWin.setLoading(false);
+        } else {
+            Ext.get(this.getContentDiv()).unmask();
+        }
     },
     showWindow: function () {
         this.popup.show();
