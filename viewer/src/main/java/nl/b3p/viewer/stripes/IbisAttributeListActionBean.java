@@ -73,6 +73,22 @@ public class IbisAttributeListActionBean implements ActionBean {
     private static final String JSON_METADATA = "metaData";
     private ActionBeanContext context;
 
+    /**
+     * Base64 form data to echo back.
+     */
+    @Validate
+    private String data;
+    /**
+     * filename to echo back.
+     */
+    @Validate
+    private String filename;
+    /**
+     * mimetype to echo back.
+     */
+    @Validate
+    private String mimetype;
+
     @Validate
     private Application application;
 
@@ -110,13 +126,13 @@ public class IbisAttributeListActionBean implements ActionBean {
     /**
      * report reportType
      */
-    @Validate(required = true, converter = EnumeratedTypeConverter.class)
+    @Validate(converter = EnumeratedTypeConverter.class)
     private ReportType reportType;
 
     /**
      * report type
      */
-    @Validate(required = true, converter = EnumeratedTypeConverter.class)
+    @Validate(converter = EnumeratedTypeConverter.class)
     private AggregationLevel aggregationLevel;
 
     enum AggregationLevel {
@@ -128,7 +144,7 @@ public class IbisAttributeListActionBean implements ActionBean {
 
         NONE, MONTH
     }
-    @Validate(required = true, converter = EnumeratedTypeConverter.class)
+    @Validate(converter = EnumeratedTypeConverter.class)
     private AggregationLevelDate aggregationLevelDate;
 
     @After(stages = LifecycleStage.BindingAndValidation)
@@ -143,6 +159,27 @@ public class IbisAttributeListActionBean implements ActionBean {
                 || !Authorizations.isAppLayerReadAuthorized(application, appLayer, context.getRequest())) {
             unauthorized = true;
         }
+    }
+
+    /**
+     * Echo back the form data. A fallback for IE and browsers that don't
+     * support client side downloads.
+     *
+     * @return
+     * @throws Exception
+     */
+    public Resolution download() throws Exception {
+        if (data == null) {
+            throw new IllegalArgumentException("Data cannot be null.");
+        }
+        if (mimetype == null) {
+            mimetype = "application/vnd.ms-excel";
+        }
+        if (filename == null) {
+            filename = "ibisrapportage.xls";
+        }
+        log.debug("returning excel:" + data);
+        return new StreamingResolution(mimetype, new StringReader(data)).setFilename(filename).setAttachment(false);
     }
 
     @DefaultHandler
@@ -328,6 +365,30 @@ public class IbisAttributeListActionBean implements ActionBean {
     }
 
     //<editor-fold defaultstate="collapsed" desc="getters en setters">
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public String getMimetype() {
+        return mimetype;
+    }
+
+    public void setMimetype(String mimetype) {
+        this.mimetype = mimetype;
+    }
+
     @Override
     public void setContext(ActionBeanContext context) {
         this.context = context;

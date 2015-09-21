@@ -493,19 +493,26 @@ Ext.define("viewer.components.IbisReport", {
             store: null,
             forceFit: true,
             dockedItems: [{
-                                    xtype: 'toolbar',
-                                    docked: 'bottom',
-                                    items: [{
-                                                xtype: 'button',
-                                                flex: 1,
-                                                text: 'Download to Excel',
-                                                handler: function (b, e) {
-                                                        b.up('grid').downloadExcelXml();
-                                                }
-                                        }]
-                            }
-
-                        ]
+                    xtype: 'toolbar',
+                    docked: 'bottom',
+                    items: [{
+                            xtype: 'button',
+                            flex: 1,
+                            text: 'Download data (Excel)',
+                            id: this.name + "downloadBtn",
+                            disabled: true,
+                            handler: function (btn, evt) {
+                                btn.up('grid').downloadExcelXml(true, 'ibisrapportage', me.config.actionbeanUrl, {
+                                    download: 1,
+                                    mimetype: 'application/vnd.ms-excel',
+                                    filename: "ibisrapportage.xls",
+                                    appLayer: me.config.bedrijvenTerreinLayer,
+                                    application: me.config.viewerController.app.id
+                                });
+                                //contextPath + "/action/ibisattributes?download=1&applyer", //mimetype //filename
+                            }
+                        }]
+                }]
         });
 
         this.form = new Ext.form.FormPanel({
@@ -798,10 +805,13 @@ Ext.define("viewer.components.IbisReport", {
                     // reconfigur grid and update model (up2date model is required for excel download)
                     me.step4.reconfigure(store, meta.columns);
                     me.reportdataStore.model.fields = meta.fields;
+                    Ext.getCmp(me.name + "downloadBtn").setDisabled(false);
                 },
                 load: function (store, records, successful, eOpts) {
                     if (!successful) {
                         Ext.MessageBox.alert("Fout", "Fout tijdens opvragen van de data: " + eOpts.error);
+                        me.step4.getComponent('downloadBtn').setDisabled(true);
+                        Ext.getCmp(me.name + "downloadBtn").setDisabled(true);
                     }
                 }
             }
