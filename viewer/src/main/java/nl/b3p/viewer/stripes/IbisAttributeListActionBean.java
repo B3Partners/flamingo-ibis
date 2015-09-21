@@ -16,6 +16,7 @@
  */
 package nl.b3p.viewer.stripes;
 
+import com.vividsolutions.jts.geom.Geometry;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,11 +41,13 @@ import nl.b3p.viewer.config.app.ApplicationLayer;
 import nl.b3p.viewer.config.app.ConfiguredAttribute;
 import nl.b3p.viewer.config.security.Authorizations;
 import nl.b3p.viewer.config.services.AttributeDescriptor;
+import nl.b3p.viewer.config.services.FeatureTypeRelation;
 import nl.b3p.viewer.config.services.Layer;
 import nl.b3p.viewer.config.services.SimpleFeatureType;
 import nl.b3p.viewer.util.FeatureToJson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureSource;
 import org.geotools.data.Query;
 import org.geotools.data.simple.SimpleFeatureCollection;
@@ -74,7 +77,7 @@ public class IbisAttributeListActionBean implements ActionBean {
     private ActionBeanContext context;
 
     /**
-     * Base64 form data to echo back.
+     * Base64 form fData to echo back.
      */
     @Validate
     private String data;
@@ -162,11 +165,12 @@ public class IbisAttributeListActionBean implements ActionBean {
     }
 
     /**
-     * Echo back the form data. A fallback for IE and browsers that don't
-     * support client side downloads.
+     * Echo back the received base64 encoded form fData. A fallback for IE and
+     * browsers that don't support client side downloads.
      *
-     * @return
-     * @throws Exception
+     * @return excel download of the posted fData (posted fData is not validated
+     * for 'excel-ness')
+     * @throws Exception if fData is null or something goes wrong during IO
      */
     public Resolution download() throws Exception {
         if (data == null) {
@@ -212,7 +216,6 @@ public class IbisAttributeListActionBean implements ActionBean {
                 } else if (regio != null) {
                     areaType = QueryArea.REGIO;
                     gebiedsNaamQuery = "wgr_naam='" + regio + "'";
-
                 } else {
                     throw new IllegalArgumentException("Geen gebied opgegeven voor rapport.");
                 }
@@ -233,6 +236,7 @@ public class IbisAttributeListActionBean implements ActionBean {
                 json.put("success", Boolean.TRUE);
 
             } catch (Exception e) {
+                log.error("Fout tijdens genereren rapport data.", e);
                 error = e.getLocalizedMessage();
             }
         }
@@ -248,24 +252,26 @@ public class IbisAttributeListActionBean implements ActionBean {
     }
 
     private void reportIssued(JSONObject json) throws Exception {
-        if (fromDate == null || toDate == null) {
-            throw new IllegalArgumentException("Datum vanaf en datum tot zijn verplicht.");
-        }
+// TODO
+//        if (fromDate == null || toDate == null) {
+//            throw new IllegalArgumentException("Datum vanaf en datum tot zijn verplicht.");
+//        }
 
-        //log.debug("Maak uitgifte rapport voor gebied: " + gebiedsNaam + ", type " + areaType + ", van " + fromDate + ", tot " + toDate + ", aggregatie gebied " + aggregationLevel + ", aggregatie periode " + aggregationLevelDate);
         SimpleFeatureType ft = layer.getFeatureType();
+        SimpleFeatureType relFt = null;
+        // TODO assuming there is only one relate, get the foreign type
+        for (FeatureTypeRelation rel : ft.getRelations()) {
+            if (rel.getType().equals(FeatureTypeRelation.RELATE)) {
+                relFt = rel.getForeignFeatureType();
+                log.debug("foreign FT: " + relFt.getTypeName());
+                break;
+            }
+        }
+        SimpleFeatureIterator foreignIt = null;
+
         List<AttributeDescriptor> featureTypeAttributes = ft.getAttributes();
         SimpleFeatureSource fs = (SimpleFeatureSource) ft.openGeoToolsFeatureSource();
-
-        final Query q = new Query(fs.getName().toString());
-
-        switch (aggregationLevel) {
-            case ASAREA:
-                // group by 
-                break;
-            case MOREDETAIL:
-                break;
-        }
+        Query q = new Query(fs.getName().toString());
 
         Filter filter;
         // if terrein
@@ -275,71 +281,99 @@ public class IbisAttributeListActionBean implements ActionBean {
             //else regio or gemeente
             filter = ECQL.toFilter(this.gebiedsNaamQuery);
         }
-        List<String> propnames = Arrays.asList("a_plannaam", "datum");
-        q.setPropertyNames(propnames);
+        List<String> tPropnames = Arrays.asList("id", "a_plannaam", "datum");
+        q.setPropertyNames(tPropnames);
         q.setFilter(filter);
         q.setHandle("uitgifte-rapport");
         // TODO
         q.setMaxFeatures(FeatureToJson.MAX_FEATURES);
-        SimpleFeatureIterator it = null;
+
         try {
-            // metadata for data fields
+            // store terreinen in mem and get a list of the id's
+            SimpleFeatureCollection inMem = DataUtilities.collection(fs.getFeatures(q).features());
+            StringBuilder in = new StringBuilder();
+            SimpleFeatureIterator inMemFeats = inMem.features();
+            while (inMemFeats.hasNext()) {
+                SimpleFeature f = inMemFeats.next();
+                in.append(f.getAttribute("id")).append(",");
+            }
+            inMemFeats.close();
+
+            // get related features (terreinen)
+            SimpleFeatureSource foreignFs = (SimpleFeatureSource) relFt.openGeoToolsFeatureSource();
+            Query foreignQ = new Query(foreignFs.getName().toString());
+            foreignQ.setHandle("uitgifte-rapport-related");
+            List<String> propnames = Arrays.asList("kavelid", "datumuitgifte", "datum", "opp_geometrie", "uitgegevenaan");
+            foreignQ.setPropertyNames(propnames);
+
+            String query = "terreinid IN (" + in.substring(0, in.length() - 1) + ")";
+            // AND datum BETWEEN " + fromDate + " AND " + toDate;
+
+            log.debug("query: " + query);
+
+            foreignQ.setFilter(ECQL.toFilter(query));
+            foreignIt = foreignFs.getFeatures(foreignQ).features();
+
+            // metadata for fData fields
             JSONArray fields = new JSONArray();
             // columns for grid
             JSONArray columns = new JSONArray();
-            // data payload
+            // fData payload
             JSONArray datas = new JSONArray();
 
-            it = fs.getFeatures(q).features();
             boolean firstFeature = true;
-            while (it.hasNext()) {
-                SimpleFeature feature = it.next();
-                JSONObject data = new JSONObject();
+            while (foreignIt.hasNext()) {
+                SimpleFeature feature = foreignIt.next();
+                JSONObject fData = new JSONObject();
+
                 for (AttributeDescriptor attr : featureTypeAttributes) {
                     String name = attr.getName();
                     if (firstFeature) {
                         if (propnames.contains(name)) {
-                            // only do this for first feature
+                            // only load metadata into json this for first feature
                             fields.put(new JSONObject().put("name", name)/* het model van FLA(wel double) is rijker dan Ext (geen double) .put("type", attr.getType())*/.put("type", "auto"));
                             columns.put(new JSONObject().put("text", (attr.getAlias() != null ? attr.getAlias() : name)).put("dataIndex", name));
                         }
                     }
-                    // this is implicit
-                    data.put(attr.getName(), feature.getAttribute(attr.getName()));
+                    fData.put(attr.getName(), feature.getAttribute(attr.getName()));
                 }
-                datas.put(data);
+                datas.put(fData);
                 firstFeature = false;
 
                 log.debug(feature);
             }
+
+            // TODO
+//        switch (aggregationLevel) {
+//            case ASAREA:
+//                // group by
+//                break;
+//            case MOREDETAIL:
+//                break;
+//        }
             json.getJSONObject(JSON_METADATA).put("fields", fields);
             json.getJSONObject(JSON_METADATA).put("columns", columns);
-
-//            fields.put(new JSONObject().put("name", "item").put("type", "int"));
-//            fields.put(new JSONObject().put("name", "naam").put("type", "string"));
-//
-//            columns.put(new JSONObject().put("text", "Item").put("dataIndex", "item"));
-//            columns.put(new JSONObject().put("text", "Naam").put("dataIndex", "naam"));
-//
-//            datas.put(new JSONObject().put("test", 1).put("item", 2).put("naam", "test naam"));
-//            datas.put(new JSONObject().put("test", 3).put("item", 4).put("naam", "tweede naam"));
             json.put("data", datas);
             json.put("total", datas.length());
 
         } finally {
-            if (it != null) {
-                it.close();
+            if (foreignIt != null) {
+                foreignIt.close();
             }
             fs.getDataStore().dispose();
         }
     }
 
+    private void createJson(SimpleFeatureCollection sfc) {
+
+    }
+
     private void reportIndividualData(JSONObject json) throws Exception {
-        // metadata for data fields
+        // metadata for fData fields
         JSONArray fields = new JSONArray();
         // columns for grid
         JSONArray columns = new JSONArray();
-        // data payload
+        // fData payload
         JSONArray datas = new JSONArray();
 
         fields.put(new JSONObject().put("name", "test").put("type", "int"));

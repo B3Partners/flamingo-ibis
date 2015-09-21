@@ -1,16 +1,12 @@
-/viewer/src/main/resources/git.properties
-/viewer-admin/src/main/resources/git.properties
-
-/target/
-/viewer/target/
-/viewer-admin/target/
+**/git.properties
+**/target/**
 
 /viewer/src/main/webapp/WEB-INF/xsl/print/print.xml
 
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-dependency-reduced-pom.xml
-buildNumber.properties
+**/pom.xml.tag
+**/pom.xml.releaseBackup
+**/pom.xml.versionsBackup
+**/pom.xml.next
+**/release.properties
+**/dependency-reduced-pom.xml
+**/buildNumber.properties
