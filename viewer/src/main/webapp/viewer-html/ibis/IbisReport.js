@@ -214,6 +214,7 @@ Ext.define("viewer.components.IbisReport", {
                         schema: me.schema,
                         idProperty: me.idVeldNaam
                     });
+
                     if (!me.config.isPopup) {
                         me.createForms();
                     }
@@ -275,7 +276,7 @@ Ext.define("viewer.components.IbisReport", {
                             Ext.get(me.getContentDiv()).unmask();
                         }
                         // set intial filters on comboboxes
-                        me.resetStoreFilters();
+                        me.resetStoreFilters(false);
                     }
                 }
             }
@@ -337,20 +338,20 @@ Ext.define("viewer.components.IbisReport", {
                 },
                 {
                     xtype: 'button',
-                    text: 'Reset selectie',
+                    text: 'Reset selectie en kaartuitsnede',
                     margin: '10 0',
-                    handler: this.resetStoreFilters.bind(this)
+                    handler: this.resetStoreFilters.bind(this, true)
                 },
                 {
                     xtype: 'container',
-                    html: 'Of kies een terrein in de kaart.',
-                    margin: '0 0 10 0'
+                    html: 'Of kies een terrein in de kaart (klik op kaart).',
+                    margin: '5 0 0 0'
                 },
                 {
                     xtype: 'button',
                     text: 'Activeer klik op kaart',
                     handler: this.activateMapClick.bind(this),
-                    margin: '10 0'
+                    margin: '5 0'
                 }
             ],
             dockedItems: this.getBottomBar(1)
@@ -534,18 +535,29 @@ Ext.define("viewer.components.IbisReport", {
             renderTo: this.getContentDiv()
         });
     },
-    /**
-     * reset the terreinenStore and comboboxes.
+    /*
+     * Reset the terreinenStore filters and comboboxes, optionally reset the maps extent.
+     *
+     * @param {Boolean} resetMapExtend true to rest the map extend to the startExtent
+     * @returns void
      */
-    resetStoreFilters: function () {
+    resetStoreFilters: function (resetMapExtend) {
         this.terreinenStore.clearFilter(false);
         this.step1.getComponent("terrein").clearValue();
         this.step1.getComponent("gemeente").clearValue();
         this.step1.getComponent("regio").clearValue();
-        this.step1.getComponent("regio").setStore(this.terreinenStore.collect(this.regioVeldNaam, false, true));
-        this.step1.getComponent("gemeente").setStore(this.terreinenStore.collect(this.gemeenteVeldNaam, false, false));
 
-        // TODO eventueel helemaal uitzoomen???
+        this.step1.getComponent("regio").setStore(this.terreinenStore.collect(this.regioVeldNaam, false, true));
+        this.step1.getComponent("regio").getStore().sort('field1', 'ASC');
+
+        this.step1.getComponent("gemeente").setStore(this.terreinenStore.collect(this.gemeenteVeldNaam, false, false));
+        this.step1.getComponent("gemeente").getStore().sort('field1', 'ASC');
+
+        this.step1.getComponent("terrein").getStore().sort(this.terreinVeldNaam, 'ASC');
+
+        if (resetMapExtend) {
+            this.config.viewerController.mapComponent.getMap().zoomToExtent(this.config.viewerController.app.startExtent);
+        }
     },
     /**
      * update gemeente combobox after choosing regio
@@ -576,6 +588,7 @@ Ext.define("viewer.components.IbisReport", {
         });
 
         this.terreinenStore.addFilter(myfilter);
+        this.terreinenStore.sort(this.gemeenteVeldNaam, 'ASC');
         this.step1.getComponent("gemeente").setStore(this.terreinenStore.collect(this.gemeenteVeldNaam, false, false));
         this.step1.getComponent("gemeente").clearValue();
         this.step1.getComponent("terrein").clearValue();
@@ -609,6 +622,7 @@ Ext.define("viewer.components.IbisReport", {
             }
         });
         this.terreinenStore.addFilter(myfilter);
+        this.terreinenStore.sort(this.terreinVeldNaam, 'ASC');
     },
     /**
      * zoom to terrein.
@@ -706,7 +720,7 @@ Ext.define("viewer.components.IbisReport", {
                 Ext.get(this.getContentDiv()).unmask();
             }
             var feature = features[0];
-            this.resetStoreFilters();
+            this.resetStoreFilters(false);
             var s = feature.__fid;
             s = s.substr(s.lastIndexOf('.') + 1);
 
@@ -741,7 +755,7 @@ Ext.define("viewer.components.IbisReport", {
         }
     },
     featuresFailed: function (msg) {
-        this.resetStoreFilters();
+        this.resetStoreFilters(false);
         Ext.MessageBox.alert("Foutmelding", msg);
         if (this.config.isPopup) {
             this.popup.popupWin.setLoading(false);
