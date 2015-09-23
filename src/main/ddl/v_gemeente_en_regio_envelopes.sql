@@ -11,7 +11,7 @@ CREATE OR REPLACE VIEW "IBIS".v_gemeente_en_regio_envelopes AS
     gemeente.deelregio,
     regio.wgr_naam,
     regio.wgr_id,
-    st_envelope(gemeente.geom) AS bbox_gemeente,
+    st_buffer(st_envelope(gemeente.geom), 1000::double precision) AS bbox_gemeente,
     st_envelope(regio.geom) AS bbox_regio
    FROM gemeente,
     regio
