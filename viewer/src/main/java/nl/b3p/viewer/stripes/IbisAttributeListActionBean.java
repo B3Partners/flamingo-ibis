@@ -175,6 +175,8 @@ public class IbisAttributeListActionBean implements ActionBean {
     public Resolution download() throws Exception {
         if (data == null) {
             throw new IllegalArgumentException("Data cannot be null.");
+        } else if (unauthorized) {
+            throw new IllegalStateException("Not authorized.");
         }
         if (mimetype == null) {
             mimetype = "application/vnd.ms-excel";
@@ -251,11 +253,16 @@ public class IbisAttributeListActionBean implements ActionBean {
         return new StreamingResolution("application/json", new StringReader(json.toString()));
     }
 
+    /**
+     * uitgifte report.
+     *
+     * @param json that get the data added
+     * @throws Exception if any
+     */
     private void reportIssued(JSONObject json) throws Exception {
-// TODO
-//        if (fromDate == null || toDate == null) {
-//            throw new IllegalArgumentException("Datum vanaf en datum tot zijn verplicht.");
-//        }
+        if (fromDate == null || toDate == null) {
+            throw new IllegalArgumentException("Datum vanaf en datum tot zijn verplicht voor uitgifte.");
+        }
 
         SimpleFeatureType ft = layer.getFeatureType();
         SimpleFeatureType relFt = null;
@@ -270,6 +277,7 @@ public class IbisAttributeListActionBean implements ActionBean {
         SimpleFeatureIterator foreignIt = null;
 
         List<AttributeDescriptor> featureTypeAttributes = ft.getAttributes();
+        List<AttributeDescriptor> relFeatureTypeAttributes = relFt.getAttributes();
         SimpleFeatureSource fs = (SimpleFeatureSource) ft.openGeoToolsFeatureSource();
         Query q = new Query(fs.getName().toString());
 
@@ -303,11 +311,11 @@ public class IbisAttributeListActionBean implements ActionBean {
             SimpleFeatureSource foreignFs = (SimpleFeatureSource) relFt.openGeoToolsFeatureSource();
             Query foreignQ = new Query(foreignFs.getName().toString());
             foreignQ.setHandle("uitgifte-rapport-related");
-            List<String> propnames = Arrays.asList("kavelid", "datumuitgifte", "datum", "opp_geometrie", "uitgegevenaan");
+            List<String> propnames = Arrays.asList(/* "kavelid",*/"opp_geometrie", "datum", "uitgegevenaan", "datumuitgifte");
             foreignQ.setPropertyNames(propnames);
 
             String query = "terreinid IN (" + in.substring(0, in.length() - 1) + ")";
-            // AND datum BETWEEN " + fromDate + " AND " + toDate;
+            // AND datumuitgifte BETWEEN " + fromDate + " AND " + toDate;
 
             log.debug("query: " + query);
 
@@ -321,14 +329,15 @@ public class IbisAttributeListActionBean implements ActionBean {
             // fData payload
             JSONArray datas = new JSONArray();
 
-            boolean firstFeature = true;
+            boolean getMetadataFromFirstFeature = true;
             while (foreignIt.hasNext()) {
                 SimpleFeature feature = foreignIt.next();
                 JSONObject fData = new JSONObject();
 
-                for (AttributeDescriptor attr : featureTypeAttributes) {
+                for (AttributeDescriptor attr : relFeatureTypeAttributes) {
                     String name = attr.getName();
-                    if (firstFeature) {
+                    log.debug("got attribute name: " + name);
+                    if (getMetadataFromFirstFeature) {
                         if (propnames.contains(name)) {
                             // only load metadata into json this for first feature
                             fields.put(new JSONObject().put("name", name)/* het model van FLA(wel double) is rijker dan Ext (geen double) .put("type", attr.getType())*/.put("type", "auto"));
@@ -338,19 +347,29 @@ public class IbisAttributeListActionBean implements ActionBean {
                     fData.put(attr.getName(), feature.getAttribute(attr.getName()));
                 }
                 datas.put(fData);
-                firstFeature = false;
+                getMetadataFromFirstFeature = false;
 
                 log.debug(feature);
             }
 
             // TODO
-//        switch (aggregationLevel) {
-//            case ASAREA:
-//                // group by
-//                break;
-//            case MOREDETAIL:
-//                break;
-//        }
+            switch (aggregationLevel) {
+                case ASAREA:
+                    // group/aggregrate by area
+                    break;
+                case MOREDETAIL:
+                    break;
+            }
+            // TODO
+            switch (aggregationLevelDate) {
+                case MONTH:
+                    // get number of months in period
+                    // for each month add up opp_geometrie
+                    break;
+                case NONE:
+                default:
+                // do nothing
+            }
             json.getJSONObject(JSON_METADATA).put("fields", fields);
             json.getJSONObject(JSON_METADATA).put("columns", columns);
             json.put("data", datas);

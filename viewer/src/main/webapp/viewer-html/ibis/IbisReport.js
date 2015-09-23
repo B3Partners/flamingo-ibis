@@ -503,14 +503,19 @@ Ext.define("viewer.components.IbisReport", {
                             id: this.name + "downloadBtn",
                             disabled: true,
                             handler: function (btn, evt) {
-                                btn.up('grid').downloadExcelXml(true, 'ibisrapportage', me.config.actionbeanUrl, {
-                                    download: 1,
-                                    mimetype: 'application/vnd.ms-excel',
-                                    filename: "ibisrapportage.xls",
-                                    appLayer: me.config.bedrijvenTerreinLayer,
-                                    application: me.config.viewerController.app.id
-                                });
-                                //contextPath + "/action/ibisattributes?download=1&applyer", //mimetype //filename
+                                btn.up('grid').downloadExcelXml(
+                                        true,
+                                        me.step2.getComponent('reportType').getRawValue() + ' rapportage '
+                                        + me.step1.getComponent('terrein').getRawValue()
+                                        + ' ' + me.step1.getComponent('gemeente').getRawValue()
+                                        + ' ' + me.step1.getComponent('regio').getRawValue(),
+                                        me.config.actionbeanUrl, {
+                                            download: 1,
+                                            mimetype: 'application/vnd.ms-excel',
+                                            filename: "ibisrapportage.xls",
+                                            appLayer: me.config.bedrijvenTerreinLayer,
+                                            application: me.config.viewerController.app.id
+                                        });
                             }
                         }]
                 }]

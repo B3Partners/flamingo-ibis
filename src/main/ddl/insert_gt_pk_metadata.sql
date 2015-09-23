@@ -14,5 +14,6 @@ SET search_path = "IBIS", pg_catalog;
 --
 
 INSERT INTO gt_pk_metadata VALUES ('IBIS', 'v_component_ibis_report', 'id', NULL, 'assigned', NULL);
+INSERT INTO gt_pk_metadata VALUES ('IBIS', 'v_component_ibis_report_uitgifte', 'kavelid', NULL, 'assigned', NULL);
 INSERT INTO gt_pk_metadata VALUES ('IBIS', 'v_gemeente_en_regio_envelopes', 'gem_id', NULL, 'assigned', NULL);
 INSERT INTO gt_pk_metadata VALUES ('IBIS', 'v_factsheet_terrein_info', 'terreinid', NULL, 'assigned', NULL);
