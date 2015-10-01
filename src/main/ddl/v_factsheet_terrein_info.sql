@@ -71,7 +71,7 @@ CREATE OR REPLACE VIEW "IBIS".v_factsheet_terrein_info AS
     round(v_terrein_oppervlakte.opp_bruto / 1000::numeric, 2) AS opp_bruto_ha,
     v_gemeente_en_regio_envelopes.naam AS gemeente_naam,
     v_gemeente_en_regio_envelopes.cbscode,
-    v_gemeente_en_regio_envelopes.wgr_naam,
+    v_gemeente_en_regio_envelopes.vvr_naam,
     v_gemeente_en_regio_envelopes.corop,
     v_gemeente_en_regio_envelopes.deelregio,
     v_gemeente_en_regio_envelopes.provincie,

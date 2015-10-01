@@ -9,13 +9,13 @@ CREATE OR REPLACE VIEW "IBIS".v_gemeente_en_regio_envelopes AS
     gemeente.provincie,
     gemeente.corop,
     gemeente.deelregio,
-    regio.wgr_naam,
-    regio.wgr_id,
+    regio.vvr_naam,
+    regio.vvr_id,
     st_buffer(st_envelope(gemeente.geom), 1000::double precision) AS bbox_gemeente,
     st_envelope(regio.geom) AS bbox_regio
    FROM gemeente,
     regio
-  WHERE gemeente.wgr_id = regio.wgr_id;
+  WHERE gemeente.vvr_id = regio.vvr_id;
 
 ALTER TABLE "IBIS".v_gemeente_en_regio_envelopes
   OWNER TO ibis;

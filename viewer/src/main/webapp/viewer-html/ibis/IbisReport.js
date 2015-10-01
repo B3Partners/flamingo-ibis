@@ -52,7 +52,7 @@ Ext.define("viewer.components.IbisReport", {
     gemeente_geomVeldId: '',
     gemeente_geomVeldNaam: '',
     //
-    regioColNaam: 'wgr_naam',
+    regioColNaam: 'vvr_naam',
     regioVeldId: '',
     regioVeldNaam: '',
     //

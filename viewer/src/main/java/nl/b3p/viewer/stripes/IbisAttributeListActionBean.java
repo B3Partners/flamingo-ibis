@@ -18,11 +18,13 @@ package nl.b3p.viewer.stripes;
 
 import com.vividsolutions.jts.geom.Geometry;
 import java.io.StringReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.action.After;
@@ -217,7 +219,7 @@ public class IbisAttributeListActionBean implements ActionBean {
                     gebiedsNaamQuery = "naam='" + gemeente + "'";
                 } else if (regio != null) {
                     areaType = QueryArea.REGIO;
-                    gebiedsNaamQuery = "wgr_naam='" + regio + "'";
+                    gebiedsNaamQuery = "vvr_naam='" + regio + "'";
                 } else {
                     throw new IllegalArgumentException("Geen gebied opgegeven voor rapport.");
                 }
@@ -263,6 +265,8 @@ public class IbisAttributeListActionBean implements ActionBean {
         if (fromDate == null || toDate == null) {
             throw new IllegalArgumentException("Datum vanaf en datum tot zijn verplicht voor uitgifte.");
         }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        sdf.setTimeZone(TimeZone.getDefault());
 
         SimpleFeatureType ft = layer.getFeatureType();
         SimpleFeatureType relFt = null;
@@ -279,7 +283,7 @@ public class IbisAttributeListActionBean implements ActionBean {
         List<AttributeDescriptor> featureTypeAttributes = ft.getAttributes();
         List<AttributeDescriptor> relFeatureTypeAttributes = relFt.getAttributes();
         SimpleFeatureSource fs = (SimpleFeatureSource) ft.openGeoToolsFeatureSource();
-        Query q = new Query(fs.getName().toString());
+        SimpleFeatureSource foreignFs = (SimpleFeatureSource) relFt.openGeoToolsFeatureSource();
 
         Filter filter;
         // if terrein
@@ -290,6 +294,7 @@ public class IbisAttributeListActionBean implements ActionBean {
             filter = ECQL.toFilter(this.gebiedsNaamQuery);
         }
         List<String> tPropnames = Arrays.asList("id", "a_plannaam", "datum");
+        Query q = new Query(fs.getName().toString());
         q.setPropertyNames(tPropnames);
         q.setFilter(filter);
         q.setHandle("uitgifte-rapport");
@@ -308,16 +313,18 @@ public class IbisAttributeListActionBean implements ActionBean {
             inMemFeats.close();
 
             // get related features (terreinen)
-            SimpleFeatureSource foreignFs = (SimpleFeatureSource) relFt.openGeoToolsFeatureSource();
             Query foreignQ = new Query(foreignFs.getName().toString());
             foreignQ.setHandle("uitgifte-rapport-related");
-            List<String> propnames = Arrays.asList(/* "kavelid",*/"opp_geometrie", "datum", "uitgegevenaan", "datumuitgifte");
+            List<String> propnames = Arrays.asList(/* "kavelid",*/"opp_geometrie", /*"datumstart", "uitgegevenaan",*/ "datumuitgifte");
             foreignQ.setPropertyNames(propnames);
 
-            String query = "terreinid IN (" + in.substring(0, in.length() - 1) + ")";
-            // AND datumuitgifte BETWEEN " + fromDate + " AND " + toDate;
-
-            log.debug("query: " + query);
+            String query = "terreinid IN ("
+                    + in.substring(0, in.length() - 1)
+                    + ") "
+                    + " AND datumuitgifte DURING "
+                    + sdf.format(fromDate) + "/"
+                    + sdf.format(toDate);
+            log.debug("uitgifte query: " + query);
 
             foreignQ.setFilter(ECQL.toFilter(query));
             foreignIt = foreignFs.getFeatures(foreignQ).features();
@@ -336,7 +343,7 @@ public class IbisAttributeListActionBean implements ActionBean {
 
                 for (AttributeDescriptor attr : relFeatureTypeAttributes) {
                     String name = attr.getName();
-                    log.debug("got attribute name: " + name);
+                    //log.debug("got attribute name: " + name);
                     if (getMetadataFromFirstFeature) {
                         if (propnames.contains(name)) {
                             // only load metadata into json this for first feature
@@ -379,6 +386,7 @@ public class IbisAttributeListActionBean implements ActionBean {
             if (foreignIt != null) {
                 foreignIt.close();
             }
+            foreignFs.getDataStore().dispose();
             fs.getDataStore().dispose();
         }
     }

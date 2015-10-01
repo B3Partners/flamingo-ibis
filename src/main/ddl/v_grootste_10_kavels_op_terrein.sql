@@ -9,7 +9,7 @@ CREATE OR REPLACE VIEW "IBIS".v_grootste_10_kavels_op_terrein AS
     st_area(a.geom)::numeric AS opp_geometrie
    FROM ( SELECT bedrijvenkavels.id,
             bedrijvenkavels.terreinid,
-            bedrijvenkavels.datum,
+            bedrijvenkavels.datumstart,
             bedrijvenkavels.status,
             bedrijvenkavels.workflow_status,
             bedrijvenkavels.geom,

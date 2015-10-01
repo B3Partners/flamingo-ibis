@@ -6,7 +6,7 @@ CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report_uitgifte AS
  SELECT bedrijvenkavels.id AS kavelid,
     bedrijvenkavels.terreinid,
     v_kavel_oppervlakte.opp_geometrie,
-    bedrijvenkavels.datum,
+    bedrijvenkavels.datumstart,
     bedrijvenkavels.uitgegevenaan,
     bedrijvenkavels.datumuitgifte
    FROM v_kavel_oppervlakte,

@@ -30,11 +30,6 @@ CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report AS
     bedrijventerrein.c_verkoopnaam,
     bedrijventerrein.c_verkooptelefoon,
     bedrijventerrein.c_verkoopwebsite,
-    bedrijventerrein.opp_bruto,
-    bedrijventerrein.opp_netto,
-    bedrijventerrein.opp_ters_uitg,
-    bedrijventerrein.opp_niet_ters_uitg,
-    bedrijventerrein.opp_geometrie,
     bedrijventerrein.codeplanfase,
     bedrijventerrein.datum_controle,
     bedrijventerrein.l_foto1,
@@ -63,11 +58,11 @@ CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report AS
     st_buffer(st_envelope(bedrijventerrein.geom), 100::double precision)::geometry(Polygon,28992) AS bbox_terrein,
     v_gemeente_en_regio_envelopes.naam,
     v_gemeente_en_regio_envelopes.bbox_gemeente,
-    v_gemeente_en_regio_envelopes.wgr_naam,
+    v_gemeente_en_regio_envelopes.vvr_naam,
     v_gemeente_en_regio_envelopes.bbox_regio
    FROM bedrijventerrein
      LEFT JOIN v_gemeente_en_regio_envelopes ON bedrijventerrein.gemeenteid = v_gemeente_en_regio_envelopes.gem_id
-  ORDER BY v_gemeente_en_regio_envelopes.wgr_naam, v_gemeente_en_regio_envelopes.naam, bedrijventerrein.a_plannaam;
+  ORDER BY v_gemeente_en_regio_envelopes.vvr_naam, v_gemeente_en_regio_envelopes.naam, bedrijventerrein.a_plannaam;
 
 ALTER TABLE "IBIS".v_component_ibis_report
   OWNER TO ibis;

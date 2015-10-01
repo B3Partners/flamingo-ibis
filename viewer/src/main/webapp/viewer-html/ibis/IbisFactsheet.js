@@ -47,6 +47,7 @@ Ext.define("viewer.components.IbisFactsheet", {
             params: requestParams,
             success: function (result, request) {
                 me.appLayerList = Ext.JSON.decode(result.responseText);
+                // register with featureinfo components
                 var infoComponents = me.viewerController.getComponentsByClassName("viewer.components.FeatureInfo");
                 for (var i = 0; i < infoComponents.length; i++) {
                     infoComponents[i].registerExtraLink(
