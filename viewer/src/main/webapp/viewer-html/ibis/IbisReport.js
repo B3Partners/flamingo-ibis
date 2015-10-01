@@ -300,7 +300,7 @@ Ext.define("viewer.components.IbisReport", {
                     itemId: 'regio',
                     name: 'regio',
                     displayField: this.regioVeldNaam,
-                    fieldLabel: 'WGR Regio',
+                    fieldLabel: 'Regio',
                     value: '',
                     queryMode: 'local',
                     listeners: {

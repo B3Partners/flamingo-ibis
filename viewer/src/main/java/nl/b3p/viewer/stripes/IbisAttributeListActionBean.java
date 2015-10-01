@@ -16,15 +16,17 @@
  */
 package nl.b3p.viewer.stripes;
 
-import com.vividsolutions.jts.geom.Geometry;
 import java.io.StringReader;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.TreeMap;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.action.After;
@@ -40,27 +42,25 @@ import net.sourceforge.stripes.validation.EnumeratedTypeConverter;
 import net.sourceforge.stripes.validation.Validate;
 import nl.b3p.viewer.config.app.Application;
 import nl.b3p.viewer.config.app.ApplicationLayer;
-import nl.b3p.viewer.config.app.ConfiguredAttribute;
 import nl.b3p.viewer.config.security.Authorizations;
 import nl.b3p.viewer.config.services.AttributeDescriptor;
 import nl.b3p.viewer.config.services.FeatureTypeRelation;
 import nl.b3p.viewer.config.services.Layer;
 import nl.b3p.viewer.config.services.SimpleFeatureType;
+import static nl.b3p.viewer.ibis.util.DateUtils.addMonth;
+import static nl.b3p.viewer.ibis.util.DateUtils.differenceInMonths;
 import nl.b3p.viewer.util.FeatureToJson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.geotools.data.DataUtilities;
-import org.geotools.data.FeatureSource;
 import org.geotools.data.Query;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.data.simple.SimpleFeatureStore;
-import org.geotools.feature.FeatureCollection;
-import org.geotools.feature.FeatureIterator;
-import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.ecql.ECQL;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
@@ -167,12 +167,12 @@ public class IbisAttributeListActionBean implements ActionBean {
     }
 
     /**
-     * Echo back the received base64 encoded form fData. A fallback for IE and
+     * Echo back the received base64 encoded form data. A fallback for IE and
      * browsers that don't support client side downloads.
      *
-     * @return excel download of the posted fData (posted fData is not validated
+     * @return excel download of the posted fData (posted data is not validated
      * for 'excel-ness')
-     * @throws Exception if fData is null or something goes wrong during IO
+     * @throws Exception if data is null or something goes wrong during IO
      */
     public Resolution download() throws Exception {
         if (data == null) {
@@ -278,7 +278,6 @@ public class IbisAttributeListActionBean implements ActionBean {
                 break;
             }
         }
-        SimpleFeatureIterator foreignIt = null;
 
         List<AttributeDescriptor> featureTypeAttributes = ft.getAttributes();
         List<AttributeDescriptor> relFeatureTypeAttributes = relFt.getAttributes();
@@ -317,82 +316,126 @@ public class IbisAttributeListActionBean implements ActionBean {
             foreignQ.setHandle("uitgifte-rapport-related");
             List<String> propnames = Arrays.asList(/* "kavelid",*/"opp_geometrie", /*"datumstart", "uitgegevenaan",*/ "datumuitgifte");
             foreignQ.setPropertyNames(propnames);
-
-            String query = "terreinid IN ("
-                    + in.substring(0, in.length() - 1)
-                    + ") "
-                    + " AND datumuitgifte DURING "
-                    + sdf.format(fromDate) + "/"
-                    + sdf.format(toDate);
+            String query = "terreinid IN (" + in.substring(0, in.length() - 1) + ") AND datumuitgifte DURING " + sdf.format(fromDate) + "/" + sdf.format(toDate);
             log.debug("uitgifte query: " + query);
-
             foreignQ.setFilter(ECQL.toFilter(query));
-            foreignIt = foreignFs.getFeatures(foreignQ).features();
 
-            // metadata for fData fields
-            JSONArray fields = new JSONArray();
-            // columns for grid
-            JSONArray columns = new JSONArray();
-            // fData payload
-            JSONArray datas = new JSONArray();
+            SimpleFeatureCollection sfc = DataUtilities.collection(foreignFs.getFeatures(foreignQ).features());
+            // TODO
+            switch (aggregationLevelDate) {
+                case MONTH:
+                    SimpleDateFormat YYYYMM = new SimpleDateFormat("YYYY.MM");
+                    // get number of months in period
+                    int months = differenceInMonths(fromDate, toDate);
 
-            boolean getMetadataFromFirstFeature = true;
-            while (foreignIt.hasNext()) {
-                SimpleFeature feature = foreignIt.next();
-                JSONObject fData = new JSONObject();
+                    // create new featuretype
+                    org.opengis.feature.simple.SimpleFeatureType type = DataUtilities.createType("MONTH",
+                            "id:String,*geom:MultiPolygon:28992,maand:String,oppervlakte:Double");
+                    // create flamingo attr descriptors
+                    relFeatureTypeAttributes = new ArrayList<AttributeDescriptor>();
 
-                for (AttributeDescriptor attr : relFeatureTypeAttributes) {
-                    String name = attr.getName();
-                    //log.debug("got attribute name: " + name);
-                    if (getMetadataFromFirstFeature) {
-                        if (propnames.contains(name)) {
-                            // only load metadata into json this for first feature
-                            fields.put(new JSONObject().put("name", name)/* het model van FLA(wel double) is rijker dan Ext (geen double) .put("type", attr.getType())*/.put("type", "auto"));
-                            columns.put(new JSONObject().put("text", (attr.getAlias() != null ? attr.getAlias() : name)).put("dataIndex", name));
-                        }
+                    AttributeDescriptor maand = new AttributeDescriptor();
+                    maand.setAlias("maand");
+                    maand.setName("maand");
+                    maand.setType(AttributeDescriptor.TYPE_DATE);
+                    maand.setId(1L);
+                    relFeatureTypeAttributes.add(maand);
+
+                    AttributeDescriptor opp = new AttributeDescriptor();
+                    opp.setAlias("oppervlakte");
+                    opp.setName("oppervlakte");
+                    opp.setType(AttributeDescriptor.TYPE_DOUBLE);
+                    opp.setId(2L);
+                    relFeatureTypeAttributes.add(opp);
+
+                    propnames = Arrays.asList("oppervlakte", "maand");
+
+                    // create a feature for each month
+                    Map<String, SimpleFeature> newfeats = new TreeMap<String, SimpleFeature>();
+                    Date newDate = fromDate;
+                    for (int m = 0; m < months; m++) {
+                        String key = YYYYMM.format(newDate);
+                        SimpleFeature feat = DataUtilities.createFeature(type, key + "|null|" + key + "|0d");
+                        newfeats.put(key, feat);
+                        newDate = addMonth(newDate);
                     }
-                    fData.put(attr.getName(), feature.getAttribute(attr.getName()));
-                }
-                datas.put(fData);
-                getMetadataFromFirstFeature = false;
 
-                log.debug(feature);
+                    // for each month add up opp_geometrie
+                    SimpleFeatureIterator items = sfc.features();
+                    while (items.hasNext()) {
+                        SimpleFeature f = items.next();
+                        Date d = (Date) f.getAttribute("datumuitgifte");
+                        SimpleFeature feat = newfeats.get(YYYYMM.format(d));
+                        feat.setAttribute("oppervlakte",
+                                ((Double) feat.getAttribute("oppervlakte"))
+                                + ((BigDecimal) f.getAttribute("opp_geometrie")).doubleValue());
+                    }
+                    items.close();
+
+                    ArrayList<SimpleFeature> feats = new ArrayList<SimpleFeature>(newfeats.values());
+                    Collections.reverse(feats);
+                    sfc = DataUtilities.collection(feats);
+                    break;
+                case NONE:
+                // do nothing
+                default:
+                // do nothing
             }
+
+            createJson(sfc, json, relFeatureTypeAttributes, propnames);
 
             // TODO
             switch (aggregationLevel) {
                 case ASAREA:
-                    // group/aggregrate by area
+                    // aggregrate by selected area (regio/gemeente/terrein)
                     break;
                 case MOREDETAIL:
-                    break;
-            }
-            // TODO
-            switch (aggregationLevelDate) {
-                case MONTH:
-                    // get number of months in period
-                    // for each month add up opp_geometrie
-                    break;
-                case NONE:
                 default:
-                // do nothing
+                // do nothing, maximum detail
             }
-            json.getJSONObject(JSON_METADATA).put("fields", fields);
-            json.getJSONObject(JSON_METADATA).put("columns", columns);
-            json.put("data", datas);
-            json.put("total", datas.length());
 
         } finally {
-            if (foreignIt != null) {
-                foreignIt.close();
-            }
             foreignFs.getDataStore().dispose();
             fs.getDataStore().dispose();
         }
     }
 
-    private void createJson(SimpleFeatureCollection sfc) {
+    private void createJson(SimpleFeatureCollection sfc, JSONObject json, List<AttributeDescriptor> featureTypeAttributes, List<String> propnamesList) throws JSONException {
+        // metadata for fData fields
+        JSONArray fields = new JSONArray();
+        // columns for grid
+        JSONArray columns = new JSONArray();
+        // fData payload
+        JSONArray datas = new JSONArray();
 
+        SimpleFeatureIterator sfIter = sfc.features();
+
+        boolean getMetadataFromFirstFeature = true;
+        while (sfIter.hasNext()) {
+            SimpleFeature feature = sfIter.next();
+            JSONObject fData = new JSONObject();
+
+            for (AttributeDescriptor attr : featureTypeAttributes) {
+                String name = attr.getName();
+                if (getMetadataFromFirstFeature) {
+                    if (propnamesList.contains(name)) {
+                        // only load metadata into json this for first feature
+                        fields.put(new JSONObject().put("name", name)/* het model van FLA(wel double) is rijker dan Ext (geen double) .put("type", attr.getType())*/.put("type", "auto"));
+                        columns.put(new JSONObject().put("text", (attr.getAlias() != null ? attr.getAlias() : name)).put("dataIndex", name));
+                    }
+                }
+                fData.put(attr.getName(), feature.getAttribute(attr.getName()));
+            }
+            datas.put(fData);
+            getMetadataFromFirstFeature = false;
+        }
+
+        json.getJSONObject(JSON_METADATA).put("fields", fields);
+        json.getJSONObject(JSON_METADATA).put("columns", columns);
+        json.put("data", datas);
+        json.put("total", datas.length());
+
+        sfIter.close();
     }
 
     private void reportIndividualData(JSONObject json) throws Exception {
