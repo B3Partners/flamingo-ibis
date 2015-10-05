@@ -55,7 +55,7 @@ CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report AS
     bedrijventerrein.o_waterontsluiting,
     bedrijventerrein.o_wegontsluiting,
     bedrijventerrein.gemeenteid,
-    st_buffer(st_envelope(bedrijventerrein.geom), 100::double precision)::geometry(Polygon,28992) AS bbox_terrein,
+    st_envelope(st_buffer(st_envelope(bedrijventerrein.geom), 100::double precision)::geometry(Polygon,28992))::geometry(Polygon,28992) AS bbox_terrein,
     v_gemeente_en_regio_envelopes.naam,
     v_gemeente_en_regio_envelopes.bbox_gemeente,
     v_gemeente_en_regio_envelopes.vvr_naam,
@@ -67,4 +67,4 @@ CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report AS
 ALTER TABLE "IBIS".v_component_ibis_report
   OWNER TO ibis;
 COMMENT ON VIEW "IBIS".v_component_ibis_report
-  IS 'koppelt de gemeente en regio gegevens aan de terreinen voor de IbisReport component';
+  IS 'Koppelt de gemeente en regio gegevens aan de terreinen voor de IbisReport component';
