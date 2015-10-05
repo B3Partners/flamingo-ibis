@@ -2,16 +2,28 @@
 
 -- DROP VIEW "IBIS".v_component_ibis_report_uitgifte;
 
-CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report_uitgifte AS 
- SELECT bedrijvenkavels.id AS kavelid,
+CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report_uitgifte AS
+  SELECT bedrijvenkavels.id AS kavelid,
     bedrijvenkavels.terreinid,
-    v_kavel_oppervlakte.opp_geometrie,
     bedrijvenkavels.datumstart,
     bedrijvenkavels.uitgegevenaan,
-    bedrijvenkavels.datumuitgifte
-   FROM v_kavel_oppervlakte,
-    bedrijvenkavels
-  WHERE bedrijvenkavels.status::text = 'uitgegeven'::text AND bedrijvenkavels.id = v_kavel_oppervlakte.id;
+    bedrijvenkavels.datumuitgifte,
+    v_kavel_oppervlakte.opp_geometrie,
+    v_gemeente_en_regio_envelopes.naam AS gemeentenaam,
+    v_gemeente_en_regio_envelopes.vvr_naam AS regionaam,
+    bedrijventerrein.a_plannaam AS terreinnaam
+   FROM bedrijvenkavels,
+    bedrijventerrein,
+    v_kavel_oppervlakte,
+    v_gemeente_en_regio_envelopes
+  WHERE bedrijvenkavels.status::text = 'uitgegeven'::text
+    AND bedrijvenkavels.id = v_kavel_oppervlakte.id
+    AND bedrijventerrein.id = bedrijvenkavels.terreinid
+    AND bedrijventerrein.gemeenteid = v_gemeente_en_regio_envelopes.gem_id;
+
 
 ALTER TABLE "IBIS".v_component_ibis_report_uitgifte
   OWNER TO ibis;
+
+COMMENT ON VIEW "IBIS".v_component_ibis_report
+  IS 'Uitgifte gegevens voor IbisReport component.';

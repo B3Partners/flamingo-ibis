@@ -393,10 +393,13 @@ Ext.define("viewer.components.IbisReport", {
                     name: 'aggregationLevel',
                     fieldLabel: 'Aggregatie niveau',
                     store: [
-                        ['ASAREA', 'Gelijk aan gebied'],
-                        ['MOREDETAIL', 'Meer detail']
+//                        ['ASAREA', 'Gelijk aan gebied'],
+//                        ['MOREDETAIL', 'Meer detail']
+                        ['REGIO', 'Regio'],
+                        ['GEMEENTE', 'Gemeente'],
+                        ['TERREIN', 'Terrein']
                     ],
-                    value: 'ASAREA',
+                    value: 'REGIO',
                     hidden: true
                 },
                 {
@@ -563,6 +566,9 @@ Ext.define("viewer.components.IbisReport", {
         if (resetMapExtend) {
             this.config.viewerController.mapComponent.getMap().zoomToExtent(this.config.viewerController.app.startExtent);
         }
+
+        this.step2.getComponent('aggregationLevel').store.clearFilter();
+        this.step2.getComponent("aggregationLevel").setValue('REGIO');
     },
     /**
      * update gemeente combobox after choosing regio
@@ -597,6 +603,10 @@ Ext.define("viewer.components.IbisReport", {
         this.step1.getComponent("gemeente").setStore(this.terreinenStore.collect(this.gemeenteVeldNaam, false, false));
         this.step1.getComponent("gemeente").clearValue();
         this.step1.getComponent("terrein").clearValue();
+
+        // update aggregation levels
+        this.step2.getComponent("aggregationLevel").setValue('REGIO');
+        this.step2.getComponent('aggregationLevel').store.clearFilter();
     },
     /**
      * update terrein combobox after choosing gemeente.
@@ -628,6 +638,22 @@ Ext.define("viewer.components.IbisReport", {
         });
         this.terreinenStore.addFilter(myfilter);
         this.terreinenStore.sort(this.terreinVeldNaam, 'ASC');
+
+        // update aggregation levels
+        var myfilter = Ext.create('Ext.util.Filter', {
+            scope: this,
+            filterFn: function (record) {
+                // filter out REGIO
+                if (record.data.field1 !== 'REGIO') {
+                    return true;
+                }
+                return false;
+            }
+        });
+        this.step2.getComponent('aggregationLevel').store.clearFilter();
+        this.step2.getComponent('aggregationLevel').store.addFilter(myfilter);
+        this.step2.getComponent("aggregationLevel").setValue('GEMEENTE');
+
     },
     /**
      * zoom to terrein.
@@ -649,7 +675,27 @@ Ext.define("viewer.components.IbisReport", {
             var zoomFeat = Ext.create("viewer.viewercontroller.controller.Feature", {_wktgeom: wkt});
             this.config.viewerController.mapComponent.getMap().zoomToExtent(zoomFeat.getExtent());
         }
-        this.terreinenStore.setFilters(filters);
+        try {
+            this.terreinenStore.setFilters(filters);
+            //Uncaught Error: Cannot override method statics on Ext.util.FilterCollection instance.
+        } catch (e) {
+            // ignore
+        }
+
+        // update aggregation levels
+        var myfilter = Ext.create('Ext.util.Filter', {
+            scope: this,
+            filterFn: function (record) {
+                // filter in TERREIN
+                if (record.data.field1 === 'TERREIN') {
+                    return true;
+                }
+                return false;
+            }
+        });
+        this.step2.getComponent('aggregationLevel').store.clearFilter();
+        this.step2.getComponent('aggregationLevel').store.addFilter(myfilter);
+        this.step2.getComponent("aggregationLevel").setValue('TERREIN');
     },
     getBottomBar: function (step) {
         var nextStep = (step === 1 || step === 2);
@@ -699,7 +745,6 @@ Ext.define("viewer.components.IbisReport", {
         } else {
             Ext.get(this.getContentDiv()).mask("Bezig met ophalen van bedrijventerrein...");
         }
-
 
         var featureInfo = Ext.create("viewer.FeatureInfo", {
             viewerController: this.config.viewerController
@@ -782,14 +827,17 @@ Ext.define("viewer.components.IbisReport", {
         this.step3.getComponent('issueVariables').setVisible(showTimeslot);
     },
     createReport: function (step) {
+        var me = this;
+        me.step4.reconfigure(null);
+
         this['step' + step].expand();
+
         if (this.config.isPopup) {
             this.popup.popupWin.setLoading("Rapport samenstellen...");
         } else {
             Ext.get(this.getContentDiv()).mask("Rapport samenstellen...");
         }
 
-        var me = this;
         var formData = me.form.getValues(
                 /*asString*/false,
                 /*dirtyOnly*/ false,
@@ -821,7 +869,7 @@ Ext.define("viewer.components.IbisReport", {
             pageSize: 0,
             listeners: {
                 metachange: function (store, meta) {
-                    // reconfigur grid and update model (up2date model is required for excel download)
+                    // reconfigure grid and update model (up2date model is required for excel download)
                     me.step4.reconfigure(store, meta.columns);
                     me.reportdataStore.model.fields = meta.fields;
                     Ext.getCmp(me.name + "downloadBtn").setDisabled(false);
@@ -829,8 +877,12 @@ Ext.define("viewer.components.IbisReport", {
                 load: function (store, records, successful, eOpts) {
                     if (!successful) {
                         Ext.MessageBox.alert("Fout", "Fout tijdens opvragen van de data: " + eOpts.error);
-                        me.step4.getComponent('downloadBtn').setDisabled(true);
                         Ext.getCmp(me.name + "downloadBtn").setDisabled(true);
+                        if (me.config.isPopup) {
+                            me.popup.popupWin.setLoading(false);
+                        } else {
+                            Ext.get(me.getContentDiv()).unmask();
+                        }
                     }
                 }
             }

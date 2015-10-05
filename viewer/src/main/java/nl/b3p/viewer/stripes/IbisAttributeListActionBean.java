@@ -22,11 +22,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.action.After;
@@ -44,6 +48,7 @@ import nl.b3p.viewer.config.app.Application;
 import nl.b3p.viewer.config.app.ApplicationLayer;
 import nl.b3p.viewer.config.security.Authorizations;
 import nl.b3p.viewer.config.services.AttributeDescriptor;
+
 import nl.b3p.viewer.config.services.FeatureTypeRelation;
 import nl.b3p.viewer.config.services.Layer;
 import nl.b3p.viewer.config.services.SimpleFeatureType;
@@ -138,7 +143,7 @@ public class IbisAttributeListActionBean implements ActionBean {
      * report type
      */
     @Validate(converter = EnumeratedTypeConverter.class)
-    private AggregationLevel aggregationLevel;
+    private QueryArea aggregationLevel;
 
     enum AggregationLevel {
 
@@ -151,6 +156,54 @@ public class IbisAttributeListActionBean implements ActionBean {
     }
     @Validate(converter = EnumeratedTypeConverter.class)
     private AggregationLevelDate aggregationLevelDate;
+
+    /**
+     * Field in the datamodel (base uitgifte view). {@value }
+     */
+    private static final String TERREINID_FIELDNAME = "id";
+    /**
+     * Field in the datamodel (base uitgifte view). {@value }
+     */
+    private static final String GEMEENTE_FIELDNAME = "naam";
+    /**
+     * Field in the datamodel (base uitgifte view). {@value }
+     */
+    private static final String REGIO_FIELDNAME = "vvr_naam";
+    /**
+     * Field in the datamodel (base uitgifte view). {@value }
+     */
+    private static final String TERREIN_FIELDNAME = "a_plannaam";
+
+    /**
+     * Field in the datamodel (related view). {@value }
+     */
+    private static final String KAVELID_RELATED_FIELDNAME = "kavelid";
+    /**
+     * Field in the datamodel (related view). {@value }
+     */
+    private static final String GEMEENTE_RELATED_FIELDNAME = "gemeentenaam";
+    /**
+     * Field in the datamodel (related view). {@value }
+     */
+    private static final String REGIO_RELATED_FIELDNAME = "regionaam";
+    /**
+     * Field in the datamodel (related view). {@value }
+     */
+    private static final String TERREIN_RELATED_FIELDNAME = "terreinnaam";
+
+    /**
+     * Field in the datamodel (related view). {@value }
+     */
+    private static final String TERREINID_RELATED_FIELDNAME = "terreinid";
+
+    /**
+     * Field in the datamodel (related view). {@value }
+     */
+    private static final String UITGIFTEDATUM_RELATED_FIELDNAME = "datumuitgifte";
+    /**
+     * Field in the datamodel (related view). {@value }
+     */
+    private static final String OPPERVLAKTE_GEOM_RELATED_FIELDNAME = "opp_geometrie";
 
     @After(stages = LifecycleStage.BindingAndValidation)
     public void loadLayer() {
@@ -213,13 +266,13 @@ public class IbisAttributeListActionBean implements ActionBean {
                 // test either regio / gemeente / terrein must not be null
                 if (terrein != null) {
                     areaType = QueryArea.TERREIN;
-                    gebiedsNaamQuery = "a_plannaam='" + terrein + "'";;
+                    gebiedsNaamQuery = TERREIN_FIELDNAME + "='" + terrein + "'";;
                 } else if (gemeente != null) {
                     areaType = QueryArea.GEMEENTE;
-                    gebiedsNaamQuery = "naam='" + gemeente + "'";
+                    gebiedsNaamQuery = GEMEENTE_FIELDNAME + "='" + gemeente + "'";
                 } else if (regio != null) {
                     areaType = QueryArea.REGIO;
-                    gebiedsNaamQuery = "vvr_naam='" + regio + "'";
+                    gebiedsNaamQuery = REGIO_FIELDNAME + "='" + regio + "'";
                 } else {
                     throw new IllegalArgumentException("Geen gebied opgegeven voor rapport.");
                 }
@@ -256,7 +309,7 @@ public class IbisAttributeListActionBean implements ActionBean {
     }
 
     /**
-     * uitgifte report.
+     * Uitgifte report.
      *
      * @param json that get the data added
      * @throws Exception if any
@@ -279,25 +332,21 @@ public class IbisAttributeListActionBean implements ActionBean {
             }
         }
 
-        List<AttributeDescriptor> featureTypeAttributes = ft.getAttributes();
-        List<AttributeDescriptor> relFeatureTypeAttributes = relFt.getAttributes();
+        //List<AttributeDescriptor> featureTypeAttributes = ft.getAttributes();
+        //List<AttributeDescriptor> relFeatureTypeAttributes = relFt.getAttributes();
         SimpleFeatureSource fs = (SimpleFeatureSource) ft.openGeoToolsFeatureSource();
         SimpleFeatureSource foreignFs = (SimpleFeatureSource) relFt.openGeoToolsFeatureSource();
 
-        Filter filter;
-        // if terrein
-        if (areaType == QueryArea.TERREIN) {
-            filter = ECQL.toFilter(this.gebiedsNaamQuery);
-        } else {
-            //else regio or gemeente
-            filter = ECQL.toFilter(this.gebiedsNaamQuery);
-        }
-        List<String> tPropnames = Arrays.asList("id", "a_plannaam", "datum");
+        Filter filter = ECQL.toFilter(this.gebiedsNaamQuery);
+        List<String> tPropnames = Arrays.asList(
+                TERREINID_FIELDNAME,
+                TERREIN_FIELDNAME,
+                GEMEENTE_FIELDNAME,
+                REGIO_FIELDNAME);
         Query q = new Query(fs.getName().toString());
         q.setPropertyNames(tPropnames);
         q.setFilter(filter);
         q.setHandle("uitgifte-rapport");
-        // TODO
         q.setMaxFeatures(FeatureToJson.MAX_FEATURES);
 
         try {
@@ -305,102 +354,236 @@ public class IbisAttributeListActionBean implements ActionBean {
             SimpleFeatureCollection inMem = DataUtilities.collection(fs.getFeatures(q).features());
             StringBuilder in = new StringBuilder();
             SimpleFeatureIterator inMemFeats = inMem.features();
+            Set<String> terreinNames = new TreeSet<String>(
+                    new Comparator<String>() {
+                        @Override
+                        public int compare(String a, String b) {
+                            return a.compareTo(b);
+                        }
+                    }
+            );
+            Set<String> regioNames = new TreeSet<String>(new Comparator<String>() {
+                @Override
+                public int compare(String a, String b) {
+                    return a.compareTo(b);
+                }
+            });
+            Set<String> gemeenteNames = new TreeSet<String>(new Comparator<String>() {
+                @Override
+                public int compare(String a, String b) {
+                    return a.compareTo(b);
+                }
+            });
+
             while (inMemFeats.hasNext()) {
                 SimpleFeature f = inMemFeats.next();
-                in.append(f.getAttribute("id")).append(",");
+                in.append(f.getAttribute(TERREINID_FIELDNAME)).append(",");
+                terreinNames.add((String) f.getAttribute(TERREIN_FIELDNAME));
+                regioNames.add((String) f.getAttribute(REGIO_FIELDNAME));
+                gemeenteNames.add((String) f.getAttribute(GEMEENTE_FIELDNAME));
             }
             inMemFeats.close();
 
             // get related features (terreinen)
             Query foreignQ = new Query(foreignFs.getName().toString());
             foreignQ.setHandle("uitgifte-rapport-related");
-            List<String> propnames = Arrays.asList(/* "kavelid",*/"opp_geometrie", /*"datumstart", "uitgegevenaan",*/ "datumuitgifte");
+            List<String> propnames = Arrays.asList(
+                    KAVELID_RELATED_FIELDNAME,
+                    OPPERVLAKTE_GEOM_RELATED_FIELDNAME,
+                    UITGIFTEDATUM_RELATED_FIELDNAME,
+                    TERREIN_RELATED_FIELDNAME,
+                    REGIO_RELATED_FIELDNAME,
+                    GEMEENTE_RELATED_FIELDNAME);
             foreignQ.setPropertyNames(propnames);
-            String query = "terreinid IN (" + in.substring(0, in.length() - 1) + ") AND datumuitgifte DURING " + sdf.format(fromDate) + "/" + sdf.format(toDate);
+            String query = TERREINID_RELATED_FIELDNAME + " IN (" + in.substring(0, in.length() - 1) + ") AND "
+                    + UITGIFTEDATUM_RELATED_FIELDNAME + " DURING " + sdf.format(fromDate) + "/" + sdf.format(toDate);
             log.debug("uitgifte query: " + query);
             foreignQ.setFilter(ECQL.toFilter(query));
 
+            // kavels for selected terrein id's
             SimpleFeatureCollection sfc = DataUtilities.collection(foreignFs.getFeatures(foreignQ).features());
-            // TODO
+
+            // create new aggregate featuretype
+            org.opengis.feature.simple.SimpleFeatureType type = DataUtilities.createType(
+                    "AGGREGATE",
+                    "id:String,*geom:MultiPolygon:28992,maand:String,oppervlakte:Double,gebied:String");
+
+            // create flamingo attribute descriptors for AGGREGATE
+            List<AttributeDescriptor> relFeatureTypeAttributes = new ArrayList<AttributeDescriptor>();
+            AttributeDescriptor maand = new AttributeDescriptor();
+            maand.setName("maand");
+            maand.setAlias("maand");
+            // mogelijk niet maand gebruiken maar string...
+            maand.setType(AttributeDescriptor.TYPE_DATE);
+            maand.setId(1L);
+            relFeatureTypeAttributes.add(maand);
+
+            AttributeDescriptor opp = new AttributeDescriptor();
+            opp.setName("oppervlakte");
+            opp.setAlias("oppervlakte");
+            opp.setType(AttributeDescriptor.TYPE_DOUBLE);
+            opp.setId(2L);
+            relFeatureTypeAttributes.add(opp);
+
+            AttributeDescriptor plan = new AttributeDescriptor();
+            plan.setName("gebied");
+            plan.setAlias("gebiedsnaam");
+            plan.setType(AttributeDescriptor.TYPE_STRING);
+            plan.setId(3L);
+            relFeatureTypeAttributes.add(plan);
+
+            switch (aggregationLevel) {
+                case REGIO:
+                    switch (aggregationLevelDate) {
+                        case MONTH:
+                            sfc = aggregateUitgifteByMonthAndArea(sfc, type, "oppervlakte",
+                                    regioNames, REGIO_RELATED_FIELDNAME);
+                            break;
+                        case NONE:
+                            sfc = aggregateUitgifteByArea(sfc, type, "oppervlakte",
+                                    regioNames, REGIO_RELATED_FIELDNAME);
+                            break;
+                    }
+                    break;
+                case GEMEENTE:
+                    switch (aggregationLevelDate) {
+                        case MONTH:
+                            sfc = aggregateUitgifteByMonthAndArea(sfc, type, "oppervlakte",
+                                    gemeenteNames, GEMEENTE_RELATED_FIELDNAME);
+                            break;
+                        case NONE:
+                            sfc = aggregateUitgifteByArea(sfc, type, "oppervlakte",
+                                    gemeenteNames, GEMEENTE_RELATED_FIELDNAME);
+                            break;
+                    }
+                    break;
+                case TERREIN:
+                    switch (aggregationLevelDate) {
+                        case MONTH:
+                            sfc = aggregateUitgifteByMonthAndArea(sfc, type, "oppervlakte",
+                                    terreinNames, TERREIN_RELATED_FIELDNAME);
+                            break;
+                        case NONE:
+                            sfc = aggregateUitgifteByArea(sfc, type, "oppervlakte",
+                                    terreinNames, TERREIN_RELATED_FIELDNAME);
+                            break;
+                    }
+
+                    break;
+            }
+
             switch (aggregationLevelDate) {
                 case MONTH:
-                    SimpleDateFormat YYYYMM = new SimpleDateFormat("YYYY.MM");
-                    // get number of months in period
-                    int months = differenceInMonths(fromDate, toDate);
-
-                    // create new featuretype
-                    org.opengis.feature.simple.SimpleFeatureType type = DataUtilities.createType("MONTH",
-                            "id:String,*geom:MultiPolygon:28992,maand:String,oppervlakte:Double");
-                    // create flamingo attr descriptors
-                    relFeatureTypeAttributes = new ArrayList<AttributeDescriptor>();
-
-                    AttributeDescriptor maand = new AttributeDescriptor();
-                    maand.setAlias("maand");
-                    maand.setName("maand");
-                    maand.setType(AttributeDescriptor.TYPE_DATE);
-                    maand.setId(1L);
-                    relFeatureTypeAttributes.add(maand);
-
-                    AttributeDescriptor opp = new AttributeDescriptor();
-                    opp.setAlias("oppervlakte");
-                    opp.setName("oppervlakte");
-                    opp.setType(AttributeDescriptor.TYPE_DOUBLE);
-                    opp.setId(2L);
-                    relFeatureTypeAttributes.add(opp);
-
-                    propnames = Arrays.asList("oppervlakte", "maand");
-
-                    // create a feature for each month
-                    Map<String, SimpleFeature> newfeats = new TreeMap<String, SimpleFeature>();
-                    Date newDate = fromDate;
-                    for (int m = 0; m < months; m++) {
-                        String key = YYYYMM.format(newDate);
-                        SimpleFeature feat = DataUtilities.createFeature(type, key + "|null|" + key + "|0d");
-                        newfeats.put(key, feat);
-                        newDate = addMonth(newDate);
-                    }
-
-                    // for each month add up opp_geometrie
-                    SimpleFeatureIterator items = sfc.features();
-                    while (items.hasNext()) {
-                        SimpleFeature f = items.next();
-                        Date d = (Date) f.getAttribute("datumuitgifte");
-                        SimpleFeature feat = newfeats.get(YYYYMM.format(d));
-                        feat.setAttribute("oppervlakte",
-                                ((Double) feat.getAttribute("oppervlakte"))
-                                + ((BigDecimal) f.getAttribute("opp_geometrie")).doubleValue());
-                    }
-                    items.close();
-
-                    ArrayList<SimpleFeature> feats = new ArrayList<SimpleFeature>(newfeats.values());
-                    Collections.reverse(feats);
-                    sfc = DataUtilities.collection(feats);
+                    propnames = Arrays.asList("maand", "oppervlakte", "gebied");
                     break;
                 case NONE:
-                // do nothing
-                default:
-                // do nothing
+                    propnames = Arrays.asList("oppervlakte", "gebied");
             }
-
-            createJson(sfc, json, relFeatureTypeAttributes, propnames);
-
-            // TODO
-            switch (aggregationLevel) {
-                case ASAREA:
-                    // aggregrate by selected area (regio/gemeente/terrein)
-                    break;
-                case MOREDETAIL:
-                default:
-                // do nothing, maximum detail
-            }
-
+            featuresToJson(sfc, json, relFeatureTypeAttributes, propnames);
         } finally {
             foreignFs.getDataStore().dispose();
             fs.getDataStore().dispose();
         }
     }
 
-    private void createJson(SimpleFeatureCollection sfc, JSONObject json, List<AttributeDescriptor> featureTypeAttributes, List<String> propnamesList) throws JSONException {
+    /**
+     * aggregate features by date and area into new collection with named
+     * features.
+     *
+     * @param sfc source simple features to aggregate
+     * @param type aggregate featuretype
+     * @param featNames names of the new features
+     * @param gebiedFieldName field name of the aggregation bucket (eg. gemeente
+     * or regio)
+     * @return aggregated features
+     */
+    private SimpleFeatureCollection aggregateUitgifteByMonthAndArea(SimpleFeatureCollection sfc,
+            org.opengis.feature.simple.SimpleFeatureType type, final String sfTypeAreaName,
+            Set<String> featNames, final String gebiedFieldName) {
+
+        final int months = differenceInMonths(fromDate, toDate);
+        final SimpleDateFormat YYYYMM = new SimpleDateFormat("YYYY.MM");
+        Map<String, SimpleFeature> newfeats = new TreeMap<String, SimpleFeature>();
+
+        // create a feature for each month for each 'gebiedFieldName' with 0 area and null geom
+        for (String fName : featNames) {
+            Date newDate = fromDate;
+            for (int m = 0; m < months; m++) {
+                String key = fName + YYYYMM.format(newDate);
+                SimpleFeature month = DataUtilities.
+                        createFeature(type, key + "|null|" + YYYYMM.format(newDate) + "|0d|" + fName);
+                newfeats.put(key, month);
+                newDate = addMonth(newDate);
+            }
+        }
+
+        // for each month add up opp_geometrie
+        SimpleFeatureIterator items = sfc.features();
+        while (items.hasNext()) {
+            SimpleFeature f = items.next();
+            Date d = (Date) f.getAttribute(UITGIFTEDATUM_RELATED_FIELDNAME);
+            SimpleFeature newFeat = newfeats.get(f.getAttribute(gebiedFieldName) + YYYYMM.format(d));
+            newFeat.setAttribute(sfTypeAreaName,
+                    ((Double) newFeat.getAttribute(sfTypeAreaName))
+                    + ((BigDecimal) f.getAttribute(OPPERVLAKTE_GEOM_RELATED_FIELDNAME)).doubleValue());
+
+        }
+        items.close();
+
+        ArrayList<SimpleFeature> feats = new ArrayList<SimpleFeature>(newfeats.values());
+        // reverse sorting
+        // Collections.reverse(feats);
+        return DataUtilities.collection(feats);
+    }
+
+    /**
+     * aggregate features area into new collection with named features.
+     *
+     * @param sfc source of simple features to aggregate
+     * @param type aggregate featuretype
+     * @param featNames names of the new features
+     * @param gebiedFieldName field name of the aggregation bucket (eg. gemeente
+     * or regio)
+     * @return aggregated features
+     */
+    private SimpleFeatureCollection aggregateUitgifteByArea(SimpleFeatureCollection sfc,
+            org.opengis.feature.simple.SimpleFeatureType type, String sfTypeAreaName,
+            Set<String> featNames, final String gebiedFieldName) {
+
+        // create a feature for each 'gebiedFieldName' with 0 area and null date and null geom
+        Map<String, SimpleFeature> newfeats = new TreeMap<String, SimpleFeature>();
+        for (String fName : featNames) {
+            SimpleFeature newfeat = DataUtilities.
+                    createFeature(type, fName + "|null|null|0d|" + fName);
+            newfeats.put(fName, newfeat);
+        }
+
+        // for each regio add up opp_geometrie
+        SimpleFeatureIterator items = sfc.features();
+        while (items.hasNext()) {
+            SimpleFeature f = items.next();
+            SimpleFeature newFeat = newfeats.get((String) f.getAttribute(gebiedFieldName));
+            newFeat.setAttribute(sfTypeAreaName,
+                    ((Double) newFeat.getAttribute(sfTypeAreaName))
+                    + ((BigDecimal) f.getAttribute(OPPERVLAKTE_GEOM_RELATED_FIELDNAME)).doubleValue());
+
+        }
+        items.close();
+        ArrayList<SimpleFeature> feats = new ArrayList<SimpleFeature>(newfeats.values());
+         Collections.reverse(feats);
+        return DataUtilities.collection(feats);
+    }
+
+    /**
+     *
+     * @param sfc collections of features
+     * @param json output/appendend to json structure
+     * @param featureTypeAttributes flamingo attribute descriptors for the
+     * features
+     * @param outputPropNames fieldnames to put in output
+     * @throws JSONException is any
+     */
+    private void featuresToJson(SimpleFeatureCollection sfc, JSONObject json, List<AttributeDescriptor> featureTypeAttributes, List<String> outputPropNames) throws JSONException {
         // metadata for fData fields
         JSONArray fields = new JSONArray();
         // columns for grid
@@ -418,9 +601,13 @@ public class IbisAttributeListActionBean implements ActionBean {
             for (AttributeDescriptor attr : featureTypeAttributes) {
                 String name = attr.getName();
                 if (getMetadataFromFirstFeature) {
-                    if (propnamesList.contains(name)) {
+                    if (outputPropNames.contains(name)) {
                         // only load metadata into json this for first feature
-                        fields.put(new JSONObject().put("name", name)/* het model van FLA(wel double) is rijker dan Ext (geen double) .put("type", attr.getType())*/.put("type", "auto"));
+                        JSONObject field = new JSONObject().put("name", name).put("type", attr.getExtJSType());
+                        if (reportType == ReportType.ISSUE && attr.getType().equals(AttributeDescriptor.TYPE_DATE)) {
+                            field.put("dateFormat", "Y-m");
+                        }
+                        fields.put(field);
                         columns.put(new JSONObject().put("text", (attr.getAlias() != null ? attr.getAlias() : name)).put("dataIndex", name));
                     }
                 }
@@ -551,11 +738,11 @@ public class IbisAttributeListActionBean implements ActionBean {
         this.reportType = reportType;
     }
 
-    public AggregationLevel getAggregationLevel() {
+    public QueryArea getAggregationLevel() {
         return aggregationLevel;
     }
 
-    public void setAggregationLevel(AggregationLevel aggregationLevel) {
+    public void setAggregationLevel(QueryArea aggregationLevel) {
         this.aggregationLevel = aggregationLevel;
     }
 

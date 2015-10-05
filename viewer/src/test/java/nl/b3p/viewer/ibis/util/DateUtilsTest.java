@@ -45,6 +45,7 @@ public class DateUtilsTest {
     @Test
     public void testAddMonth() {
         Date now = new Date();
-        assertEquals(1, differenceInMonths(now, addMonth(now)));
+        assertEquals("added one month to current date", 1, differenceInMonths(now, addMonth(now)));
+        assertEquals("added two months to current date", 2, differenceInMonths(now, addMonth(addMonth(now))));
     }
 }
