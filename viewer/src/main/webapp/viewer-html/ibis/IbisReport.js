@@ -68,6 +68,7 @@ Ext.define("viewer.components.IbisReport", {
      * the visible attributes.
      */
     attributeList: [],
+    appLayer: null,
     config: {
         title: null,
         titlebarIcon: null,
@@ -115,9 +116,9 @@ Ext.define("viewer.components.IbisReport", {
     },
     getDataModel: function () {
         var me = this;
-        var appLayer = this.viewerController.getAppLayerById(this.config.bedrijvenTerreinLayer);
-        var featureService = this.config.viewerController.getAppLayerFeatureService(appLayer);
-        featureService.loadAttributes(appLayer,
+        me.appLayer = this.viewerController.getAppLayerById(this.config.bedrijvenTerreinLayer);
+        var featureService = this.config.viewerController.getAppLayerFeatureService(me.appLayer);
+        featureService.loadAttributes(me.appLayer,
                 function (attributes) {
                     var index = 0;
                     for (var i = 0; i < attributes.length; i++) {
@@ -235,7 +236,7 @@ Ext.define("viewer.components.IbisReport", {
             viewerController: this.config.viewerController
         });
 
-        var appLayer = this.viewerController.getAppLayerById(this.config.bedrijvenTerreinLayer);
+        //var appLayer = this.viewerController.getAppLayerById(this.config.bedrijvenTerreinLayer);
 
         if (this.config.isPopup) {
             this.popup.popupWin.setLoading("Bezig met ophalen van de lijst met bedrijven terreinen. <br /> Dit duurt even...");
@@ -250,7 +251,7 @@ Ext.define("viewer.components.IbisReport", {
                 type: 'ajax',
                 timeout: 120000,
                 actionMethods: {read: 'POST'},
-                url: appLayer.featureService.getStoreUrl(),
+                url: me.appLayer.featureService.getStoreUrl(),
                 extraParams: {
                     attributesToInclude: [
                         me.idVeldId, me.regioVeldId, me.gemeenteVeldId, me.terreinVeldId,
@@ -432,30 +433,31 @@ Ext.define("viewer.components.IbisReport", {
             ],
             dockedItems: this.getBottomBar(2)
         });
-        // TODO get this from a feature service? or from the config
-        var variables = [
-            {xtype: 'checkbox', aggregationType: false, boxLabel: 'Organisatie', value: 'organisatie'},
-            {xtype: 'checkbox', aggregationType: false, boxLabel: 'Terein status', value: 'terein_status'},
-            {xtype: 'checkbox', aggregationType: true, boxLabel: 'Oppervlakte', value: 'oppervlakte'},
-            {xtype: 'checkbox', aggregationType: true, boxLabel: 'Minimale huur', value: 'minimale_huur'},
-            {xtype: 'checkbox', aggregationType: true, boxLabel: 'Maximale huur', value: 'maximale_huur'}
-        ];
-        var aggregationVariables = [];
-        for (var i = 0; i < variables.length; i++) {
-            if (variables[i].aggregationType) {
-                aggregationVariables.push(variables[i]);
+
+        var allVariables = [];
+        for (var i = 0; i < this.appLayer.attributes.length; i++) {
+            var attr = this.appLayer.attributes[i];
+            // skip geometry fields
+            if (attr.type !== "geometry"
+                    && attr.type !== "multipolygon" && attr.type !== "polygon"
+                    && attr.type !== "point" && attr.type !== "multipoint"
+                    && attr.type !== "linestring" && attr.type !== "multilinestring") {
+
+                allVariables.push({
+                    xtype: 'checkbox',
+                    aggregationType: (this.config[attr.id] === true),
+                    boxLabel: (attr.alias !== undefined ? attr.alias : attr.name),
+                    name: 'attrNames',
+                    inputValue: attr.name
+                });
             }
         }
 
-        var allVariables = [];
-        for (var i = 0; i < this.attributeList.length; i++) {
-            allVariables.push({
-                xtype: 'checkbox',
-                aggregationType: false,
-                boxLabel: this.attributeList[i].colName,
-                value: this.attributeList[i].colName,
-                name: this.attributeList[i].value
-            });
+        var aggregationVariables = [];
+        for (var i = 0; i < allVariables.length; i++) {
+            if (allVariables[i].aggregationType) {
+                aggregationVariables.push(allVariables[i]);
+            }
         }
 
         this.step3 = Ext.create('Ext.panel.Panel', {
@@ -468,7 +470,7 @@ Ext.define("viewer.components.IbisReport", {
             items: [
                 {
                     xtype: 'container',
-                    html: 'Kies de variablen die u in het rapport wilt hebben.',
+                    html: 'Kies de variabelen die u in het rapport wilt hebben.',
                     margin: '0 0 10 0'
                 },
                 {
@@ -840,7 +842,7 @@ Ext.define("viewer.components.IbisReport", {
 
         var formData = me.form.getValues(
                 /*asString*/false,
-                /*dirtyOnly*/ false,
+                /*dirtyOnly*/ true,
                 /*includeEmptyText*/false,
                 /*useDataValues*/false);
         formData.appLayer = me.config.bedrijvenTerreinLayer;
