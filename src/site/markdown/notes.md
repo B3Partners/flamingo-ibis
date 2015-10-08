@@ -23,7 +23,7 @@ and not anything else.
   - Create a layer "ibis report component" based on the `v_component_ibis_report` that is created from the same view. Attach a WFS attribue source to this layer.
   - Create a `relate` fetaure type relation to the view `v_component_ibis_report_uitgifte` linking "v_component_ibis_report":id to "v_component_ibis_report_uitgifte":terreinid
   - Add the layer to the application, but give it a place of it's own in "Boomstructuuur met kaart" so it won't show up in the legend. eg. `Applicatie > niet in de kaart > ibis report component > ibis report component`, turn on __all__ attributes. (Do __not__ add the layer to the "Kaartbeeld")
-  - Add the IbisReport component to the application, either as a sidebar component or a popup, configure it to use "ibis report component" as layer
+  - Add the IbisReport component to the application, either as a sidebar component or a popup, configure it to use "ibis report component" as layer, select which attributes should be available as aggregate.
 
 
 ### Other joins and relates

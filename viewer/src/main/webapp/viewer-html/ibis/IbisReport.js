@@ -775,33 +775,7 @@ Ext.define("viewer.components.IbisReport", {
             this.resetStoreFilters(false);
             var s = feature.__fid;
             s = s.substr(s.lastIndexOf('.') + 1);
-
             this.step1.getComponent('terrein').setSelection(this.terreinenStore.getById(s));
-            //this.step1.getComponent('terrein').select(this.terreinenStore.getById(s));
-//            try {
-//                // try to zoom in
-//                var appLayer = this.viewerController.getAppLayerById(this.config.bedrijvenTerreinLayer);
-//                // XXX re-index for editable fields (geom must be editable...)
-//                var geomIdx = 0;
-//                for (var i = 0; i < appLayer.attributes.length; i++) {
-//                    var attribute = appLayer.attributes[i];
-//                    if (attribute.editable) {
-//                        if (attribute.name === appLayer.geometryAttribute) {
-//                            geomIdx = 'c' + geomIdx;
-//                            break;
-//                        }
-//                        geomIdx++;
-//                    }
-//                }
-//                var zoomFeat = Ext.create("viewer.viewercontroller.controller.Feature", {_wktgeom: feature[geomIdx]});
-//                this.config.viewerController.mapComponent.getMap().zoomToExtent(zoomFeat.getExtent());
-//            } finally {
-//                   if (this.config.isPopup) {
-//                            this.popup.popupWin.setLoading(false);
-//                        } else {
-//                            Ext.get(this.getContentDiv()).unmask();
-//                        }
-//            }
         } else {
             this.featuresFailed("Niets gevonden, probeer opnieuw of kies uit de lijst met terreinen.");
         }
@@ -816,6 +790,16 @@ Ext.define("viewer.components.IbisReport", {
         }
     },
     reportTypeChange: function (combo, val) {
+        // uncheck any checkboxes
+        var checkboxes = this.step3.getComponent('allVariables').query('[isCheckbox]');
+        Ext.Array.each(checkboxes, function (checkbox) {
+            checkbox.reset();
+        });
+        checkboxes = this.step3.getComponent('aggregationVariables').query('[isCheckbox]');
+        Ext.Array.each(checkboxes, function (checkbox) {
+            checkbox.reset();
+        });
+
         var showAggregation = val === 'AGGREGATED' || val === 'ISSUE';
         var showTimeslot = val === 'ISSUE';
         // Step 2 details
@@ -830,19 +814,17 @@ Ext.define("viewer.components.IbisReport", {
     },
     createReport: function (step) {
         var me = this;
-        me.step4.reconfigure(null);
-
-        this['step' + step].expand();
-
-        if (this.config.isPopup) {
-            this.popup.popupWin.setLoading("Rapport samenstellen...");
+        me['step' + step].expand();
+        if (me.config.isPopup) {
+            me.popup.popupWin.setLoading("Rapport samenstellen...");
         } else {
-            Ext.get(this.getContentDiv()).mask("Rapport samenstellen...");
+            Ext.get(me.getContentDiv()).mask("Rapport samenstellen...");
         }
 
+        me.step4.reconfigure(null);
         var formData = me.form.getValues(
                 /*asString*/false,
-                /*dirtyOnly*/ true,
+                /*dirtyOnly*/ false,
                 /*includeEmptyText*/false,
                 /*useDataValues*/false);
         formData.appLayer = me.config.bedrijvenTerreinLayer;
