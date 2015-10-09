@@ -32,7 +32,6 @@
             <version>${flamingo.version}</version>
             <classifier>classes</classifier>
         </dependency>
-        
     </dependencies>
     <repositories />
     <pluginRepositories />

@@ -16,6 +16,9 @@
  */
 package nl.b3p.viewer.stripes;
 
+import static nl.b3p.viewer.ibis.util.DateUtils.addMonth;
+import static nl.b3p.viewer.ibis.util.DateUtils.differenceInMonths;
+
 import java.io.StringReader;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -24,6 +27,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -51,22 +55,21 @@ import nl.b3p.viewer.config.services.AttributeDescriptor;
 import nl.b3p.viewer.config.services.FeatureTypeRelation;
 import nl.b3p.viewer.config.services.Layer;
 import nl.b3p.viewer.config.services.SimpleFeatureType;
-import static nl.b3p.viewer.ibis.util.DateUtils.addMonth;
-import static nl.b3p.viewer.ibis.util.DateUtils.differenceInMonths;
 import nl.b3p.viewer.util.FeatureToJson;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.Query;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.filter.text.ecql.ECQL;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opengis.feature.Property;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 
@@ -202,9 +205,16 @@ public class IbisAttributeListActionBean implements ActionBean {
     private static final String OPPERVLAKTE_GEOM_RELATED_FIELDNAME = "opp_geometrie";
 
     /**
-     * aggregate locality field name.
+     * aggregate locality field name. {@value}
      */
     private static final String GEBIED_FIELDNAME = "gebied";
+
+    /**
+     * name of the related feature type. {@value}.
+     *
+     * @todo assuming there is only one relate
+     */
+    private static final String RELATED_FT_NAME = null;
 
     @After(stages = LifecycleStage.BindingAndValidation)
     public void loadLayer() {
@@ -322,14 +332,7 @@ public class IbisAttributeListActionBean implements ActionBean {
         sdf.setTimeZone(TimeZone.getDefault());
 
         SimpleFeatureType ft = layer.getFeatureType();
-        SimpleFeatureType relFt = null;
-        // TODO assuming there is only one relate, get the foreign type
-        for (FeatureTypeRelation rel : ft.getRelations()) {
-            if (rel.getType().equals(FeatureTypeRelation.RELATE)) {
-                relFt = rel.getForeignFeatureType();
-                break;
-            }
-        }
+        SimpleFeatureType relFt = this.getRelatedSFT(ft, RELATED_FT_NAME);
         SimpleFeatureSource fs = (SimpleFeatureSource) ft.openGeoToolsFeatureSource();
         SimpleFeatureSource foreignFs = (SimpleFeatureSource) relFt.openGeoToolsFeatureSource();
 
@@ -620,50 +623,127 @@ public class IbisAttributeListActionBean implements ActionBean {
         sfIter.close();
     }
 
+    /**
+     * look up the named related featuretype.
+     *
+     * @param ft main/parent feature type
+     * @param typeNameToGet the name of the related feature type or null
+     * @return the named feature type or the first feature type in case
+     * {@code typeNameToGet} is {
+     * @null} or {
+     * @null} when the/a related feature type does not exist
+     */
+    private SimpleFeatureType getRelatedSFT(SimpleFeatureType ft, String typeNameToGet) {
+        SimpleFeatureType relFt = null;
+
+        for (FeatureTypeRelation rel : ft.getRelations()) {
+            if (rel.getType().equals(FeatureTypeRelation.RELATE)) {
+                relFt = rel.getForeignFeatureType();
+                if (relFt.getTypeName().equals(typeNameToGet) || typeNameToGet == null) {
+                    break;
+                }
+            }
+        }
+        return relFt;
+    }
+
     private void reportIndividualData(JSONObject json) throws Exception {
-        log.debug("attribute names: " + StringUtils.join(attrNames));
+        List<String> tPropnames = new ArrayList(attrNames);
 
         SimpleFeatureType ft = layer.getFeatureType();
         List<AttributeDescriptor> featureTypeAttributes = ft.getAttributes();
         SimpleFeatureSource fs = (SimpleFeatureSource) ft.openGeoToolsFeatureSource();
 
+        List<String> foreignAttrNames = new ArrayList<String>();
+        // find out which attribute names -if any- are from related features
+        for (String a : attrNames) {
+            if (fs.getSchema().getDescriptor(a) == null) {
+                // if not from fs it must be foreign
+                foreignAttrNames.add(a);
+                tPropnames.remove(a);
+            }
+        }
+        foreignAttrNames.add(TERREINID_RELATED_FIELDNAME);
+        tPropnames.add(TERREINID_FIELDNAME);
         Filter filter = ECQL.toFilter(this.gebiedsNaamQuery);
-        List<String> tPropnames = attrNames;
         Query q = new Query(fs.getName().toString());
         q.setPropertyNames(tPropnames);
         q.setFilter(filter);
         q.setHandle("individueel-rapport");
         q.setMaxFeatures(FeatureToJson.MAX_FEATURES);
 
+        SimpleFeatureCollection mainFSinMem;
         try {
-            SimpleFeatureCollection inMem = DataUtilities.collection(fs.getFeatures(q).features());
-            featuresToJson(inMem, json, featureTypeAttributes, attrNames);
+            mainFSinMem = DataUtilities.collection(fs.getFeatures(q).features());
         } finally {
             fs.getDataStore().dispose();
         }
-//        TODO related features
-        // find out which attribute names are from related features
-        // get the related features
-        // for each related feature add the parent object's attributes + date
-        // convert to json
+        if (!foreignAttrNames.isEmpty()) {
+            SimpleFeatureType relFt = this.getRelatedSFT(ft, RELATED_FT_NAME);
+            SimpleFeatureSource foreignFs = (SimpleFeatureSource) relFt.openGeoToolsFeatureSource();
+            // compose IN query criteria and store parent features in a map so we can easily get them later
+            StringBuilder in = new StringBuilder();
+            HashMap<Integer, SimpleFeature> parentFeatures = new HashMap<Integer, SimpleFeature>();
+            SimpleFeatureIterator inMemFeats = mainFSinMem.features();
+            while (inMemFeats.hasNext()) {
+                SimpleFeature f = inMemFeats.next();
+                in.append(f.getAttribute(TERREINID_FIELDNAME)).append(",");
+                parentFeatures.put((Integer) f.getAttribute(TERREINID_FIELDNAME), f);
+            }
+            inMemFeats.close();
 
-//        SimpleFeatureType relFt = null;
-//        // TODO assuming there is only one relate, get the foreign type
-//        for (FeatureTypeRelation rel : ft.getRelations()) {
-//            if (rel.getType().equals(FeatureTypeRelation.RELATE)) {
-//                relFt = rel.getForeignFeatureType();
-//                log.debug("foreign FT: " + relFt.getTypeName());
-//                break;
-//            }
-//        }
-//        SimpleFeatureSource foreignFs = (SimpleFeatureSource) relFt.openGeoToolsFeatureSource();
-//        List<AttributeDescriptor> relFeatureTypeAttributes = relFt.getAttributes();
+            // get related features (children)
+            Query foreignQ = new Query(foreignFs.getName().toString());
+            foreignQ.setHandle("individueel-rapport-related");
+            foreignQ.setPropertyNames(foreignAttrNames);
+            String query = TERREINID_RELATED_FIELDNAME + " IN (" + in.substring(0, in.length() - 1) + ")";
+            log.debug("individueel-rapport-related: " + query);
+            foreignQ.setFilter(ECQL.toFilter(query));
+            try {
+                // kavels/children for selected terrein id's
+                SimpleFeatureCollection relatedFC = foreignFs.getFeatures(foreignQ);
+                // create a new aggregate feature type 'COMPOSITE' that has attributes of both parent and child types
+                SimpleFeatureTypeBuilder tb = new SimpleFeatureTypeBuilder();
+                tb.setName("COMPOSITE");
+                for (String prop : attrNames) {
+                    org.opengis.feature.type.AttributeDescriptor attrDescName = fs.getSchema().getDescriptor(prop);
+                    if (attrDescName == null) {
+                        // if not from the parent it must be from the child
+                        attrDescName = foreignFs.getSchema().getDescriptor(prop);
+                    }
+                    tb.add(attrDescName);
+                }
+                tb.add(TERREINID_RELATED_FIELDNAME, Integer.class);
+                org.opengis.feature.simple.SimpleFeatureType type = tb.buildFeatureType();
+                //  merge main & related child flamingo attribute descriptors for COMPOSITE,
+                featureTypeAttributes.addAll(relFt.getAttributes());
+
+                SimpleFeatureBuilder sfBuilder = new SimpleFeatureBuilder(type);
+                SimpleFeatureIterator sfcIter = relatedFC.features();
+                ArrayList<SimpleFeature> newfeats = new ArrayList<SimpleFeature>();
+                while (sfcIter.hasNext()) {
+                    // create as many new features as children
+                    SimpleFeature f = sfcIter.next();
+                    SimpleFeature n = SimpleFeatureBuilder.retype(f, sfBuilder);
+                    // copy main data to related children(n)
+                    SimpleFeature p = parentFeatures.get((Integer) f.getAttribute(TERREINID_RELATED_FIELDNAME));
+                    for (Property a : p.getProperties()) {
+                        if (attrNames.contains(a.getName().toString())) {
+                            n.setAttribute(a.getName(), a.getValue());
+                        }
+                    }
+                    newfeats.add(n);
+                }
+                sfcIter.close();
+                mainFSinMem = DataUtilities.collection(newfeats);
+            } finally {
+                foreignFs.getDataStore().dispose();
+            }
+        }
+        featuresToJson(mainFSinMem, json, featureTypeAttributes, attrNames);
     }
 
     private void reportAggregateData(JSONObject json) throws Exception {
-        log.debug("attribute names: " + StringUtils.join(attrNames));
-        log.debug("aggregate by: " + this.areaType + " using " + gebiedsNaamQuery);
-
         SimpleFeatureType ft = layer.getFeatureType();
         List<AttributeDescriptor> featureTypeAttributes = ft.getAttributes();
         SimpleFeatureSource fs = (SimpleFeatureSource) ft.openGeoToolsFeatureSource();
@@ -674,8 +754,6 @@ public class IbisAttributeListActionBean implements ActionBean {
         tPropnames.add(REGIO_FIELDNAME);
         tPropnames.add(TERREIN_FIELDNAME);
 
-        log.debug("setting query fields: " + StringUtils.join(tPropnames));
-
         Query q = new Query(fs.getName().toString());
         q.setPropertyNames(tPropnames);
         q.setFilter(filter);
@@ -685,7 +763,6 @@ public class IbisAttributeListActionBean implements ActionBean {
         log.debug("aggregatie query:" + q);
         try {
             SimpleFeatureCollection sfc = DataUtilities.collection(fs.getFeatures(q).features());
-
             // create the new aggregate featuretype
             SimpleFeatureTypeBuilder tb = new SimpleFeatureTypeBuilder();
             tb.setName("AGGREGATE");
@@ -695,19 +772,12 @@ public class IbisAttributeListActionBean implements ActionBean {
             tb.add(GEBIED_FIELDNAME, String.class);
             org.opengis.feature.simple.SimpleFeatureType type = tb.buildFeatureType();
 
-            // create flamingo attribute descriptors for AGGREGATE
-            List<AttributeDescriptor> newFeatureTypeAttributes = new ArrayList<AttributeDescriptor>();
-            for (AttributeDescriptor a : featureTypeAttributes) {
-                if (attrNames.contains(a.getName())) {
-                    newFeatureTypeAttributes.add(a);
-                }
-            }
+            // update flamingo attribute descriptors for AGGREGATE
             AttributeDescriptor g = new AttributeDescriptor();
             g.setName(GEBIED_FIELDNAME);
             g.setAlias("gebiedsnaam");
             g.setType(AttributeDescriptor.TYPE_STRING);
-            //g.setId(0L);
-            newFeatureTypeAttributes.add(0, g);
+            featureTypeAttributes.add(0, g);
 
             // aggregation
             Set<String> regions = new HashSet<String>();
@@ -754,7 +824,7 @@ public class IbisAttributeListActionBean implements ActionBean {
             }
 
             attrNames.add(GEBIED_FIELDNAME);
-            featuresToJson(sfc, json, newFeatureTypeAttributes, attrNames);
+            featuresToJson(sfc, json, featureTypeAttributes, attrNames);
         } finally {
             fs.getDataStore().dispose();
         }
@@ -793,7 +863,7 @@ public class IbisAttributeListActionBean implements ActionBean {
             newfeats.put(fName, newfeat);
         }
 
-        // for each (regio|gemeente|terrein) name in sfc get the attribute to aggregate
+        // for each (regio|gemeente|terrein) name in relatedFC get the attribute to aggregate
         //  and add up in new named feature
         SimpleFeatureIterator items = sfc.features();
         while (items.hasNext()) {
