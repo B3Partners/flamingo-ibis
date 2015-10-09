@@ -748,36 +748,126 @@ public class IbisAttributeListActionBean implements ActionBean {
         List<AttributeDescriptor> featureTypeAttributes = ft.getAttributes();
         SimpleFeatureSource fs = (SimpleFeatureSource) ft.openGeoToolsFeatureSource();
 
-        Filter filter = ECQL.toFilter(this.gebiedsNaamQuery);
         List<String> tPropnames = new ArrayList(attrNames);
+        List<String> foreignAttrNames = new ArrayList<String>();
+        // find out which attribute names -if any- are from related features
+        for (String a : attrNames) {
+            if (fs.getSchema().getDescriptor(a) == null) {
+                // if not from fs it must be foreign
+                foreignAttrNames.add(a);
+                tPropnames.remove(a);
+            }
+        }
+        foreignAttrNames.add(TERREINID_RELATED_FIELDNAME);
+        tPropnames.add(TERREINID_FIELDNAME);
         tPropnames.add(GEMEENTE_FIELDNAME);
         tPropnames.add(REGIO_FIELDNAME);
         tPropnames.add(TERREIN_FIELDNAME);
 
+        Filter filter = ECQL.toFilter(this.gebiedsNaamQuery);
         Query q = new Query(fs.getName().toString());
         q.setPropertyNames(tPropnames);
         q.setFilter(filter);
         q.setHandle("aggregatie-rapport");
         q.setMaxFeatures(FeatureToJson.MAX_FEATURES);
-
         log.debug("aggregatie query:" + q);
+
         try {
-            SimpleFeatureCollection sfc = DataUtilities.collection(fs.getFeatures(q).features());
             // create the new aggregate featuretype
+            org.opengis.feature.simple.SimpleFeatureType type;
             SimpleFeatureTypeBuilder tb = new SimpleFeatureTypeBuilder();
             tb.setName("AGGREGATE");
-            for (String prop : attrNames) {
-                tb.add(fs.getSchema().getDescriptor(prop));
+            for (String prop : tPropnames) {
+                org.opengis.feature.type.AttributeDescriptor attrDescName = fs.getSchema().getDescriptor(prop);
+                if (attrDescName != null) {
+                    tb.add(attrDescName);
+                }
             }
             tb.add(GEBIED_FIELDNAME, String.class);
-            org.opengis.feature.simple.SimpleFeatureType type = tb.buildFeatureType();
-
             // update flamingo attribute descriptors for AGGREGATE
             AttributeDescriptor g = new AttributeDescriptor();
             g.setName(GEBIED_FIELDNAME);
             g.setAlias("gebiedsnaam");
             g.setType(AttributeDescriptor.TYPE_STRING);
             featureTypeAttributes.add(0, g);
+            // get parent features
+            SimpleFeatureCollection sfc = DataUtilities.collection(fs.getFeatures(q).features());
+
+            if (!foreignAttrNames.isEmpty()) {
+                SimpleFeatureType relFt = this.getRelatedSFT(ft, RELATED_FT_NAME);
+                SimpleFeatureSource foreignFs = (SimpleFeatureSource) relFt.openGeoToolsFeatureSource();
+
+                // add related attributes to type
+                for (String prop : foreignAttrNames) {
+                    org.opengis.feature.type.AttributeDescriptor attrDescName = foreignFs.getSchema().getDescriptor(prop);
+                    if (attrDescName != null) {
+                        tb.add(attrDescName);
+                    }
+                }
+                tb.add(TERREINID_RELATED_FIELDNAME, Integer.class);
+                type = tb.buildFeatureType();
+
+                //  merge main & related child flamingo attribute descriptors for AGGREGATE,
+                featureTypeAttributes.addAll(relFt.getAttributes());
+
+                // compose IN query criteria and store parent features in a map so we can easily get them later
+                StringBuilder in = new StringBuilder();
+                HashMap<Integer, SimpleFeature> parentFeatures = new HashMap<Integer, SimpleFeature>();
+                SimpleFeatureIterator inMemFeats = sfc.features();
+                while (inMemFeats.hasNext()) {
+                    SimpleFeature f = inMemFeats.next();
+                    in.append(f.getAttribute(TERREINID_FIELDNAME)).append(",");
+                    parentFeatures.put((Integer) f.getAttribute(TERREINID_FIELDNAME), f);
+                }
+                inMemFeats.close();
+
+                // get related features (children)
+                Query foreignQ = new Query(foreignFs.getName().toString());
+                foreignQ.setHandle("aggregatie-rapport-related");
+                foreignQ.setPropertyNames(foreignAttrNames);
+                String query = TERREINID_RELATED_FIELDNAME + " IN (" + in.substring(0, in.length() - 1) + ")";
+                log.debug("aggregatie-rapport-related: " + query);
+                foreignQ.setFilter(ECQL.toFilter(query));
+
+                try {
+                    // kavels/children for selected terrein id's
+                    SimpleFeatureCollection relatedFC = foreignFs.getFeatures(foreignQ);
+                    SimpleFeatureBuilder sfBuilder = new SimpleFeatureBuilder(type);
+                    SimpleFeatureIterator sfcIter = relatedFC.features();
+                    ArrayList<SimpleFeature> newfeats = new ArrayList<SimpleFeature>();
+
+                    boolean firsttimeForP = true;
+                    Set<SimpleFeature> firsttimeForPSet = new HashSet<SimpleFeature>();
+                    while (sfcIter.hasNext()) {
+                        // create as many new features as related/children
+                        SimpleFeature f = sfcIter.next();
+                        SimpleFeature n = SimpleFeatureBuilder.retype(f, sfBuilder);
+
+                        // copy main data to related children
+                        //   but payload field only once to prevent aggregating those values later
+                        SimpleFeature p = parentFeatures.get((Integer) f.getAttribute(TERREINID_RELATED_FIELDNAME));
+                        for (Property a : p.getProperties()) {
+                            if (firsttimeForPSet.contains(p)) {
+                                if (!attrNames.contains(a.getName().toString())) {
+                                    n.setAttribute(a.getName(), a.getValue());
+                                }
+                            } else {
+                                if (tPropnames.contains(a.getName().toString())) {
+                                    n.setAttribute(a.getName(), a.getValue());
+                                }
+                            }
+                        }
+                        newfeats.add(n);
+                        firsttimeForPSet.add(p);
+                    }
+                    sfcIter.close();
+                    sfc = DataUtilities.collection(newfeats);
+                } finally {
+                    foreignFs.getDataStore().dispose();
+                }
+            } else {
+                type = tb.buildFeatureType();
+            }
 
             // aggregation
             Set<String> regions = new HashSet<String>();
