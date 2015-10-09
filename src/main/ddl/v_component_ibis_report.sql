@@ -2,7 +2,7 @@
 
 -- DROP VIEW "IBIS".v_component_ibis_report;
 
-CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report AS 
+CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report AS
  SELECT bedrijventerrein.id,
     bedrijventerrein.rin_nr,
     bedrijventerrein.datum,
@@ -59,12 +59,23 @@ CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report AS
     v_gemeente_en_regio_envelopes.naam,
     v_gemeente_en_regio_envelopes.bbox_gemeente,
     v_gemeente_en_regio_envelopes.vvr_naam,
-    v_gemeente_en_regio_envelopes.bbox_regio
+    v_gemeente_en_regio_envelopes.bbox_regio,
+    v_terrein_oppervlakte.opp_geom,
+    v_terrein_oppervlakte.opp_woonbebouwing,
+    v_terrein_oppervlakte.opp_openbare_ruimte,
+    v_terrein_oppervlakte.opp_niet_terstond_uitgeefbaar,
+    v_terrein_oppervlakte.opp_uitgegeven,
+    v_terrein_oppervlakte.opp_uitgeefbaar,
+    v_terrein_oppervlakte.opp_niet_bekend,
+    v_terrein_oppervlakte.opp_leeg,
+    v_terrein_oppervlakte.opp_netto,
+    v_terrein_oppervlakte.opp_bruto
    FROM bedrijventerrein
      LEFT JOIN v_gemeente_en_regio_envelopes ON bedrijventerrein.gemeenteid = v_gemeente_en_regio_envelopes.gem_id
+     JOIN v_terrein_oppervlakte ON bedrijventerrein.id = v_terrein_oppervlakte.id
   ORDER BY v_gemeente_en_regio_envelopes.vvr_naam, v_gemeente_en_regio_envelopes.naam, bedrijventerrein.a_plannaam;
 
 ALTER TABLE "IBIS".v_component_ibis_report
   OWNER TO ibis;
 COMMENT ON VIEW "IBIS".v_component_ibis_report
-  IS 'Koppelt de gemeente en regio gegevens aan de terreinen voor de IbisReport component';
+  IS 'Koppelt de gemeente en regio gegevens en oppervlakte gegevens aan de terreinen voor de IbisReport component';
