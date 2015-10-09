@@ -20,16 +20,16 @@
     <scm>
         <connection>scm:git:git@github.com:B3Partners/flamingo-ibis.git</connection>
         <developerConnection>scm:git:git@github.com:B3Partners/flamingo-ibis.git</developerConnection>
-        <url>https://github.com/B3Partners/flamingo-ibis</url>
+        <url>https://github.com/B3Partners/flamingo-ibis/</url>
         <tag>HEAD</tag>
     </scm>
     <ciManagement>
         <system>Travis-CI</system>
-        <url>https://travis-ci.org/B3Partners/flamingo-ibis</url>
+        <url>https://travis-ci.org/B3Partners/flamingo-ibis/</url>
     </ciManagement>
     <issueManagement>
         <system>Github</system>
-        <url>https://github.com/B3Partners/flamingo-ibis/issues</url>
+        <url>https://github.com/B3Partners/flamingo-ibis/issues/</url>
     </issueManagement>
     <distributionManagement>
         <repository>
@@ -45,7 +45,7 @@
         <site>
             <id>github</id>
             <name>github generated site</name>
-            <url>scm:git:git@github.com:B3Partners/flamingo-ibis.git/</url>
+            <url>scm:git:git@github.com:B3Partners/flamingo-ibis.git</url>
         </site>
     </distributionManagement>
     <dependencyManagement>
@@ -161,158 +161,6 @@
             </plugin>
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
-                <configuration>
-                    <skipDeploy>true</skipDeploy>
-                    <generateSitemap>true</generateSitemap>
-                    <attach>true</attach>
-                    <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
-                    <topSiteURL>https://b3partners.github.io/flamingo-ibis/</topSiteURL>
-                    <reportPlugins>
-                        <plugin>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>versions-maven-plugin</artifactId>
-                            <version>2.2</version>
-                            <reportSets>
-                                <reportSet>
-                                    <reports>
-                                        <report>dependency-updates-report</report>
-                                        <report>plugin-updates-report</report>
-                                    </reports>
-                                </reportSet>
-                            </reportSets>
-                        </plugin>
-                        <plugin>
-                            <artifactId>maven-project-info-reports-plugin</artifactId>
-                            <reportSets>
-                                <reportSet>
-                                    <reports>
-                                        <report>cim</report>
-                                        <report>dependencies</report>
-                                        <report>dependency-convergence</report>
-                                        <report>dependency-management</report>
-                                        <report>index</report>
-                                        <report>plugin-management</report>
-                                        <report>plugins</report>
-                                        <report>scm</report>
-                                        <report>summary</report>
-                                    </reports>
-                                </reportSet>
-                            </reportSets>
-                            <configuration>
-                                <dependencyLocationsEnabled>true</dependencyLocationsEnabled>
-                            </configuration>
-                        </plugin>
-                        <plugin>
-                            <artifactId>maven-jxr-plugin</artifactId>
-                            <configuration>
-                                <linkJavadoc>true</linkJavadoc>
-                                <javadocDir>${basedir}/target/site/apidocs</javadocDir>
-                            </configuration>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>versions-maven-plugin</artifactId>
-                            <reportSets>
-                                <reportSet>
-                                    <reports>
-                                        <report>dependency-updates-report</report>
-                                        <report>plugin-updates-report</report>
-                                    </reports>
-                                </reportSet>
-                            </reportSets>
-                        </plugin>
-                        <plugin>
-                            <artifactId>maven-javadoc-plugin</artifactId>
-                            <reportSets>
-                                <reportSet>
-                                    <reports>
-                                        <report>javadoc-no-fork</report>
-                                        <report>test-javadoc-no-fork</report>
-                                    </reports>
-                                </reportSet>
-                            </reportSets>
-                            <configuration>
-                                <debug>${debug}</debug>
-                                <stylesheet>java</stylesheet>
-                                <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
-                                <additionalparam>-all -hide java.* -hide javax.* -hide org.* -inferrel -inferreltype</additionalparam>
-                                <docletArtifact>
-                                    <groupId>org.umlgraph</groupId>
-                                    <artifactId>umlgraph</artifactId>
-                                    <version>5.6.6</version>
-                                </docletArtifact>
-                                <show>package</show>
-                                <useStandardDocletOptions>true</useStandardDocletOptions>
-                                <links>
-                                    <link>http://www.slf4j.org/apidocs</link>
-                                    <link>http://download.oracle.com/javaee/6/api</link>
-                                    <link>http://docs.geotools.org/stable/javadocs/</link>
-                                    <link>https://logging.apache.org/log4j/1.2/apidocs/</link>
-                                </links>
-                                <author>true</author>
-                                <defaultAuthor />
-                                <defaultVersion />
-                                <fixClassComment>true</fixClassComment>
-                                <fixTags>all</fixTags>
-                                <javadocVersion>${java.version}</javadocVersion>
-                                <encoding>${project.build.sourceEncoding}</encoding>
-                                <packagesheader>${project.artifactId}</packagesheader>
-                                <tags>
-                                    <tag>
-                                        <name>todo</name>
-                                        <placement>a</placement>
-                                        <head>To Do:</head>
-                                    </tag>
-                                    <tag>
-                                        <name>note</name>
-                                        <placement>a</placement>
-                                        <head>Note:</head>
-                                    </tag>
-                                    <tag>
-                                        <name>opt</name>
-                                        <placement>X</placement>
-                                    </tag>
-                                    <tag>
-                                        <name>composed</name>
-                                        <placement>X</placement>
-                                    </tag>
-                                    <tag>
-                                        <name>has</name>
-                                        <placement>X</placement>
-                                    </tag>
-                                    <tag>
-                                        <name>depend</name>
-                                        <placement>X</placement>
-                                    </tag>
-                                    <tag>
-                                        <name>assoc</name>
-                                        <placement>X</placement>
-                                    </tag>
-                                    <tag>
-                                        <name>extends</name>
-                                        <placement>X</placement>
-                                    </tag>
-                                </tags>
-                            </configuration>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>taglist-maven-plugin</artifactId>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-surefire-report-plugin</artifactId>
-                            <version>${maven.surefire.version}</version>
-                            <configuration>
-                                <linkXRef>true</linkXRef>
-                                <goal>report-only</goal>
-                            </configuration>
-                        </plugin>
-                    </reportPlugins>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-site-plugin</artifactId>
                 <executions>
                     <execution>
                         <id>stage-for-scm-publish</id>
@@ -321,8 +169,166 @@
                             <goal>stage</goal>
                         </goals>
                         <configuration>
-                            <skipDeploy>false</skipDeploy>
+                            <topSiteURL>https://b3partners.github.io/flamingo-ibis/</topSiteURL>
+                            <stagingDirectory>${project.build.directory}/staging</stagingDirectory>
                         </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-site</id>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>stage</goal>
+                        </goals>
+                        <configuration>
+                            <skipDeploy>true</skipDeploy>
+                            <generateSitemap>true</generateSitemap>
+                            <attach>true</attach>
+                            <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
+                            <topSiteURL>https://b3partners.github.io/flamingo-ibis/</topSiteURL>
+                            <reportPlugins>
+                                <plugin>
+                                    <groupId>org.codehaus.mojo</groupId>
+                                    <artifactId>versions-maven-plugin</artifactId>
+                                    <version>2.2</version>
+                                    <reportSets>
+                                        <reportSet>
+                                            <reports>
+                                                <report>dependency-updates-report</report>
+                                                <report>plugin-updates-report</report>
+                                            </reports>
+                                        </reportSet>
+                                    </reportSets>
+                                </plugin>
+                                <plugin>
+                                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                                    <reportSets>
+                                        <reportSet>
+                                            <reports>
+                                                <report>cim</report>
+                                                <report>dependencies</report>
+                                                <report>dependency-convergence</report>
+                                                <report>dependency-management</report>
+                                                <report>index</report>
+                                                <report>plugin-management</report>
+                                                <report>plugins</report>
+                                                <report>scm</report>
+                                                <report>summary</report>
+                                            </reports>
+                                        </reportSet>
+                                    </reportSets>
+                                    <configuration>
+                                        <dependencyLocationsEnabled>true</dependencyLocationsEnabled>
+                                    </configuration>
+                                </plugin>
+                                <plugin>
+                                    <artifactId>maven-jxr-plugin</artifactId>
+                                    <configuration>
+                                        <linkJavadoc>true</linkJavadoc>
+                                        <javadocDir>${basedir}/target/site/apidocs</javadocDir>
+                                    </configuration>
+                                </plugin>
+                                <plugin>
+                                    <groupId>org.codehaus.mojo</groupId>
+                                    <artifactId>versions-maven-plugin</artifactId>
+                                    <reportSets>
+                                        <reportSet>
+                                            <reports>
+                                                <report>dependency-updates-report</report>
+                                                <report>plugin-updates-report</report>
+                                            </reports>
+                                        </reportSet>
+                                    </reportSets>
+                                </plugin>
+                                <plugin>
+                                    <artifactId>maven-javadoc-plugin</artifactId>
+                                    <reportSets>
+                                        <reportSet>
+                                            <reports>
+                                                <report>javadoc-no-fork</report>
+                                                <report>test-javadoc-no-fork</report>
+                                            </reports>
+                                        </reportSet>
+                                    </reportSets>
+                                    <configuration>
+                                        <debug>${debug}</debug>
+                                        <stylesheet>java</stylesheet>
+                                        <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+                                        <additionalparam>-all -hide java.* -hide javax.* -hide org.* -inferrel -inferreltype</additionalparam>
+                                        <docletArtifact>
+                                            <groupId>org.umlgraph</groupId>
+                                            <artifactId>umlgraph</artifactId>
+                                            <version>5.6.6</version>
+                                        </docletArtifact>
+                                        <show>package</show>
+                                        <useStandardDocletOptions>true</useStandardDocletOptions>
+                                        <links>
+                                            <link>http://www.slf4j.org/apidocs</link>
+                                            <link>http://download.oracle.com/javaee/6/api</link>
+                                            <link>http://docs.geotools.org/stable/javadocs/</link>
+                                            <link>https://logging.apache.org/log4j/1.2/apidocs/</link>
+                                        </links>
+                                        <author>true</author>
+                                        <defaultAuthor />
+                                        <defaultVersion />
+                                        <fixClassComment>true</fixClassComment>
+                                        <fixTags>all</fixTags>
+                                        <javadocVersion>${java.version}</javadocVersion>
+                                        <encoding>${project.build.sourceEncoding}</encoding>
+                                        <packagesheader>${project.artifactId}</packagesheader>
+                                        <tags>
+                                            <tag>
+                                                <name>todo</name>
+                                                <placement>a</placement>
+                                                <head>To Do:</head>
+                                            </tag>
+                                            <tag>
+                                                <name>note</name>
+                                                <placement>a</placement>
+                                                <head>Note:</head>
+                                            </tag>
+                                            <tag>
+                                                <name>opt</name>
+                                                <placement>X</placement>
+                                            </tag>
+                                            <tag>
+                                                <name>composed</name>
+                                                <placement>X</placement>
+                                            </tag>
+                                            <tag>
+                                                <name>has</name>
+                                                <placement>X</placement>
+                                            </tag>
+                                            <tag>
+                                                <name>depend</name>
+                                                <placement>X</placement>
+                                            </tag>
+                                            <tag>
+                                                <name>assoc</name>
+                                                <placement>X</placement>
+                                            </tag>
+                                            <tag>
+                                                <name>extends</name>
+                                                <placement>X</placement>
+                                            </tag>
+                                        </tags>
+                                    </configuration>
+                                </plugin>
+                                <plugin>
+                                    <groupId>org.codehaus.mojo</groupId>
+                                    <artifactId>taglist-maven-plugin</artifactId>
+                                </plugin>
+                                <plugin>
+                                    <groupId>org.apache.maven.plugins</groupId>
+                                    <artifactId>maven-surefire-report-plugin</artifactId>
+                                    <version>${maven.surefire.version}</version>
+                                    <configuration>
+                                        <linkXRef>true</linkXRef>
+                                        <goal>report-only</goal>
+                                    </configuration>
+                                </plugin>
+                            </reportPlugins>
+                        </configuration>
+
                     </execution>
                 </executions>
             </plugin>
