@@ -24,17 +24,17 @@
         <head>
             <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
             <link rel="icon" href="favicon.ico" type="image/x-icon" />
-            <!-- link rel="meta" title="DOAP"
-            href="${project.url}/doap_${project.artifactId}.rdf" type="application/rdf+xml" / -->
+            <link rel="meta" title="DOAP"
+                  href="${project.url}/doap_${project.artifactId}.rdf" type="application/rdf+xml" />
         </head>
         <links>
             <item name="Issues dashboard" href="${project.issueManagement.url}" />
         </links>
         <menu name="Information" inherit="top">
             <item name="Home" href="/index.html" />
-            <item name="Notes" href="/notes.html" />
+            <item name="Deployment notes" href="/notes.html" />
             <item name="Release notes" href="/releasenotes.html" />
-            <!-- item name="Developer Notes" href="/development.html" / -->
+            <item name="Developer Notes" href="/development.html" />
         </menu>
         <menu ref="parent" />
         <menu ref="modules" />

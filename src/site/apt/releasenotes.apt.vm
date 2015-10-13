@@ -1,0 +1,36 @@
+	 -----
+	 Release notes
+	 -----
+	 mprins
+	 -----
+	 12 oct 2015
+	 -----
+
+~~ reference: http://maven.apache.org/doxia/references/apt-format.html
+
+~~ Note that we're using eg. ${project.properties.get("jruby.version")} to work
+~~     around a limitation getting pom properties with a dot.
+
+${project.name} ${project.version} Release Notes
+
+  These are the release notes for ${project.name} version ${project.version}.
+
+%{toc|section=1|fromDepth=2|toDepth=2}
+
+* ${project.version} Release Notes
+
+  A complete list of issues can be seen in the tracker
+  {{{${project.issueManagement.url}?q=milestone%3A${project.version}+is%3Aclosed}milestone ${project.version} }}.
+
+** New
+
+  *
+
+  []
+
+** Enhancements and Fixes
+
+  *
+
+  []
+

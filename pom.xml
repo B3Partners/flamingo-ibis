@@ -6,7 +6,8 @@
     <version>2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>ibis-flamingo-mc</name>
-    <url>https://github.com/B3Partners/flamingo-ibis</url>
+    <description>A Flamingo based project to provide for busines park development.</description>
+    <url>https://github.com/B3Partners/flamingo-ibis/</url>
     <parent>
         <groupId>org.flamingo-mc</groupId>
         <artifactId>flamingo-mc</artifactId>
@@ -28,7 +29,7 @@
         <url>https://travis-ci.org/B3Partners/flamingo-ibis/</url>
     </ciManagement>
     <issueManagement>
-        <system>Github</system>
+        <system>GitHub</system>
         <url>https://github.com/B3Partners/flamingo-ibis/issues/</url>
     </issueManagement>
     <distributionManagement>
@@ -47,9 +48,9 @@
             <name>github generated site</name>
             <url>scm:git:git@github.com:B3Partners/flamingo-ibis.git</url>
         </site>
+        <downloadUrl>http://repo.b3p.nl/nexus/</downloadUrl>
     </distributionManagement>
-    <dependencyManagement>
-    </dependencyManagement>
+    <dependencyManagement />
     <repositories>
         <repository>
             <id>b3p</id>
@@ -147,6 +148,11 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-changes-plugin</artifactId>
+                    <version>2.11</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-scm-publish-plugin</artifactId>
                     <version>1.1</version>
                 </plugin>
@@ -170,7 +176,7 @@
                         </goals>
                         <configuration>
                             <topSiteURL>https://b3partners.github.io/flamingo-ibis/</topSiteURL>
-                            <stagingDirectory>${project.build.directory}/staging</stagingDirectory>
+                            <stagingDirectory>${project.build.directory}/staging/</stagingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -185,6 +191,7 @@
                             <attach>true</attach>
                             <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
                             <topSiteURL>https://b3partners.github.io/flamingo-ibis/</topSiteURL>
+                            <stagingDirectory>${project.build.directory}/staging/</stagingDirectory>
                             <reportPlugins>
                                 <plugin>
                                     <groupId>org.codehaus.mojo</groupId>
@@ -206,7 +213,6 @@
                                             <reports>
                                                 <report>cim</report>
                                                 <report>dependencies</report>
-                                                <report>dependency-convergence</report>
                                                 <report>dependency-management</report>
                                                 <report>index</report>
                                                 <report>plugin-management</report>
@@ -217,7 +223,7 @@
                                         </reportSet>
                                     </reportSets>
                                     <configuration>
-                                        <dependencyLocationsEnabled>true</dependencyLocationsEnabled>
+                                        <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
                                     </configuration>
                                 </plugin>
                                 <plugin>
@@ -326,16 +332,34 @@
                                         <goal>report-only</goal>
                                     </configuration>
                                 </plugin>
+                                <plugin>
+                                    <artifactId>maven-changes-plugin</artifactId>
+                                    <configuration>
+                                        <includeOpenIssues>false</includeOpenIssues>
+                                        <columnNames>Type,Key,Summary,Assignee,Status,Fix Version</columnNames>
+                                    </configuration>
+                                </plugin>
                             </reportPlugins>
                         </configuration>
-
                     </execution>
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-doap-plugin</artifactId>
+                <version>1.2</version>
+                <configuration>
+                    <doapOptions>
+                        <category>webapp</category>
+                        <programmingLanguage>Java</programmingLanguage>
+                        <programmingLanguage>Javascript</programmingLanguage>
+                    </doapOptions>
+                </configuration>
+            </plugin>
+            <plugin>
                 <artifactId>maven-scm-publish-plugin</artifactId>
                 <configuration>
-                    <content>${project.build.directory}/staging</content>
+                    <content>${project.build.directory}/staging/</content>
                     <scmBranch>gh-pages</scmBranch>
                 </configuration>
                 <executions>
