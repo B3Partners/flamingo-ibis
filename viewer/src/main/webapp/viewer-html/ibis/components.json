@@ -11,6 +11,18 @@ className: "viewer.components.IbisReport",
         restrictions: ["left_menu", "rightmargin_top", "leftmargin_top"],
         showHelp: true
 }, {
+className: "viewer.components.IbisLocationFinder",
+        notInCombinationWith: ["viewer.mapcomponents.FlamingoMap"],
+        name: "IbisZoeker",
+        group: "Ibis",
+        shortName: "IZ",
+        sources: ["IbisReportStore.js", "IbisReportBase.js", "IbisLocationFinder.js"],
+        configSource: ["ConfigObject.js", "SelectionWindowConfig.js", "IbisLocationFinder-config.js"],
+        singleton: true,
+        type: "popup",
+        restrictions: ["rightmargin_top", "leftmargin_top"],
+        showHelp: true
+}, {
 className: "viewer.components.IbisFactsheet",
         notInCombinationWith: ["viewer.mapcomponents.FlamingoMap"],
         name: "IbisFactsheet",
@@ -21,20 +33,18 @@ className: "viewer.components.IbisFactsheet",
         singleton: true,
         restrictions: ["content"],
         showHelp: true
-},
-{
+}, {
 className: "viewer.components.IbisEdit",
         name: "Edit",
         shortName: "Ed",
         group: "Ibis",
-                sources: ["WorkflowStatus.js", "Edit.js", "IbisEdit.js"],
-                configSource: ["WorkflowStatus.js", "ConfigObject.js", "SelectionWindowConfig.js", "IbisEdit-config.js"],
+        sources: ["WorkflowStatus.js", "Edit.js", "IbisEdit.js"],
+        configSource: ["WorkflowStatus.js", "ConfigObject.js", "SelectionWindowConfig.js", "IbisEdit-config.js"],
         restrictions: ["left_menu"],
         type: "popup",
         singleton: true,
         showHelp: true
-}
-, {
+}, {
 className: "viewer.components.IbisSplit",
         name: "Splitsen",
         shortName: "Sp",
@@ -58,5 +68,4 @@ className: "viewer.components.IbisMerge",
         type: "popup",
         singleton: true,
         showHelp: true
-}
-]
+}]

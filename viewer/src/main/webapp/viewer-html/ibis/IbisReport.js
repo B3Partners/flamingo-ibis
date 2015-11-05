@@ -20,9 +20,9 @@
  * @author <a href="mailto:geertplaisier@b3partners.nl">Geert Plaisier</a>
  * @author <a href="mailto:markprins@b3partners.nl">Mark Prins</a>
  */
-Ext.define("viewer.components.IbisReport", {
-    extend: "viewer.components.Component",
-    requires: ['viewer.components.GridPanel'],
+Ext.define('viewer.components.IbisReport', {
+    extend: 'viewer.components.Component',
+    requires: ['viewer.components.GridPanel', 'viewer.components.IbisReportBase'],
     deActivatedTools: [],
     toolMapClick: null,
     step1: null,
@@ -663,7 +663,8 @@ Ext.define("viewer.components.IbisReport", {
      * @returns {undefined}
      */
     updateTerrein: function (combo, value, scope) {
-        var filters = this.terreinenStore.getFilters().clone();
+        // var filters = this.terreinenStore.getFilters().clone();
+        var filters = this.terreinenStore.getFilters().getRange();
         this.terreinenStore.clearFilter(false);
 
         var wkt;
@@ -677,12 +678,13 @@ Ext.define("viewer.components.IbisReport", {
             var zoomFeat = Ext.create("viewer.viewercontroller.controller.Feature", {_wktgeom: wkt});
             this.config.viewerController.mapComponent.getMap().zoomToExtent(zoomFeat.getExtent());
         }
-        try {
+        //try {
             this.terreinenStore.setFilters(filters);
-            //Uncaught Error: Cannot override method statics on Ext.util.FilterCollection instance.
-        } catch (e) {
+        //Uncaught Error: Cannot override method statics on Ext.util.FilterCollection instance.
+        //see https://www.sencha.com/forum/showthread.php?302351-store.getFilters()-and-then-store.setFilters()-fails
+        //} catch (e) {
             // ignore
-        }
+        //}
 
         // update aggregation levels
         var myfilter = Ext.create('Ext.util.Filter', {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context antiJARLocking="true" disableURLRewriting="true" path="/viewer">
+<Context antiJARLocking="true" disableURLRewriting="true" path="">
   <Parameter name="componentregistry.path" override="false" value="/viewer-html/components,/viewer-html/ibis"/>
   <!-- For Tomcat: define datasource in server.xml, for example:
 
