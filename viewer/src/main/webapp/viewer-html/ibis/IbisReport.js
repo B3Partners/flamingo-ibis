@@ -36,7 +36,7 @@ Ext.define('viewer.components.IbisReport', {
         title: null,
         titlebarIcon: null,
         tooltip: null,
-        label: "",
+        label: ""
     },
     constructor: function (conf) {
         viewer.components.IbisReport.superclass.constructor.call(this, conf);
