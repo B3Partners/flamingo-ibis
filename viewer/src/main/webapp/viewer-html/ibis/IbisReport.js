@@ -22,7 +22,7 @@
  */
 Ext.define('viewer.components.IbisReport', {
     extend: 'viewer.components.IbisReportBase',
-    requires: ['viewer.components.GridPanel', 'viewer.components.IbisReportStore'],
+    requires: ['viewer.components.GridPanel'],
     deActivatedTools: [],
     toolMapClick: null,
     step1: null,
@@ -87,16 +87,17 @@ Ext.define('viewer.components.IbisReport', {
         me.setIsLoading("Bezig met ophalen van de lijst met bedrijven terreinen. <br /> Dit duurt even...");
         if (Ext.StoreMgr.lookup('terreinenStore')) {
             me.terreinenStore = Ext.StoreMgr.lookup('terreinenStore');
-            if (me.terreinenStore.isLoading( )) {
+
+            if (!me.terreinenStore.isLoaded( )) {
                 me.terreinenStore.on({
                     load: {fn: function () {
                             me.setDoneLoading();
-                            // set intial filters on comboboxes
                             me.resetStoreFilters(false);
                         }, scope: me}
                 });
             } else {
                 me.setDoneLoading();
+                me.resetStoreFilters(false);
             }
         } else {
             me.terreinenStore = Ext.create('Ext.data.Store', {
@@ -127,7 +128,6 @@ Ext.define('viewer.components.IbisReport', {
                     load: {
                         fn: function () {
                             me.setDoneLoading();
-                            // set intial filters on comboboxes
                             me.resetStoreFilters(false);
                         }
                     }
@@ -247,8 +247,6 @@ Ext.define('viewer.components.IbisReport', {
                     name: 'aggregationLevel',
                     fieldLabel: 'Aggregatie niveau',
                     store: [
-//                        ['ASAREA', 'Gelijk aan gebied'],
-//                        ['MOREDETAIL', 'Meer detail']
                         ['REGIO', 'Regio'],
                         ['GEMEENTE', 'Gemeente'],
                         ['TERREIN', 'Terrein']
@@ -590,7 +588,7 @@ Ext.define('viewer.components.IbisReport', {
         var me = this;
         this.deactivateMapClick();
 
-       this.setIsLoading("Bezig met ophalen van bedrijventerrein...");
+        this.setIsLoading("Bezig met ophalen van bedrijventerrein...");
         var featureInfo = Ext.create("viewer.FeatureInfo", {
             viewerController: this.config.viewerController
         });

@@ -40,16 +40,16 @@ Ext.define('viewer.components.IbisLocationFinder', {
         me.setIsLoading("Bezig met ophalen van de lijst met bedrijven terreinen. <br /> Dit duurt even...");
         if (Ext.StoreMgr.lookup('terreinenStore')) {
             me.terreinenStore = Ext.StoreMgr.lookup('terreinenStore');
-            if (me.terreinenStore.isLoading( )) {
+            if (!me.terreinenStore.isLoaded( )) {
                 me.terreinenStore.on({
                     load: {fn: function () {
                             me.setDoneLoading();
-                            // set intial filters on comboboxes
                             me.resetStoreFilters(false);
                         }, scope: me}
                 });
             } else {
                 this.setDoneLoading();
+                me.resetStoreFilters(false);
             }
         } else {
             me.terreinenStore = Ext.create('Ext.data.Store', {
@@ -80,19 +80,12 @@ Ext.define('viewer.components.IbisLocationFinder', {
                     load: {
                         fn: function () {
                             me.setDoneLoading();
-                            // set intial filters on comboboxes
                             me.resetStoreFilters(false);
                         }
                     }
                 }
             });
         }
-        me.terreinenStore.on({
-            'load': {
-                fn: function () {
-                    me.resetStoreFilters(false);
-                }
-            }});
 
         this.step1 = Ext.create('Ext.panel.Panel', {
             title: 'Zoek gebied',

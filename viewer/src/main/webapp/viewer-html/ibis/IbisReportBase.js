@@ -22,9 +22,22 @@
  */
 Ext.define("viewer.components.IbisReportBase", {
     extend: 'viewer.components.Component',
-    //require: ['viewer.components.IbisReportStore'],
-//  shared fields
-
+    /**
+     * An array of objects having a name (eg. c0) and a colName (eg. a_bestaatnietmeer) and an optional colAlias;
+     * the visible attributes.
+     */
+    attributeList: [],
+    // TODO would be nice to set this to 0 (== unlimited in Ext world) but the
+    // flamingo featureService limits this to 1000
+    MAX_ITEMS: 1000,
+    //schema: null,
+    appLayer: null,
+    config: {
+        componentLayer: null,
+        actionbeanUrl: ""
+    },
+    // the datamodel based on the componentLayer
+    //
     idColNaam: 'id',
     idVeldId: '',
     idVeldNaam: '',
@@ -53,20 +66,6 @@ Ext.define("viewer.components.IbisReportBase", {
     regio_geomVeldId: '',
     regio_geomVeldNaam: '',
     /**
-     * An array of objects having a name (eg. c0) and a colName (eg. a_bestaatnietmeer) and an optional colAlias;
-     * the visible attributes.
-     */
-    attributeList: [],
-    // TODO would be nice to set this to 0 (== unlimited in Ext world) but the
-    // flamingo featureService limits this to 1000
-    MAX_ITEMS: 1000,
-    schema: null,
-    appLayer: null,
-    config: {
-        componentLayer: null,
-        actionbeanUrl: ""
-    },
-    /**
      * constructs a ne instance.
      * @param {Object} conf
      * @returns {viewer.components.IbisReportBase}
@@ -76,7 +75,7 @@ Ext.define("viewer.components.IbisReportBase", {
         this.initConfig(conf);
         // update custom url, global var contextPath is not available until after page load
         this.config.actionbeanUrl = contextPath + '/action/ibisattributes';
-        this.schema = new Ext.data.schema.Schema();
+        //this.schema = new Ext.data.schema.Schema();
         this.getDataModel();
         return this;
     },
@@ -183,7 +182,8 @@ Ext.define("viewer.components.IbisReportBase", {
                     Ext.define('terreinModel', {
                         extend: 'Ext.data.Model',
                         fields: me.attributeList,
-                        schema: me.schema,
+                        //schema: me.schema,
+                        schema: new Ext.data.schema.Schema(),
                         idProperty: me.idVeldNaam
                     });
 
@@ -211,7 +211,8 @@ Ext.define("viewer.components.IbisReportBase", {
     resetStoreFilters: function (resetMapExtend) {
     },
     /**
-     *
+     * set loading message.
+     * @param {String} msg The loading message to display
      * @returns {void}
      */
     setIsLoading: function (msg) {
@@ -221,6 +222,10 @@ Ext.define("viewer.components.IbisReportBase", {
             Ext.get(this.getContentDiv()).mask(msg);
         }
     },
+    /**
+     *  clear loading messages.
+
+     */
     setDoneLoading: function () {
         if (this.config.isPopup) {
             this.popup.popupWin.setLoading(false);
