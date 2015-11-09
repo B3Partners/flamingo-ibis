@@ -69,7 +69,7 @@
                             <groupId>org.flamingo-mc</groupId>
                             <artifactId>viewer</artifactId>
                             <excludes>
-                                <!-- exlude>somefile</exclude -->
+                                <exclude>**/git.properties</exclude>
                             </excludes>
                         </overlay>
                     </overlays>

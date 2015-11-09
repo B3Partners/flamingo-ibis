@@ -45,29 +45,6 @@ Ext.define("viewer.components.IbisEdit", {
         viewer.components.IbisEdit.superclass.constructor.call(this, conf);
         this.workflow_fieldname = workflowFieldName;
         this.workflowStore = Ext.data.StoreManager.lookup('IbisWorkflowStore');
-
-// niet meer nodig, we gebruiken het attribuutveld
-// add workflow selector, updated in initAttributeInputs
-//        this.maincontainer.add([{
-//                xtype: 'combobox',
-//                fieldLabel: 'Nieuwe workflow status',
-//                id: this.name + "workflowStatus",
-//                editable: false,
-//                store: 'IbisWorkflowStore',
-//                queryMode: 'local',
-//                name: 'workflowStatus',
-//                itemId: 'workflowStatus',
-//                displayField: 'label',
-//                valueField: 'id',
-//                listeners: {
-//                    afterrender: function (combo) {
-//                        var recordSelected = combo.getStore().getAt(0);
-//                        combo.setValue(recordSelected);
-//                    }
-//                },
-//                autoSelect: true
-//            }
-//        ]);
         this.maincontainer.add([{id: this.name + "workflowLabel",
                 margin: 5,
                 text: '',
@@ -81,7 +58,13 @@ Ext.define("viewer.components.IbisEdit", {
         }
         this.superclass.initAttributeInputs.call(this, appLayer);
         this.groupInputsByPrefix(appLayer);
-        getNextIbisWorkflowStatus(user.roles, null, null);
+        if (user !== null && user.roles) {
+            getNextIbisWorkflowStatus(user.roles, null, null);
+        } else {
+            this.cancel();
+            Ext.Msg.alert('Workflow Fout', "Uitlezen van gebruikers rollen is mislukt, workflow editing niet mogelijk. <br/>Bent U aangemeld met de juiste rol?");
+        }
+        
     },
     groupInputsByPrefix: function () {
         if (this.config.prefixConfig.length === 0) {
