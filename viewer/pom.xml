@@ -51,6 +51,9 @@
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
+                    <filters>
+                        <filter>${basedir}/src/main/resources/git.properties</filter>
+                    </filters>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                     <webResources>
                         <resource>
@@ -64,7 +67,6 @@
                     <useCache>false</useCache>
                     <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
                     <overlays>
-                        <overlay><!-- een lege groupId/artifactId voor de huidige build --></overlay>
                         <overlay>
                             <id>flamingo</id>
                             <groupId>org.flamingo-mc</groupId>
@@ -111,6 +113,7 @@
                 <artifactId>git-commit-id-plugin</artifactId>
                 <executions>
                     <execution>
+                        <phase>validate</phase>
                         <goals>
                             <goal>revision</goal>
                         </goals>
