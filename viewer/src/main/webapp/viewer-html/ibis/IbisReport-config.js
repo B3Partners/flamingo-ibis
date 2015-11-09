@@ -59,19 +59,19 @@ Ext.define("viewer.components.CustomConfiguration", {
                         emptyText: 'Maak uw keuze',
                         store: layers,
                         queryMode: 'local',
-                        itemId: 'bedrijvenTerreinLayer',
-                        name: 'bedrijvenTerreinLayer',
+                        itemId: 'componentLayer',
+                        name: 'componentLayer',
                         displayField: 'alias',
                         valueField: 'id',
-                        value: me.configObject.bedrijvenTerreinLayer || null,
+                        value: me.configObject.componentLayer || null,
                         listeners: {
                             scope: me,
                             select: me.addAggregatableAttributes
                         }
                     }
                 ]);
-                if (me.configObject.bedrijvenTerreinLayer) {
-                    me.updateAttributes(me.configObject.bedrijvenTerreinLayer);
+                if (me.configObject.componentLayer) {
+                    me.updateAttributes(me.configObject.componentLayer);
                 }
             },
             failure: function () {

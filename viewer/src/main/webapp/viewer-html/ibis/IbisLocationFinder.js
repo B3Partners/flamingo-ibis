@@ -23,181 +23,76 @@ Ext.define('viewer.components.IbisLocationFinder', {
     extend: 'viewer.components.IbisReportBase',
     step1: null,
     terreinenStore: null,
-    schema: null,
-    /**
-     * An array of objects having a name (eg. c0) and a colName (eg. a_bestaatnietmeer) and an optional colAlias;
-     * the visible attributes.
-     */
-    attributeList: [],
-    appLayer: null,
     config: {
         title: null,
         titlebarIcon: null,
         tooltip: null,
-        label: "",
-        componentLayer: null,
-        actionbeanUrl: ""
+        label: ""
     },
     constructor: function (conf) {
         viewer.components.IbisLocationFinder.superclass.constructor.call(this, conf);
         this.initConfig(conf);
-        // update custom url, global var contextPath is not available until after page load
-        // this.config.actionbeanUrl = contextPath + '/action/ibisattributes';
-
-        this.schema = new Ext.data.schema.Schema();
-        this.getDataModel();
-
         return this;
     },
-    getDataModel: function () {
-        var me = this;
-        me.appLayer = this.viewerController.getAppLayerById(this.config.componentLayer);
-        var featureService = this.config.viewerController.getAppLayerFeatureService(me.appLayer);
-        featureService.loadAttributes(me.appLayer,
-                function (attributes) {
-                    var index = 0;
-                    for (var i = 0; i < attributes.length; i++) {
-                        var attribute = attributes[i];
-                        if (attribute.visible) {
-                            var attIndex = 0;
-                            switch (attribute.name) {
-                                case me.idColNaam:
-                                    attIndex = index++;
-                                    me.idVeldNaam = "c" + attIndex;
-                                    me.idVeldId = attribute.id;
-                                    me.attributeList[attIndex] = ({
-                                        attrId: attribute.id,
-                                        name: me.idVeldNaam,
-                                        colName: attribute.name,
-                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
-                                    });
-                                    break;
-                                case me.regioColNaam:
-                                    attIndex = index++;
-                                    me.regioVeldNaam = "c" + attIndex;
-                                    me.regioVeldId = attribute.id;
-                                    me.attributeList[attIndex] = ({
-                                        attrId: attribute.id,
-                                        name: me.regioVeldNaam,
-                                        colName: attribute.name,
-                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
-                                    });
-                                    break;
-                                case me.gemeenteColNaam:
-                                    attIndex = index++;
-                                    me.gemeenteVeldNaam = "c" + attIndex;
-                                    me.gemeenteVeldId = attribute.id;
-                                    me.attributeList[attIndex] = ({
-                                        attrId: attribute.id,
-                                        name: me.gemeenteVeldNaam,
-                                        colName: attribute.name,
-                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
-                                    });
-                                    break;
-                                case me.terreinColNaam:
-                                    attIndex = index++;
-                                    me.terreinVeldNaam = "c" + attIndex;
-                                    me.terreinVeldId = attribute.id;
-                                    me.attributeList[attIndex] = ({
-                                        attrId: attribute.id,
-                                        name: me.terreinVeldNaam,
-                                        colName: attribute.name,
-                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
-                                    });
-                                    break;
-                                case me.regio_geomColNaam:
-                                    attIndex = index++;
-                                    me.regio_geomVeldNaam = "c" + attIndex;
-                                    me.regio_geomVeldId = attribute.id;
-                                    me.attributeList[attIndex] = ({
-                                        attrId: attribute.id,
-                                        name: me.regio_geomVeldNaam,
-                                        colName: attribute.name,
-                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
-                                    });
-                                    break;
-                                case me.gemeente_geomColNaam:
-                                    attIndex = index++;
-                                    me.gemeente_geomVeldNaam = "c" + attIndex;
-                                    me.gemeente_geomVeldId = attribute.id;
-                                    me.attributeList[attIndex] = ({
-                                        attrId: attribute.id,
-                                        name: me.gemeente_geomVeldNaam,
-                                        colName: attribute.name,
-                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
-                                    });
-                                    break;
-                                case me.terrein_geomColNaam:
-                                    attIndex = index++;
-                                    me.terrein_geomVeldNaam = "c" + attIndex;
-                                    me.terrein_geomVeldId = attribute.id;
-                                    me.attributeList[attIndex] = ({
-                                        attrId: attribute.id,
-                                        name: me.terrein_geomVeldNaam,
-                                        colName: attribute.name,
-                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
-                                    });
-                                    break;
-                                default:
-
-                            }
-                        }
-                    }
-
-                    Ext.define('terreinModel', {
-                        extend: 'Ext.data.Model',
-                        fields: me.attributeList,
-                        schema: me.schema,
-                        idProperty: me.idVeldNaam
-                    });
-
-                    me.createForms();
-                },
-                function (msg) {
-                    Ext.MessageBox.alert("Attributen ophalen voor datamodel is mislukt", msg);
-                });
-    },
     createForms: function () {
-        Ext.get(this.getContentDiv()).mask("Bezig met ophalen van de lijst met bedrijventerreinen. <br /> Dit duurt even...");
-
         var me = this;
-        me.terreinenStore = Ext.create('Ext.data.Store', {
-            model: 'terreinModel',
-            proxy: {
-                type: 'ajax',
-                timeout: 120000,
-                actionMethods: {read: 'POST'},
-                url: me.appLayer.featureService.getStoreUrl(),
-                extraParams: {
-                    attributesToInclude: [
-                        me.idVeldId, me.regioVeldId, me.gemeenteVeldId, me.terreinVeldId,
-                        me.regio_geomVeldId, me.gemeente_geomVeldId, me.terrein_geomVeldId
-                    ],
-                    graph: true,
-                    arrays: 1
+
+        me.setIsLoading("Bezig met ophalen van de lijst met bedrijven terreinen. <br /> Dit duurt even...");
+        if (Ext.StoreMgr.lookup('terreinenStore')) {
+            me.terreinenStore = Ext.StoreMgr.lookup('terreinenStore');
+            if (me.terreinenStore.isLoading( )) {
+                me.terreinenStore.on({
+                    load: {fn: function () {
+                            me.setDoneLoading();
+                            // set intial filters on comboboxes
+                            me.resetStoreFilters(false);
+                        }, scope: me}
+                });
+            } else {
+                this.setDoneLoading();
+            }
+        } else {
+            me.terreinenStore = Ext.create('Ext.data.Store', {
+                model: 'terreinModel',
+                storeId: 'terreinenStore',
+                proxy: {
+                    type: 'ajax',
+                    timeout: 120000,
+                    actionMethods: {read: 'POST'},
+                    url: me.appLayer.featureService.getStoreUrl(),
+                    extraParams: {
+                        attributesToInclude: [
+                            me.idVeldId, me.regioVeldId, me.gemeenteVeldId, me.terreinVeldId,
+                            me.regio_geomVeldId, me.gemeente_geomVeldId, me.terrein_geomVeldId
+                        ],
+                        graph: true,
+                        arrays: 1
+                    },
+                    reader: {
+                        type: 'json',
+                        rootProperty: 'features',
+                        totalProperty: 'total'
+                    }
                 },
-                reader: {
-                    type: 'json',
-                    rootProperty: 'features',
-                    totalProperty: 'total'
-                }
-            },
-            autoLoad: true,
-            pageSize: me.MAX_ITEMS,
-            listeners: {
-                load: {
-                    fn: function () {
-                        if (me.config.isPopup) {
-                            me.popup.popupWin.setLoading(false);
-                        } else {
-                            Ext.get(me.getContentDiv()).unmask();
+                autoLoad: true,
+                pageSize: me.MAX_ITEMS,
+                listeners: {
+                    load: {
+                        fn: function () {
+                            me.setDoneLoading();
+                            // set intial filters on comboboxes
+                            me.resetStoreFilters(false);
                         }
-                        // set intial filters on comboboxes
-                        me.resetStoreFilters(false);
                     }
                 }
-            }
-        });
+            });
+        }
+        me.terreinenStore.on({
+            'load': {
+                fn: function () {
+                    me.resetStoreFilters(false);
+                }
+            }});
 
         this.step1 = Ext.create('Ext.panel.Panel', {
             title: 'Zoek gebied',
@@ -286,7 +181,6 @@ Ext.define('viewer.components.IbisLocationFinder', {
         if (resetMapExtend) {
             this.config.viewerController.mapComponent.getMap().zoomToExtent(this.config.viewerController.app.startExtent);
         }
-
     },
     /**
      * update gemeente combobox after choosing regio

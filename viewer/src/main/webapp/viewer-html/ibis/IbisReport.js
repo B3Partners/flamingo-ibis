@@ -21,8 +21,8 @@
  * @author <a href="mailto:markprins@b3partners.nl">Mark Prins</a>
  */
 Ext.define('viewer.components.IbisReport', {
-    extend: 'viewer.components.Component',
-    requires: ['viewer.components.GridPanel', 'viewer.components.IbisReportBase'],
+    extend: 'viewer.components.IbisReportBase',
+    requires: ['viewer.components.GridPanel', 'viewer.components.IbisReportStore'],
     deActivatedTools: [],
     toolMapClick: null,
     step1: null,
@@ -32,70 +32,26 @@ Ext.define('viewer.components.IbisReport', {
     form: null,
     terreinenStore: null,
     reportdataStore: null,
-    idColNaam: 'id',
-    idVeldId: '',
-    idVeldNaam: '',
-    //
-    terreinColNaam: 'a_plannaam',
-    terreinVeldId: '',
-    terreinVeldNaam: '',
-    //
-    terrein_geomColNaam: 'bbox_terrein',
-    terrein_geomVeldId: '',
-    terrein_geomVeldNaam: '',
-    //
-    gemeenteColNaam: 'naam',
-    gemeenteVeldId: '',
-    gemeenteVeldNaam: '',
-    //
-    gemeente_geomColNaam: 'bbox_gemeente',
-    gemeente_geomVeldId: '',
-    gemeente_geomVeldNaam: '',
-    //
-    regioColNaam: 'vvr_naam',
-    regioVeldId: '',
-    regioVeldNaam: '',
-    //
-    regio_geomColNaam: 'bbox_regio',
-    regio_geomVeldId: '',
-    regio_geomVeldNaam: '',
-    // TODO would be nice to set this to 0 (== unlimited in Ext world) but the
-    // flamingo featureService limits this to 1000
-    MAX_ITEMS: 1000,
-    schema: null,
-    /** 
-     * An array of objects having a name (eg. c0) and a colName (eg. a_bestaatnietmeer) and an optional colAlias;
-     * the visible attributes.
-     */
-    attributeList: [],
-    appLayer: null,
     config: {
         title: null,
         titlebarIcon: null,
         tooltip: null,
         label: "",
-        bedrijvenTerreinLayer: null,
-        bedrijvenKavelsLayer: null,
-        actionbeanUrl: ""
     },
     constructor: function (conf) {
         viewer.components.IbisReport.superclass.constructor.call(this, conf);
         this.initConfig(conf);
-        // update custom url, global var contextPath is not available until after page load
-        this.config.actionbeanUrl = contextPath + "/action/ibisattributes";
 
         Ext.define('reportdataModel', {
             extend: 'Ext.data.Model',
             fields: []
         });
 
-
-        this.schema = new Ext.data.schema.Schema();
-        this.getDataModel();
         if (this.config.isPopup) {
             this.renderButton();
         } else {
-            //this.createForms();
+            // called from getDataModel()
+            // this.createForms();
         }
         return this;
     },
@@ -114,174 +70,71 @@ Ext.define('viewer.components.IbisReport', {
             }
         });
     },
-    getDataModel: function () {
-        var me = this;
-        me.appLayer = this.viewerController.getAppLayerById(this.config.bedrijvenTerreinLayer);
-        var featureService = this.config.viewerController.getAppLayerFeatureService(me.appLayer);
-        featureService.loadAttributes(me.appLayer,
-                function (attributes) {
-                    var index = 0;
-                    for (var i = 0; i < attributes.length; i++) {
-                        var attribute = attributes[i];
-                        if (attribute.visible) {
-                            var attIndex = 0;
-                            switch (attribute.name) {
-                                case me.idColNaam:
-                                    attIndex = index++;
-                                    me.idVeldNaam = "c" + attIndex;
-                                    me.idVeldId = attribute.id;
-                                    me.attributeList[attIndex] = ({
-                                        attrId: attribute.id,
-                                        name: me.idVeldNaam,
-                                        colName: attribute.name,
-                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
-                                    });
-                                    break;
-                                case me.regioColNaam:
-                                    attIndex = index++;
-                                    me.regioVeldNaam = "c" + attIndex;
-                                    me.regioVeldId = attribute.id;
-                                    me.attributeList[attIndex] = ({
-                                        attrId: attribute.id,
-                                        name: me.regioVeldNaam,
-                                        colName: attribute.name,
-                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
-                                    });
-                                    break;
-                                case me.gemeenteColNaam:
-                                    attIndex = index++;
-                                    me.gemeenteVeldNaam = "c" + attIndex;
-                                    me.gemeenteVeldId = attribute.id;
-                                    me.attributeList[attIndex] = ({
-                                        attrId: attribute.id,
-                                        name: me.gemeenteVeldNaam,
-                                        colName: attribute.name,
-                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
-                                    });
-                                    break;
-                                case me.terreinColNaam:
-                                    attIndex = index++;
-                                    me.terreinVeldNaam = "c" + attIndex;
-                                    me.terreinVeldId = attribute.id;
-                                    me.attributeList[attIndex] = ({
-                                        attrId: attribute.id,
-                                        name: me.terreinVeldNaam,
-                                        colName: attribute.name,
-                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
-                                    });
-                                    break;
-                                case me.regio_geomColNaam:
-                                    attIndex = index++;
-                                    me.regio_geomVeldNaam = "c" + attIndex;
-                                    me.regio_geomVeldId = attribute.id;
-                                    me.attributeList[attIndex] = ({
-                                        attrId: attribute.id,
-                                        name: me.regio_geomVeldNaam,
-                                        colName: attribute.name,
-                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
-                                    });
-                                    break;
-                                case me.gemeente_geomColNaam:
-                                    attIndex = index++;
-                                    me.gemeente_geomVeldNaam = "c" + attIndex;
-                                    me.gemeente_geomVeldId = attribute.id;
-                                    me.attributeList[attIndex] = ({
-                                        attrId: attribute.id,
-                                        name: me.gemeente_geomVeldNaam,
-                                        colName: attribute.name,
-                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
-                                    });
-                                    break;
-                                case me.terrein_geomColNaam:
-                                    attIndex = index++;
-                                    me.terrein_geomVeldNaam = "c" + attIndex;
-                                    me.terrein_geomVeldId = attribute.id;
-                                    me.attributeList[attIndex] = ({
-                                        attrId: attribute.id,
-                                        name: me.terrein_geomVeldNaam,
-                                        colName: attribute.name,
-                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
-                                    });
-                                    break;
-                                default:
-
-                            }
-                        }
-                    }
-
-                    Ext.define('terreinModel', {
-                        extend: 'Ext.data.Model',
-                        fields: me.attributeList,
-                        schema: me.schema,
-                        idProperty: me.idVeldNaam
-                    });
-
-                    if (!me.config.isPopup) {
-                        me.createForms();
-                    }
-                },
-                function (msg) {
-                    Ext.MessageBox.alert("Attributen ophalen voor datamodel is mislukt", msg);
-                });
-    },
     createForms: function () {
+        var me = this;
+
         // to select a bedrijventerrein on the map
-        this.toolMapClick = this.config.viewerController.mapComponent.createTool({
+        me.toolMapClick = this.config.viewerController.mapComponent.createTool({
             type: viewer.viewercontroller.controller.Tool.MAP_CLICK,
             id: this.name + "toolMapClick",
             handler: {
-                fn: this.mapClicked,
-                scope: this
+                fn: me.mapClicked,
+                scope: me
             },
             viewerController: this.config.viewerController
         });
 
-        //var appLayer = this.viewerController.getAppLayerById(this.config.bedrijvenTerreinLayer);
-
-        if (this.config.isPopup) {
-            this.popup.popupWin.setLoading("Bezig met ophalen van de lijst met bedrijven terreinen. <br /> Dit duurt even...");
+        me.setIsLoading("Bezig met ophalen van de lijst met bedrijven terreinen. <br /> Dit duurt even...");
+        if (Ext.StoreMgr.lookup('terreinenStore')) {
+            me.terreinenStore = Ext.StoreMgr.lookup('terreinenStore');
+            if (me.terreinenStore.isLoading( )) {
+                me.terreinenStore.on({
+                    load: {fn: function () {
+                            me.setDoneLoading();
+                            // set intial filters on comboboxes
+                            me.resetStoreFilters(false);
+                        }, scope: me}
+                });
+            } else {
+                me.setDoneLoading();
+            }
         } else {
-            Ext.get(this.getContentDiv()).mask("Bezig met ophalen van de lijst met bedrijventerreinen. <br /> Dit duurt even...");
-        }
-
-        var me = this;
-        me.terreinenStore = Ext.create('Ext.data.Store', {
-            model: 'terreinModel',
-            proxy: {
-                type: 'ajax',
-                timeout: 120000,
-                actionMethods: {read: 'POST'},
-                url: me.appLayer.featureService.getStoreUrl(),
-                extraParams: {
-                    attributesToInclude: [
-                        me.idVeldId, me.regioVeldId, me.gemeenteVeldId, me.terreinVeldId,
-                        me.regio_geomVeldId, me.gemeente_geomVeldId, me.terrein_geomVeldId
-                    ],
-                    graph: true,
-                    arrays: 1
+            me.terreinenStore = Ext.create('Ext.data.Store', {
+                model: 'terreinModel',
+                storeId: 'terreinenStore',
+                proxy: {
+                    type: 'ajax',
+                    timeout: 120000,
+                    actionMethods: {read: 'POST'},
+                    url: me.appLayer.featureService.getStoreUrl(),
+                    extraParams: {
+                        attributesToInclude: [
+                            me.idVeldId, me.regioVeldId, me.gemeenteVeldId, me.terreinVeldId,
+                            me.regio_geomVeldId, me.gemeente_geomVeldId, me.terrein_geomVeldId
+                        ],
+                        graph: true,
+                        arrays: 1
+                    },
+                    reader: {
+                        type: 'json',
+                        rootProperty: 'features',
+                        totalProperty: 'total'
+                    }
                 },
-                reader: {
-                    type: 'json',
-                    rootProperty: 'features',
-                    totalProperty: 'total'
-                }
-            },
-            autoLoad: true,
-            pageSize: me.MAX_ITEMS,
-            listeners: {
-                load: {
-                    fn: function () {
-                        if (me.config.isPopup) {
-                            me.popup.popupWin.setLoading(false);
-                        } else {
-                            Ext.get(me.getContentDiv()).unmask();
+                autoLoad: true,
+                pageSize: me.MAX_ITEMS,
+                listeners: {
+                    load: {
+                        fn: function () {
+                            me.setDoneLoading();
+                            // set intial filters on comboboxes
+                            me.resetStoreFilters(false);
                         }
-                        // set intial filters on comboboxes
-                        me.resetStoreFilters(false);
                     }
                 }
-            }
-        });
+            });
+        }
+
 
         this.step1 = Ext.create('Ext.panel.Panel', {
             title: 'Stap 1. Kies gebied',
@@ -518,7 +371,7 @@ Ext.define('viewer.components.IbisReport', {
                                             download: 1,
                                             mimetype: 'application/vnd.ms-excel',
                                             filename: "ibisrapportage.xls",
-                                            appLayer: me.config.bedrijvenTerreinLayer,
+                                            appLayer: me.config.componentLayer,
                                             application: me.config.viewerController.app.id
                                         });
                             }
@@ -663,7 +516,6 @@ Ext.define('viewer.components.IbisReport', {
      * @returns {undefined}
      */
     updateTerrein: function (combo, value, scope) {
-        // var filters = this.terreinenStore.getFilters().clone();
         var filters = this.terreinenStore.getFilters().getRange();
         this.terreinenStore.clearFilter(false);
 
@@ -678,13 +530,7 @@ Ext.define('viewer.components.IbisReport', {
             var zoomFeat = Ext.create("viewer.viewercontroller.controller.Feature", {_wktgeom: wkt});
             this.config.viewerController.mapComponent.getMap().zoomToExtent(zoomFeat.getExtent());
         }
-        //try {
-            this.terreinenStore.setFilters(filters);
-        //Uncaught Error: Cannot override method statics on Ext.util.FilterCollection instance.
-        //see https://www.sencha.com/forum/showthread.php?302351-store.getFilters()-and-then-store.setFilters()-fails
-        //} catch (e) {
-            // ignore
-        //}
+        this.terreinenStore.setFilters(filters);
 
         // update aggregation levels
         var myfilter = Ext.create('Ext.util.Filter', {
@@ -744,12 +590,7 @@ Ext.define('viewer.components.IbisReport', {
         var me = this;
         this.deactivateMapClick();
 
-        if (this.config.isPopup) {
-            this.popup.popupWin.setLoading("Bezig met ophalen van bedrijventerrein...");
-        } else {
-            Ext.get(this.getContentDiv()).mask("Bezig met ophalen van bedrijventerrein...");
-        }
-
+       this.setIsLoading("Bezig met ophalen van bedrijventerrein...");
         var featureInfo = Ext.create("viewer.FeatureInfo", {
             viewerController: this.config.viewerController
         });
@@ -757,7 +598,7 @@ Ext.define('viewer.components.IbisReport', {
                 comp.coord.x,
                 comp.coord.y,
                 me.config.viewerController.mapComponent.getMap().getResolution() * 4,
-                me.viewerController.getAppLayerById(me.config.bedrijvenTerreinLayer),
+                me.viewerController.getAppLayerById(me.config.componentLayer),
                 function (features) {
                     me.featuresReceived(features);
                 },
@@ -768,11 +609,7 @@ Ext.define('viewer.components.IbisReport', {
     featuresReceived: function (features) {
         // select in dropdown
         if (features && features.length > 0) {
-            if (this.config.isPopup) {
-                this.popup.popupWin.setLoading(false);
-            } else {
-                Ext.get(this.getContentDiv()).unmask();
-            }
+            this.setDoneLoading();
             var feature = features[0];
             this.resetStoreFilters(false);
             var s = feature.__fid;
@@ -785,11 +622,7 @@ Ext.define('viewer.components.IbisReport', {
     featuresFailed: function (msg) {
         this.resetStoreFilters(false);
         Ext.MessageBox.alert("Foutmelding", msg);
-        if (this.config.isPopup) {
-            this.popup.popupWin.setLoading(false);
-        } else {
-            Ext.get(this.getContentDiv()).unmask();
-        }
+        this.setDoneLoading();
     },
     reportTypeChange: function (combo, val) {
         // uncheck any checkboxes
@@ -817,11 +650,8 @@ Ext.define('viewer.components.IbisReport', {
     createReport: function (step) {
         var me = this;
         me['step' + step].expand();
-        if (me.config.isPopup) {
-            me.popup.popupWin.setLoading("Rapport samenstellen...");
-        } else {
-            Ext.get(me.getContentDiv()).mask("Rapport samenstellen...");
-        }
+
+        this.setIsLoading("Rapport samenstellen...");
 
         me.step4.reconfigure(null);
         var formData = me.form.getValues(
@@ -829,7 +659,7 @@ Ext.define('viewer.components.IbisReport', {
                 /*dirtyOnly*/ false,
                 /*includeEmptyText*/false,
                 /*useDataValues*/false);
-        formData.appLayer = me.config.bedrijvenTerreinLayer;
+        formData.appLayer = me.config.componentLayer;
         formData.application = me.config.viewerController.app.id;
 
         // get data from backend
@@ -864,20 +694,12 @@ Ext.define('viewer.components.IbisReport', {
                     if (!successful) {
                         Ext.MessageBox.alert("Fout", "Fout tijdens opvragen van de data: " + eOpts.error);
                         Ext.getCmp(me.name + "downloadBtn").setDisabled(true);
-                        if (me.config.isPopup) {
-                            me.popup.popupWin.setLoading(false);
-                        } else {
-                            Ext.get(me.getContentDiv()).unmask();
-                        }
+                        me.setDoneLoading();
                     }
                 }
             }
         });
-        if (this.config.isPopup) {
-            this.popup.popupWin.setLoading(false);
-        } else {
-            Ext.get(this.getContentDiv()).unmask();
-        }
+        me.setDoneLoading();
     },
     showWindow: function () {
         this.popup.show();

@@ -22,7 +22,7 @@
  */
 Ext.define("viewer.components.IbisReportBase", {
     extend: 'viewer.components.Component',
-    require: ['viewer.components.IbisReportStore'],
+    //require: ['viewer.components.IbisReportStore'],
 //  shared fields
 
     idColNaam: 'id',
@@ -52,9 +52,20 @@ Ext.define("viewer.components.IbisReportBase", {
     regio_geomColNaam: 'bbox_regio',
     regio_geomVeldId: '',
     regio_geomVeldNaam: '',
+    /**
+     * An array of objects having a name (eg. c0) and a colName (eg. a_bestaatnietmeer) and an optional colAlias;
+     * the visible attributes.
+     */
+    attributeList: [],
     // TODO would be nice to set this to 0 (== unlimited in Ext world) but the
     // flamingo featureService limits this to 1000
     MAX_ITEMS: 1000,
+    schema: null,
+    appLayer: null,
+    config: {
+        componentLayer: null,
+        actionbeanUrl: ""
+    },
     /**
      * constructs a ne instance.
      * @param {Object} conf
@@ -65,8 +76,157 @@ Ext.define("viewer.components.IbisReportBase", {
         this.initConfig(conf);
         // update custom url, global var contextPath is not available until after page load
         this.config.actionbeanUrl = contextPath + '/action/ibisattributes';
-
+        this.schema = new Ext.data.schema.Schema();
+        this.getDataModel();
         return this;
     },
+    /**
+     * get and initialize the datamodel.
+     * @returns {undefined}
+     */
+    getDataModel: function () {
+        var me = this;
+
+        me.appLayer = this.viewerController.getAppLayerById(this.config.componentLayer);
+        var featureService = this.config.viewerController.getAppLayerFeatureService(me.appLayer);
+        featureService.loadAttributes(me.appLayer,
+                function (attributes) {
+                    var index = 0;
+                    for (var i = 0; i < attributes.length; i++) {
+                        var attribute = attributes[i];
+                        if (attribute.visible) {
+                            var attIndex = 0;
+                            switch (attribute.name) {
+                                case me.idColNaam:
+                                    attIndex = index++;
+                                    me.idVeldNaam = "c" + attIndex;
+                                    me.idVeldId = attribute.id;
+                                    me.attributeList[attIndex] = ({
+                                        attrId: attribute.id,
+                                        name: me.idVeldNaam,
+                                        colName: attribute.name,
+                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
+                                    });
+                                    break;
+                                case me.regioColNaam:
+                                    attIndex = index++;
+                                    me.regioVeldNaam = "c" + attIndex;
+                                    me.regioVeldId = attribute.id;
+                                    me.attributeList[attIndex] = ({
+                                        attrId: attribute.id,
+                                        name: me.regioVeldNaam,
+                                        colName: attribute.name,
+                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
+                                    });
+                                    break;
+                                case me.gemeenteColNaam:
+                                    attIndex = index++;
+                                    me.gemeenteVeldNaam = "c" + attIndex;
+                                    me.gemeenteVeldId = attribute.id;
+                                    me.attributeList[attIndex] = ({
+                                        attrId: attribute.id,
+                                        name: me.gemeenteVeldNaam,
+                                        colName: attribute.name,
+                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
+                                    });
+                                    break;
+                                case me.terreinColNaam:
+                                    attIndex = index++;
+                                    me.terreinVeldNaam = "c" + attIndex;
+                                    me.terreinVeldId = attribute.id;
+                                    me.attributeList[attIndex] = ({
+                                        attrId: attribute.id,
+                                        name: me.terreinVeldNaam,
+                                        colName: attribute.name,
+                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
+                                    });
+                                    break;
+                                case me.regio_geomColNaam:
+                                    attIndex = index++;
+                                    me.regio_geomVeldNaam = "c" + attIndex;
+                                    me.regio_geomVeldId = attribute.id;
+                                    me.attributeList[attIndex] = ({
+                                        attrId: attribute.id,
+                                        name: me.regio_geomVeldNaam,
+                                        colName: attribute.name,
+                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
+                                    });
+                                    break;
+                                case me.gemeente_geomColNaam:
+                                    attIndex = index++;
+                                    me.gemeente_geomVeldNaam = "c" + attIndex;
+                                    me.gemeente_geomVeldId = attribute.id;
+                                    me.attributeList[attIndex] = ({
+                                        attrId: attribute.id,
+                                        name: me.gemeente_geomVeldNaam,
+                                        colName: attribute.name,
+                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
+                                    });
+                                    break;
+                                case me.terrein_geomColNaam:
+                                    attIndex = index++;
+                                    me.terrein_geomVeldNaam = "c" + attIndex;
+                                    me.terrein_geomVeldId = attribute.id;
+                                    me.attributeList[attIndex] = ({
+                                        attrId: attribute.id,
+                                        name: me.terrein_geomVeldNaam,
+                                        colName: attribute.name,
+                                        colAlias: (attribute.alias !== undefined ? attribute.alias : attribute.name)
+                                    });
+                                    break;
+                                default:
+
+                            }
+                        }
+                    }
+
+                    Ext.define('terreinModel', {
+                        extend: 'Ext.data.Model',
+                        fields: me.attributeList,
+                        schema: me.schema,
+                        idProperty: me.idVeldNaam
+                    });
+
+                    if (!me.config.isPopup) {
+                        me.createForms();
+                    }
+                },
+                function (msg) {
+                    Ext.MessageBox.alert("Attributen ophalen voor datamodel is mislukt", msg);
+                });
+    },
+    /**
+     * @returns void
+     * @abstract
+     */
+    createForms: function () {
+    },
+    /*
+     * Reset the terreinenStore filters and comboboxes, optionally reset the maps extent.
+     *
+     * @param {Boolean} resetMapExtend true to rest the map extend to the startExtent
+     * @returns void
+     * @abstract
+     */
+    resetStoreFilters: function (resetMapExtend) {
+    },
+    /**
+     *
+     * @returns {void}
+     */
+    setIsLoading: function (msg) {
+        if (this.config.isPopup) {
+            this.popup.popupWin.setLoading(msg);
+        } else {
+            Ext.get(this.getContentDiv()).mask(msg);
+        }
+    },
+    setDoneLoading: function () {
+        if (this.config.isPopup) {
+            this.popup.popupWin.setLoading(false);
+        } else {
+            Ext.get(this.getContentDiv()).unmask();
+        }
+    }
 });
 
