@@ -77,7 +77,7 @@
                         </xsl:call-template>
                     </fo:block-container>
 
-                    <fo:block-container width="6.5cm" height="4cm" top="4.6cm" left="13.2cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
+                    <fo:block-container overflow="hidden" width="6.5cm" height="4cm" top="4.6cm" left="13.2cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
                         <xsl:call-template name="legend"/>
                     </fo:block-container>
 
@@ -114,7 +114,7 @@
                     </fo:block-container>
 
                     <!-- bedrijvigheid -->
-                    <fo:block-container width="20.4cm" height="7.0cm" top="17.8cm" left="0cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
+                    <fo:block-container overflow="hidden" width="20.4cm" height="7.0cm" top="17.8cm" left="0cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
                         <fo:block xsl:use-attribute-sets="subtitle-font">Gegevens gevestigde bedrijvigheid en grootste gevestigde bedrijven</fo:block>
                         <xsl:for-each select="extra/info[@classname='viewer.components.IbisFactsheet.gegevensGevestigd']/root">
                             <xsl:call-template name="ibis-tabel-2column">
