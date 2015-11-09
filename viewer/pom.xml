@@ -17,6 +17,7 @@
         <viewerhtml.path>${basedir}/src/main/webapp/viewer-html</viewerhtml.path>
         <org-netbeans-modules-maven-j2ee.netbeans_2e_hint_2e_deploy_2e_server>Tomcat</org-netbeans-modules-maven-j2ee.netbeans_2e_hint_2e_deploy_2e_server>
         <org-netbeans-modules-maven-j2ee.netbeans_2e_hint_2e_j2eeVersion>1.6-web</org-netbeans-modules-maven-j2ee.netbeans_2e_hint_2e_j2eeVersion>
+        <netbeans.deploy.clientUrlPart>/</netbeans.deploy.clientUrlPart>
     </properties>
     <dependencies>
         <dependency>
