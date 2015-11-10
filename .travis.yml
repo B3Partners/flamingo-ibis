@@ -15,7 +15,7 @@ before_install:
 #  - psql -U postgres --list
   - ls -l ./src/main/ddl/
   - psql -U postgres -w -d ibis -a -f ./src/main/ddl/create_ibis_database.sql
-#  - psql -U postgres -w -d ibis -a -f ./src/main/ddl/psql_laadviews.sql
+  - psql -U postgres -w -d ibis -a -f ./src/main/ddl/psql_laadviews.sql
 
 install:
   # install without testing
