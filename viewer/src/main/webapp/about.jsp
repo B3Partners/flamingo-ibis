@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <link href="${contextPath}/resources/css/viewer.css" rel="stylesheet">
     </head>
     <body>
-        <h1>Flamingo viewer</h1>
+        <h1>Ibis 2 viewer</h1>
     <c:set var="version" value="${project.version}"/>
     <table>
         <tr>
