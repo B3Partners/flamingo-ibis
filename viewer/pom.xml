@@ -4,7 +4,7 @@
     <artifactId>ibis-viewer</artifactId>
     <packaging>war</packaging>
     <name>ibis-viewer</name>
-    <description>war overlay project voor IBIS</description>
+    <description>Flamingo viewer war overlay project voor IBIS.</description>
     <version>2.0-SNAPSHOT</version>
     <parent>
         <groupId>org.flamingo-mc</groupId>

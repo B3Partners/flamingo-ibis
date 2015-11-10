@@ -379,7 +379,14 @@
     <developers>
         <developer>
             <name>Mark Prins</name>
+            <id>mprins</id>
             <email>markprins@b3partners.nl</email>
+            <organization>B3Partners B.V.</organization>
+            <organizationUrl>http://www.b3partners.nl</organizationUrl>
+        </developer>
+        <developer>
+            <name>Geert Plaisier</name>
+            <id>geertplaisier</id>
             <organization>B3Partners B.V.</organization>
             <organizationUrl>http://www.b3partners.nl</organizationUrl>
         </developer>
