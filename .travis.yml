@@ -2,13 +2,36 @@ language: java
 
 sudo: false
 
+addons:
+  postgresql: "9.3"
+
+before_install:
+  - psql --version
+  - psql -U postgres -c 'CREATE ROLE ibis LOGIN NOSUPERUSER INHERIT CREATEDB NOCREATEROLE NOREPLICATION;'
+  - psql -U postgres -c 'create database ibis WITH OWNER = ibis'
+  - psql -U postgres -c 'create schema "IBIS" AUTHORIZATION ibis';
+  - psql -U postgres -c 'ALTER DATABASE "ibis" SET search_path = "IBIS", public;'
+  - psql -U postgres -d ibis -c 'create extension postgis;'
+#  - psql -U postgres --list
+  - ls -l ./src/main/ddl/
+  - psql -U postgres -w -d ibis -a -f ./src/main/ddl/create_ibis_database.sql
+#  - psql -U postgres -w -d ibis -a -f ./src/main/ddl/psql_laadviews.sql
+
 install:
   # install without testing
   - mvn install -Dmaven.test.skip=true -B -V -fae -q
 
+before_script:
+
 script:
   # execute unit and integration tests
   - mvn -e test verify -B
+
+after_success:
+
+after_failure:
+
+after_script:
 
 jdk:
   - openjdk6
