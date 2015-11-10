@@ -5,7 +5,7 @@
 CREATE OR REPLACE VIEW "IBIS".v_beschikbare_panden_op_terrein AS 
  SELECT bedrijvenkavels.terreinid,
     count(bedrijvenkavels.terreinid) AS beschikbare_panden
-   FROM bedrijvenkavels
+   FROM "IBIS".bedrijvenkavels
   WHERE bedrijvenkavels.status::text = ANY (ARRAY['uitgeefbaar'::character varying::text, 'terstond uitgeefbaar'::character varying::text])
   GROUP BY bedrijvenkavels.terreinid;
 

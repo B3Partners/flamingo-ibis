@@ -9,11 +9,11 @@ SELECT bedrijvenkavels.id AS kavelid,
     bedrijvenkavels.datumstart,
     bedrijvenkavels.uitgegevenaan,
     bedrijvenkavels.datumuitgifte,
-    v_kavel_oppervlakte.opp_geometrie,
+    v_kavel_oppervlakte.opp_geometrie_ha as opp_geometrie,
     v_gemeente_en_regio_envelopes.naam AS gemeentenaam,
     v_gemeente_en_regio_envelopes.vvr_naam AS regionaam,
     bedrijventerrein.a_plannaam AS terreinnaam
-   FROM bedrijvenkavels,
+   FROM "IBIS".bedrijvenkavels,
     bedrijventerrein,
     v_kavel_oppervlakte,
     v_gemeente_en_regio_envelopes

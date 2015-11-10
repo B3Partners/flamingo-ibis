@@ -20,7 +20,7 @@ CREATE OR REPLACE VIEW "IBIS".v_grootste_10_kavels_op_terrein AS
             bedrijvenkavels.eerstejaaruitgifte,
             bedrijvenkavels.identificatie,
             row_number() OVER (PARTITION BY bedrijvenkavels.terreinid ORDER BY st_area(bedrijvenkavels.geom)::numeric DESC) AS row_id
-           FROM bedrijvenkavels
+           FROM "IBIS".bedrijvenkavels
           WHERE bedrijvenkavels.status::text = 'uitgegeven'::text) a
   WHERE a.row_id <= 10
   ORDER BY a.terreinid, st_area(a.geom)::numeric;

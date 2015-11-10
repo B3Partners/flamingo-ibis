@@ -14,7 +14,7 @@ CREATE OR REPLACE VIEW "IBIS".v_grootste_10_bedrijven_op_rin_nr AS
             bedrijven.bedrijvent,
             bedrijven.totf,
             row_number() OVER (PARTITION BY bedrijven.bedrijvent ORDER BY bedrijven.totf DESC) AS row_id
-           FROM bedrijven
+           FROM "IBIS".bedrijven
           WHERE bedrijven.datumeinde IS NULL) a
   WHERE a.row_id <= 10
   ORDER BY a.gid, a.totf;
