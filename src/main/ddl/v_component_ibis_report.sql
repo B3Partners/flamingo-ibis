@@ -2,7 +2,7 @@
 
 -- DROP VIEW "IBIS".v_component_ibis_report;
 
-CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report AS
+CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report AS 
  SELECT bedrijventerrein.id,
     bedrijventerrein.rin_nr,
     bedrijventerrein.datum,
@@ -55,7 +55,7 @@ CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report AS
     bedrijventerrein.o_waterontsluiting,
     bedrijventerrein.o_wegontsluiting,
     bedrijventerrein.gemeenteid,
-    st_envelope(st_buffer(st_envelope(bedrijventerrein.geom), 100::double precision)::geometry(Polygon,28992))::geometry(Polygon,28992) AS bbox_terrein,
+    st_envelope(st_snaptogrid(st_buffer(st_envelope(bedrijventerrein.geom), 100::double precision)::geometry(Polygon,28992), 1::double precision, 1::double precision))::geometry(Polygon,28992) AS bbox_terrein,
     v_gemeente_en_regio_envelopes.naam,
     v_gemeente_en_regio_envelopes.bbox_gemeente,
     v_gemeente_en_regio_envelopes.vvr_naam,
