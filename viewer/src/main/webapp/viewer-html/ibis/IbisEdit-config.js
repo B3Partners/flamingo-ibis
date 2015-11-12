@@ -43,6 +43,13 @@ Ext.define("viewer.components.CustomConfiguration", {
                 labelWidth: this.labelWidth
             },
             {
+                xtype: 'checkbox',
+                fieldLabel: 'Link toevoegen in Feature Info',
+                name: 'showEditLinkInFeatureInfo',
+                value: this.configObject.showEditLinkInFeatureInfo !== undefined ? this.configObject.showEditLinkInFeatureInfo : false,
+                labelWidth: this.labelWidth
+            },
+            {
                 itemId: 'prefixLabels',
                 xtype: 'panel',
                 collapsible: true,
