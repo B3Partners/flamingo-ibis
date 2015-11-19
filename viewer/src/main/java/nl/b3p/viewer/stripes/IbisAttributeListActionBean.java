@@ -35,6 +35,7 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import javax.persistence.EntityManager;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.action.After;
@@ -72,6 +73,7 @@ import org.json.JSONObject;
 import org.opengis.feature.Property;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
+import org.stripesstuff.stripersist.Stripersist;
 
 /**
  * Attribute list backend for voor IBIS component IbisReport.
@@ -223,9 +225,10 @@ public class IbisAttributeListActionBean implements ActionBean {
 
     @Before(stages = LifecycleStage.EventHandling)
     public void checkAuthorization() {
+        EntityManager em = Stripersist.getEntityManager();
         if (application == null
                 || appLayer == null
-                || !Authorizations.isAppLayerReadAuthorized(application, appLayer, context.getRequest())) {
+                || !Authorizations.isAppLayerReadAuthorized(application, appLayer, context.getRequest(), em)) {
             unauthorized = true;
         }
     }
