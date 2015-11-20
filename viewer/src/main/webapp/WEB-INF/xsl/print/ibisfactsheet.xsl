@@ -19,6 +19,12 @@
 
     <xsl:output method="xml" version="1.0" omit-xml-declaration="no" indent="yes"/>
 
+    <xsl:comment>
+        XSLT Version = <xsl:copy-of select="system-property('xsl:version')"/>
+        XSLT Vendor = <xsl:copy-of select="system-property('xsl:vendor')"/>
+        XSLT Vendor URL = <xsl:copy-of select="system-property('xsl:vendor-url')"/>
+    </xsl:comment>
+
     <xsl:param name="versionParam" select="'1.0'"/>
 
     <!-- map variables --> 
