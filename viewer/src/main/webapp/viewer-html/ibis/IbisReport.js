@@ -32,6 +32,8 @@ Ext.define('viewer.components.IbisReport', {
     form: null,
     terreinenStore: null,
     reportdataStore: null,
+    dataGridPopup: null,
+    dataGridColumns: [],
     config: {
         title: null,
         titlebarIcon: null,
@@ -373,27 +375,12 @@ Ext.define('viewer.components.IbisReport', {
             dockedItems: [{
                     xtype: 'toolbar',
                     docked: 'bottom',
-                    items: [{
+                    items: [me.getDownloadExcelButton(), {
                             xtype: 'button',
                             flex: 1,
-                            text: 'Download data (Excel)',
-                            id: this.name + "downloadBtn",
-                            disabled: true,
-                            handler: function (btn, evt) {
-                                btn.up('grid').downloadExcelXml(
-                                        true,
-                                        me.step2.getComponent('reportType').getRawValue() + ' rapportage '
-                                        + me.step1.getComponent('terrein').getRawValue()
-                                        + ' ' + me.step1.getComponent('gemeente').getRawValue()
-                                        + ' ' + me.step1.getComponent('regio').getRawValue(),
-                                        me.config.actionbeanUrl, {
-                                            download: 1,
-                                            mimetype: 'application/vnd.ms-excel',
-                                            filename: "ibisrapportage.xls",
-                                            appLayer: me.config.componentLayer,
-                                            application: me.config.viewerController.app.id
-                                        });
-                            }
+                            text: 'Open in popup',
+                            handler: this.openGridInPopup.bind(this),
+                            visible: !this.config.isPopup
                         }]
                 }]
         });
@@ -416,6 +403,63 @@ Ext.define('viewer.components.IbisReport', {
             items: [this.step1, this.step2, this.step3, this.step4],
             renderTo: this.getContentDiv()
         });
+    },
+    getDownloadExcelButton: function(enabled) {
+        return {
+            xtype: 'button',
+            flex: 1,
+            text: 'Download data (Excel)',
+            disabled: !enabled,
+            handler: function (btn, evt) {
+                btn.up('grid').downloadExcelXml(
+                true,
+                this.getReportTitle(),
+                this.config.actionbeanUrl, {
+                    download: 1,
+                    mimetype: 'application/vnd.ms-excel',
+                    filename: "ibisrapportage.xls",
+                    appLayer: this.config.componentLayer,
+                    application: this.config.viewerController.app.id
+                });
+            }.bind(this)
+        };
+    },
+    getReportTitle: function() {
+        return [
+            this.step2.getComponent('reportType').getRawValue(),
+            'rapportage',
+            this.step1.getComponent('terrein').getRawValue(),
+            this.step1.getComponent('gemeente').getRawValue(),
+            this.step1.getComponent('regio').getRawValue()
+        ].join(" ");
+    },
+    openGridInPopup: function(btn) {
+        if(this.dataGridPopup === null) {
+            this.dataGridPopup = Ext.create('viewer.components.ScreenPopup', {
+                viewerController: this.config.viewerController,
+                title: this.getReportTitle(),
+                details: {
+                    width: '90%',
+                    height:'90%',
+                    useExtLayout: true
+                }
+            });
+        } else {
+            this.dataGridPopup.getContentContainer().removeAll();
+        }
+        this.setIsLoading("Bezig met laden van popup...");
+        var datagrid = Ext.create('Ext.grid.Panel', {
+            store: this.step4.getStore(),
+            columns: this.dataGridColumns,
+            dockedItems: [{
+                xtype: 'toolbar',
+                docked: 'bottom',
+                items: [ this.getDownloadExcelButton(/*enabled=*/true) ]
+            }]
+        });
+        this.dataGridPopup.getContentContainer().add(datagrid);
+        this.dataGridPopup.show();
+        this.setDoneLoading();
     },
     /*
      * Reset the terreinenStore filters and comboboxes, optionally reset the maps extent.
@@ -704,21 +748,28 @@ Ext.define('viewer.components.IbisReport', {
             pageSize: 0,
             listeners: {
                 metachange: function (store, meta) {
+                    // save a copy of the columns array to use when opening grid in popup
+                    me.dataGridColumns = [].concat(meta.columns); // [].concat creates a copy of the array
                     // reconfigure grid and update model (up2date model is required for excel download)
                     me.step4.reconfigure(store, meta.columns);
                     me.reportdataStore.model.fields = meta.fields;
-                    Ext.getCmp(me.name + "downloadBtn").setDisabled(false);
+                    me.toggleGridButtons(/*disabled=*/false);
                 },
                 load: function (store, records, successful, eOpts) {
                     if (!successful) {
                         Ext.MessageBox.alert("Fout", "Fout tijdens opvragen van de data: " + eOpts.error);
-                        Ext.getCmp(me.name + "downloadBtn").setDisabled(true);
-                        me.setDoneLoading();
+                        me.toggleGridButtons(/*disabled=*/true);
                     }
+                    me.setDoneLoading();
                 }
             }
         });
-        me.setDoneLoading();
+    },
+    toggleGridButtons: function(disabled) {
+        var btns = this.step4.query('button');
+        for(var i = 0; i < btns.length; i++) {
+            btns[i].setDisabled(disabled);
+        }
     },
     showWindow: function () {
         this.popup.show();
