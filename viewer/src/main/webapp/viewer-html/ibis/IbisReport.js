@@ -65,6 +65,7 @@ Ext.define('viewer.components.IbisReport', {
             handler: function () {
                 if (!me.form) {
                     me.createForms();
+                    me.resetStoreFilters(false);
                 }
                 me.showWindow();
             }
@@ -97,7 +98,9 @@ Ext.define('viewer.components.IbisReport', {
                 });
             } else {
                 me.setDoneLoading();
-                me.resetStoreFilters(false);
+                if (me.form) {
+                    me.resetStoreFilters(false);
+                }
             }
         } else {
             me.terreinenStore = Ext.create('Ext.data.Store', {
