@@ -265,7 +265,8 @@ public class IbisAttributeListActionBean implements ActionBean {
         JSONObject metadata = new JSONObject()
                 .put("root", "data").put("totalProperty", "total")
                 .put("successProperty", "success")
-                .put("messageProperty", "message");
+                .put("messageProperty", "message")
+                .put("idProperty", "rownum");
         json.put(JSON_METADATA, metadata);
 
         String error = null;
