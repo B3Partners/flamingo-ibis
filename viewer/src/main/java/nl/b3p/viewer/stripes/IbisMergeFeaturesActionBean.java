@@ -95,7 +95,7 @@ public class IbisMergeFeaturesActionBean extends MergeFeaturesActionBean {
             //create a copy of A and add status archief
             SimpleFeature archiveFeatA = DataUtilities.createFeature(featureA.getType(),
                     DataUtilities.encodeFeature(featureA, false));
-            archiveFeatA.setAttribute(WorkflowStatus.workflowFieldName, WorkflowStatus.archief);
+            archiveFeatA.setAttribute(WorkflowStatus.workflowFieldName, WorkflowStatus.afgevoerd);
             localStore.addFeatures(DataUtilities.collection(archiveFeatA));
 
             // update feature A, add new geom and new status
@@ -106,14 +106,14 @@ public class IbisMergeFeaturesActionBean extends MergeFeaturesActionBean {
             localStore.modifyFeatures(attributes, attributevalues, filterA);
 
             // update B with status archief
-            localStore.modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.archief, filterB);
+            localStore.modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.afgevoerd, filterB);
 
             ids.add(new FeatureIdImpl(this.getFidA()));
         } else if (this.getStrategy().equalsIgnoreCase("new")) {
                 // archive the source feature (A) and merge partner(B)
             //   and create a new feature with the attributes of A but a new geom and new status.
-            localStore.modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.archief, filterA);
-            localStore.modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.archief, filterB);
+            localStore.modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.afgevoerd, filterA);
+            localStore.modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.afgevoerd, filterB);
 
             SimpleFeature newFeat = DataUtilities.createFeature(featureA.getType(),
                     DataUtilities.encodeFeature(featureA, false));

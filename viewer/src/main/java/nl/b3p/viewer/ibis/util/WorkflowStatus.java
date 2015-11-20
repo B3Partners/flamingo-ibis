@@ -24,12 +24,9 @@ package nl.b3p.viewer.ibis.util;
 public enum WorkflowStatus {
 
     // explicitly using lowercase, to mimic the javascript
-    nieuw("Nieuw"),
-    beoordeling_gemeente("Beoordeling gemeente"),
-    goedkeuring_gemeente("Goedkeuring gemeente"),
-    goedkeuring_provincie("Goedkeuring provincie"),
+    bewerkt("Bewerkt"),
     definitief("Definitief"),
-    archief("Archief");
+    afgevoerd("Afgevoerd");
 
     private final String label;
 

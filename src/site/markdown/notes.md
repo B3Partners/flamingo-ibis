@@ -43,7 +43,7 @@ The IbisLocationFinder uses the same layer as the IbisReport component, see abov
 
 For the possible values list in the viewer-admin edit configuration use the
 following for the layers that have workflow enabled (kavels + terreinen):
-`nieuw:Nieuw,beoordeling_gemeente:Beoordeling gemeente,goedkeuring_gemeente:Goedkeuring gemeente,goedkeuring_provincie:Goedkeuring provincie,definitief:Definitief,archief:Archief`
+`bewerkt:Bewerkt,definitief:Definitief,afgevoerd:Afgevoerd`
 
 _note_ there is no space after the comma.
 

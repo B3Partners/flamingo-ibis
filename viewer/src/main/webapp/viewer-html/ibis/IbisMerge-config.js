@@ -54,7 +54,6 @@ Ext.define("viewer.components.CustomConfiguration", {
                 value: me.configObject.mergeGapDist ? me.configObject.mergeGapDist : 0,
                 labelWidth: me.labelWidth
             }
-            // status altijd nieuw
 //            , {
 //                xtype: 'combobox',
 //                fieldLabel: 'Workflow status',

@@ -26,8 +26,8 @@ Ext.define("viewer.components.IbisSplit", {
     config: {
         // custom url
         actionbeanUrl: "/viewer/action/feature/ibissplit",
-        // status altijd nieuw
-        workflowstatus: "nieuw"
+        // status altijd definitief
+        workflowstatus: "definitief"
     },
     constructor: function (conf) {
         viewer.components.IbisSplit.superclass.constructor.call(this, conf);
@@ -37,15 +37,30 @@ Ext.define("viewer.components.IbisSplit", {
 
         // update custom url, global var contextPath is not available until after page load
         this.config.actionbeanUrl = contextPath + "/action/feature/ibissplit";
+
+        this.maincontainer.insert(0, {
+                id: this.name + "datumMutatie",
+                margin: 5,
+                fieldLabel: 'Splitsingsdatum',
+                xtype: 'datefield',
+                itemId: 'datum_mutatie',
+                value: new Date()
+            }
+        );
+
+
         return this;
     },
     /**
-     * add a workflow_status
+     * add a workflow_status, reden, datum_mutatie
      * @override
      */
     getExtraData: function () {
-        // return 'workflow_status=' + this.status.getId();
-        return 'workflow_status=' + this.status.get("desc");
+        return Ext.util.JSON.encode({
+            'workflow_status': this.status.get("id"),
+            'reden': 'splitsing',
+            'datum_mutatie': this.maincontainer.getComponent('datum_mutatie').getValue()
+        });
     },
     /**
      * Return the name of the superclass to inherit the css property.

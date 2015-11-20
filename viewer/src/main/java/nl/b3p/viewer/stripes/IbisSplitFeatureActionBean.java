@@ -17,28 +17,24 @@
 package nl.b3p.viewer.stripes;
 
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.WKTReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import net.sourceforge.stripes.action.StrictBinding;
 import net.sourceforge.stripes.action.UrlBinding;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.geotools.data.DataUtilities;
-import org.geotools.data.DefaultTransaction;
-import org.geotools.data.Transaction;
 import org.geotools.data.simple.SimpleFeatureStore;
-import org.geotools.factory.CommonFactoryFinder;
-import org.geotools.feature.FeatureCollection;
-import org.geotools.filter.identity.FeatureIdImpl;
 import org.geotools.util.Converter;
 import org.geotools.util.GeometryTypeConverterFactory;
+import org.json.JSONException;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.GeometryType;
 import org.opengis.filter.Filter;
-import org.opengis.filter.FilterFactory2;
 import org.opengis.filter.identity.FeatureId;
+import org.json.JSONObject;
 
 /**
  * A workflow-supporting split action bean for ibis.
@@ -63,11 +59,15 @@ public class IbisSplitFeatureActionBean extends SplitFeatureActionBean {
      * @todo maybe we want to pass some more attributes in a delimited string
      */
     @Override
-    protected List<SimpleFeature> handleExtraData(List<SimpleFeature> features) {
-        final String[] extraData = this.getExtraData().split("=");
-        for (SimpleFeature f : features) {
-            log.debug(String.format("Setting value : %s for attribute: %s on feature %s", extraData[1], extraData[0], f.getID()));
-            f.setAttribute(extraData[0], extraData[1]);
+    protected List<SimpleFeature> handleExtraData(List<SimpleFeature> features) throws JSONException {
+        JSONObject json = new JSONObject(this.getExtraData());
+        Iterator items = json.keys();
+        while (items.hasNext()) {
+            String key = (String) items.next();
+            for (SimpleFeature f : features) {
+                log.debug(String.format("Setting value : %s for attribute: %s on feature %s", json.get(key), key, f.getID()));
+                f.setAttribute(key, json.get(key));
+            }
         }
         return features;
     }

@@ -43,12 +43,9 @@ if (!Ext.data.StoreManager.lookup('IbisWorkflowStore')) {
                 model: 'IbisWorkflowModel',
                 storeId: 'IbisWorkflowStore',
                 data: [
-                    {id: 'nieuw', label: "Nieuw"},
-                    {id: 'beoordeling_gemeente', label: "Beoordeling gemeente"},
-                    {id: 'goedkeuring_gemeente', label: "Goedkeuring gemeente"},
-                    {id: 'goedkeuring_provincie', label: "Goedkeuring provincie"},
+                    {id: 'bewerkt', label: "Bewerkt"},
                     {id: 'definitief', label: "Definitief"},
-                    {id: 'archief', label: "Archief"}
+                    {id: 'afgevoerd', label: "Afgevoerd"}
                 ]}
     );
 }
@@ -78,58 +75,61 @@ function getNextIbisWorkflowStatus(userRoles, statusId, comboBox) {
     switch (workflowRole) {
         case "workflow_gemeente":
             switch (statusId) {
-                case "nieuw":
-                    possibleNextStatus = ['nieuw', 'beoordeling_gemeente'];
-                    break;
-                case "beoordeling_gemeente":
-                    possibleNextStatus = ['beoordeling_gemeente', 'goedkeuring_gemeente'];
-                    break;
-                case "goedkeuring_gemeente":
-                    possibleNextStatus = ['goedkeuring_gemeente', 'beoordeling_gemeente'];
-                    break;
-                case "goedkeuring_provincie":
-                    possibleNextStatus = ['goedkeuring_gemeente'];
-                    break;
-                case "definitief":
-                    possibleNextStatus = ['definitief'];
-                    break;
-                case "archief":
-                    break;
+//                case "nieuw":
+//                    possibleNextStatus = ['nieuw', 'beoordeling_gemeente'];
+//                    break;
+//                case "beoordeling_gemeente":
+//                    possibleNextStatus = ['beoordeling_gemeente', 'goedkeuring_gemeente'];
+//                    break;
+//                case "goedkeuring_gemeente":
+//                    possibleNextStatus = ['goedkeuring_gemeente', 'beoordeling_gemeente'];
+//                    break;
+//                case "goedkeuring_provincie":
+//                    possibleNextStatus = ['goedkeuring_gemeente'];
+//                    break;
+//                case "definitief":
+//                    possibleNextStatus = ['definitief'];
+//                    break;
+//                case "archief":
+//                    break;
+                default:
+                    // iedere wijziging van een gemeente medewerker leidt tot workflow_status=bewerkt
+                    possibleNextStatus = ['bewerkt'];
             }
             break;
         case "workflow_provincie":
             switch (statusId) {
-                case "nieuw":
-                    possibleNextStatus = ['nieuw', 'beoordeling_gemeente'];
-                    break;
-                case "beoordeling_gemeente":
-                    possibleNextStatus = ['beoordeling_gemeente'];
-                    break;
-                case "goedkeuring_gemeente":
-                    possibleNextStatus = ['goedkeuring_gemeente', 'beoordeling_gemeente', 'goedkeuring_provincie'];
-                    break;
-                case "goedkeuring_provincie":
-                    possibleNextStatus = ['definitief'];
-                    break;
-                case "definitief":
-                    possibleNextStatus = ['definitief'];
-                    break;
-                case "archief":
-                    break;
+//                case "nieuw":
+//                    possibleNextStatus = ['nieuw', 'beoordeling_gemeente'];
+//                    break;
+//                case "beoordeling_gemeente":
+//                    possibleNextStatus = ['beoordeling_gemeente'];
+//                    break;
+//                case "goedkeuring_gemeente":
+//                    possibleNextStatus = ['goedkeuring_gemeente', 'beoordeling_gemeente', 'goedkeuring_provincie'];
+//                    break;
+//                case "goedkeuring_provincie":
+//                    possibleNextStatus = ['definitief'];
+//                    break;
+//                case "definitief":
+//                    possibleNextStatus = ['definitief'];
+//                    break;
+//                case "archief":
+//                    break;
+                default:
+                    possibleNextStatus = ['bewerkt', 'definitief', 'afgevoerd'];
             }
             break;
         case "workflow_admin":
             // kan alles, geen filter
-            possibleNextStatus = ['nieuw', 'beoordeling_gemeente', 'goedkeuring_gemeente', 'goedkeuring_provincie', 'definitief', 'archief'];
+            //possibleNextStatus = ['nieuw', 'beoordeling_gemeente', 'goedkeuring_gemeente', 'goedkeuring_provincie', 'definitief', 'archief'];
+            possibleNextStatus = ['bewerkt', 'definitief', 'afgevoerd'];
             break;
         default:
             // onbekende/lege gebruikers rol??
-            possibleNextStatus = ['nieuw'];
+            possibleNextStatus = ['bewerkt'];
             break;
     }
-
-    //console.debug("lookup up workflows for ", workflowRole, statusId, comboBox);
-    // console.debug("possibleNextStatus", possibleNextStatus);
 
     if (possibleNextStatus) {
         // filter toepassen

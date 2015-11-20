@@ -95,7 +95,7 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean {
 
         try {
             //this.getStore().removeFeatures(filter);
-            this.getStore().modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.archief, filter);
+            this.getStore().modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.afgevoerd, filter);
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
@@ -165,7 +165,7 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean {
             if (workflowStatus != null && workflowStatus == WorkflowStatus.definitief) {
                 // if the new workflow status === defintief
                 // store the original with status archief
-                this.getStore().modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.archief, filter);
+                this.getStore().modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.afgevoerd, filter);
 
                 // make a copy of the original
                 SimpleFeature original = this.getStore().getFeatures(filter).features().next();
