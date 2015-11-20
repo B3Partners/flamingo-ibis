@@ -32,6 +32,9 @@ and not anything else.
     or a popup, configure it to use "ibis report component" as layer, select
     which attributes should be available as aggregate.
 
+### IbisLocationFinder component
+
+The IbisLocationFinder uses the same layer as the IbisReport component, see above for configuration. The two components share a common datastore so that the location data only needs to be downloaded once.
 
 ### Other joins and relates
 
