@@ -326,6 +326,27 @@ Ext.define('viewer.components.IbisReport', {
                 },
                 {
                     xtype: 'container',
+                    items: [{
+                        xtype: 'checkbox',
+                        itemId: 'checkAllVariables',
+                        boxLabel: 'Alle variabelen aan/uitzetten',
+                        listeners: {
+                            change: { scope: this, fn: function(field, newval) {
+                                var container = this.step3.getComponent('allVariables');
+                                if(container.isHidden()) {
+                                    container = this.step3.getComponent('aggregationVariables');
+                                }
+                                var checkboxes = container.query('checkbox');
+                                Ext.Array.each(checkboxes, function (checkbox) {
+                                    checkbox.setValue(!!newval);
+                                });
+                            }}
+                        }
+                    }],
+                    margin: '0 0 10 0'
+                },
+                {
+                    xtype: 'container',
                     itemId: 'allVariables',
                     items: allVariables
                 },
@@ -632,7 +653,7 @@ Ext.define('viewer.components.IbisReport', {
         Ext.Array.each(checkboxes, function (checkbox) {
             checkbox.reset();
         });
-
+        Ext.ComponentQuery.query('#checkAllVariables')[0].setValue(false);
         var showAggregation = val === 'AGGREGATED' || val === 'ISSUE';
         var showTimeslot = val === 'ISSUE';
         // Step 2 details
