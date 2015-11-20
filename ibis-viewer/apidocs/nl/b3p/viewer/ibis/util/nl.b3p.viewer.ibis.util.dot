@@ -19,12 +19,9 @@ digraph G {
 <tr><td align="left" balign="left"> + workflowFieldName : String </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> nieuw </td></tr>
-<tr><td align="left" balign="left"> beoordeling_gemeente </td></tr>
-<tr><td align="left" balign="left"> goedkeuring_gemeente </td></tr>
-<tr><td align="left" balign="left"> goedkeuring_provincie </td></tr>
+<tr><td align="left" balign="left"> bewerkt </td></tr>
 <tr><td align="left" balign="left"> definitief </td></tr>
-<tr><td align="left" balign="left"> archief </td></tr>
+<tr><td align="left" balign="left"> afgevoerd </td></tr>
 		</table></td></tr>
 		</table>>, URL="./WorkflowStatus.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.ibis.util.DateUtils

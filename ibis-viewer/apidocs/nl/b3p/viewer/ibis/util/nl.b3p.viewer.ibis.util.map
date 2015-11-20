@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./WorkflowStatus.html" title="nl.b3p.viewer.ibis.util.WorkflowStatus" alt="" coords="16,11,208,191"/>
-<area shape="rect" id="node1" href="./WorkflowStatus.html" title="&lt;TABLE&gt;" alt="" coords="5,5,219,196"/>
-<area shape="rect" id="node2_1" href="./DateUtils.html" title="nl.b3p.viewer.ibis.util.DateUtils" alt="" coords="253,45,715,156"/>
-<area shape="rect" id="node2" href="./DateUtils.html" title="&lt;TABLE&gt;" alt="" coords="243,40,725,161"/>
+<area shape="rect" id="node1_0" href="./WorkflowStatus.html" title="nl.b3p.viewer.ibis.util.WorkflowStatus" alt="" coords="16,11,208,139"/>
+<area shape="rect" id="node1" href="./WorkflowStatus.html" title="&lt;TABLE&gt;" alt="" coords="5,5,219,144"/>
+<area shape="rect" id="node2_1" href="./DateUtils.html" title="nl.b3p.viewer.ibis.util.DateUtils" alt="" coords="253,19,715,130"/>
+<area shape="rect" id="node2" href="./DateUtils.html" title="&lt;TABLE&gt;" alt="" coords="243,14,725,135"/>
 </map>
