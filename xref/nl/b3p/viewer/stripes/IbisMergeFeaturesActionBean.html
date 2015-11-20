@@ -103,7 +103,7 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>              <em class="jxr_comment">//create a copy of A and add status archief</em>
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>              SimpleFeature archiveFeatA = DataUtilities.createFeature(featureA.getType(),
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>                      DataUtilities.encodeFeature(featureA, false));
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>              archiveFeatA.setAttribute(WorkflowStatus.workflowFieldName, WorkflowStatus.archief);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>              archiveFeatA.setAttribute(WorkflowStatus.workflowFieldName, WorkflowStatus.afgevoerd);
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>              localStore.addFeatures(DataUtilities.collection(archiveFeatA));
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 
 <a class="jxr_linenumber" name="L101" href="#L101">101</a>             <em class="jxr_comment">// update feature A, add new geom and new status</em>
@@ -114,14 +114,14 @@
 <a class="jxr_linenumber" name="L106" href="#L106">106</a>             localStore.modifyFeatures(attributes, attributevalues, filterA);
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 
 <a class="jxr_linenumber" name="L108" href="#L108">108</a>             <em class="jxr_comment">// update B with status archief</em>
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>             localStore.modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.archief, filterB);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>             localStore.modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.afgevoerd, filterB);
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 
 <a class="jxr_linenumber" name="L111" href="#L111">111</a>             ids.add(<strong class="jxr_keyword">new</strong> FeatureIdImpl(<strong class="jxr_keyword">this</strong>.getFidA()));
 <a class="jxr_linenumber" name="L112" href="#L112">112</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.getStrategy().equalsIgnoreCase(<span class="jxr_string">"new"</span>)) {
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>                 <em class="jxr_comment">// archive the source feature (A) and merge partner(B)</em>
 <a class="jxr_linenumber" name="L114" href="#L114">114</a>             <em class="jxr_comment">//   and create a new feature with the attributes of A but a new geom and new status.</em>
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>             localStore.modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.archief, filterA);
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>             localStore.modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.archief, filterB);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>             localStore.modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.afgevoerd, filterA);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>             localStore.modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.afgevoerd, filterB);
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 
 <a class="jxr_linenumber" name="L118" href="#L118">118</a>             SimpleFeature newFeat = DataUtilities.createFeature(featureA.getType(),
 <a class="jxr_linenumber" name="L119" href="#L119">119</a>                     DataUtilities.encodeFeature(featureA, false));

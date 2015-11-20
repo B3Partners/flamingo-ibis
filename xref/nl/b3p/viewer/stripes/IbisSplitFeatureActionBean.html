@@ -25,57 +25,57 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> nl.b3p.viewer.stripes;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> com.vividsolutions.jts.geom.Geometry;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> com.vividsolutions.jts.io.WKTReader;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.ArrayList;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.util.ArrayList;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.Iterator;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.List;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> net.sourceforge.stripes.action.StrictBinding;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> net.sourceforge.stripes.action.UrlBinding;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.logging.Log;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.logging.LogFactory;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.geotools.data.DataUtilities;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.geotools.data.DefaultTransaction;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.geotools.data.Transaction;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.geotools.data.simple.SimpleFeatureStore;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.geotools.factory.CommonFactoryFinder;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.geotools.feature.FeatureCollection;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.geotools.filter.identity.FeatureIdImpl;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.geotools.util.Converter;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.geotools.util.GeometryTypeConverterFactory;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.opengis.feature.simple.SimpleFeature;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.opengis.feature.type.AttributeDescriptor;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.opengis.feature.type.GeometryType;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.opengis.filter.Filter;
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.opengis.filter.FilterFactory2;
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> org.opengis.filter.identity.FeatureId;
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * A workflow-supporting split action bean for ibis.</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * @author Mark Prins &lt;mark@b3partners.nl&gt;</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  @UrlBinding(<span class="jxr_string">"/action/feature/ibissplit"</span>)
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  @StrictBinding
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../nl/b3p/viewer/stripes/IbisSplitFeatureActionBean.html">IbisSplitFeatureActionBean</a> <strong class="jxr_keyword">extends</strong> SplitFeatureActionBean {
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Log log = LogFactory.getLog(IbisSplitFeatureActionBean.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">     * force the workflow status attribute on the feature. This will handle the</em>
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">     * case where the {@code extraData} attribute is a key/value pair with the</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">     * workflow, eg {@code workflow_status=status}.</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.geotools.data.simple.SimpleFeatureStore;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.geotools.util.Converter;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.geotools.util.GeometryTypeConverterFactory;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.json.JSONException;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.opengis.feature.simple.SimpleFeature;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.opengis.feature.type.AttributeDescriptor;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.opengis.feature.type.GeometryType;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.opengis.filter.Filter;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.opengis.filter.identity.FeatureId;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.json.JSONObject;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * A workflow-supporting split action bean for ibis.</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * @author Mark Prins &lt;mark@b3partners.nl&gt;</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  @UrlBinding(<span class="jxr_string">"/action/feature/ibissplit"</span>)
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  @StrictBinding
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../nl/b3p/viewer/stripes/IbisSplitFeatureActionBean.html">IbisSplitFeatureActionBean</a> <strong class="jxr_keyword">extends</strong> SplitFeatureActionBean {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Log log = LogFactory.getLog(IbisSplitFeatureActionBean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment">     * force the workflow status attribute on the feature. This will handle the</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">     * case where the {@code extraData} attribute is a key/value pair with the</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">     * workflow, eg {@code workflow_status=status}.</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">     * @param features A list of features to be modified</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">     * @return the list of modified features that are about to be committed to</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">     * the datastore</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">     * @param features A list of features to be modified</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">     * @return the list of modified features that are about to be committed to</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">     * the datastore</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">     * @todo maybe we want to pass some more attributes in a delimited string</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      @Override
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      <strong class="jxr_keyword">protected</strong> List&lt;SimpleFeature&gt; handleExtraData(List&lt;SimpleFeature&gt; features) {
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>          <strong class="jxr_keyword">final</strong> String[] extraData = <strong class="jxr_keyword">this</strong>.getExtraData().split(<span class="jxr_string">"="</span>);
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>          <strong class="jxr_keyword">for</strong> (SimpleFeature f : features) {
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>              log.debug(String.format(<span class="jxr_string">"Setting value : %s for attribute: %s on feature %s"</span>, extraData[1], extraData[0], f.getID()));
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>              f.setAttribute(extraData[0], extraData[1]);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">     * @todo maybe we want to pass some more attributes in a delimited string</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      @Override
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <strong class="jxr_keyword">protected</strong> List&lt;SimpleFeature&gt; handleExtraData(List&lt;SimpleFeature&gt; features) <strong class="jxr_keyword">throws</strong> JSONException {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          JSONObject json = <strong class="jxr_keyword">new</strong> JSONObject(<strong class="jxr_keyword">this</strong>.getExtraData());
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>          Iterator items = json.keys();
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>          <strong class="jxr_keyword">while</strong> (items.hasNext()) {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>              String key = (String) items.next();
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>              <strong class="jxr_keyword">for</strong> (SimpleFeature f : features) {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>                  log.debug(String.format(<span class="jxr_string">"Setting value : %s for attribute: %s on feature %s"</span>, json.get(key), key, f.getID()));
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>                  f.setAttribute(key, json.get(key));
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>              }
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>          }
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>          <strong class="jxr_keyword">return</strong> features;
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>      }

@@ -190,7 +190,7 @@
 <h3><a name="Other_joins_and_relates"></a>Other joins and relates</h3></div>
 <div class="section">
 <h3><a name="Workflow"></a>Workflow</h3>
-<p>For the possible values list in the viewer-admin edit configuration use the following for the layers that have workflow enabled (kavels + terreinen): <tt>nieuw:Nieuw,beoordeling_gemeente:Beoordeling gemeente,goedkeuring_gemeente:Goedkeuring gemeente,goedkeuring_provincie:Goedkeuring provincie,definitief:Definitief,archief:Archief</tt></p>
+<p>For the possible values list in the viewer-admin edit configuration use the following for the layers that have workflow enabled (kavels + terreinen): <tt>bewerkt:Bewerkt,definitief:Definitief,afgevoerd:Afgevoerd</tt></p>
 <p><i>note</i> there is no space after the comma.</p>
 <p>Next add the following (workflow) user groups in flamingo and add the users to the groups:  - workflow_gemeente  - workflow_provincie  - workflow_admin (can change any status to any other status)</p>
 <p>If you need to prevent some users from editing geometry create a usergroup for that (eg. cannot_edit_geometry) and attach them to this group, next specify the group on that cannot edit geometry on the layer in the &#x201c;Service en Kaartlagen&#x201d; view of the viewer-admin</p></div></div>
