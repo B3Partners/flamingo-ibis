@@ -118,7 +118,7 @@
         ibis-viewer-admin</a>
             </li>
                               <li class="nav-header">Project Documentation</li>
-                                                                                                                                                                          
+                                                                                                                                                                                            
       <li>
   
                           <a href="project-info.html" title="Project Information">
@@ -155,11 +155,27 @@
                                   
             <h1>Development notes</h1>
 <div class="section">
-<h2><a name="building"></a>building</h2>
-<p><tt>mvn install</tt> will generate the artifacts</p></div>
+<h2><a name="set_up_Maven"></a>set up Maven</h2>
+<p>Install Maven 3.0.5 or newer.</p>
+<p>In your maven settings.xml add the following <tt>server</tt> element:</p>
+
+<div class="source">
+<div class="source"><pre class="prettyprint">      &lt;server&gt;
+          &lt;id&gt;gh-pages&lt;/id&gt;
+          &lt;!--&lt;username&gt;git&lt;/username&gt;--&gt;
+          &lt;password&gt;....&lt;/password&gt;
+      &lt;/server&gt;
+</pre></div></div>
+<p>This is required to publish the site into the gh-pages branch using the <a class="externalLink" href="https://github.com/trajano/wagon-git">wagon-git</a>.</p></div>
 <div class="section">
-<h2><a name="generating_site"></a>generating site</h2>
-<p><tt>mvn site</tt> will create a staged site, <tt>mvn site site:stage site:deploy</tt> should take care of deploying the site</p></div>
+<h2><a name="building"></a>building</h2>
+<p><tt>mvn install</tt> will generate the artifacts for viewer and viewer-admin.</p></div>
+<div class="section">
+<h2><a name="releasing"></a>releasing</h2>
+<p>Use the regular maven relase cycle; <tt>mvn release:prepare</tt> and then <tt>mvn release:perform</tt>.</p></div>
+<div class="section">
+<h2><a name="generating_and_deploying_site"></a>generating and deploying site</h2>
+<p><tt>mvn site</tt> will create a staged maven site, <tt>mvn site site:stage site:deploy</tt> should take care of deploying the site to <a class="externalLink" href="https://b3partners.github.io/flamingo-ibis/">https://b3partners.github.io/flamingo-ibis/</a>.</p></div>
                   </div>
             </div>
           </div>
