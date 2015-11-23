@@ -21,14 +21,20 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
+ * Utility class with various date manipulation methods.
  *
  * @author Mark Prins <mark@b3partners.nl>
  */
 public class DateUtils {
-
-    private DateUtils() {
-    }
-
+    /**
+     * calculate difference in months between the arguments.
+     *
+     * @param beginningDate
+     * @param endingDate
+     * @return number of months
+     *
+     * @see #differenceInMonths(java.util.Calendar, java.util.Calendar)
+     */
     public static int differenceInMonths(Date beginningDate, Date endingDate) {
         if (beginningDate == null || endingDate == null) {
             return 0;
@@ -40,6 +46,13 @@ public class DateUtils {
         return differenceInMonths(cal1, cal2);
     }
 
+    /**
+     * calculate difference in months between the arguments.
+     *
+     * @param beginningDate
+     * @param endingDate
+     * @return number of months
+     */
     public static int differenceInMonths(Calendar beginningDate, Calendar endingDate) {
         if (beginningDate == null || endingDate == null) {
             return 0;
@@ -61,4 +74,11 @@ public class DateUtils {
         cal.add(Calendar.MONTH, 1);
         return cal.getTime();
     }
+
+    /**
+     * private constructor.
+     */
+    private DateUtils() {
+    }
+
 }

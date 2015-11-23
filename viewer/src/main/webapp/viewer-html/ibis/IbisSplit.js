@@ -38,7 +38,7 @@ Ext.define("viewer.components.IbisSplit", {
         // update custom url, global var contextPath is not available until after page load
         this.config.actionbeanUrl = contextPath + "/action/feature/ibissplit";
 
-        this.maincontainer.insert(0, {
+        this.maincontainer.insert(2, {
                 id: this.name + "datumMutatie",
                 margin: 5,
                 fieldLabel: 'Splitsingsdatum',
@@ -47,8 +47,6 @@ Ext.define("viewer.components.IbisSplit", {
                 value: new Date()
             }
         );
-
-
         return this;
     },
     /**

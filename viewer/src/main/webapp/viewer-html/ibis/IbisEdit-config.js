@@ -50,6 +50,13 @@ Ext.define("viewer.components.CustomConfiguration", {
                 labelWidth: this.labelWidth
             },
             {
+                xtype: 'checkbox',
+                fieldLabel: 'Nieuw toestaan',
+                name: 'allowNew',
+                value: this.configObject.allowNew !== undefined ? this.configObject.allowNew : true,
+                labelWidth: this.labelWidth
+            },
+            {
                 itemId: 'prefixLabels',
                 xtype: 'panel',
                 collapsible: true,

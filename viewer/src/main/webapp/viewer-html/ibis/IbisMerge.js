@@ -23,6 +23,8 @@ Ext.define("viewer.components.IbisMerge", {
     extend: "viewer.components.Merge",
     /** (cached) workflow status. */
     status: null,
+    labelA: 'Hoofdperceel',
+    labelB: 'Vervallen perceel',
     config: {
         // custom url
         actionbeanUrl: "/viewer/action/feature/ibismerge",
@@ -37,6 +39,16 @@ Ext.define("viewer.components.IbisMerge", {
 
         // update custom url, global var contextPath is not available until after page load
         this.config.actionbeanUrl = contextPath + "/action/feature/ibismerge";
+
+        this.maincontainer.insert(3, {
+            id: this.name + "datumMutatie",
+            margin: 5,
+            fieldLabel: 'Samenvoeg datum',
+            xtype: 'datefield',
+            itemId: 'datum_mutatie',
+            value: new Date()
+        });
+
         return this;
     },
     /**
@@ -44,8 +56,11 @@ Ext.define("viewer.components.IbisMerge", {
      * @override
      */
     getExtraData: function () {
-        // return 'workflow_status=' + this.status.getId();
-        return 'workflow_status=' + this.status.get("desc");
+        return Ext.util.JSON.encode({
+            'reden': 'samenvoeging',
+            'datum_mutatie': this.maincontainer.getComponent('datum_mutatie').getValue()
+        });
+
     },
     /**
      * Return the name of the superclass to inherit the css property.

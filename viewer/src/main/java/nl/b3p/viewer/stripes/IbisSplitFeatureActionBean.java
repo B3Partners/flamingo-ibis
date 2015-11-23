@@ -49,14 +49,15 @@ public class IbisSplitFeatureActionBean extends SplitFeatureActionBean {
 
     /**
      * force the workflow status attribute on the feature. This will handle the
-     * case where the {@code extraData} attribute is a key/value pair with the
-     * workflow, eg {@code workflow_status=status}.
+     * case where the {@code extraData} attribute is a piece of json with the
+     * workflow, eg
+     * {@code {workflow_status:'afgevoerd',datum_mutatie:'2015-12-01Z00:00'}}.
      *
      * @param features A list of features to be modified
      * @return the list of modified features that are about to be committed to
      * the datastore
      *
-     * @todo maybe we want to pass some more attributes in a delimited string
+     * @throws JSONException if json parsing failed
      */
     @Override
     protected List<SimpleFeature> handleExtraData(List<SimpleFeature> features) throws JSONException {
