@@ -16,41 +16,32 @@
  */
 package nl.b3p.viewer.stripes;
 
+import static nl.b3p.viewer.ibis.util.IbisConstants.*;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.WKTReader;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import net.sourceforge.stripes.action.DefaultHandler;
-import net.sourceforge.stripes.action.Resolution;
-import net.sourceforge.stripes.action.StreamingResolution;
 import net.sourceforge.stripes.action.StrictBinding;
 import net.sourceforge.stripes.action.UrlBinding;
-import net.sourceforge.stripes.validation.Validate;
-import nl.b3p.viewer.config.security.Authorizations;
 import nl.b3p.viewer.ibis.util.WorkflowStatus;
+import nl.b3p.viewer.ibis.util.WorkflowUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.DefaultTransaction;
-import org.geotools.data.FeatureSource;
 import org.geotools.data.Transaction;
-import org.geotools.data.simple.SimpleFeatureCollection;
-import org.geotools.data.simple.SimpleFeatureStore;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.filter.identity.FeatureIdImpl;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.GeometryType;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
-import org.opengis.filter.identity.FeatureId;
+import org.stripesstuff.stripersist.Stripersist;
 
 /**
  * edit component met ibis workflow.
@@ -75,11 +66,10 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean {
 //        log.debug("hit ibis delete");
 //        return super.delete();
 //    }
-
     /**
      * Override to not delete a feature but set workflow status to
      * {@code WorkflowStatus.archief}
-      *
+     *
      * @param fid
      * @throws IOException
      * @throws Exception
@@ -96,7 +86,14 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean {
         try {
             //this.getStore().removeFeatures(filter);
             this.getStore().modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.afgevoerd, filter);
+
+            SimpleFeature original = this.getStore().getFeatures(filter).features().next();
+            String terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME).toString();
+
             transaction.commit();
+
+            WorkflowUtil.updateTerreinGeometry(terreinID, this.getStore(), this.getApplication(), Stripersist.getEntityManager());
+
         } catch (Exception e) {
             transaction.rollback();
             throw e;
@@ -122,7 +119,7 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean {
         FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
         Filter filter = ff.id(new FeatureIdImpl(fid));
 
-        List<String> attributes = new ArrayList<String>();
+        List<String> attributes = new ArrayList();
         List values = new ArrayList();
         WorkflowStatus workflowStatus = null;
         for (Iterator<String> it = this.getJsonFeature().keys(); it.hasNext();) {
@@ -162,28 +159,34 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean {
                 values.toString()));
 
         try {
-            if (workflowStatus != null && workflowStatus == WorkflowStatus.definitief) {
-                // if the new workflow status === defintief
-                // store the original with status archief
-                this.getStore().modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.afgevoerd, filter);
 
-                // make a copy of the original
-                SimpleFeature original = this.getStore().getFeatures(filter).features().next();
-                SimpleFeatureBuilder builder = new SimpleFeatureBuilder(original.getFeatureType());
-                builder.init(original);
-                SimpleFeature copy = builder.buildFeature(null);
+//            if (workflowStatus != null && workflowStatus == WorkflowStatus.definitief) {
+            // if the new workflow status === defintief
+            // store the original with status archief
+            this.getStore().modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.afgevoerd, filter);
 
-                // set (new) attribute values
-                for (int i = 0; i < attributes.size(); i++) {
-                    copy.setAttribute(attributes.get(i), values.get(i));
-                }
+            // make a copy of the original
+            SimpleFeature original = this.getStore().getFeatures(filter).features().next();
+            SimpleFeatureBuilder builder = new SimpleFeatureBuilder(original.getFeatureType());
+            builder.init(original);
+            SimpleFeature copy = builder.buildFeature(null);
 
-                this.getStore().addFeatures(DataUtilities.collection(copy));
-            } else {
-                // ordinary edit
-                this.getStore().modifyFeatures(attributes.toArray(new String[]{}), values.toArray(), filter);
+            // set (new) attribute values
+            for (int i = 0; i < attributes.size(); i++) {
+                copy.setAttribute(attributes.get(i), values.get(i));
             }
+
+            this.getStore().addFeatures(DataUtilities.collection(copy));
+//            } else {
+//                // ordinary edit
+//                this.getStore().modifyFeatures(attributes.toArray(new String[]{}), values.toArray(), filter);
+//            }
+
+            String terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME).toString();
+
             transaction.commit();
+
+            WorkflowUtil.updateTerreinGeometry(terreinID, this.getStore(), this.getApplication(), Stripersist.getEntityManager());
         } catch (Exception e) {
             transaction.rollback();
             throw e;
@@ -191,4 +194,5 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean {
             transaction.close();
         }
     }
+
 }

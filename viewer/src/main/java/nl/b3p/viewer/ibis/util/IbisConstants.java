@@ -24,6 +24,9 @@ package nl.b3p.viewer.ibis.util;
 public final class IbisConstants {
 
     public static final String KAVEL_TERREIN_ID_FIELDNAME = "terreinid";
+    public static final String TERREIN_ID_FIELDNAME = "id";
+    public static final String TERREIN_LAYER_NAME = "bedrijventerrein";
+    public static final String WORKFLOW_FIELDNAME = "workflow_status";
 
     /**
      * private constructor.

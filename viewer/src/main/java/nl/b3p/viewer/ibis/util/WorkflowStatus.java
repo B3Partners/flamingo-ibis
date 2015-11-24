@@ -26,14 +26,18 @@ public enum WorkflowStatus {
     // explicitly using lowercase, to mimic the javascript
     bewerkt("Bewerkt"),
     definitief("Definitief"),
+    archief("Archief"),
     afgevoerd("Afgevoerd");
 
     private final String label;
 
     /**
      * The name of the workflow attribute field in the datamodel {@value }.
+     *
+     * @deprecated use {@link IbisConstants.WORKFLOW_FIELDNAME}
      */
-    public static final String workflowFieldName = "workflow_status";
+    @Deprecated
+    public static final String workflowFieldName = IbisConstants.WORKFLOW_FIELDNAME;
 
     WorkflowStatus(String label) {
         this.label = label;
