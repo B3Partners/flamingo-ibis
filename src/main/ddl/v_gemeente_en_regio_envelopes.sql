@@ -13,11 +13,11 @@ CREATE OR REPLACE VIEW "IBIS".v_gemeente_en_regio_envelopes AS
     regio.vvr_id,
     st_envelope(st_snaptogrid(st_buffer(st_envelope(gemeente.geom), 1000::double precision), 1::double precision, 1::double precision)) AS bbox_gemeente,
     st_snaptogrid(st_envelope(regio.geom), 1::double precision, 1::double precision) AS bbox_regio
-   FROM gemeente,
-    regio
+   FROM "IBIS".gemeente,
+    "IBIS".regio
   WHERE gemeente.vvr_id = regio.vvr_id;
 
 ALTER TABLE "IBIS".v_gemeente_en_regio_envelopes
-  OWNER TO ibis;
+  OWNER TO geo;
 COMMENT ON VIEW "IBIS".v_gemeente_en_regio_envelopes
   IS 'Geeft de MBR van de gemeenten en regio_s';

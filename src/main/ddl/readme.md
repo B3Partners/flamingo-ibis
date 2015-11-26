@@ -6,7 +6,7 @@ Some views depende on others, use the following order to create the views:
 1. v_kavel_oppervlakte.sql
 1. v_terrein_oppervlakte.sql
 1. v_gemeente_en_regio_envelopes.sql
-1. v_beschikbare_panden_op_terrein.sql
+1.   OWNER TO "IBIS";.sql
 1. v_grootste_10_bedrijven_op_rin_nr.sql
 1. v_grootste_10_bedrijven_op_terrein.sql
 1. v_grootste_10_kavels_op_terrein.sql

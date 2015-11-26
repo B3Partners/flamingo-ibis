@@ -7,25 +7,14 @@ CREATE OR REPLACE VIEW "IBIS".v_grootste_10_kavels_op_terrein AS
     a.uitgegevenaan,
     a.id AS id_kavel,
     st_area(a.geom)::numeric AS opp_geometrie
-   FROM ( SELECT bedrijvenkavels.id,
-            bedrijvenkavels.terreinid,
-            bedrijvenkavels.datumstart,
-            bedrijvenkavels.status,
-            bedrijvenkavels.workflow_status,
-            bedrijvenkavels.geom,
-            bedrijvenkavels.hindercat,
-            bedrijvenkavels.eigenaartype,
-            bedrijvenkavels.hoeveelheid,
-            bedrijvenkavels.uitgegevenaan,
-            bedrijvenkavels.eerstejaaruitgifte,
-            bedrijvenkavels.identificatie,
-            row_number() OVER (PARTITION BY bedrijvenkavels.terreinid ORDER BY st_area(bedrijvenkavels.geom)::numeric DESC) AS row_id
-           FROM bedrijvenkavels
-          WHERE bedrijvenkavels.status::text = 'uitgegeven'::text) a
+   FROM ( SELECT v_actuele_kavels.*,
+            row_number() OVER (PARTITION BY v_actuele_kavels.terreinid ORDER BY st_area(v_actuele_kavels.geom)::numeric DESC) AS row_id
+           FROM "IBIS".v_actuele_kavels
+          WHERE v_actuele_kavels.status::text = 'Uitgegeven'::text) a
   WHERE a.row_id <= 10
   ORDER BY a.terreinid, st_area(a.geom)::numeric;
 
 ALTER TABLE "IBIS".v_grootste_10_kavels_op_terrein
-  OWNER TO ibis;
+  OWNER TO geo;
 COMMENT ON VIEW "IBIS".v_grootste_10_kavels_op_terrein
   IS 'Geeft de 10 grootste kavels met bedrijf per bedrijventerrein gesorteerd op oppervlakte';
