@@ -8,6 +8,9 @@ addons:
 before_install:
   - psql --version
   - psql -U postgres -c 'CREATE ROLE ibis LOGIN NOSUPERUSER INHERIT CREATEDB NOCREATEROLE NOREPLICATION;'
+  - psql -U postgres -c 'CREATE ROLE geo LOGIN NOSUPERUSER INHERIT CREATEDB NOCREATEROLE NOREPLICATION;'
+  - psql -U postgres -c 'CREATE ROLE geolees LOGIN NOSUPERUSER INHERIT CREATEDB NOCREATEROLE NOREPLICATION;'
+  - psql -U postgres -c 'CREATE ROLE geoedit LOGIN NOSUPERUSER INHERIT CREATEDB NOCREATEROLE NOREPLICATION;'
   - psql -U postgres -c 'create database ibis WITH OWNER = ibis'
   - psql -U postgres -c 'create schema "IBIS" AUTHORIZATION ibis';
   - psql -U postgres -c 'ALTER DATABASE "ibis" SET search_path = "IBIS", public;'
