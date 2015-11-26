@@ -10,6 +10,6 @@ CREATE OR REPLACE VIEW "IBIS".v_totaal_bedrijven_en_medewerkers_op_rin_nr AS
   GROUP BY bedrijven.bedrijvent;
 
 ALTER TABLE "IBIS".v_totaal_bedrijven_en_medewerkers_op_rin_nr
-  OWNER TO ibis;
+  OWNER TO geo;
 COMMENT ON VIEW "IBIS".v_totaal_bedrijven_en_medewerkers_op_rin_nr
   IS 'Geeft het totaal aantal bedrijven en aantal medewerkers per bedrijventerrein';

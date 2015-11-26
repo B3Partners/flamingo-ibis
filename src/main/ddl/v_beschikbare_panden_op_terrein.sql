@@ -1,15 +1,14 @@
--- View: "IBIS".v_beschikbare_panden_op_terrein
+-- View: "IBIS".  OWNER TO "IBIS";
 
--- DROP VIEW "IBIS".v_beschikbare_panden_op_terrein;
+-- DROP VIEW "IBIS".  OWNER TO "IBIS";;
 
-CREATE OR REPLACE VIEW "IBIS".v_beschikbare_panden_op_terrein AS 
- SELECT bedrijvenkavels.terreinid,
-    count(bedrijvenkavels.terreinid) AS beschikbare_panden
-   FROM "IBIS".bedrijvenkavels
-  WHERE bedrijvenkavels.status::text = ANY (ARRAY['uitgeefbaar'::character varying::text, 'terstond uitgeefbaar'::character varying::text])
-  GROUP BY bedrijvenkavels.terreinid;
+CREATE OR REPLACE VIEW "IBIS".OWNER AS 
+ SELECT v_actuele_kavels.terreinid,
+    count(v_actuele_kavels.terreinid) AS beschikbare_panden
+   FROM "IBIS".v_actuele_kavels 
+  GROUP BY v_actuele_kavels.terreinid;
 
-ALTER TABLE "IBIS".v_beschikbare_panden_op_terrein
-  OWNER TO ibis;
-COMMENT ON VIEW "IBIS".v_beschikbare_panden_op_terrein
+ALTER TABLE "IBIS".OWNER
+  OWNER TO geo;
+COMMENT ON VIEW "IBIS".OWNER
   IS 'Geeft de het aantal beschikbare panden op een terrein';

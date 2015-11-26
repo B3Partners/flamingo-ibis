@@ -1,7 +1,7 @@
 -- script om de te maken views specifiek in psql te laden. 
 -- uit te voeren door in psql \i psql_laadviews.sql te laden.
 SET statement_timeout = 0;
-SET lock_timeout = 0;
+--SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -12,7 +12,14 @@ SET search_path = "IBIS", public, pg_catalog;
 -- begin met een index om de oppervlaktes wat vlotter te laten berekenen.
 drop index kavels_terreinen_idx;
 create index kavels_terreinen_idx on bedrijvenkavels (terreinid);
+alter table "IBIS".bedrijvenkavels drop constraint bedrijvenkavels_pkey;
+alter table "IBIS".bedrijvenkavels ADD CONSTRAINT bedrijvenkavels_pkey PRIMARY KEY (id, datummutatie, workflow_status);
+alter table "IBIS".bedrijventerrein drop constraint bedrijventerrein_pkey;
+alter table "IBIS".bedrijventerrein ADD CONSTRAINT bedrijventerrein_pkey PRIMARY KEY (id, datummutatie, workflow_status);
 
+
+--\i mv_kavels_actueel_mviews.sql
+\i v_actuele_kavels.sql
 \i v_kavel_oppervlakte.sql
 \i v_terrein_oppervlakte.sql
 \i v_gemeente_en_regio_envelopes.sql

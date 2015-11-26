@@ -15,6 +15,6 @@ CREATE OR REPLACE VIEW "IBIS".v_grootste_10_bedrijven_op_terrein AS
   ORDER BY bedrijventerrein.id, v_grootste_10_bedrijven_op_rin_nr.grootte_klasse DESC;
 
 ALTER TABLE "IBIS".v_grootste_10_bedrijven_op_terrein
-  OWNER TO ibis;
+  OWNER TO geo;
 COMMENT ON VIEW "IBIS".v_grootste_10_bedrijven_op_terrein
   IS 'Geeft de 10 grootste bedrijven per terrein';

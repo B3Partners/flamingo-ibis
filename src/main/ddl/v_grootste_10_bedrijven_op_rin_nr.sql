@@ -20,6 +20,6 @@ CREATE OR REPLACE VIEW "IBIS".v_grootste_10_bedrijven_op_rin_nr AS
   ORDER BY a.gid, a.totf;
 
 ALTER TABLE "IBIS".v_grootste_10_bedrijven_op_rin_nr
-  OWNER TO ibis;
+  OWNER TO geo;
 COMMENT ON VIEW "IBIS".v_grootste_10_bedrijven_op_rin_nr
   IS 'Geeft de 10 grootste actieve bedrijven per bedrijventerrein (rin nr) gesorteerd op aantal medewerkers';

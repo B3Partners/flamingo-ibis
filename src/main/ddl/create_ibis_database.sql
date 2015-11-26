@@ -112,25 +112,25 @@ SET default_with_oids = true;
 -- Name: bedrijvenkavels; Type: TABLE; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
-CREATE TABLE bedrijvenkavels (
-    id bigint NOT NULL,
-    identificatie character varying(20),
-    terreinid integer,
-    datumstart date,
-    status character varying(70),
-    workflow_status character varying(50),
-    hindercat character varying(50),
-    eigenaartype character varying(50),
-    hoeveelheid character varying(8),
-    uitgegevenaan character varying(255),
-    eerstejaaruitgifte character varying(10),
-    datumuitgifte date,
-    faseveroudering character varying(20),
-    actueel character varying(10),
-    datumarchief date,
-    geom public.geometry(MultiPolygon,28992)
+CREATE TABLE "IBIS".bedrijvenkavels
+(
+  id bigint NOT NULL,
+  workflow_status character varying(50),
+  datummutatie date,
+  terreinid integer,
+  status character varying(70),
+  milieuwet character varying(50),
+  uitgegevenaan character varying(255),
+  eerstejaaruitgifte integer,
+  faseveroudering character varying(100),
+  gemeenteid bigint,
+  gemeentenaam character varying(100),
+  geom geometry(MultiPolygon,28992),
+  CONSTRAINT bedrijvenkavels_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=TRUE
 );
-
 
 ALTER TABLE bedrijvenkavels OWNER TO ibis;
 
@@ -139,60 +139,58 @@ ALTER TABLE bedrijvenkavels OWNER TO ibis;
 -- Name: bedrijventerrein; Type: TABLE; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
-CREATE TABLE bedrijventerrein (
-    id integer NOT NULL,
-    rin_nr integer,
-    datum date,
-    reden character varying(70),
-    workflow_status character varying(50),
-    a_bestaatnietmeer character varying(20),
-    a_bestemming character varying(30),
-    a_gecontroleerd character varying(20),
-    a_grootstedeel double precision,
-    a_haruimtegebruik double precision,
-    a_kernnaam character varying(25),
-    a_ovwkavelgrootte character varying(20),
-    a_planfase character varying(100),
-    a_plannaam character varying(255),
-    a_statusrpb character varying(100),
-    a_type character varying(100),
-    c_hyperlink character varying(255),
-    c_onderhoudemail character varying(100),
-    c_onderhoudnaam character varying(100),
-    c_onderhoudtelefoon character varying(15),
-    c_organisatie character varying(100),
-    c_postcodeplaats character varying(50),
-    c_verkoopadres character varying(100),
-    c_verkoopemail character varying(100),
-    c_verkoopnaam character varying(100),
-    c_verkooptelefoon character varying(15),
-    c_verkoopwebsite character varying(255),
-    codeplanfase character varying(3),
-    datum_controle date,
-    l_foto1 character varying(255),
-    l_foto2 character varying(255),
-    l_foto3 character varying(255),
-    l_foto4 character varying(255),
-    o_afstandvliegveld integer,
-    o_collbeheer character varying(20),
-    o_collinkoop character varying(50),
-    o_collvoorz character varying(25),
-    o_externebereikbaarheid character varying(20),
-    o_internet character varying(100),
-    o_maxhuur bigint,
-    o_maxverkoop bigint,
-    o_milieuwet character varying(55),
-    o_milieuzone character varying(20),
-    o_minhuur bigint,
-    o_minverkoop bigint,
-    o_naamvliegveld character varying(100),
-    o_overslag character varying(100),
-    o_parkeergelegenheid character varying(100),
-    o_spoorontsluiting character varying(100),
-    o_waterontsluiting character varying(100),
-    o_wegontsluiting character varying(100),
-    gemeenteid integer,
-    geom public.geometry(MultiPolygon,28992)
+CREATE TABLE "IBIS".bedrijventerrein
+(
+  id integer NOT NULL,
+  rin_nr integer,
+  datummutatie date,
+  reden character varying(70),
+  workflow_status character varying(50),
+  a_bestemming character varying(30),
+  a_grootstedeel double precision,
+  a_haruimtegebruik double precision,
+  a_kernnaam character varying(25),
+  a_ovwkavelgrootte character varying(20),
+  a_planfase character varying(100),
+  a_plannaam character varying(255),
+  a_faseveroudering character varying(100),
+  a_statusrpb character varying(100),
+  a_type character varying(100),
+  c_hyperlink character varying(255),
+  c_onderhoudemail character varying(100),
+  c_onderhoudnaam character varying(100),
+  c_onderhoudtelefoon character varying(15),
+  c_organisatie character varying(100),
+  c_postcodeplaats character varying(50),
+  c_verkoopadres character varying(100),
+  c_verkoopemail character varying(100),
+  c_verkoopnaam character varying(100),
+  c_verkooptelefoon character varying(15),
+  c_verkoopwebsite character varying(255),
+  o_afstandvliegveld integer,
+  o_collbeheer character varying(20),
+  o_collinkoop character varying(50),
+  o_collvoorz character varying(25),
+  o_internet character varying(100),
+  o_maxhuur bigint,
+  o_maxverkoop bigint,
+  o_milieuwet character varying(55),
+  o_milieuzone character varying(20),
+  o_externebereikbaarheid character varying(20),
+  o_minhuur bigint,
+  o_minverkoop bigint,
+  o_naamvliegveld character varying(100),
+  o_overslag character varying(100),
+  o_parkeergelegenheid character varying(100),
+  o_spoorontsluiting character varying(100),
+  o_waterontsluiting character varying(100),
+  o_wegontsluiting character varying(100),
+  gemeenteid integer,
+  geom geometry(MultiPolygon,28992),
+  CONSTRAINT bedrijventerrein_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=TRUE
 );
 
 

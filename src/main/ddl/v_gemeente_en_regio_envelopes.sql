@@ -18,6 +18,6 @@ CREATE OR REPLACE VIEW "IBIS".v_gemeente_en_regio_envelopes AS
   WHERE gemeente.vvr_id = regio.vvr_id;
 
 ALTER TABLE "IBIS".v_gemeente_en_regio_envelopes
-  OWNER TO ibis;
+  OWNER TO geo;
 COMMENT ON VIEW "IBIS".v_gemeente_en_regio_envelopes
   IS 'Geeft de MBR van de gemeenten en regio_s';
