@@ -8,9 +8,10 @@ the kavels layer, the link text is the title of the component (no title - no lin
 Configure the component to use the kavels layer as the "Factsheet kaartlaag".
 The kavels layer should have the following joins and relates configured:
 
-  - relate to `v_grootste_10_bedrijven_op_terrein` which provide the 10 biggest companies on the terrain that the kavel is part of.
-  - join to the view that provides area information for the kavels `v_kavel_oppervlakte`
-  - join to the view that provides factsheet information `v_factsheet_terrein_info`
+  - relate to `v_grootste_10_bedrijven_op_terrein` which provide the 10 biggest 
+    companies on the terrain that the kavel is part of (`terreinid` = `terreinid`).
+  - join to the view that provides area information for the kavels `v_kavel_oppervlakte` (`id` = `id`)
+  - join to the view that provides factsheet information `v_factsheet_terrein_info` (`terreinid` = `terreinid`)
 
 In the components "Selecteer de kaartlagen waarop deze tool van toepassing is" list 
 check the layers to be part of the legend (Bedrijventerrein begrenzing and Bedrijventerrein kavels)
@@ -22,7 +23,7 @@ and not anything else.
 
   - Create a layer "ibis report component" based on the `v_component_ibis_report`
     that is created from the same view. Attach a WFS attribue source to this layer.
-  - Create a `relate` fetaure type relation to the view `v_component_ibis_report_uitgifte`
+  - Create a `relate` feature type relation to the view `v_component_ibis_report_uitgifte`
     linking "v_component_ibis_report":id to "v_component_ibis_report_uitgifte":terreinid
   - Add the layer to the application, but give it a place of it's own in
     "Boomstructuuur met kaart" so it won't show up in the legend. eg.
@@ -36,8 +37,10 @@ and not anything else.
 
 The IbisLocationFinder uses the same layer as the IbisReport component, see above for configuration. The two components share a common datastore so that the location data only needs to be downloaded once.
 
-### Other joins and relates
+### Other Flamingo joins and relates
 
+  - join `bedrijventerrein` to `gemeente` (`gemeenteid` = `id`)
+  - join `bedrijventerrein` to `v_terrein_oppervlakte` (`id` = `id`)
 
 ### Workflow
 
