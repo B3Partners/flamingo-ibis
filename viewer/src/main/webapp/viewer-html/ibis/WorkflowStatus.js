@@ -45,6 +45,7 @@ if (!Ext.data.StoreManager.lookup('IbisWorkflowStore')) {
                 data: [
                     {id: 'bewerkt', label: "Bewerkt"},
                     {id: 'definitief', label: "Definitief"},
+                    {id: 'archief', label: "Archief"},
                     {id: 'afgevoerd', label: "Afgevoerd"}
                 ]}
     );
@@ -62,7 +63,6 @@ function getNextIbisWorkflowStatus(userRoles, statusId, comboBox) {
     // get the first workflow role
     var workflowRole = "";
     for (var role in userRoles) {
-        // TODO hardcoded
         if (role.indexOf("workflow_", 0) === 0) {
             workflowRole = role;
             break;
@@ -99,31 +99,13 @@ function getNextIbisWorkflowStatus(userRoles, statusId, comboBox) {
             break;
         case "workflow_provincie":
             switch (statusId) {
-//                case "nieuw":
-//                    possibleNextStatus = ['nieuw', 'beoordeling_gemeente'];
-//                    break;
-//                case "beoordeling_gemeente":
-//                    possibleNextStatus = ['beoordeling_gemeente'];
-//                    break;
-//                case "goedkeuring_gemeente":
-//                    possibleNextStatus = ['goedkeuring_gemeente', 'beoordeling_gemeente', 'goedkeuring_provincie'];
-//                    break;
-//                case "goedkeuring_provincie":
-//                    possibleNextStatus = ['definitief'];
-//                    break;
-//                case "definitief":
-//                    possibleNextStatus = ['definitief'];
-//                    break;
-//                case "archief":
-//                    break;
                 default:
-                    possibleNextStatus = ['bewerkt', 'definitief', 'afgevoerd'];
+                    possibleNextStatus = ['bewerkt', 'definitief', 'archief', 'afgevoerd'];
             }
             break;
         case "workflow_admin":
             // kan alles, geen filter
-            //possibleNextStatus = ['nieuw', 'beoordeling_gemeente', 'goedkeuring_gemeente', 'goedkeuring_provincie', 'definitief', 'archief'];
-            possibleNextStatus = ['bewerkt', 'definitief', 'afgevoerd'];
+            possibleNextStatus = ['bewerkt', 'definitief', 'archief', 'afgevoerd'];
             break;
         default:
             // onbekende/lege gebruikers rol??

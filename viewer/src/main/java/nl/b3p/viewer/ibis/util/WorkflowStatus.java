@@ -31,14 +31,6 @@ public enum WorkflowStatus {
 
     private final String label;
 
-    /**
-     * The name of the workflow attribute field in the datamodel {@value }.
-     *
-     * @deprecated use {@link IbisConstants.WORKFLOW_FIELDNAME}
-     */
-    @Deprecated
-    public static final String workflowFieldName = IbisConstants.WORKFLOW_FIELDNAME;
-
     WorkflowStatus(String label) {
         this.label = label;
     }

@@ -46,7 +46,7 @@ import org.opengis.filter.identity.FeatureId;
  */
 @UrlBinding("/action/feature/ibismerge")
 @StrictBinding
-public class IbisMergeFeaturesActionBean extends MergeFeaturesActionBean {
+public class IbisMergeFeaturesActionBean extends MergeFeaturesActionBean implements IbisConstants {
 
     private static final Log log = LogFactory.getLog(IbisMergeFeaturesActionBean.class);
 
@@ -95,7 +95,7 @@ public class IbisMergeFeaturesActionBean extends MergeFeaturesActionBean {
             //create a copy of A and add status archief
             SimpleFeature archiveFeatA = DataUtilities.createFeature(featureA.getType(),
                     DataUtilities.encodeFeature(featureA, false));
-            archiveFeatA.setAttribute(WorkflowStatus.workflowFieldName, WorkflowStatus.afgevoerd);
+            archiveFeatA.setAttribute(IbisConstants.WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd);
             localStore.addFeatures(DataUtilities.collection(archiveFeatA));
 
             // update feature A, add new geom and new status
@@ -106,7 +106,7 @@ public class IbisMergeFeaturesActionBean extends MergeFeaturesActionBean {
             localStore.modifyFeatures(attributes, attributevalues, filterA);
 
             // update B with status afgevoerd, null terreinid
-            String[] fields = new String[]{WorkflowStatus.workflowFieldName, IbisConstants.KAVEL_TERREIN_ID_FIELDNAME};
+            String[] fields = new String[]{WORKFLOW_FIELDNAME, KAVEL_TERREIN_ID_FIELDNAME};
             Object[] values = new Object[]{WorkflowStatus.afgevoerd, null};
             localStore.modifyFeatures(fields, values, filterB);
             
@@ -114,9 +114,9 @@ public class IbisMergeFeaturesActionBean extends MergeFeaturesActionBean {
         } else if (this.getStrategy().equalsIgnoreCase("new")) {
             // archive the source feature (A) and merge partner(B)
             //   and create a new feature with the attributes of A but a new geom and new status.
-            localStore.modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.afgevoerd, filterA);
+            localStore.modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd, filterA);
 
-            String[] fields = new String[]{WorkflowStatus.workflowFieldName, IbisConstants.KAVEL_TERREIN_ID_FIELDNAME};
+            String[] fields = new String[]{WORKFLOW_FIELDNAME, KAVEL_TERREIN_ID_FIELDNAME};
             Object[] values = new Object[]{WorkflowStatus.afgevoerd, null};
             localStore.modifyFeatures(fields, values, filterB);
 

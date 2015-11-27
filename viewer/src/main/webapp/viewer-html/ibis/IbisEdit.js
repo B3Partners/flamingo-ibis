@@ -26,6 +26,7 @@ Ext.define("viewer.components.IbisEdit", {
     config: {
         prefixConfig: []
     },
+    newID: null,
     /**
      * Create our component.
      * @constructor
@@ -64,7 +65,6 @@ Ext.define("viewer.components.IbisEdit", {
             this.cancel();
             Ext.Msg.alert('Workflow Fout', "Uitlezen van gebruikers rollen is mislukt, workflow editing niet mogelijk. <br/>Bent U aangemeld met de juiste rol?");
         }
-        
     },
     groupInputsByPrefix: function () {
         if (this.config.prefixConfig.length === 0) {
@@ -146,8 +146,8 @@ Ext.define("viewer.components.IbisEdit", {
         this.superclass.handleFeature.call(this, feature);
         var s = "";
         if (this.mode === "copy") {
-            getNextIbisWorkflowStatus({}, 'nieuw', Ext.getCmp(this.workflow_fieldname));
-            s = this.workflowStore.getById('nieuw').get("label");
+            getNextIbisWorkflowStatus({}, 'bewerkt', Ext.getCmp(this.workflow_fieldname));
+            s = this.workflowStore.getById('bewerkt').get("label");
         } else {
             getNextIbisWorkflowStatus(user.roles, feature.workflow_status, Ext.getCmp(this.workflow_fieldname));
             s = this.workflowStore.getById(feature[this.workflow_fieldname]).get("label");
@@ -156,9 +156,25 @@ Ext.define("viewer.components.IbisEdit", {
     },
     createNew: function () {
         this.superclass.createNew.call(this);
-        getNextIbisWorkflowStatus(user.roles, 'nieuw', Ext.getCmp(this.workflow_fieldname));
-        var s = this.workflowStore.getById('nieuw').get("label");
+        getNextIbisWorkflowStatus(user.roles, 'bewerkt', Ext.getCmp(this.workflow_fieldname));
+        var s = this.workflowStore.getById('bewerkt').get("label");
         Ext.getCmp(this.name + "workflowLabel").setText("Huidige workflow status: " + s);
+
+        this.inputContainer.getForm().findField('datummutatie').setValue(new Date());
+        this.inputContainer.getForm().findField('status').setValue('Niet bekend');
+
+        // generate a new, speudo-unique id for this feature
+        // millisecond precision requires database schema update to swith id from integer to bigint
+        // alter table bedrijventerrein alter id type bigint;
+        // alter table bedrijvenkavels alter id type bigint;
+        // var newID = new Date().getTime();
+        // for now use second precision
+        this.newID = new Date() / 1000 | 0;
+        try{
+            this.inputContainer.getForm().findField('id').setValue(this.newID);
+        } finally {
+            // ignore
+        }
     },
     deleteFeature: function () {
         this.superclass.deleteFeature.call(this);
@@ -191,6 +207,13 @@ Ext.define("viewer.components.IbisEdit", {
         if (this.mode === "copy") {
             feature.__fid = null;
         }
+
+        if ((this.mode === "new")) {
+            if (!feature.id) {
+                feature.id = this.newID;
+            }
+        }
+
         var me = this;
         try {
             feature = this.changeFeatureBeforeSave(feature);
@@ -258,7 +281,7 @@ Ext.define("viewer.components.IbisEdit", {
             this.currentFID = null;
             delete feature.__fid;
         }
-        
+
         return feature;
     },
     /**

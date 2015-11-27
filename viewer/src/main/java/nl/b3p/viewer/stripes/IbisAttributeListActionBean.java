@@ -56,6 +56,7 @@ import nl.b3p.viewer.config.services.AttributeDescriptor;
 import nl.b3p.viewer.config.services.FeatureTypeRelation;
 import nl.b3p.viewer.config.services.Layer;
 import nl.b3p.viewer.config.services.SimpleFeatureType;
+import nl.b3p.viewer.ibis.util.IbisConstants;
 import nl.b3p.viewer.util.FeatureToJson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -82,7 +83,7 @@ import org.stripesstuff.stripersist.Stripersist;
  */
 @UrlBinding("/action/ibisattributes")
 @StrictBinding
-public class IbisAttributeListActionBean implements ActionBean {
+public class IbisAttributeListActionBean implements ActionBean, IbisConstants {
 
     private static final Log log = LogFactory.getLog(IbisAttributeListActionBean.class);
     private static final String JSON_METADATA = "metaData";

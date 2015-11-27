@@ -16,7 +16,7 @@
  */
 package nl.b3p.viewer.stripes;
 
-import static nl.b3p.viewer.ibis.util.IbisConstants.*;
+import nl.b3p.viewer.ibis.util.IbisConstants;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.WKTReader;
 import java.io.IOException;
@@ -50,7 +50,7 @@ import org.stripesstuff.stripersist.Stripersist;
  */
 @UrlBinding("/action/feature/ibisedit")
 @StrictBinding
-public class IbisEditFeatureActionBean extends EditFeatureActionBean {
+public class IbisEditFeatureActionBean extends EditFeatureActionBean implements IbisConstants {
 
     private static final Log log = LogFactory.getLog(IbisEditFeatureActionBean.class);
 
@@ -66,6 +66,16 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean {
 //        log.debug("hit ibis delete");
 //        return super.delete();
 //    }
+    protected String addNewFeature() throws Exception {
+        String kavelID = super.addNewFeature();
+        //update  terrein
+        Integer terreinID = Integer.parseInt(this.getJsonFeature().optString(KAVEL_TERREIN_ID_FIELDNAME, null));
+        if (terreinID != null) {
+            WorkflowUtil.updateTerreinGeometry(terreinID, this.getLayer(), this.getApplication(), Stripersist.getEntityManager());
+        }
+        return kavelID;
+    }
+
     /**
      * Override to not delete a feature but set workflow status to
      * {@code WorkflowStatus.archief}
@@ -85,14 +95,16 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean {
 
         try {
             //this.getStore().removeFeatures(filter);
-            this.getStore().modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.afgevoerd, filter);
+            this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd, filter);
 
             SimpleFeature original = this.getStore().getFeatures(filter).features().next();
-            String terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME).toString();
 
             transaction.commit();
 
-            WorkflowUtil.updateTerreinGeometry(terreinID, this.getStore(), this.getApplication(), Stripersist.getEntityManager());
+            Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);
+            if (terreinID != null) {
+                WorkflowUtil.updateTerreinGeometry((Integer) terreinID, this.getLayer(), this.getApplication(), Stripersist.getEntityManager());
+            }
 
         } catch (Exception e) {
             transaction.rollback();
@@ -129,22 +141,26 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean {
                 AttributeDescriptor ad = this.getStore().getSchema().getDescriptor(attribute);
 
                 if (ad != null) {
-                    attributes.add(attribute);
+                    if (!isAttributeUserEditingDisabled(attribute)) {
+                        attributes.add(attribute);
 
-                    if (ad.getType() instanceof GeometryType) {
-                        String wkt = this.getJsonFeature().getString(ad.getLocalName());
-                        Geometry g = null;
-                        if (wkt != null) {
-                            g = new WKTReader().read(wkt);
+                        if (ad.getType() instanceof GeometryType) {
+                            String wkt = this.getJsonFeature().getString(ad.getLocalName());
+                            Geometry g = null;
+                            if (wkt != null) {
+                                g = new WKTReader().read(wkt);
+                            }
+                            values.add(g);
+                        } else {
+                            String v = this.getJsonFeature().getString(attribute);
+                            values.add(StringUtils.defaultIfBlank(v, null));
+                            // remember workflow status
+                            if (attribute.equals(WORKFLOW_FIELDNAME)) {
+                                workflowStatus = WorkflowStatus.valueOf(v);
+                            }
                         }
-                        values.add(g);
                     } else {
-                        String v = this.getJsonFeature().getString(attribute);
-                        values.add(StringUtils.defaultIfBlank(v, null));
-                        // remember workflow status
-                        if (attribute.equals(WorkflowStatus.workflowFieldName)) {
-                            workflowStatus = WorkflowStatus.valueOf(v);
-                        }
+                        log.info(String.format("Attribute \"%s\" not user editable; ignoring", attribute));
                     }
                 } else {
                     log.warn(String.format("Attribute \"%s\" not in feature type; ignoring", attribute));
@@ -163,8 +179,7 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean {
 //            if (workflowStatus != null && workflowStatus == WorkflowStatus.definitief) {
             // if the new workflow status === defintief
             // store the original with status archief
-            this.getStore().modifyFeatures(WorkflowStatus.workflowFieldName, WorkflowStatus.afgevoerd, filter);
-
+            // this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd, filter);
             // make a copy of the original
             SimpleFeature original = this.getStore().getFeatures(filter).features().next();
             SimpleFeatureBuilder builder = new SimpleFeatureBuilder(original.getFeatureType());
@@ -177,16 +192,13 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean {
             }
 
             this.getStore().addFeatures(DataUtilities.collection(copy));
-//            } else {
-//                // ordinary edit
-//                this.getStore().modifyFeatures(attributes.toArray(new String[]{}), values.toArray(), filter);
-//            }
-
-            String terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME).toString();
-
             transaction.commit();
 
-            WorkflowUtil.updateTerreinGeometry(terreinID, this.getStore(), this.getApplication(), Stripersist.getEntityManager());
+            Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);
+            if (terreinID != null) {
+                WorkflowUtil.updateTerreinGeometry((Integer) terreinID, this.getLayer(), this.getApplication(), Stripersist.getEntityManager());
+            }
+
         } catch (Exception e) {
             transaction.rollback();
             throw e;
@@ -194,5 +206,4 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean {
             transaction.close();
         }
     }
-
 }

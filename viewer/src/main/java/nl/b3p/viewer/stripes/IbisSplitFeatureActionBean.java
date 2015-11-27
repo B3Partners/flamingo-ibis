@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import net.sourceforge.stripes.action.StrictBinding;
 import net.sourceforge.stripes.action.UrlBinding;
+import nl.b3p.viewer.ibis.util.IbisConstants;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.geotools.data.DataUtilities;
@@ -43,7 +44,7 @@ import org.json.JSONObject;
  */
 @UrlBinding("/action/feature/ibissplit")
 @StrictBinding
-public class IbisSplitFeatureActionBean extends SplitFeatureActionBean {
+public class IbisSplitFeatureActionBean extends SplitFeatureActionBean implements IbisConstants {
 
     private static final Log log = LogFactory.getLog(IbisSplitFeatureActionBean.class);
 

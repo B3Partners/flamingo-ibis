@@ -17,20 +17,14 @@
 package nl.b3p.viewer.ibis.util;
 
 /**
- * Utility class with constants for IBIS.
+ * Utility interface with constants for IBIS.
  *
  * @author Mark Prins <mark@b3partners.nl>
  */
-public final class IbisConstants {
+public interface IbisConstants {
 
     public static final String KAVEL_TERREIN_ID_FIELDNAME = "terreinid";
     public static final String TERREIN_ID_FIELDNAME = "id";
     public static final String TERREIN_LAYER_NAME = "bedrijventerrein";
     public static final String WORKFLOW_FIELDNAME = "workflow_status";
-
-    /**
-     * private constructor.
-     */
-    private IbisConstants() {
-    }
 }
