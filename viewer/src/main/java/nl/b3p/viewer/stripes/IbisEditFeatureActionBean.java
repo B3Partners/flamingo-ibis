@@ -20,11 +20,18 @@ import nl.b3p.viewer.ibis.util.IbisConstants;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.WKTReader;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
+import javax.persistence.EntityManager;
 import net.sourceforge.stripes.action.StrictBinding;
 import net.sourceforge.stripes.action.UrlBinding;
+import nl.b3p.viewer.config.app.ApplicationLayer;
+import nl.b3p.viewer.config.services.Layer;
+import static nl.b3p.viewer.ibis.util.IbisConstants.TERREIN_LAYER_NAME;
 import nl.b3p.viewer.ibis.util.WorkflowStatus;
 import nl.b3p.viewer.ibis.util.WorkflowUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +40,7 @@ import org.apache.commons.logging.LogFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.DefaultTransaction;
 import org.geotools.data.Transaction;
+import org.geotools.data.simple.SimpleFeatureStore;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.filter.identity.FeatureIdImpl;
@@ -66,12 +74,13 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
 //        log.debug("hit ibis delete");
 //        return super.delete();
 //    }
+    @Override
     protected String addNewFeature() throws Exception {
         String kavelID = super.addNewFeature();
         //update  terrein
-        Integer terreinID = Integer.parseInt(this.getJsonFeature().optString(KAVEL_TERREIN_ID_FIELDNAME, null));
+        Object terreinID = this.getJsonFeature().optString(KAVEL_TERREIN_ID_FIELDNAME, null);
         if (terreinID != null) {
-            WorkflowUtil.updateTerreinGeometry(terreinID, this.getLayer(), this.getApplication(), Stripersist.getEntityManager());
+            WorkflowUtil.updateTerreinGeometry((Integer) terreinID, this.getLayer(), this.getApplication(), Stripersist.getEntityManager());
         }
         return kavelID;
     }
@@ -87,6 +96,8 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
      */
     @Override
     protected void deleteFeature(String fid) throws IOException, Exception {
+        log.debug("ibis deleteFeature: " + fid);
+
         Transaction transaction = new DefaultTransaction("edit");
         this.getStore().setTransaction(transaction);
 
@@ -94,13 +105,10 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
         Filter filter = ff.id(new FeatureIdImpl(fid));
 
         try {
-            //this.getStore().removeFeatures(filter);
+            //this.getStore().removeFeatures(fidFilter);
             this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd, filter);
-
             SimpleFeature original = this.getStore().getFeatures(filter).features().next();
-
             transaction.commit();
-
             Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);
             if (terreinID != null) {
                 WorkflowUtil.updateTerreinGeometry((Integer) terreinID, this.getLayer(), this.getApplication(), Stripersist.getEntityManager());
@@ -122,28 +130,23 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
      */
     @Override
     protected void editFeature(String fid) throws Exception {
-
         log.debug("ibis editFeature:" + fid);
 
-        Transaction transaction = new DefaultTransaction("edit");
-        this.getStore().setTransaction(transaction);
-
         FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
-        Filter filter = ff.id(new FeatureIdImpl(fid));
 
+        Filter fidFilter = ff.id(new FeatureIdImpl(fid));
         List<String> attributes = new ArrayList();
         List values = new ArrayList();
-        WorkflowStatus workflowStatus = null;
+        WorkflowStatus incomingWorkflowStatus = null;
+
+        // parse json
         for (Iterator<String> it = this.getJsonFeature().keys(); it.hasNext();) {
             String attribute = it.next();
             if (!this.getFID().equals(attribute)) {
-
                 AttributeDescriptor ad = this.getStore().getSchema().getDescriptor(attribute);
-
                 if (ad != null) {
                     if (!isAttributeUserEditingDisabled(attribute)) {
                         attributes.add(attribute);
-
                         if (ad.getType() instanceof GeometryType) {
                             String wkt = this.getJsonFeature().getString(ad.getLocalName());
                             Geometry g = null;
@@ -154,9 +157,9 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
                         } else {
                             String v = this.getJsonFeature().getString(attribute);
                             values.add(StringUtils.defaultIfBlank(v, null));
-                            // remember workflow status
+                            // remember the incoming workflow status
                             if (attribute.equals(WORKFLOW_FIELDNAME)) {
-                                workflowStatus = WorkflowStatus.valueOf(v);
+                                incomingWorkflowStatus = WorkflowStatus.valueOf(v);
                             }
                         }
                     } else {
@@ -167,43 +170,158 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
                 }
             }
         }
-
         log.debug(String.format("Modifying feature source #%d fid=%s, attributes=%s, values=%s",
-                this.getLayer().getFeatureType().getId(),
-                fid,
-                attributes.toString(),
-                values.toString()));
+                this.getLayer().getFeatureType().getId(), fid, attributes.toString(), values.toString()));
 
+        Transaction editTransaction = new DefaultTransaction("edit");
+        this.getStore().setTransaction(editTransaction);
         try {
+            if (incomingWorkflowStatus == null) {
+                throw new IllegalArgumentException("Workflow status van edit feature is null, dit wordt niet ondersteund.");
+            }
+            SimpleFeature original = this.getStore().getFeatures(fidFilter).features().next();
+            Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);
 
-//            if (workflowStatus != null && workflowStatus == WorkflowStatus.definitief) {
-            // if the new workflow status === defintief
-            // store the original with status archief
-            // this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd, filter);
-            // make a copy of the original
-            SimpleFeature original = this.getStore().getFeatures(filter).features().next();
-            SimpleFeatureBuilder builder = new SimpleFeatureBuilder(original.getFeatureType());
-            builder.init(original);
-            SimpleFeature copy = builder.buildFeature(null);
-
-            // set (new) attribute values
+            // make a copy of the original feature and set (new) attribute values on the copy
+            SimpleFeature copy = createCopy(original);
             for (int i = 0; i < attributes.size(); i++) {
                 copy.setAttribute(attributes.get(i), values.get(i));
             }
 
-            this.getStore().addFeatures(DataUtilities.collection(copy));
-            transaction.commit();
+            if (incomingWorkflowStatus == WorkflowStatus.bewerkt) {
+                if (original.getAttribute(WORKFLOW_FIELDNAME).toString().equalsIgnoreCase(WorkflowStatus.definitief.name())) {
+                    // insert new record with original id and workflowstatus "bewerkt", leave original "definitief"
+                    this.getStore().addFeatures(DataUtilities.collection(copy));
+                } else if (!isSameMutatiedatum(original.getAttribute(MUTATIEDATUM_FIELDNAME), copy.getAttribute(MUTATIEDATUM_FIELDNAME))) {
+                    // original is bewerkt, but different date, add new "bewerkt"
+                    this.getStore().addFeatures(DataUtilities.collection(copy));
+                } else {
+                    // same date and workflow status, overwite existing
+                    this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);
+                }
+            }
 
-            Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);
+            if (incomingWorkflowStatus == WorkflowStatus.definitief) {
+                // check if any definitief exists for this id and update that to archief
+                Filter definitief = ff.and(
+                        ff.equals(ff.property(ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME))),
+                        ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false)
+                );
+                this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, definitief);
+                // add the new definitief
+                this.getStore().addFeatures(DataUtilities.collection(copy));
+            }
+
+            if (incomingWorkflowStatus == WorkflowStatus.afgevoerd) {
+                // update original with the new/edited data
+                this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);
+
+                // find any "bewerkt" for this id and delete those
+                Filter bewerkt = ff.and(
+                        ff.equals(ff.property(ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME))),
+                        ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.toString()), false)
+                );
+                this.getStore().removeFeatures(bewerkt);
+
+                // update any "definitief" for this id to "afgevoerd"
+                Filter definitief = ff.and(
+                        ff.equals(ff.property(ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME))),
+                        ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.toString()), false)
+                );
+                this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd, definitief);
+
+                if (terreinID == null) {
+                    // find any kavels related to this terrein and also set them to "afgevoerd"
+                    Filter kavelFilter = ff.equals(ff.property(KAVEL_TERREIN_ID_FIELDNAME), ff.literal(terreinID));
+                    this.updateKavelWorkflowForTerrein(kavelFilter, WorkflowStatus.afgevoerd);
+                }
+            }
+
+            editTransaction.commit();
+
+            // update terrein geometry
             if (terreinID != null) {
                 WorkflowUtil.updateTerreinGeometry((Integer) terreinID, this.getLayer(), this.getApplication(), Stripersist.getEntityManager());
             }
-
-        } catch (Exception e) {
-            transaction.rollback();
+        } catch (IllegalArgumentException | IOException | NoSuchElementException e) {
+            editTransaction.rollback();
+            log.error("editFeature error", e);
             throw e;
-        } finally {
-            transaction.close();
         }
+    }
+
+    /**
+     * make a copy of the original.
+     *
+     * @param copyFrom original
+     * @return copy
+     */
+    private SimpleFeature createCopy(SimpleFeature copyFrom) {
+        SimpleFeatureBuilder builder = new SimpleFeatureBuilder(copyFrom.getFeatureType());
+        builder.init(copyFrom);
+        return builder.buildFeature(null);
+    }
+
+    /**
+     * Update any of the selected kavels to the given workflow.
+     *
+     * @param terreinID
+     * @param kavelFilter
+     * @param newStatus
+     */
+    private void updateKavelWorkflowForTerrein(Filter kavelFilter, WorkflowStatus newStatus) {
+        SimpleFeatureStore kavelStore = null;
+        try (Transaction kavelTransaction = new DefaultTransaction("get-related-kavel-geom")) {
+            EntityManager em = Stripersist.getEntityManager();
+            log.debug("updating kavels voor terrein met filter: " + kavelFilter);
+            // find kavel appLayer
+            ApplicationLayer kavelAppLyr = null;
+            List<ApplicationLayer> lyrs = this.getApplication().loadTreeCache(em).getApplicationLayers();
+            for (ListIterator<ApplicationLayer> it = lyrs.listIterator(); it.hasNext();) {
+                kavelAppLyr = it.next();
+                if (kavelAppLyr.getLayerName().equalsIgnoreCase(KAVEL_LAYER_NAME)) {
+                    break;
+                }
+            }
+            Layer l = kavelAppLyr.getService().getLayer(KAVEL_LAYER_NAME, em);
+            kavelStore = (SimpleFeatureStore) l.getFeatureType().openGeoToolsFeatureSource();
+            kavelStore.setTransaction(kavelTransaction);
+            // update kavels
+            kavelStore.modifyFeatures(WORKFLOW_FIELDNAME, newStatus, kavelFilter);
+            kavelTransaction.commit();
+            kavelTransaction.close();
+        } catch (Exception e) {
+            log.error(String.format("Bijwerken van kavel workflow status naar %s voor terrein met %s is mislukt.",
+                    newStatus, kavelFilter), e);
+        } finally {
+            if (kavelStore != null) {
+                kavelStore.getDataStore().dispose();
+            }
+        }
+    }
+
+    /**
+     * Check that if {@code disableUserEdit} flag is set on the attribute.
+     * Override superclass behaviour for the workflow field, so that it's not
+     * editable client side, but it can be set programatically in the client.
+     *
+     * @param attrName attribute to check
+     * @return {@code true} when the configured attribute is flagged as
+     * "readOnly" except when this is workflow status
+     */
+    @Override
+    protected boolean isAttributeUserEditingDisabled(String attrName) {
+        boolean isAttributeUserEditingDisabled = super.isAttributeUserEditingDisabled(attrName);
+
+        if (attrName.equalsIgnoreCase(WORKFLOW_FIELDNAME)) {
+            isAttributeUserEditingDisabled = false;
+        }
+
+        return isAttributeUserEditingDisabled;
+    }
+
+    private boolean isSameMutatiedatum(Object datum1, Object datum2) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+        return sdf.format(datum1).equals(sdf.format(datum2));
     }
 }

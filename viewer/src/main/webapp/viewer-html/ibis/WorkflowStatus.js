@@ -16,7 +16,7 @@
  */
 
 /**
- * @description this file provides some globals
+ * @description this file provides some globals regarding workflow status voor Ibis.
  */
 /**
  * the name of the workflow attribute field in the datamodel.
@@ -24,11 +24,9 @@
  */
 var workflowFieldName = "workflow_status";
 
-/**
- * workflow status voor Ibis.
- */
+// Check if this store is registered so we only define/create this store once
 if (!Ext.data.StoreManager.lookup('IbisWorkflowStore')) {
-    // only define/create this store once
+
     Ext.define('IbisWorkflowModel', {
         extend: 'Ext.data.Model',
         idProperty: 'id',
@@ -37,7 +35,7 @@ if (!Ext.data.StoreManager.lookup('IbisWorkflowStore')) {
             {name: 'label'}
         ]
     });
-// mimic WorkflowStatus.java
+    /* mimic WorkflowStatus.java */
     Ext.create(
             'Ext.data.Store', {
                 model: 'IbisWorkflowModel',
@@ -52,14 +50,13 @@ if (!Ext.data.StoreManager.lookup('IbisWorkflowStore')) {
 }
 
 /**
- * return the next status in the workflow.
+ * Set the next status in the workflow on the store that is controlling the combo.
  *
- * @param {Object} userRoles
- * @param {Status} statusId
- * @param {Ext.form.ComboBox} comboBox
- * @returns {Array} of possible next statusIds
+ * @param {Object} userRoles The set of roles of the current user
+ * @param {Status} statusId the current workflow status
+ * @param {Ext.form.ComboBox} comboBox for display
  */
-function getNextIbisWorkflowStatus(userRoles, statusId, comboBox) {
+function setNextIbisWorkflowStatus(userRoles, statusId, comboBox) {
     // get the first workflow role
     var workflowRole = "";
     for (var role in userRoles) {
@@ -70,38 +67,14 @@ function getNextIbisWorkflowStatus(userRoles, statusId, comboBox) {
     }
 
     var possibleNextStatus = null;
-
-    //TODO  workflow logica; wat volgt op wat, wie (rol) kan wat
     switch (workflowRole) {
         case "workflow_gemeente":
-            switch (statusId) {
-//                case "nieuw":
-//                    possibleNextStatus = ['nieuw', 'beoordeling_gemeente'];
-//                    break;
-//                case "beoordeling_gemeente":
-//                    possibleNextStatus = ['beoordeling_gemeente', 'goedkeuring_gemeente'];
-//                    break;
-//                case "goedkeuring_gemeente":
-//                    possibleNextStatus = ['goedkeuring_gemeente', 'beoordeling_gemeente'];
-//                    break;
-//                case "goedkeuring_provincie":
-//                    possibleNextStatus = ['goedkeuring_gemeente'];
-//                    break;
-//                case "definitief":
-//                    possibleNextStatus = ['definitief'];
-//                    break;
-//                case "archief":
-//                    break;
-                default:
-                    // iedere wijziging van een gemeente medewerker leidt tot workflow_status=bewerkt
-                    possibleNextStatus = ['bewerkt'];
-            }
+            // iedere wijziging van een gemeente medewerker leidt tot workflow_status=bewerkt
+            possibleNextStatus = ['bewerkt'];
             break;
         case "workflow_provincie":
-            switch (statusId) {
-                default:
-                    possibleNextStatus = ['bewerkt', 'definitief', 'archief', 'afgevoerd'];
-            }
+            // provincie kan iedere status instellen
+            possibleNextStatus = ['bewerkt', 'definitief', 'archief', 'afgevoerd'];
             break;
         case "workflow_admin":
             // kan alles, geen filter

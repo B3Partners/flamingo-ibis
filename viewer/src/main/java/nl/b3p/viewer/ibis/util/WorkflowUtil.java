@@ -60,10 +60,10 @@ public class WorkflowUtil {
 
     /**
      * Update the geometry of the TERREIN. Must be called after the kavels
-     * transaction.
+ terreinTransaction.
      *
      * @param terreinID
-     * @param layer
+     * @param layer kavels layer
      * @param application
      * @param em
      *
@@ -71,12 +71,12 @@ public class WorkflowUtil {
     public static void updateTerreinGeometry(Integer terreinID, Layer layer, Application application, EntityManager em) {
         SimpleFeatureStore terreinStore = null;
         SimpleFeatureStore kavelStore = null;
-        Transaction transaction = new DefaultTransaction("edit-terrein-geom");
-        Transaction t = new DefaultTransaction("get-kavel-geom");
+        FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
+        Transaction terreinTransaction = new DefaultTransaction("edit-terrein-geom");
+        Transaction kavelTransaction = new DefaultTransaction("get-kavel-geom");
         try {
             log.debug("updating terrein geometry for " + terreinID);
             // find all "current" kavel met terreinID
-            FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
             Filter kavelFilter = ff.and(
                     ff.equals(ff.property(KAVEL_TERREIN_ID_FIELDNAME), ff.literal(terreinID)),
                     ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.toString()), false)
@@ -85,7 +85,7 @@ public class WorkflowUtil {
             log.debug(kavelFilter);
 
             kavelStore = (SimpleFeatureStore) layer.getFeatureType().openGeoToolsFeatureSource();
-            kavelStore.setTransaction(t);
+            kavelStore.setTransaction(kavelTransaction);
             SimpleFeatureCollection kavels = kavelStore.getFeatures(kavelFilter);
 
             // dissolve alle kavels
@@ -115,16 +115,16 @@ public class WorkflowUtil {
             }
             Layer l = terreinAppLyr.getService().getLayer(TERREIN_LAYER_NAME, em);
             terreinStore = (SimpleFeatureStore) l.getFeatureType().openGeoToolsFeatureSource();
-            terreinStore.setTransaction(transaction);
+            terreinStore.setTransaction(terreinTransaction);
             // update terrein with new geom
             // TODO get "current"
-            Filter tFilt = ff.equals(ff.property(TERREIN_ID_FIELDNAME), ff.literal(terreinID));
+            Filter tFilt = ff.equals(ff.property(ID_FIELDNAME), ff.literal(terreinID));
             String geomAttrName = terreinStore.getSchema().getGeometryDescriptor().getLocalName();
             terreinStore.modifyFeatures(geomAttrName, newTerreinGeom, tFilt);
-            transaction.commit();
-            transaction.close();
+            terreinTransaction.commit();
+            terreinTransaction.close();
 
-            t.close();
+            kavelTransaction.close();
 
         } catch (Exception e) {
             log.error(String.format("Update van terrein geometrie %s is mislukt", terreinID), e);
