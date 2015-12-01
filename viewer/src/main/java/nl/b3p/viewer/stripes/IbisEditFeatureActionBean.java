@@ -31,7 +31,6 @@ import net.sourceforge.stripes.action.StrictBinding;
 import net.sourceforge.stripes.action.UrlBinding;
 import nl.b3p.viewer.config.app.ApplicationLayer;
 import nl.b3p.viewer.config.services.Layer;
-import static nl.b3p.viewer.ibis.util.IbisConstants.TERREIN_LAYER_NAME;
 import nl.b3p.viewer.ibis.util.WorkflowStatus;
 import nl.b3p.viewer.ibis.util.WorkflowUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -67,8 +66,9 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
         String kavelID = super.addNewFeature();
         //update  terrein
         Object terreinID = this.getJsonFeature().optString(KAVEL_TERREIN_ID_FIELDNAME, null);
+        WorkflowStatus status = WorkflowStatus.valueOf(this.getJsonFeature().optString(WORKFLOW_FIELDNAME, WorkflowStatus.bewerkt.name()));
         if (terreinID != null) {
-            WorkflowUtil.updateTerreinGeometry((Integer) terreinID, this.getLayer(), this.getApplication(), Stripersist.getEntityManager());
+            WorkflowUtil.updateTerreinGeometry((Integer) terreinID, this.getLayer(), status, this.getApplication(), Stripersist.getEntityManager());
         }
         return kavelID;
     }
@@ -99,7 +99,7 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
             transaction.commit();
             Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);
             if (terreinID != null) {
-                WorkflowUtil.updateTerreinGeometry((Integer) terreinID, this.getLayer(), this.getApplication(), Stripersist.getEntityManager());
+                WorkflowUtil.updateTerreinGeometry((Integer) terreinID, this.getLayer(), WorkflowStatus.afgevoerd, this.getApplication(), Stripersist.getEntityManager());
             }
 
         } catch (Exception e) {
@@ -240,7 +240,7 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
 
             // update terrein geometry
             if (terreinID != null) {
-                WorkflowUtil.updateTerreinGeometry((Integer) terreinID, this.getLayer(), this.getApplication(), Stripersist.getEntityManager());
+                WorkflowUtil.updateTerreinGeometry((Integer) terreinID, this.getLayer(), incomingWorkflowStatus, this.getApplication(), Stripersist.getEntityManager());
             }
         } catch (IllegalArgumentException | IOException | NoSuchElementException e) {
             editTransaction.rollback();

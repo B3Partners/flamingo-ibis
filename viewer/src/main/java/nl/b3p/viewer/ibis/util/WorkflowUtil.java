@@ -60,15 +60,16 @@ public class WorkflowUtil implements IbisConstants {
 
     /**
      * Update the geometry of the TERREIN. Must be called after the kavels
-     * terreinTransaction.
+     * transaction. voor definitief terrein definitief kavels gebruiken, voor
+     * bewerkt terrein definitef en bewerkt kavel genbruiken
      *
      * @param terreinID
      * @param layer kavels layer
+     * @param kavelStatus
      * @param application
      * @param em
-     *
      */
-    public static void updateTerreinGeometry(Integer terreinID, Layer layer, Application application, EntityManager em) {
+    public static void updateTerreinGeometry(Integer terreinID, Layer layer, WorkflowStatus kavelStatus, Application application, EntityManager em) {
         log.debug("updating terrein geometry for " + terreinID);
         SimpleFeatureStore terreinStore = null;
         SimpleFeatureStore kavelStore = null;
@@ -76,11 +77,29 @@ public class WorkflowUtil implements IbisConstants {
         Transaction terreinTransaction = new DefaultTransaction("edit-terrein-geom");
         Transaction kavelTransaction = new DefaultTransaction("get-kavel-geom");
         try {
-            // find all "current" kavel met terreinID
-            Filter kavelFilter = ff.and(
-                    ff.equals(ff.property(KAVEL_TERREIN_ID_FIELDNAME), ff.literal(terreinID)),
-                    ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.toString()), false)
-            );
+            // determin whichs kavels to use for calcutating new geometry
+            Filter kavelFilter = Filter.EXCLUDE;
+            switch (kavelStatus) {
+                case archief:
+                case afgevoerd:
+                case definitief:
+                    // find all "definitief" kavel for terreinID
+                    kavelFilter = ff.and(
+                            ff.equals(ff.property(KAVEL_TERREIN_ID_FIELDNAME), ff.literal(terreinID)),
+                            ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.toString()), false)
+                    );
+                    break;
+                case bewerkt:
+                    // find all "definitief" and "bewerkt" kavel for terreinID
+                    kavelFilter = ff.and(
+                            ff.equals(ff.property(KAVEL_TERREIN_ID_FIELDNAME), ff.literal(terreinID)),
+                            ff.or(
+                                    ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.toString()), false),
+                                    ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.toString()), false)
+                            ));
+                    break;
+                default:
+            }
             log.debug(kavelFilter);
 
             kavelStore = (SimpleFeatureStore) layer.getFeatureType().openGeoToolsFeatureSource();
@@ -115,19 +134,30 @@ public class WorkflowUtil implements IbisConstants {
             Layer l = terreinAppLyr.getService().getLayer(TERREIN_LAYER_NAME, em);
             terreinStore = (SimpleFeatureStore) l.getFeatureType().openGeoToolsFeatureSource();
             terreinStore.setTransaction(terreinTransaction);
-            // update terrein with new geom
-            String geomAttrName = terreinStore.getSchema().getGeometryDescriptor().getLocalName();
-            // TODO get "current" instead of all "definitief" and "bewerkt" terrein
-            Filter terreinFilter = ff.and(
-                    ff.equals(ff.property(ID_FIELDNAME), ff.literal(terreinID)),
-                    ff.or(
-                            ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false),
+
+            // determine which terrein to update
+            Filter terreinFilter = Filter.EXCLUDE;
+            switch (kavelStatus) {
+                case archief:
+                case afgevoerd:
+                case definitief:
+                    terreinFilter = ff.and(
+                            ff.equals(ff.property(ID_FIELDNAME), ff.literal(terreinID)),
+                            ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false)
+                    );
+                    break;
+                case bewerkt:
+                    terreinFilter = ff.and(
+                            ff.equals(ff.property(ID_FIELDNAME), ff.literal(terreinID)),
                             ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.name()), false)
-                    )
-            );
+                    );
+                    break;
+                default:
+            }
             log.debug("update geom for kavels filtered by: " + terreinFilter);
 
-            // if_then_else
+            // update terrein with new geom
+            String geomAttrName = terreinStore.getSchema().getGeometryDescriptor().getLocalName();
             terreinStore.modifyFeatures(geomAttrName, newTerreinGeom, terreinFilter);
             terreinTransaction.commit();
             terreinTransaction.close();
