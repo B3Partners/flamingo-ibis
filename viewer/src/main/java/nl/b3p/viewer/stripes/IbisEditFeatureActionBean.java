@@ -223,7 +223,7 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
 
                     if (terreinID == null) {
                         // find any kavels related to this terrein and also set them to "afgevoerd"
-                        Filter kavelFilter = ff.equals(ff.property(KAVEL_TERREIN_ID_FIELDNAME), ff.literal(terreinID));
+                        Filter kavelFilter = ff.equals(ff.property(KAVEL_TERREIN_ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME)));
                         this.updateKavelWorkflowForTerrein(kavelFilter, WorkflowStatus.afgevoerd);
                     }
                     break;
