@@ -1,4 +1,4 @@
--- /usr/bin/pg_dump --host ibis.b3p.nl --port 5432 --username "ibis" --role "ibis" --no-password  --format plain --schema-only --create --encoding UTF8 --verbose --file "/home/mark/Desktop/create_ibis_database.sql" --table "\"IBIS\".bedrijven" --table "\"IBIS\".bedrijven_grootteklasse" --table "\"IBIS\".bedrijvenkavels" --table "\"IBIS\".bedrijventerrein" --table "\"IBIS\".code" --table "\"IBIS\".financier" --table "\"IBIS\".gemeente" --table "\"IBIS\".regio" "flamingo-ibis-test"
+-- /usr/bin/pg_dump --host ibis.b3p.nl --port 5432 --username "ibis" --role "ibis" --no-password  --format plain --schema-only --create --encoding UTF8 --verbose --file "/home/mark/Desktop/create_ibis_database.sql" --table "\"IBIS\".EcMO_Leegstand" --table "\"IBIS\".bedrijven" --table "\"IBIS\".bedrijven_grootteklasse" --table "\"IBIS\".bedrijvenkavels" --table "\"IBIS\".bedrijventerrein" --table "\"IBIS\".code" --table "\"IBIS\".gemeente" --table "\"IBIS\".regio" "flamingo-ibis-test"
 
 --
 -- PostgreSQL database dump
@@ -6,7 +6,7 @@
 
 -- Dumped from database version 9.3.9
 -- Dumped by pg_dump version 9.4.5
--- Started on 2015-11-10 15:33:53 CET
+-- Started on 2015-12-01 08:32:15 CET
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -22,7 +22,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- TOC entry 190 (class 1259 OID 5309748)
+-- TOC entry 211 (class 1259 OID 5499638)
 -- Name: bedrijven; Type: TABLE; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
@@ -69,7 +69,7 @@ CREATE TABLE bedrijven (
 ALTER TABLE bedrijven OWNER TO ibis;
 
 --
--- TOC entry 189 (class 1259 OID 5309746)
+-- TOC entry 212 (class 1259 OID 5499644)
 -- Name: bedrijven_gid_seq; Type: SEQUENCE; Schema: IBIS; Owner: ibis
 --
 
@@ -84,8 +84,8 @@ CREATE SEQUENCE bedrijven_gid_seq
 ALTER TABLE bedrijven_gid_seq OWNER TO ibis;
 
 --
--- TOC entry 3262 (class 0 OID 0)
--- Dependencies: 189
+-- TOC entry 3358 (class 0 OID 0)
+-- Dependencies: 212
 -- Name: bedrijven_gid_seq; Type: SEQUENCE OWNED BY; Schema: IBIS; Owner: ibis
 --
 
@@ -93,7 +93,7 @@ ALTER SEQUENCE bedrijven_gid_seq OWNED BY bedrijven.gid;
 
 
 --
--- TOC entry 191 (class 1259 OID 5339667)
+-- TOC entry 213 (class 1259 OID 5499646)
 -- Name: bedrijven_grootteklasse; Type: TABLE; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
@@ -108,98 +108,139 @@ ALTER TABLE bedrijven_grootteklasse OWNER TO ibis;
 SET default_with_oids = true;
 
 --
--- TOC entry 196 (class 1259 OID 5350020)
+-- TOC entry 214 (class 1259 OID 5499649)
 -- Name: bedrijvenkavels; Type: TABLE; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
-CREATE TABLE "IBIS".bedrijvenkavels
-(
-  id bigint NOT NULL,
-  workflow_status character varying(50),
-  datummutatie date,
-  terreinid integer,
-  status character varying(70),
-  milieuwet character varying(50),
-  uitgegevenaan character varying(255),
-  eerstejaaruitgifte integer,
-  faseveroudering character varying(100),
-  gemeenteid bigint,
-  gemeentenaam character varying(100),
-  geom geometry(MultiPolygon,28992),
-  CONSTRAINT bedrijvenkavels_pkey PRIMARY KEY (id)
-)
-WITH (
-  OIDS=TRUE
+CREATE TABLE bedrijvenkavels (
+    id bigint NOT NULL,
+    workflow_status character varying(50) NOT NULL,
+    datummutatie date NOT NULL,
+    terreinid integer,
+    status character varying(70),
+    milieuwet character varying(50),
+    uitgegevenaan character varying(255),
+    eerstejaaruitgifte integer,
+    faseveroudering character varying(100),
+    gemeenteid bigint,
+    gemeentenaam character varying(100),
+    geom public.geometry(Polygon,28992),
+    gt_key bigint NOT NULL
 );
+
 
 ALTER TABLE bedrijvenkavels OWNER TO ibis;
 
 --
--- TOC entry 195 (class 1259 OID 5347223)
+-- TOC entry 235 (class 1259 OID 5522288)
+-- Name: bedrijvenkavels_gt_key_seq; Type: SEQUENCE; Schema: IBIS; Owner: ibis
+--
+
+CREATE SEQUENCE bedrijvenkavels_gt_key_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE bedrijvenkavels_gt_key_seq OWNER TO ibis;
+
+--
+-- TOC entry 3359 (class 0 OID 0)
+-- Dependencies: 235
+-- Name: bedrijvenkavels_gt_key_seq; Type: SEQUENCE OWNED BY; Schema: IBIS; Owner: ibis
+--
+
+ALTER SEQUENCE bedrijvenkavels_gt_key_seq OWNED BY bedrijvenkavels.gt_key;
+
+
+--
+-- TOC entry 215 (class 1259 OID 5499655)
 -- Name: bedrijventerrein; Type: TABLE; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
-CREATE TABLE "IBIS".bedrijventerrein
-(
-  id integer NOT NULL,
-  rin_nr integer,
-  datummutatie date,
-  reden character varying(70),
-  workflow_status character varying(50),
-  a_bestemming character varying(30),
-  a_grootstedeel double precision,
-  a_haruimtegebruik double precision,
-  a_kernnaam character varying(25),
-  a_ovwkavelgrootte character varying(20),
-  a_planfase character varying(100),
-  a_plannaam character varying(255),
-  a_faseveroudering character varying(100),
-  a_statusrpb character varying(100),
-  a_type character varying(100),
-  c_hyperlink character varying(255),
-  c_onderhoudemail character varying(100),
-  c_onderhoudnaam character varying(100),
-  c_onderhoudtelefoon character varying(15),
-  c_organisatie character varying(100),
-  c_postcodeplaats character varying(50),
-  c_verkoopadres character varying(100),
-  c_verkoopemail character varying(100),
-  c_verkoopnaam character varying(100),
-  c_verkooptelefoon character varying(15),
-  c_verkoopwebsite character varying(255),
-  o_afstandvliegveld integer,
-  o_collbeheer character varying(20),
-  o_collinkoop character varying(50),
-  o_collvoorz character varying(25),
-  o_internet character varying(100),
-  o_maxhuur bigint,
-  o_maxverkoop bigint,
-  o_milieuwet character varying(55),
-  o_milieuzone character varying(20),
-  o_externebereikbaarheid character varying(20),
-  o_minhuur bigint,
-  o_minverkoop bigint,
-  o_naamvliegveld character varying(100),
-  o_overslag character varying(100),
-  o_parkeergelegenheid character varying(100),
-  o_spoorontsluiting character varying(100),
-  o_waterontsluiting character varying(100),
-  o_wegontsluiting character varying(100),
-  gemeenteid integer,
-  geom geometry(MultiPolygon,28992),
-  CONSTRAINT bedrijventerrein_pkey PRIMARY KEY (id)
-)
-WITH (
-  OIDS=TRUE
+CREATE TABLE bedrijventerrein (
+    id integer NOT NULL,
+    rin_nr integer,
+    datummutatie date NOT NULL,
+    reden character varying(70),
+    workflow_status character varying(50) NOT NULL,
+    a_bestemming character varying(30),
+    a_grootstedeel double precision,
+    a_haruimtegebruik double precision,
+    a_kernnaam character varying(25),
+    a_ovwkavelgrootte character varying(20),
+    a_planfase character varying(100),
+    a_plannaam character varying(255),
+    a_faseveroudering character varying(100),
+    a_statusrpb character varying(100),
+    a_type character varying(100),
+    c_hyperlink character varying(255),
+    c_onderhoudemail character varying(100),
+    c_onderhoudnaam character varying(100),
+    c_onderhoudtelefoon character varying(15),
+    c_organisatie character varying(100),
+    c_postcodeplaats character varying(50),
+    c_verkoopadres character varying(100),
+    c_verkoopemail character varying(100),
+    c_verkoopnaam character varying(100),
+    c_verkooptelefoon character varying(15),
+    c_verkoopwebsite character varying(255),
+    o_afstandvliegveld integer,
+    o_collbeheer character varying(20),
+    o_collinkoop character varying(50),
+    o_collvoorz character varying(25),
+    o_internet character varying(100),
+    o_maxhuur bigint,
+    o_maxverkoop bigint,
+    o_milieuwet character varying(55),
+    o_milieuzone character varying(20),
+    o_externebereikbaarheid character varying(20),
+    o_minhuur bigint,
+    o_minverkoop bigint,
+    o_naamvliegveld character varying(100),
+    o_overslag character varying(100),
+    o_parkeergelegenheid character varying(100),
+    o_spoorontsluiting character varying(100),
+    o_waterontsluiting character varying(100),
+    o_wegontsluiting character varying(100),
+    gemeenteid integer,
+    geom public.geometry(MultiPolygon,28992),
+    gt_pkey bigint NOT NULL
 );
 
 
 ALTER TABLE bedrijventerrein OWNER TO ibis;
 
+--
+-- TOC entry 236 (class 1259 OID 5522808)
+-- Name: bedrijventerrein_gt_pkey_seq; Type: SEQUENCE; Schema: IBIS; Owner: ibis
+--
+
+CREATE SEQUENCE bedrijventerrein_gt_pkey_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE bedrijventerrein_gt_pkey_seq OWNER TO ibis;
+
+--
+-- TOC entry 3360 (class 0 OID 0)
+-- Dependencies: 236
+-- Name: bedrijventerrein_gt_pkey_seq; Type: SEQUENCE OWNED BY; Schema: IBIS; Owner: ibis
+--
+
+ALTER SEQUENCE bedrijventerrein_gt_pkey_seq OWNED BY bedrijventerrein.gt_pkey;
+
+
 SET default_with_oids = false;
 
 --
--- TOC entry 185 (class 1259 OID 4984187)
+-- TOC entry 216 (class 1259 OID 5499661)
 -- Name: code; Type: TABLE; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
@@ -216,7 +257,7 @@ CREATE TABLE code (
 ALTER TABLE code OWNER TO ibis;
 
 --
--- TOC entry 184 (class 1259 OID 4984185)
+-- TOC entry 217 (class 1259 OID 5499664)
 -- Name: code_id_seq; Type: SEQUENCE; Schema: IBIS; Owner: ibis
 --
 
@@ -231,33 +272,18 @@ CREATE SEQUENCE code_id_seq
 ALTER TABLE code_id_seq OWNER TO ibis;
 
 --
--- TOC entry 3263 (class 0 OID 0)
--- Dependencies: 184
+-- TOC entry 3361 (class 0 OID 0)
+-- Dependencies: 217
 -- Name: code_id_seq; Type: SEQUENCE OWNED BY; Schema: IBIS; Owner: ibis
 --
 
 ALTER SEQUENCE code_id_seq OWNED BY code.id;
 
 
---
--- TOC entry 187 (class 1259 OID 4984375)
--- Name: financier; Type: TABLE; Schema: IBIS; Owner: ibis; Tablespace: 
---
-
-CREATE TABLE financier (
-    id integer NOT NULL,
-    terreinid integer,
-    financier character varying(100),
-    percentage numeric(15,0)
-);
-
-
-ALTER TABLE financier OWNER TO ibis;
-
 SET default_with_oids = true;
 
 --
--- TOC entry 193 (class 1259 OID 5347088)
+-- TOC entry 218 (class 1259 OID 5499666)
 -- Name: gemeente; Type: TABLE; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
@@ -269,14 +295,14 @@ CREATE TABLE gemeente (
     vvr_id smallint,
     corop character varying(65),
     deelregio character varying(65),
-    geom public.geometry(MultiPolygon,28992)
+    geom public.geometry(Polygon,28992)
 );
 
 
 ALTER TABLE gemeente OWNER TO ibis;
 
 --
--- TOC entry 194 (class 1259 OID 5347094)
+-- TOC entry 219 (class 1259 OID 5499672)
 -- Name: gemeente_id_seq; Type: SEQUENCE; Schema: IBIS; Owner: ibis
 --
 
@@ -291,8 +317,8 @@ CREATE SEQUENCE gemeente_id_seq
 ALTER TABLE gemeente_id_seq OWNER TO ibis;
 
 --
--- TOC entry 3264 (class 0 OID 0)
--- Dependencies: 194
+-- TOC entry 3362 (class 0 OID 0)
+-- Dependencies: 219
 -- Name: gemeente_id_seq; Type: SEQUENCE OWNED BY; Schema: IBIS; Owner: ibis
 --
 
@@ -300,7 +326,7 @@ ALTER SEQUENCE gemeente_id_seq OWNED BY gemeente.id;
 
 
 --
--- TOC entry 192 (class 1259 OID 5347058)
+-- TOC entry 223 (class 1259 OID 5499686)
 -- Name: regio; Type: TABLE; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
@@ -315,31 +341,7 @@ CREATE TABLE regio (
 ALTER TABLE regio OWNER TO ibis;
 
 --
--- TOC entry 186 (class 1259 OID 4984373)
--- Name: tblfinancier_id_seq; Type: SEQUENCE; Schema: IBIS; Owner: ibis
---
-
-CREATE SEQUENCE tblfinancier_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE tblfinancier_id_seq OWNER TO ibis;
-
---
--- TOC entry 3265 (class 0 OID 0)
--- Dependencies: 186
--- Name: tblfinancier_id_seq; Type: SEQUENCE OWNED BY; Schema: IBIS; Owner: ibis
---
-
-ALTER SEQUENCE tblfinancier_id_seq OWNED BY financier.id;
-
-
---
--- TOC entry 3113 (class 2604 OID 5309751)
+-- TOC entry 3191 (class 2604 OID 5499745)
 -- Name: gid; Type: DEFAULT; Schema: IBIS; Owner: ibis
 --
 
@@ -347,7 +349,23 @@ ALTER TABLE ONLY bedrijven ALTER COLUMN gid SET DEFAULT nextval('bedrijven_gid_s
 
 
 --
--- TOC entry 3111 (class 2604 OID 4984190)
+-- TOC entry 3192 (class 2604 OID 5522290)
+-- Name: gt_key; Type: DEFAULT; Schema: IBIS; Owner: ibis
+--
+
+ALTER TABLE ONLY bedrijvenkavels ALTER COLUMN gt_key SET DEFAULT nextval('bedrijvenkavels_gt_key_seq'::regclass);
+
+
+--
+-- TOC entry 3193 (class 2604 OID 5522810)
+-- Name: gt_pkey; Type: DEFAULT; Schema: IBIS; Owner: ibis
+--
+
+ALTER TABLE ONLY bedrijventerrein ALTER COLUMN gt_pkey SET DEFAULT nextval('bedrijventerrein_gt_pkey_seq'::regclass);
+
+
+--
+-- TOC entry 3194 (class 2604 OID 5499746)
 -- Name: id; Type: DEFAULT; Schema: IBIS; Owner: ibis
 --
 
@@ -355,15 +373,7 @@ ALTER TABLE ONLY code ALTER COLUMN id SET DEFAULT nextval('code_id_seq'::regclas
 
 
 --
--- TOC entry 3112 (class 2604 OID 4984378)
--- Name: id; Type: DEFAULT; Schema: IBIS; Owner: ibis
---
-
-ALTER TABLE ONLY financier ALTER COLUMN id SET DEFAULT nextval('tblfinancier_id_seq'::regclass);
-
-
---
--- TOC entry 3114 (class 2604 OID 5347096)
+-- TOC entry 3195 (class 2604 OID 5499747)
 -- Name: id; Type: DEFAULT; Schema: IBIS; Owner: ibis
 --
 
@@ -371,7 +381,7 @@ ALTER TABLE ONLY gemeente ALTER COLUMN id SET DEFAULT nextval('gemeente_id_seq':
 
 
 --
--- TOC entry 3120 (class 2606 OID 5339671)
+-- TOC entry 3199 (class 2606 OID 5522263)
 -- Name: bedrijven_grootteklasse_pkey; Type: CONSTRAINT; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
@@ -380,7 +390,7 @@ ALTER TABLE ONLY bedrijven_grootteklasse
 
 
 --
--- TOC entry 3118 (class 2606 OID 5309756)
+-- TOC entry 3197 (class 2606 OID 5522265)
 -- Name: bedrijven_pkey; Type: CONSTRAINT; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
@@ -389,25 +399,43 @@ ALTER TABLE ONLY bedrijven
 
 
 --
--- TOC entry 3130 (class 2606 OID 5368113)
+-- TOC entry 3202 (class 2606 OID 5522807)
+-- Name: bedrijvenkavels_id_workflow_status_datummutatie_key; Type: CONSTRAINT; Schema: IBIS; Owner: ibis; Tablespace: 
+--
+
+ALTER TABLE ONLY bedrijvenkavels
+    ADD CONSTRAINT bedrijvenkavels_id_workflow_status_datummutatie_key UNIQUE (id, workflow_status, datummutatie);
+
+
+--
+-- TOC entry 3204 (class 2606 OID 5522805)
 -- Name: bedrijvenkavels_pkey; Type: CONSTRAINT; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
 ALTER TABLE ONLY bedrijvenkavels
-    ADD CONSTRAINT bedrijvenkavels_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT bedrijvenkavels_pkey PRIMARY KEY (gt_key);
 
 
 --
--- TOC entry 3127 (class 2606 OID 5350018)
+-- TOC entry 3208 (class 2606 OID 5524982)
+-- Name: bedrijventerrein_id_datummutatie_workflow_status_key; Type: CONSTRAINT; Schema: IBIS; Owner: ibis; Tablespace: 
+--
+
+ALTER TABLE ONLY bedrijventerrein
+    ADD CONSTRAINT bedrijventerrein_id_datummutatie_workflow_status_key UNIQUE (id, datummutatie, workflow_status);
+
+
+--
+-- TOC entry 3210 (class 2606 OID 5524980)
 -- Name: bedrijventerrein_pkey; Type: CONSTRAINT; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
 ALTER TABLE ONLY bedrijventerrein
-    ADD CONSTRAINT bedrijventerrein_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT bedrijventerrein_pkey PRIMARY KEY (gt_pkey);
 
 
 --
--- TOC entry 3123 (class 2606 OID 5347078)
+-- TOC entry 3214 (class 2606 OID 5522273)
 -- Name: regio_pkey; Type: CONSTRAINT; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
@@ -416,47 +444,46 @@ ALTER TABLE ONLY regio
 
 
 --
--- TOC entry 3116 (class 2606 OID 4984380)
--- Name: tblfinancier_pkey; Type: CONSTRAINT; Schema: IBIS; Owner: ibis; Tablespace: 
+-- TOC entry 3200 (class 1259 OID 5522275)
+-- Name: bedrijvenkavels_geom_1448372990699; Type: INDEX; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
-ALTER TABLE ONLY financier
-    ADD CONSTRAINT tblfinancier_pkey PRIMARY KEY (id);
-
-
---
--- TOC entry 3128 (class 1259 OID 5368114)
--- Name: bedrijvenkavels_geom_1443171719128; Type: INDEX; Schema: IBIS; Owner: ibis; Tablespace: 
---
-
-CREATE INDEX bedrijvenkavels_geom_1443171719128 ON bedrijvenkavels USING gist (geom);
+CREATE INDEX bedrijvenkavels_geom_1448372990699 ON bedrijvenkavels USING gist (geom);
 
 
 --
--- TOC entry 3125 (class 1259 OID 5350019)
--- Name: bedrijventerrein_geom_1443094268178; Type: INDEX; Schema: IBIS; Owner: ibis; Tablespace: 
+-- TOC entry 3206 (class 1259 OID 5522276)
+-- Name: bedrijventerrein_geom_1448368720658; Type: INDEX; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
-CREATE INDEX bedrijventerrein_geom_1443094268178 ON bedrijventerrein USING gist (geom);
-
-
---
--- TOC entry 3124 (class 1259 OID 5347222)
--- Name: gemeente_geom_1443087869706; Type: INDEX; Schema: IBIS; Owner: ibis; Tablespace: 
---
-
-CREATE INDEX gemeente_geom_1443087869706 ON gemeente USING gist (geom);
+CREATE INDEX bedrijventerrein_geom_1448368720658 ON bedrijventerrein USING gist (geom);
 
 
 --
--- TOC entry 3121 (class 1259 OID 5347079)
--- Name: regio_geom_1443087503427; Type: INDEX; Schema: IBIS; Owner: ibis; Tablespace: 
+-- TOC entry 3211 (class 1259 OID 5522277)
+-- Name: gemeente_geom_1448368646168; Type: INDEX; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
-CREATE INDEX regio_geom_1443087503427 ON regio USING gist (geom);
+CREATE INDEX gemeente_geom_1448368646168 ON gemeente USING gist (geom);
 
 
--- Completed on 2015-11-10 15:33:54 CET
+--
+-- TOC entry 3205 (class 1259 OID 5522279)
+-- Name: kavels_terreinen_idx; Type: INDEX; Schema: IBIS; Owner: ibis; Tablespace: 
+--
+
+CREATE INDEX kavels_terreinen_idx ON bedrijvenkavels USING btree (terreinid);
+
+
+--
+-- TOC entry 3212 (class 1259 OID 5522280)
+-- Name: regio_geom_1448368417357; Type: INDEX; Schema: IBIS; Owner: ibis; Tablespace: 
+--
+
+CREATE INDEX regio_geom_1448368417357 ON regio USING gist (geom);
+
+
+-- Completed on 2015-12-01 08:32:16 CET
 
 --
 -- PostgreSQL database dump complete
