@@ -16,11 +16,9 @@
  */
 package nl.b3p.viewer.ibis.util;
 
-import static nl.b3p.viewer.ibis.util.IbisConstants.*;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -32,23 +30,25 @@ import nl.b3p.viewer.config.services.Layer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.geotools.data.DefaultTransaction;
+import org.geotools.data.Query;
 import org.geotools.data.Transaction;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureStore;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.feature.collection.AbstractFeatureVisitor;
-import org.geotools.filter.text.ecql.ECQL;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.opengis.feature.Feature;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
+import org.opengis.filter.sort.SortBy;
+import org.opengis.filter.sort.SortOrder;
 
 /**
  * Utility method that come in handy hadling workflow.
  *
  * @author Mark Prins <mark@b3partners.nl>
  */
-public class WorkflowUtil {
+public class WorkflowUtil implements IbisConstants {
 
     private static final Log log = LogFactory.getLog(WorkflowUtil.class);
 
@@ -60,7 +60,7 @@ public class WorkflowUtil {
 
     /**
      * Update the geometry of the TERREIN. Must be called after the kavels
- terreinTransaction.
+     * terreinTransaction.
      *
      * @param terreinID
      * @param layer kavels layer
@@ -69,26 +69,25 @@ public class WorkflowUtil {
      *
      */
     public static void updateTerreinGeometry(Integer terreinID, Layer layer, Application application, EntityManager em) {
+        log.debug("updating terrein geometry for " + terreinID);
         SimpleFeatureStore terreinStore = null;
         SimpleFeatureStore kavelStore = null;
         FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
         Transaction terreinTransaction = new DefaultTransaction("edit-terrein-geom");
         Transaction kavelTransaction = new DefaultTransaction("get-kavel-geom");
         try {
-            log.debug("updating terrein geometry for " + terreinID);
             // find all "current" kavel met terreinID
             Filter kavelFilter = ff.and(
                     ff.equals(ff.property(KAVEL_TERREIN_ID_FIELDNAME), ff.literal(terreinID)),
                     ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.toString()), false)
             );
-
             log.debug(kavelFilter);
 
             kavelStore = (SimpleFeatureStore) layer.getFeatureType().openGeoToolsFeatureSource();
             kavelStore.setTransaction(kavelTransaction);
             SimpleFeatureCollection kavels = kavelStore.getFeatures(kavelFilter);
 
-            // dissolve alle kavels
+            // dissolve all kavel geometries
             final Collection<Geometry> kavelGeoms = new ArrayList();
             kavels.accepts(new AbstractFeatureVisitor() {
                 @Override
@@ -117,10 +116,19 @@ public class WorkflowUtil {
             terreinStore = (SimpleFeatureStore) l.getFeatureType().openGeoToolsFeatureSource();
             terreinStore.setTransaction(terreinTransaction);
             // update terrein with new geom
-            // TODO get "current"
-            Filter tFilt = ff.equals(ff.property(ID_FIELDNAME), ff.literal(terreinID));
             String geomAttrName = terreinStore.getSchema().getGeometryDescriptor().getLocalName();
-            terreinStore.modifyFeatures(geomAttrName, newTerreinGeom, tFilt);
+            // TODO get "current" instead of all "definitief" and "bewerkt" terrein
+            Filter terreinFilter = ff.and(
+                    ff.equals(ff.property(ID_FIELDNAME), ff.literal(terreinID)),
+                    ff.or(
+                            ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false),
+                            ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.name()), false)
+                    )
+            );
+            log.debug("update geom for kavels filtered by: " + terreinFilter);
+
+            // if_then_else
+            terreinStore.modifyFeatures(geomAttrName, newTerreinGeom, terreinFilter);
             terreinTransaction.commit();
             terreinTransaction.close();
 
@@ -136,5 +144,38 @@ public class WorkflowUtil {
                 kavelStore.getDataStore().dispose();
             }
         }
+    }
+
+    /**
+     * create a filter that will return the current ("actueel") feature.
+     *
+     * @param id value for {@link #ID_FIELDNAME}
+     * @param typeName the typename eg.
+     * {@code Layer layer.getFeatureType().getTypeName()}
+     * @param fidOnly if you only want the fid
+     * @return
+     */
+    public static Query actueelQuery(String id, String typeName, boolean fidOnly) {
+        FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
+        Filter filter = ff.and(
+                ff.equals(ff.property(ID_FIELDNAME), ff.literal(id)),
+                ff.or(
+                        ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false),
+                        ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.name()), false)
+                )
+        );
+        log.debug("update geom for kavels filtered by: " + filter);
+
+        Query q = new Query(typeName, filter);
+        if (fidOnly) {
+            // just the fid
+            q.setProperties(Query.NO_PROPERTIES);
+        }
+        q.setSortBy(new SortBy[]{
+            ff.sort(WORKFLOW_FIELDNAME, SortOrder.ASCENDING),
+            ff.sort(MUTATIEDATUM_FIELDNAME, SortOrder.DESCENDING)
+        });
+        q.setMaxFeatures(1);
+        return q;
     }
 }

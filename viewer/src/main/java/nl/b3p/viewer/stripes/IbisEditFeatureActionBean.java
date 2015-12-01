@@ -62,18 +62,6 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
 
     private static final Log log = LogFactory.getLog(IbisEditFeatureActionBean.class);
 
-//    @DefaultHandler
-//    @Override
-//    public Resolution edit() throws JSONException {
-//        log.debug("hit ibis edit");
-//        return super.edit();
-//    }
-//
-//    @Override
-//    public Resolution delete() throws JSONException {
-//        log.debug("hit ibis delete");
-//        return super.delete();
-//    }
     @Override
     protected String addNewFeature() throws Exception {
         String kavelID = super.addNewFeature();
@@ -131,14 +119,12 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
     @Override
     protected void editFeature(String fid) throws Exception {
         log.debug("ibis editFeature:" + fid);
-
         FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
-
         Filter fidFilter = ff.id(new FeatureIdImpl(fid));
+
         List<String> attributes = new ArrayList();
         List values = new ArrayList();
         WorkflowStatus incomingWorkflowStatus = null;
-
         // parse json
         for (Iterator<String> it = this.getJsonFeature().keys(); it.hasNext();) {
             String attribute = it.next();
@@ -188,53 +174,66 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
                 copy.setAttribute(attributes.get(i), values.get(i));
             }
 
-            if (incomingWorkflowStatus == WorkflowStatus.bewerkt) {
-                if (original.getAttribute(WORKFLOW_FIELDNAME).toString().equalsIgnoreCase(WorkflowStatus.definitief.name())) {
-                    // insert new record with original id and workflowstatus "bewerkt", leave original "definitief"
-                    this.getStore().addFeatures(DataUtilities.collection(copy));
-                } else if (!isSameMutatiedatum(original.getAttribute(MUTATIEDATUM_FIELDNAME), copy.getAttribute(MUTATIEDATUM_FIELDNAME))) {
-                    // original is bewerkt, but different date, add new "bewerkt"
-                    this.getStore().addFeatures(DataUtilities.collection(copy));
-                } else {
-                    // same date and workflow status, overwite existing
+            Filter definitief = ff.and(
+                    ff.equals(ff.property(ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME))),
+                    ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false)
+            );
+            boolean definitiefExists = (this.getStore().getFeatures(definitief).size() > 0);
+
+            // Filter bewerkt = ff.and(
+            //         ff.equals(ff.property(ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME))),
+            //         ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.name()), false)
+            // );
+            // boolean bewerktExists = (this.getStore().getFeatures(bewerkt).size() > 0);
+            switch (incomingWorkflowStatus) {
+                case bewerkt:
+                    if (original.getAttribute(WORKFLOW_FIELDNAME).toString().equalsIgnoreCase(WorkflowStatus.definitief.name())) {
+                        // insert new record with original id and workflowstatus "bewerkt", leave original "definitief"
+                        this.getStore().addFeatures(DataUtilities.collection(copy));
+                    } else if (!isSameMutatiedatum(original.getAttribute(MUTATIEDATUM_FIELDNAME), copy.getAttribute(MUTATIEDATUM_FIELDNAME))) {
+                        // original is bewerkt, but different date, add new "bewerkt"
+                        this.getStore().addFeatures(DataUtilities.collection(copy));
+                    } else {
+                        // same date and workflow status, overwite existing
+                        this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);
+                    }
+                    break;
+                case definitief:
+                    if (definitiefExists) {
+                        // check if any "definitief" exists for this id and move that to "archief"
+                        this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, definitief);
+                    }
+                    if (original.getAttribute(WORKFLOW_FIELDNAME).toString().equalsIgnoreCase(WorkflowStatus.definitief.name())) {
+                        // if the original was "definitief" insert a new "definitief"
+                        this.getStore().addFeatures(DataUtilities.collection(copy));
+                    } else if (original.getAttribute(WORKFLOW_FIELDNAME).toString().equalsIgnoreCase(WorkflowStatus.bewerkt.name())) {
+                        // if original was "bewerkt" update this to "definitief" with the edits
+                        this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);
+                    } else {
+                        // other behaviour not documented eg. archief -> definitief, afgevoerd -> definitief
+                    }
+                    break;
+                case afgevoerd:
+                    if (definitiefExists) {
+                        // update any "definitief" for this id to "archief"
+                        this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, definitief);
+                    }
+                    // update original with the new/edited data including "afgevoerd"
                     this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);
+
+                    if (terreinID == null) {
+                        // find any kavels related to this terrein and also set them to "afgevoerd"
+                        Filter kavelFilter = ff.equals(ff.property(KAVEL_TERREIN_ID_FIELDNAME), ff.literal(terreinID));
+                        this.updateKavelWorkflowForTerrein(kavelFilter, WorkflowStatus.afgevoerd);
+                    }
+                    break;
+                case archief: {
+                    // not described, for now just edit the feature
+                    this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);
+                    break;
                 }
-            }
-
-            if (incomingWorkflowStatus == WorkflowStatus.definitief) {
-                // check if any definitief exists for this id and update that to archief
-                Filter definitief = ff.and(
-                        ff.equals(ff.property(ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME))),
-                        ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false)
-                );
-                this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, definitief);
-                // add the new definitief
-                this.getStore().addFeatures(DataUtilities.collection(copy));
-            }
-
-            if (incomingWorkflowStatus == WorkflowStatus.afgevoerd) {
-                // update original with the new/edited data
-                this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);
-
-                // find any "bewerkt" for this id and delete those
-                Filter bewerkt = ff.and(
-                        ff.equals(ff.property(ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME))),
-                        ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.toString()), false)
-                );
-                this.getStore().removeFeatures(bewerkt);
-
-                // update any "definitief" for this id to "afgevoerd"
-                Filter definitief = ff.and(
-                        ff.equals(ff.property(ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME))),
-                        ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.toString()), false)
-                );
-                this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd, definitief);
-
-                if (terreinID == null) {
-                    // find any kavels related to this terrein and also set them to "afgevoerd"
-                    Filter kavelFilter = ff.equals(ff.property(KAVEL_TERREIN_ID_FIELDNAME), ff.literal(terreinID));
-                    this.updateKavelWorkflowForTerrein(kavelFilter, WorkflowStatus.afgevoerd);
-                }
+                default:
+                    throw new IllegalArgumentException("Workflow status van edit feature is null, dit wordt niet ondersteund.");
             }
 
             editTransaction.commit();
@@ -251,10 +250,10 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
     }
 
     /**
-     * make a copy of the original.
+     * Make a copy of the original, but with a new fid.
      *
      * @param copyFrom original
-     * @return copy
+     * @return copy having same attribute values as original and a new fid
      */
     private SimpleFeature createCopy(SimpleFeature copyFrom) {
         SimpleFeatureBuilder builder = new SimpleFeatureBuilder(copyFrom.getFeatureType());

@@ -23,23 +23,29 @@ package nl.b3p.viewer.ibis.util;
  */
 public interface IbisConstants {
 
+    /**
+     * name of the kavel layer ({@value}).
+     */
     public static final String KAVEL_LAYER_NAME = "bedrijvenkavels";
+    /**
+     * name of the terrein layer ({@value}).
+     */
     public static final String TERREIN_LAYER_NAME = "bedrijventerrein";
     /**
-     * Name of the foreign TERREIN ID field in the datamodel (exists only in
-     * {@link IbisConstants#KAVEL_LAYER_NAME). {@value}.
+     * Name of the foreign TERREIN ID field in the datamodel ({@value}). (exists
+     * only in     * {@link IbisConstants#KAVEL_LAYER_NAME}).
      */
     public static final String KAVEL_TERREIN_ID_FIELDNAME = "terreinid";
     /**
-     * name of the ID field in the datamodel. {@value}.
+     * name of the ID field in the datamodel ({@value}).
      */
     public static final String ID_FIELDNAME = "id";
     /**
-     * name of the workflow field in the datamodel. {@value}.
+     * name of the workflow field in the datamodel ({@value}).
      */
     public static final String WORKFLOW_FIELDNAME = "workflow_status";
     /**
-     * name of the mutatiedatum field in the datamodel. {@value}.
+     * name of the mutatiedatum field in the datamodel ({@value}).
      */
     public static final String MUTATIEDATUM_FIELDNAME = "datummutatie";
 }
