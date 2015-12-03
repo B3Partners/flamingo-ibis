@@ -21,14 +21,14 @@
  */
 Ext.define("viewer.components.IbisSplit", {
     extend: "viewer.components.Split",
-    /** (cached) workflow status. */
-    status: null,
     config: {
         // custom url
         actionbeanUrl: "/viewer/action/feature/ibissplit",
-        // status altijd definitief
+        // always "definitief" for split
         workflowstatus: "definitief"
     },
+    /** (cached) workflow status. */
+    status: null,
     constructor: function (conf) {
         viewer.components.IbisSplit.superclass.constructor.call(this, conf);
 
@@ -39,14 +39,13 @@ Ext.define("viewer.components.IbisSplit", {
         this.config.actionbeanUrl = contextPath + "/action/feature/ibissplit";
 
         this.maincontainer.insert(2, {
-                id: this.name + "datumMutatie",
-                margin: 5,
-                fieldLabel: 'Splitsingsdatum',
-                xtype: 'datefield',
-                itemId: 'datum_mutatie',
-                value: new Date()
-            }
-        );
+            id: this.name + "datumMutatie",
+            margin: 5,
+            fieldLabel: 'Splitsingsdatum',
+            xtype: 'datefield',
+            itemId: mutatiedatumFieldName,
+            value: new Date()
+        });
         return this;
     },
     /**
@@ -54,11 +53,12 @@ Ext.define("viewer.components.IbisSplit", {
      * @override
      */
     getExtraData: function () {
-        return Ext.util.JSON.encode({
-            'workflow_status': this.status.get("id"),
-            'reden': 'splitsing',
-            'datum_mutatie': this.maincontainer.getComponent('datum_mutatie').getValue()
-        });
+        var obj = {};
+        obj[workflowFieldName] = this.status.get("id");
+        obj[mutatiedatumFieldName] = this.maincontainer.getComponent(mutatiedatumFieldName).getValue();
+        // reden veld ontbreekt in datamodel!
+        // obj[redenFieldName] = 'splitsing';
+        return Ext.util.JSON.encode(obj);
     },
     /**
      * Return the name of the superclass to inherit the css property.

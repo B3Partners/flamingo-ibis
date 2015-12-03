@@ -18,11 +18,16 @@ package nl.b3p.viewer.stripes;
 
 import com.vividsolutions.jts.geom.Geometry;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import net.sourceforge.stripes.action.StrictBinding;
 import net.sourceforge.stripes.action.UrlBinding;
 import nl.b3p.viewer.ibis.util.IbisConstants;
+import static nl.b3p.viewer.ibis.util.IbisConstants.KAVEL_TERREIN_ID_FIELDNAME;
+import static nl.b3p.viewer.ibis.util.IbisConstants.WORKFLOW_FIELDNAME;
+import nl.b3p.viewer.ibis.util.WorkflowStatus;
+import nl.b3p.viewer.ibis.util.WorkflowUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.geotools.data.DataUtilities;
@@ -36,6 +41,7 @@ import org.opengis.feature.type.GeometryType;
 import org.opengis.filter.Filter;
 import org.opengis.filter.identity.FeatureId;
 import org.json.JSONObject;
+import org.stripesstuff.stripersist.Stripersist;
 
 /**
  * A workflow-supporting split action bean for ibis.
@@ -45,8 +51,11 @@ import org.json.JSONObject;
 @UrlBinding("/action/feature/ibissplit")
 @StrictBinding
 public class IbisSplitFeatureActionBean extends SplitFeatureActionBean implements IbisConstants {
-
+    
     private static final Log log = LogFactory.getLog(IbisSplitFeatureActionBean.class);
+    
+    private Object terreinID = null;
+    private WorkflowStatus newWorkflowStatus = WorkflowStatus.definitief;
 
     /**
      * force the workflow status attribute on the feature. This will handle the
@@ -67,8 +76,11 @@ public class IbisSplitFeatureActionBean extends SplitFeatureActionBean implement
         while (items.hasNext()) {
             String key = (String) items.next();
             for (SimpleFeature f : features) {
-                log.debug(String.format("Setting value : %s for attribute: %s on feature %s", json.get(key), key, f.getID()));
+                log.debug(String.format("Setting value: %s for attribute: %s on feature %s", json.get(key), key, f.getID()));
                 f.setAttribute(key, json.get(key));
+                if (key.equalsIgnoreCase(WORKFLOW_FIELDNAME)) {
+                    newWorkflowStatus = WorkflowStatus.valueOf(json.getString(key));
+                }
             }
         }
         return features;
@@ -80,42 +92,74 @@ public class IbisSplitFeatureActionBean extends SplitFeatureActionBean implement
     @Override
     protected List<FeatureId> handleStrategy(SimpleFeature feature, List<? extends Geometry> geoms,
             Filter filter, SimpleFeatureStore localStore, String localStrategy) throws Exception {
-
+        
         List<SimpleFeature> newFeats = new ArrayList();
         GeometryTypeConverterFactory cf = new GeometryTypeConverterFactory();
         Converter c = cf.createConverter(Geometry.class, localStore.getSchema().getGeometryDescriptor().getType().getBinding(), null);
         GeometryType type = localStore.getSchema().getGeometryDescriptor().getType();
         String geomAttribute = localStore.getSchema().getGeometryDescriptor().getLocalName();
+        
         boolean firstFeature = true;
+        int newID = (int) (new Date().getTime() / 1000);
         for (Geometry newGeom : geoms) {
+            log.debug("Creating feature with geom: " + newGeom.getLength());
             if (firstFeature) {
-                if (localStrategy.equalsIgnoreCase("replace")) {
-                    // use first/largest geom to update existing feature geom
-                    feature.setAttribute(geomAttribute, c.convert(newGeom, type.getBinding()));
-                    feature = this.handleExtraData(feature);
+//                if (localStrategy.equalsIgnoreCase("replace")) {
+//                    // IBIS MUST USE add STRATEGY
+//                    // use first/largest geom to update existing feature geom
+//                    feature.setAttribute(geomAttribute, c.convert(newGeom, type.getBinding()));
+//                    feature = this.handleExtraData(feature);
+//                    Object[] attributevalues = feature.getAttributes().toArray(new Object[feature.getAttributeCount()]);
+//                    AttributeDescriptor[] attributes = feature.getFeatureType().getAttributeDescriptors()
+//                            .toArray(new AttributeDescriptor[feature.getAttributeCount()]);
+//                    localStore.modifyFeatures(attributes, attributevalues, filter);
+//                    firstFeature = false;
+//                    continue;
+//                } else
+                if (localStrategy.equalsIgnoreCase("add")) {
+                    // existing feature to "archief"
+                    feature.setAttribute(WORKFLOW_FIELDNAME, WorkflowStatus.archief);
                     Object[] attributevalues = feature.getAttributes().toArray(new Object[feature.getAttributeCount()]);
                     AttributeDescriptor[] attributes = feature.getFeatureType().getAttributeDescriptors()
                             .toArray(new AttributeDescriptor[feature.getAttributeCount()]);
                     localStore.modifyFeatures(attributes, attributevalues, filter);
+                    // remember terreinID
+                    this.terreinID = feature.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);
+
+                    // create the first new feature
+                    SimpleFeature newFeat = DataUtilities.createFeature(feature.getType(),
+                            DataUtilities.encodeFeature(feature, false));
+                    newFeat.setAttribute(geomAttribute, c.convert(newGeom, type.getBinding()));
+                    newFeats.add(newFeat);
+                    
                     firstFeature = false;
                     continue;
-                } else if (localStrategy.equalsIgnoreCase("add")) {
-                    // delete the source feature, new ones will be created
-                    localStore.removeFeatures(filter);
-                    firstFeature = false;
                 } else {
-                    throw new IllegalArgumentException("Unknown strategy '" + localStrategy + "', cannot split");
+                    throw new IllegalArgumentException("Unknown or unsupported strategy '" + localStrategy + "', cannot split.");
                 }
             }
-            // create + add new features
+            // create + add new features using the rest of the geometries
             SimpleFeature newFeat = DataUtilities.createFeature(feature.getType(),
                     DataUtilities.encodeFeature(feature, false));
             newFeat.setAttribute(geomAttribute, c.convert(newGeom, type.getBinding()));
+            newFeat.setAttribute(ID_FIELDNAME, newID++);
+            log.debug("created new feature with id: " + newID);
             newFeats.add(newFeat);
         }
-
+        // update specified fields on the new features
         newFeats = this.handleExtraData(newFeats);
-
         return localStore.addFeatures(DataUtilities.collection(newFeats));
+    }
+
+    /**
+     * Called after the split is completed and commit was performed. update
+     * terrein geometry
+     */
+    @Override
+    protected void afterSplit() {
+        if (this.terreinID != null) {
+            WorkflowUtil.updateTerreinGeometry((Integer) this.terreinID, this.getLayer(),
+                    this.newWorkflowStatus, this.getApplication(), Stripersist.getEntityManager());
+        }
     }
 }

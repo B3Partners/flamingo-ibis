@@ -23,6 +23,8 @@
  * @type String
  */
 var workflowFieldName = "workflow_status";
+var mutatiedatumFieldName = "datummutatie";
+var redenFieldName = "reden";
 
 // Check if this store is registered so we only define/create this store once
 if (!Ext.data.StoreManager.lookup('IbisWorkflowStore')) {
