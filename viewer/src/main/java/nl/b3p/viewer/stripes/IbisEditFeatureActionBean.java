@@ -68,7 +68,7 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
         Object terreinID = this.getJsonFeature().optString(KAVEL_TERREIN_ID_FIELDNAME, null);
         WorkflowStatus status = WorkflowStatus.valueOf(this.getJsonFeature().optString(WORKFLOW_FIELDNAME, WorkflowStatus.bewerkt.name()));
         if (terreinID != null) {
-            WorkflowUtil.updateTerreinGeometry((Integer) terreinID, this.getLayer(), status, this.getApplication(), Stripersist.getEntityManager());
+            WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), this.getLayer(), status, this.getApplication(), Stripersist.getEntityManager());
         }
         return kavelID;
     }
@@ -99,9 +99,8 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
             transaction.commit();
             Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);
             if (terreinID != null) {
-                WorkflowUtil.updateTerreinGeometry((Integer) terreinID, this.getLayer(), WorkflowStatus.afgevoerd, this.getApplication(), Stripersist.getEntityManager());
+                WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), this.getLayer(), WorkflowStatus.afgevoerd, this.getApplication(), Stripersist.getEntityManager());
             }
-
         } catch (Exception e) {
             transaction.rollback();
             throw e;
@@ -240,7 +239,7 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
 
             // update terrein geometry
             if (terreinID != null) {
-                WorkflowUtil.updateTerreinGeometry((Integer) terreinID, this.getLayer(), incomingWorkflowStatus, this.getApplication(), Stripersist.getEntityManager());
+                WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), this.getLayer(), incomingWorkflowStatus, this.getApplication(), Stripersist.getEntityManager());
             }
         } catch (IllegalArgumentException | IOException | NoSuchElementException e) {
             editTransaction.rollback();

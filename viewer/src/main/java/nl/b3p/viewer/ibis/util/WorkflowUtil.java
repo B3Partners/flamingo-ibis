@@ -19,6 +19,7 @@ package nl.b3p.viewer.ibis.util;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -70,7 +71,7 @@ public class WorkflowUtil implements IbisConstants {
      * @param em
      */
     public static void updateTerreinGeometry(Integer terreinID, Layer layer, WorkflowStatus kavelStatus, Application application, EntityManager em) {
-        log.debug("updating terrein geometry for " + terreinID);
+        log.debug("Updating terrein geometry for " + terreinID);
         SimpleFeatureStore terreinStore = null;
         SimpleFeatureStore kavelStore = null;
         FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
@@ -100,7 +101,7 @@ public class WorkflowUtil implements IbisConstants {
                     break;
                 default:
             }
-            log.debug(kavelFilter);
+            log.debug("Looking for kavel with filter: " + kavelFilter);
 
             kavelStore = (SimpleFeatureStore) layer.getFeatureType().openGeoToolsFeatureSource();
             kavelStore.setTransaction(kavelTransaction);
@@ -138,8 +139,6 @@ public class WorkflowUtil implements IbisConstants {
             // determine which terrein to update
             Filter terreinFilter = Filter.EXCLUDE;
             switch (kavelStatus) {
-                case archief:
-                case afgevoerd:
                 case definitief:
                     terreinFilter = ff.and(
                             ff.equals(ff.property(ID_FIELDNAME), ff.literal(terreinID)),
@@ -152,21 +151,28 @@ public class WorkflowUtil implements IbisConstants {
                             ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.name()), false)
                     );
                     break;
+                case archief:
+                case afgevoerd:
                 default:
+                // won't do anything
             }
-            log.debug("update geom for kavels filtered by: " + terreinFilter);
+            log.debug("Update terrein geom for kavels filtered by: " + terreinFilter);
 
             // update terrein with new geom
             String geomAttrName = terreinStore.getSchema().getGeometryDescriptor().getLocalName();
             terreinStore.modifyFeatures(geomAttrName, newTerreinGeom, terreinFilter);
             terreinTransaction.commit();
             terreinTransaction.close();
-
             kavelTransaction.close();
-
         } catch (Exception e) {
             log.error(String.format("Update van terrein geometrie %s is mislukt", terreinID), e);
         } finally {
+            try {
+                kavelTransaction.close();
+                terreinTransaction.close();
+            } catch (IOException io) {
+                // closing transaction failed
+            }
             if (terreinStore != null) {
                 terreinStore.getDataStore().dispose();
             }

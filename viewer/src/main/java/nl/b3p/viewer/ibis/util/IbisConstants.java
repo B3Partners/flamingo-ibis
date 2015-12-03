@@ -22,7 +22,6 @@ package nl.b3p.viewer.ibis.util;
  * @author Mark Prins <mark@b3partners.nl>
  */
 public interface IbisConstants {
-
     /**
      * name of the kavel layer ({@value}).
      */

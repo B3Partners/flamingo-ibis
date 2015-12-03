@@ -158,7 +158,7 @@ Ext.define("viewer.components.IbisEdit", {
                 valueField: 'id',
                 displayField: 'label',
                 value: this.workflowStore.getById('bewerkt'),
-                store: Ext.data.StoreManager.lookup('IbisWorkflowStore')
+                store: 'IbisWorkflowStore'
             });
         }
 
@@ -188,10 +188,8 @@ Ext.define("viewer.components.IbisEdit", {
         // var newID = new Date().getTime();
         // for now we'll use second precision
         this.newID = new Date() / 1000 | 0;
-        try {
+        if (this.inputContainer.getForm().findField('id')) {
             this.inputContainer.getForm().findField('id').setValue(this.newID);
-        } finally {
-            // ignore
         }
     },
     deleteFeature: function () {
