@@ -179,37 +179,4 @@ public class WorkflowUtil implements IbisConstants {
             }
         }
     }
-
-    /**
-     * create a filter that will return the current ("actueel") feature.
-     *
-     * @param id value for {@link #ID_FIELDNAME}
-     * @param typeName the typename eg.
-     * {@code Layer layer.getFeatureType().getTypeName()}
-     * @param fidOnly if you only want the fid
-     * @return
-     */
-    public static Query actueelQuery(String id, String typeName, boolean fidOnly) {
-        FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
-        Filter filter = ff.and(
-                ff.equals(ff.property(ID_FIELDNAME), ff.literal(id)),
-                ff.or(
-                        ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false),
-                        ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.name()), false)
-                )
-        );
-        log.debug("update geom for kavels filtered by: " + filter);
-
-        Query q = new Query(typeName, filter);
-        if (fidOnly) {
-            // just the fid
-            q.setProperties(Query.NO_PROPERTIES);
-        }
-        q.setSortBy(new SortBy[]{
-            ff.sort(WORKFLOW_FIELDNAME, SortOrder.ASCENDING),
-            ff.sort(MUTATIEDATUM_FIELDNAME, SortOrder.DESCENDING)
-        });
-        q.setMaxFeatures(1);
-        return q;
-    }
 }
