@@ -24,20 +24,20 @@ import net.sourceforge.stripes.action.StrictBinding;
 import net.sourceforge.stripes.action.UrlBinding;
 import nl.b3p.viewer.ibis.util.IbisConstants;
 import nl.b3p.viewer.ibis.util.WorkflowStatus;
+import nl.b3p.viewer.ibis.util.WorkflowUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.simple.SimpleFeatureStore;
-import org.geotools.filter.identity.FeatureIdImpl;
 import org.geotools.util.Converter;
 import org.geotools.util.GeometryTypeConverterFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.GeometryType;
 import org.opengis.filter.Filter;
 import org.opengis.filter.identity.FeatureId;
+import org.stripesstuff.stripersist.Stripersist;
 
 /**
  * A workflow-supporting merge action bean for ibis.
@@ -49,6 +49,8 @@ import org.opengis.filter.identity.FeatureId;
 public class IbisMergeFeaturesActionBean extends MergeFeaturesActionBean implements IbisConstants {
 
     private static final Log log = LogFactory.getLog(IbisMergeFeaturesActionBean.class);
+    private Object terreinID = null;
+    private WorkflowStatus newWorkflowStatus = WorkflowStatus.definitief;
 
     /**
      * Force the workflow status attribute on the feature. This will handle the
@@ -69,8 +71,11 @@ public class IbisMergeFeaturesActionBean extends MergeFeaturesActionBean impleme
         while (items.hasNext()) {
             String key = (String) items.next();
             for (SimpleFeature f : features) {
-                log.debug(String.format("Setting value : %s for attribute: %s on feature %s", json.get(key), key, f.getID()));
+                log.debug(String.format("Setting value: %s for attribute: %s on feature %s", json.get(key), key, f.getID()));
                 f.setAttribute(key, json.get(key));
+                if (key.equalsIgnoreCase(WORKFLOW_FIELDNAME)) {
+                    newWorkflowStatus = WorkflowStatus.valueOf(json.getString(key));
+                }
             }
         }
         return features;
@@ -90,46 +95,61 @@ public class IbisMergeFeaturesActionBean extends MergeFeaturesActionBean impleme
                 localStore.getSchema().getGeometryDescriptor().getType().getBinding(),
                 null);
 
-        if (this.getStrategy().equalsIgnoreCase("replace")) {
-
-            //create a copy of A and add status archief
-            SimpleFeature archiveFeatA = DataUtilities.createFeature(featureA.getType(),
-                    DataUtilities.encodeFeature(featureA, false));
-            archiveFeatA.setAttribute(IbisConstants.WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd);
-            localStore.addFeatures(DataUtilities.collection(archiveFeatA));
-
-            // update feature A, add new geom and new status
-            featureA.setAttribute(geomAttrName, c.convert(newGeom, type.getBinding()));
-            featureA = this.handleExtraData(featureA);
-            Object[] attributevalues = featureA.getAttributes().toArray(new Object[featureA.getAttributeCount()]);
-            AttributeDescriptor[] attributes = featureA.getFeatureType().getAttributeDescriptors().toArray(new AttributeDescriptor[featureA.getAttributeCount()]);
-            localStore.modifyFeatures(attributes, attributevalues, filterA);
+//        if (this.getStrategy().equalsIgnoreCase("replace")) {
+//
+//            //create a copy of A and add status archief
+//            SimpleFeature archiveFeatA = DataUtilities.createFeature(featureA.getType(),
+//                    DataUtilities.encodeFeature(featureA, false));
+//            archiveFeatA.setAttribute(IbisConstants.WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd);
+//            localStore.addFeatures(DataUtilities.collection(archiveFeatA));
+//
+//            // update feature A, add new geom and new status
+//            featureA.setAttribute(geomAttrName, c.convert(newGeom, type.getBinding()));
+//            featureA = this.handleExtraData(featureA);
+//            Object[] attributevalues = featureA.getAttributes().toArray(new Object[featureA.getAttributeCount()]);
+//            AttributeDescriptor[] attributes = featureA.getFeatureType().getAttributeDescriptors().toArray(new AttributeDescriptor[featureA.getAttributeCount()]);
+//            localStore.modifyFeatures(attributes, attributevalues, filterA);
+//
+//            // update B with status afgevoerd, null terreinid
+//            String[] fields = new String[]{WORKFLOW_FIELDNAME, KAVEL_TERREIN_ID_FIELDNAME};
+//            Object[] values = new Object[]{WorkflowStatus.afgevoerd, null};
+//            localStore.modifyFeatures(fields, values, filterB);
+//
+//            ids.add(new FeatureIdImpl(this.getFidA()));
+//        } else
+        if (this.getStrategy().equalsIgnoreCase("new")) {
+            // archive the source feature (A)
+            localStore.modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, filterA);
 
             // update B with status afgevoerd, null terreinid
             String[] fields = new String[]{WORKFLOW_FIELDNAME, KAVEL_TERREIN_ID_FIELDNAME};
             Object[] values = new Object[]{WorkflowStatus.afgevoerd, null};
             localStore.modifyFeatures(fields, values, filterB);
-            
-            ids.add(new FeatureIdImpl(this.getFidA()));
-        } else if (this.getStrategy().equalsIgnoreCase("new")) {
-            // archive the source feature (A) and merge partner(B)
-            //   and create a new feature with the attributes of A but a new geom and new status.
-            localStore.modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd, filterA);
 
-            String[] fields = new String[]{WORKFLOW_FIELDNAME, KAVEL_TERREIN_ID_FIELDNAME};
-            Object[] values = new Object[]{WorkflowStatus.afgevoerd, null};
-            localStore.modifyFeatures(fields, values, filterB);
-
-            SimpleFeature newFeat = DataUtilities.createFeature(featureA.getType(),
+            // create a new feature with the attributes of A but a new geom
+            SimpleFeature newAfeat = DataUtilities.createFeature(featureA.getType(),
                     DataUtilities.encodeFeature(featureA, false));
-            newFeat.setAttribute(geomAttrName, c.convert(newGeom, type.getBinding()));
+            newAfeat.setAttribute(geomAttrName, c.convert(newGeom, type.getBinding()));
+
+            // remember terreinID
+            this.terreinID = newAfeat.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);
+
             List<SimpleFeature> newFeats = new ArrayList();
-            newFeats.add(newFeat);
+            newFeats.add(newAfeat);
+            // update new feature set mut. date, workflow status etc.
             newFeats = this.handleExtraData(newFeats);
             ids = localStore.addFeatures(DataUtilities.collection(newFeats));
         } else {
-            throw new IllegalArgumentException("Unknown strategy '" + this.getStrategy() + "', cannot merge.");
+            throw new IllegalArgumentException("Unknown merge strategy '" + this.getStrategy() + "', cannot merge.");
         }
         return ids;
+    }
+
+    @Override
+    protected void afterMerge(List<FeatureId> ids) {
+        if (this.terreinID != null) {
+            WorkflowUtil.updateTerreinGeometry(Integer.parseInt(this.terreinID.toString()), this.getLayer(),
+                    this.newWorkflowStatus, this.getApplication(), Stripersist.getEntityManager());
+        }
     }
 }

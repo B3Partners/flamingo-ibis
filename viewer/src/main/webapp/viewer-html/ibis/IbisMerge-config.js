@@ -38,12 +38,13 @@ Ext.define("viewer.components.CustomConfiguration", {
             {
                 xtype: "combo",
                 fields: ['value', 'text'],
-                value: me.configObject.strategy ? me.configObject.strategy : "replace",
+                value: me.configObject.strategy ? me.configObject.strategy : "new",
                 name: "strategy",
-                fieldLabel: "Samenvoegen strategie",
-                emptyText: 'Maak uw keuze',
+                fieldLabel: "Samenvoegen strategie (new)",
+                emptyText: 'Maak uw keuze (new)',
                 store: [
-                    ["replace", "replace"],
+                    //["replace", "replace"],
+                    // always new for ibis
                     ["new", "new"]
                 ],
                 labelWidth: me.labelWidth
@@ -51,22 +52,22 @@ Ext.define("viewer.components.CustomConfiguration", {
                 xtype: "textfield",
                 fieldLabel: "Maximum afstand voor samenvoegen",
                 name: "mergeGapDist",
-                value: me.configObject.mergeGapDist ? me.configObject.mergeGapDist : 0,
+                value: me.configObject.mergeGapDist ? me.configObject.mergeGapDist : 5,
                 labelWidth: me.labelWidth
             }
-//            , {
-//                xtype: 'combobox',
-//                fieldLabel: 'Workflow status',
-//                labelWidth: this.labelWidth,
-//                emptyText: 'Maak uw keuze',
-//                store: 'IbisWorkflowStore',
-//                queryMode: 'local',
-//                name: 'workflowstatus',
-//                itemId: 'workflowstatus',
-//                displayField: 'desc',
-//                valueField: 'status',
-//                value: this.configObject.workflowstatus || null
-//            }
+            , {
+                xtype: 'combobox',
+                fieldLabel: 'Nieuwe Workflow status (Definitief)',
+                labelWidth: this.labelWidth,
+                emptyText: 'Maak uw keuze (definitief)',
+                store: 'IbisWorkflowStore',
+                queryMode: 'local',
+                name: 'workflowstatus',
+                itemId: 'workflowstatus',
+                displayField: 'label',
+                valueField: 'id',
+                value: me.configObject.workflowstatus ? me.configObject.workflowstatus : "definitief"
+            }
         ]);
     }
 });

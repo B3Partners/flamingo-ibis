@@ -40,7 +40,7 @@ Ext.define("viewer.components.CustomConfiguration", {
                 fields: ['value', 'text'],
                 value: me.configObject.strategy ? me.configObject.strategy : "add",
                 name: "strategy",
-                fieldLabel: "Splits strategie",
+                fieldLabel: "Splits strategie (add)",
                 emptyText: 'Maak uw keuze (add)',
                 store: [
                     // in ibis altijd add
@@ -50,7 +50,7 @@ Ext.define("viewer.components.CustomConfiguration", {
                 labelWidth: me.labelWidth
             } , {
                 xtype: 'combobox',
-                fieldLabel: 'Nieuwe Workflow status',
+                fieldLabel: 'Nieuwe Workflow status (Definitief)',
                 labelWidth: this.labelWidth,
                 emptyText: 'Maak uw keuze (definitief)',
                 store: 'IbisWorkflowStore',

@@ -156,7 +156,7 @@ public class IbisSplitFeatureActionBean extends SplitFeatureActionBean implement
      * terrein geometry
      */
     @Override
-    protected void afterSplit() {
+    protected void afterSplit(List<FeatureId> ids) {
         if (this.terreinID != null) {
             WorkflowUtil.updateTerreinGeometry(Integer.parseInt(this.terreinID.toString()), this.getLayer(),
                     this.newWorkflowStatus, this.getApplication(), Stripersist.getEntityManager());

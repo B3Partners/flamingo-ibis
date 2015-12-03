@@ -22,15 +22,16 @@
 Ext.define("viewer.components.IbisMerge", {
     extend: "viewer.components.Merge",
     /** (cached) workflow status. */
-    status: null,
     labelA: 'Hoofdperceel',
     labelB: 'Vervallen perceel',
     config: {
         // custom url
         actionbeanUrl: "/viewer/action/feature/ibismerge",
-        // status altijd nieuw
-        workflowstatus: "nieuw"
+        // status altijd definief
+        workflowstatus: "definief"
     },
+    /** (cached) workflow status. */
+    status: null,
     constructor: function (conf) {
         viewer.components.IbisMerge.superclass.constructor.call(this, conf);
 
@@ -45,7 +46,7 @@ Ext.define("viewer.components.IbisMerge", {
             margin: 5,
             fieldLabel: 'Samenvoeg datum',
             xtype: 'datefield',
-            itemId: 'datum_mutatie',
+            itemId: mutatiedatumFieldName,
             value: new Date()
         });
 
@@ -56,11 +57,12 @@ Ext.define("viewer.components.IbisMerge", {
      * @override
      */
     getExtraData: function () {
-        return Ext.util.JSON.encode({
-            'reden': 'samenvoeging',
-            'datum_mutatie': this.maincontainer.getComponent('datum_mutatie').getValue()
-        });
-
+        var obj = {};
+        obj[mutatiedatumFieldName] = this.maincontainer.getComponent(mutatiedatumFieldName).getValue();
+        obj[workflowFieldName] = this.status.get("id");
+        // reden veld ontbreekt in datamodel!
+        // obj[redenFieldName] = 'samenvoeging';
+        return Ext.util.JSON.encode(obj);
     },
     /**
      * Return the name of the superclass to inherit the css property.

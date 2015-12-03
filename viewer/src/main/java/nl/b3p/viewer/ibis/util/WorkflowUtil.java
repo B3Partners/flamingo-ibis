@@ -162,8 +162,6 @@ public class WorkflowUtil implements IbisConstants {
             String geomAttrName = terreinStore.getSchema().getGeometryDescriptor().getLocalName();
             terreinStore.modifyFeatures(geomAttrName, newTerreinGeom, terreinFilter);
             terreinTransaction.commit();
-            terreinTransaction.close();
-            kavelTransaction.close();
         } catch (Exception e) {
             log.error(String.format("Update van terrein geometrie %s is mislukt", terreinID), e);
         } finally {
