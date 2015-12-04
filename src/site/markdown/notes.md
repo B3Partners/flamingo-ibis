@@ -35,7 +35,9 @@ and not anything else.
 
 ### IbisLocationFinder component
 
-The IbisLocationFinder uses the same layer as the IbisReport component, see above for configuration. The two components share a common datastore so that the location data only needs to be downloaded once.
+The IbisLocationFinder uses the same layer as the IbisReport component, see above
+for configuration. The two components share a common datastore so that the location
+data only needs to be downloaded once.
 
 ### Other Flamingo joins and relates
 
@@ -46,7 +48,7 @@ The IbisLocationFinder uses the same layer as the IbisReport component, see abov
 
 For the possible values list in the viewer-admin edit configuration use the
 following for the layers that have workflow enabled (kavels + terreinen):
-`bewerkt:Bewerkt,definitief:Definitief,afgevoerd:Afgevoerd`
+`bewerkt:Bewerkt,definitief:Definitief,archief:Archief,afgevoerd:Afgevoerd`
 
 _note_ there is no space after the comma.
 
