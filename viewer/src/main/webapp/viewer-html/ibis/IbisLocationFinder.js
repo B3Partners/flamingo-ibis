@@ -24,7 +24,7 @@ Ext.define('viewer.components.IbisLocationFinder', {
     step1: null,
     terreinenStore: null,
     config: {
-        title: null,
+        title: "Zoek gebied",
         titlebarIcon: null,
         tooltip: null,
         label: ""
@@ -88,7 +88,7 @@ Ext.define('viewer.components.IbisLocationFinder', {
         }
 
         this.step1 = Ext.create('Ext.panel.Panel', {
-            title: 'Zoek gebied',
+            title: this.config.title,
             layout: {
                 type: 'vbox',
                 align: 'stretch'
