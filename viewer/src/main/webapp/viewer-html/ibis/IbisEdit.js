@@ -300,6 +300,17 @@ Ext.define("viewer.components.IbisEdit", {
 
         return feature;
     },
+    saveSucces: function (fid) {
+        var me = this;
+        Ext.Object.eachValue(this.config.viewerController.app.appLayers, function (appLayer) {
+            if (appLayer.layerName === terreinenLayerName) {
+                me.config.viewerController.getLayer(appLayer).reload();
+            }
+        });
+        this.editingLayer.reload();
+        this.currentFID = fid;
+        this.cancel();
+    },
     /**
      * Return the name of the superclass to inherit the css property.
      * @returns {String} base class name

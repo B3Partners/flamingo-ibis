@@ -64,6 +64,15 @@ Ext.define("viewer.components.IbisMerge", {
         // obj[redenFieldName] = 'samenvoeging';
         return Ext.util.JSON.encode(obj);
     },
+    saveSucces: function (response, me) {
+        Ext.Object.eachValue(me.config.viewerController.app.appLayers, function (appLayer) {
+            if (appLayer.layerName === terreinenLayerName) {
+                me.config.viewerController.getLayer(appLayer).reload();
+            }
+        });
+        me.config.viewerController.getLayer(me.layerSelector.getValue()).reload();
+        me.cancel();
+    },
     /**
      * Return the name of the superclass to inherit the css property.
      * @returns {String} base class name

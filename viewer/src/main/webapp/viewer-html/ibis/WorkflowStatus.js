@@ -15,6 +15,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// The name of the some of the attribute fields in the datamodel;
+//    TODO ideally these should come from a property fed bean
+
+var terreinenLayerName = "bedrijventerrein";
+var workflowFieldName = "workflow_status";
+var mutatiedatumFieldName = "datummutatie";
+var redenFieldName = "reden";
+var idFieldName = "id";
+var planNaamFieldName = "a_plannaam";
+var bboxTerreinFieldName = "bbox_terrein";
+var gemeenteFieldName = "naam";
+var bboxGemeenteFieldName = "bbox_gemeente";
+var regioFieldName = "vvr_naam";
+var bboxRegioFieldName = "bbox_regio";
+
 /**
  * @description this file provides some globals regarding workflow status voor Ibis.
  */
