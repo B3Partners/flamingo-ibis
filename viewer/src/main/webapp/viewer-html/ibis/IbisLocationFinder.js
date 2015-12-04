@@ -142,11 +142,17 @@ Ext.define('viewer.components.IbisLocationFinder', {
                     }
                 },
                 {
-                    xtype: 'button',
-                    text: 'Reset kaartuitsnede',
-                    margin: '10 0',
-                    handler: this.resetStoreFilters.bind(this, true)
-                }
+                    xtype: 'container',
+                    layout: {
+                        align: 'left'
+                    },
+                    items: [{
+                            xtype: 'button',
+                            text: 'Reset kaartuitsnede',
+                            margin: '10 10',
+                            handler: this.resetStoreFilters.bind(this, true),
+                        }]
+                },
             ],
             renderTo: this.getContentDiv()
         });
