@@ -18,17 +18,8 @@
 /**
  * @description this file provides some globals regarding workflow status voor Ibis.
  */
-/**
- * the name of the workflow attribute field in the datamodel.
- * @type String
- */
-var workflowFieldName = "workflow_status";
-var mutatiedatumFieldName = "datummutatie";
-var redenFieldName = "reden";
-
-// Check if this store is registered so we only define/create this store once
 if (!Ext.data.StoreManager.lookup('IbisWorkflowStore')) {
-
+    // Check if this store is registered so we only define/create this store once
     Ext.define('IbisWorkflowModel', {
         extend: 'Ext.data.Model',
         idProperty: 'id',

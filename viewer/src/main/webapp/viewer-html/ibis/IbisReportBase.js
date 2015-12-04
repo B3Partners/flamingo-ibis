@@ -37,32 +37,32 @@ Ext.define("viewer.components.IbisReportBase", {
         actionbeanUrl: ""
     },
     // the datamodel based on the componentLayer
-    //
-    idColNaam: 'id',
+    // NB these globals are defined in app_overrides.jsp
+    idColNaam: idFieldName,
     idVeldId: '',
     idVeldNaam: '',
     //
-    terreinColNaam: 'a_plannaam',
+    terreinColNaam: planNaamFieldName,
     terreinVeldId: '',
     terreinVeldNaam: '',
     //
-    terrein_geomColNaam: 'bbox_terrein',
+    terrein_geomColNaam: bboxTerreinFieldName,
     terrein_geomVeldId: '',
     terrein_geomVeldNaam: '',
     //
-    gemeenteColNaam: 'naam',
+    gemeenteColNaam: gemeenteFieldName,
     gemeenteVeldId: '',
     gemeenteVeldNaam: '',
     //
-    gemeente_geomColNaam: 'bbox_gemeente',
+    gemeente_geomColNaam: bboxGemeenteFieldName,
     gemeente_geomVeldId: '',
     gemeente_geomVeldNaam: '',
     //
-    regioColNaam: 'vvr_naam',
+    regioColNaam: regioFieldName,
     regioVeldId: '',
     regioVeldNaam: '',
     //
-    regio_geomColNaam: 'bbox_regio',
+    regio_geomColNaam: bboxRegioFieldName,
     regio_geomVeldId: '',
     regio_geomVeldNaam: '',
     /**
