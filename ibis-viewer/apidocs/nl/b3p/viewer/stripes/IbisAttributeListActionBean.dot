@@ -9,8 +9,26 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
+	// nl.b3p.viewer.ibis.util.IbisConstants
+	c87 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> IbisConstants </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + KAVEL_LAYER_NAME : String </td></tr>
+<tr><td align="left" balign="left"> + TERREIN_LAYER_NAME : String </td></tr>
+<tr><td align="left" balign="left"> + KAVEL_TERREIN_ID_FIELDNAME : String </td></tr>
+<tr><td align="left" balign="left"> + ID_FIELDNAME : String </td></tr>
+<tr><td align="left" balign="left"> + WORKFLOW_FIELDNAME : String </td></tr>
+<tr><td align="left" balign="left"> + MUTATIEDATUM_FIELDNAME : String </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		</table>>, URL="../ibis/util/IbisConstants.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean
-	c52 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisAttributeListActionBean.html">
+	c91 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisAttributeListActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisAttributeListActionBean </td></tr>
 		</table></td></tr>
@@ -56,7 +74,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./IbisAttributeListActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea
-	c53 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.QueryArea.html">
+	c92 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.QueryArea.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> QueryArea </td></tr>
@@ -71,7 +89,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./IbisAttributeListActionBean.QueryArea.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean.ReportType
-	c54 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.ReportType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.ReportType.html">
+	c93 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.ReportType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.ReportType.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> ReportType </td></tr>
@@ -86,7 +104,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./IbisAttributeListActionBean.ReportType.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean.AggregationLevelDate
-	c55 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.AggregationLevelDate" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.AggregationLevelDate.html">
+	c94 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.AggregationLevelDate" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.AggregationLevelDate.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> AggregationLevelDate </td></tr>
@@ -100,25 +118,27 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./IbisAttributeListActionBean.AggregationLevelDate.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//nl.b3p.viewer.stripes.IbisAttributeListActionBean implements net.sourceforge.stripes.action.ActionBean
-	c59:p -> c52:p [dir=back,arrowtail=empty,style=dashed];
+	c99:p -> c91:p [dir=back,arrowtail=empty,style=dashed];
+	//nl.b3p.viewer.stripes.IbisAttributeListActionBean implements nl.b3p.viewer.ibis.util.IbisConstants
+	c87:p -> c91:p [dir=back,arrowtail=empty,style=dashed];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC net.sourceforge.stripes.action.ActionBeanContext
-	c52:p -> c64:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c91:p -> c104:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.config.app.Application
-	c52:p -> c72:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c91:p -> c112:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.config.app.ApplicationLayer
-	c52:p -> c75:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c91:p -> c115:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.ReportType
-	c52:p -> c54:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c91:p -> c93:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea
-	c52:p -> c53:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c91:p -> c92:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.AggregationLevelDate
-	c52:p -> c55:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c91:p -> c94:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.config.services.Layer
-	c52:p -> c81:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c91:p -> c121:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea
-	c52:p -> c53:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c91:p -> c92:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.config.app.ApplicationLayer
-	c75 [label=<<table title="nl.b3p.viewer.config.app.ApplicationLayer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c115 [label=<<table title="nl.b3p.viewer.config.app.ApplicationLayer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ApplicationLayer </td></tr>
 		</table></td></tr>
@@ -161,7 +181,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.config.services.Layer
-	c81 [label=<<table title="nl.b3p.viewer.config.services.Layer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c121 [label=<<table title="nl.b3p.viewer.config.services.Layer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Layer </td></tr>
 		</table></td></tr>
@@ -234,7 +254,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.sourceforge.stripes.action.ActionBeanContext
-	c64 [label=<<table title="net.sourceforge.stripes.action.ActionBeanContext" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c104 [label=<<table title="net.sourceforge.stripes.action.ActionBeanContext" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ActionBeanContext </td></tr>
 		</table></td></tr>
@@ -261,8 +281,22 @@ digraph G {
 <tr><td align="left" balign="left"> + toString() : String </td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.sourceforge.stripes.action.ActionBean
+	c99 [label=<<table title="net.sourceforge.stripes.action.ActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> ActionBean </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + setContext(arg0 : ActionBeanContext) </td></tr>
+<tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
+		</table></td></tr>
+		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.config.app.Application
-	c72 [label=<<table title="nl.b3p.viewer.config.app.Application" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c112 [label=<<table title="nl.b3p.viewer.config.app.Application" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Application </td></tr>
 		</table></td></tr>
@@ -322,20 +356,6 @@ digraph G {
 <tr><td align="left" balign="left"> + removeOldProperties() </td></tr>
 <tr><td align="left" balign="left"> + setGlobalLayout(arg0 : String) </td></tr>
 <tr><td align="left" balign="left"> + getGlobalLayout() : JSONObject </td></tr>
-		</table></td></tr>
-		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// net.sourceforge.stripes.action.ActionBean
-	c59 [label=<<table title="net.sourceforge.stripes.action.ActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
-<tr><td align="center" balign="center"> ActionBean </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + setContext(arg0 : ActionBeanContext) </td></tr>
-<tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }

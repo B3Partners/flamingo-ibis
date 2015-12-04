@@ -9,8 +9,21 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
+	// nl.b3p.viewer.stripes.IbisFeatureInfoActionBean
+	c17 [label=<<table title="nl.b3p.viewer.stripes.IbisFeatureInfoActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisFeatureInfoActionBean.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> IbisFeatureInfoActionBean </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + IbisFeatureInfoActionBean() </td></tr>
+<tr><td align="left" balign="left"> # executeQuery(al : ApplicationLayer, ft : SimpleFeatureType, fs : FeatureSource&lt;&gt;, q : Query) : JSONArray </td></tr>
+		</table></td></tr>
+		</table>>, URL="./IbisFeatureInfoActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean
-	c11 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.html">
+	c18 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisAttributeListActionBean </td></tr>
 		</table></td></tr>
@@ -56,7 +69,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./IbisAttributeListActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea
-	c12 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.QueryArea.html">
+	c19 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.QueryArea.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> QueryArea </td></tr>
@@ -71,7 +84,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./IbisAttributeListActionBean.QueryArea.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean.ReportType
-	c13 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.ReportType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.ReportType.html">
+	c20 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.ReportType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.ReportType.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> ReportType </td></tr>
@@ -86,7 +99,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./IbisAttributeListActionBean.ReportType.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean.AggregationLevelDate
-	c14 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.AggregationLevelDate" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.AggregationLevelDate.html">
+	c21 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.AggregationLevelDate" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.AggregationLevelDate.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> AggregationLevelDate </td></tr>
@@ -100,7 +113,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./IbisAttributeListActionBean.AggregationLevelDate.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisEditFeatureActionBean
-	c15 [label=<<table title="nl.b3p.viewer.stripes.IbisEditFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisEditFeatureActionBean.html">
+	c22 [label=<<table title="nl.b3p.viewer.stripes.IbisEditFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisEditFeatureActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisEditFeatureActionBean </td></tr>
 		</table></td></tr>
@@ -109,12 +122,14 @@ digraph G {
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + IbisEditFeatureActionBean() </td></tr>
+<tr><td align="left" balign="left"> # addNewFeature() : String </td></tr>
 <tr><td align="left" balign="left"> # deleteFeature(fid : String) </td></tr>
 <tr><td align="left" balign="left"> # editFeature(fid : String) </td></tr>
+<tr><td align="left" balign="left"> # isAttributeUserEditingDisabled(attrName : String) : boolean </td></tr>
 		</table></td></tr>
 		</table>>, URL="./IbisEditFeatureActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean
-	c16 [label=<<table title="nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisMergeFeaturesActionBean.html">
+	c23 [label=<<table title="nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisMergeFeaturesActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisMergeFeaturesActionBean </td></tr>
 		</table></td></tr>
@@ -125,10 +140,11 @@ digraph G {
 <tr><td align="left" balign="left"> + IbisMergeFeaturesActionBean() </td></tr>
 <tr><td align="left" balign="left"> # handleExtraData(features : List&lt;SimpleFeature&gt;) : List&lt;SimpleFeature&gt; </td></tr>
 <tr><td align="left" balign="left"> # handleStrategy(featureA : SimpleFeature, featureB : SimpleFeature, newGeom : Geometry, filterA : Filter, filterB : Filter, localStore : SimpleFeatureStore, localStrategy : String) : List&lt;FeatureId&gt; </td></tr>
+<tr><td align="left" balign="left"> # afterMerge(ids : List&lt;FeatureId&gt;) </td></tr>
 		</table></td></tr>
 		</table>>, URL="./IbisMergeFeaturesActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisSplitFeatureActionBean
-	c17 [label=<<table title="nl.b3p.viewer.stripes.IbisSplitFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisSplitFeatureActionBean.html">
+	c24 [label=<<table title="nl.b3p.viewer.stripes.IbisSplitFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisSplitFeatureActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisSplitFeatureActionBean </td></tr>
 		</table></td></tr>
@@ -139,24 +155,27 @@ digraph G {
 <tr><td align="left" balign="left"> + IbisSplitFeatureActionBean() </td></tr>
 <tr><td align="left" balign="left"> # handleExtraData(features : List&lt;SimpleFeature&gt;) : List&lt;SimpleFeature&gt; </td></tr>
 <tr><td align="left" balign="left"> # handleStrategy(feature : SimpleFeature, geoms : List&lt;?&gt;, filter : Filter, localStore : SimpleFeatureStore, localStrategy : String) : List&lt;FeatureId&gt; </td></tr>
+<tr><td align="left" balign="left"> # afterSplit(ids : List&lt;FeatureId&gt;) </td></tr>
 		</table></td></tr>
 		</table>>, URL="./IbisSplitFeatureActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	//nl.b3p.viewer.stripes.IbisFeatureInfoActionBean extends nl.b3p.viewer.stripes.FeatureInfoActionBean
+	c26:p -> c17:p [dir=back,arrowtail=empty];
 	//nl.b3p.viewer.stripes.IbisEditFeatureActionBean extends nl.b3p.viewer.stripes.EditFeatureActionBean
-	c18:p -> c15:p [dir=back,arrowtail=empty];
+	c27:p -> c22:p [dir=back,arrowtail=empty];
 	//nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean extends nl.b3p.viewer.stripes.MergeFeaturesActionBean
-	c19:p -> c16:p [dir=back,arrowtail=empty];
+	c28:p -> c23:p [dir=back,arrowtail=empty];
 	//nl.b3p.viewer.stripes.IbisSplitFeatureActionBean extends nl.b3p.viewer.stripes.SplitFeatureActionBean
-	c20:p -> c17:p [dir=back,arrowtail=empty];
+	c29:p -> c24:p [dir=back,arrowtail=empty];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.ReportType
-	c11:p -> c13:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c18:p -> c20:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea
-	c11:p -> c12:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c18:p -> c19:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.AggregationLevelDate
-	c11:p -> c14:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c18:p -> c21:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea
-	c11:p -> c12:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c18:p -> c19:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.MergeFeaturesActionBean
-	c19 [label=<<table title="nl.b3p.viewer.stripes.MergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c28 [label=<<table title="nl.b3p.viewer.stripes.MergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MergeFeaturesActionBean </td></tr>
 		</table></td></tr>
@@ -171,6 +190,7 @@ digraph G {
 <tr><td align="left" balign="left"> # handleExtraData(arg0 : List&lt;SimpleFeature&gt;) : List&lt;SimpleFeature&gt; </td></tr>
 <tr><td align="left" balign="left"> # handleExtraData(arg0 : SimpleFeature) : SimpleFeature </td></tr>
 <tr><td align="left" balign="left"> # handleStrategy(arg0 : SimpleFeature, arg1 : SimpleFeature, arg2 : Geometry, arg3 : Filter, arg4 : Filter, arg5 : SimpleFeatureStore, arg6 : String) : List&lt;FeatureId&gt; </td></tr>
+<tr><td align="left" balign="left"> # afterMerge(arg0 : List&lt;FeatureId&gt;) </td></tr>
 <tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
 <tr><td align="left" balign="left"> + setContext(arg0 : ActionBeanContext) </td></tr>
 <tr><td align="left" balign="left"> + getApplication() : Application </td></tr>
@@ -187,10 +207,11 @@ digraph G {
 <tr><td align="left" balign="left"> + setMergeGapDist(arg0 : int) </td></tr>
 <tr><td align="left" balign="left"> + getExtraData() : String </td></tr>
 <tr><td align="left" balign="left"> + setExtraData(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getLayer() : Layer </td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.EditFeatureActionBean
-	c18 [label=<<table title="nl.b3p.viewer.stripes.EditFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c27 [label=<<table title="nl.b3p.viewer.stripes.EditFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> EditFeatureActionBean </td></tr>
 		</table></td></tr>
@@ -213,12 +234,14 @@ digraph G {
 <tr><td align="left" balign="left"> + getFID() : String </td></tr>
 <tr><td align="left" balign="left"> + edit() : Resolution </td></tr>
 <tr><td align="left" balign="left"> + delete() : Resolution </td></tr>
+<tr><td align="left" balign="left"> # addNewFeature() : String </td></tr>
 <tr><td align="left" balign="left"> # deleteFeature(arg0 : String) </td></tr>
 <tr><td align="left" balign="left"> # editFeature(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> # isAttributeUserEditingDisabled(arg0 : String) : boolean </td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.SplitFeatureActionBean
-	c20 [label=<<table title="nl.b3p.viewer.stripes.SplitFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c29 [label=<<table title="nl.b3p.viewer.stripes.SplitFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> SplitFeatureActionBean </td></tr>
 		</table></td></tr>
@@ -232,6 +255,7 @@ digraph G {
 <tr><td align="left" balign="left"> + split() : Resolution </td></tr>
 <tr><td align="left" balign="left"> # handleExtraData(arg0 : List&lt;SimpleFeature&gt;) : List&lt;SimpleFeature&gt; </td></tr>
 <tr><td align="left" balign="left"> # handleExtraData(arg0 : SimpleFeature) : SimpleFeature </td></tr>
+<tr><td align="left" balign="left"> # afterSplit(arg0 : List&lt;FeatureId&gt;) </td></tr>
 <tr><td align="left" balign="left"> # handleStrategy(arg0 : SimpleFeature, arg1 : List&lt;?&gt;, arg2 : Filter, arg3 : SimpleFeatureStore, arg4 : String) : List&lt;FeatureId&gt; </td></tr>
 <tr><td align="left" balign="left"> # splitLine(arg0 : Geometry, arg1 : Geometry) : List&lt;LineString&gt; </td></tr>
 <tr><td align="left" balign="left"> # splitPolygon(arg0 : Geometry, arg1 : Geometry) : List&lt;Polygon&gt; </td></tr>
@@ -249,6 +273,46 @@ digraph G {
 <tr><td align="left" balign="left"> + setStrategy(arg0 : String) </td></tr>
 <tr><td align="left" balign="left"> + getExtraData() : String </td></tr>
 <tr><td align="left" balign="left"> + setExtraData(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getLayer() : Layer </td></tr>
+		</table></td></tr>
+		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// nl.b3p.viewer.stripes.FeatureInfoActionBean
+	c26 [label=<<table title="nl.b3p.viewer.stripes.FeatureInfoActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> FeatureInfoActionBean </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + FID : String </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + FeatureInfoActionBean() </td></tr>
+<tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
+<tr><td align="left" balign="left"> + setContext(arg0 : ActionBeanContext) </td></tr>
+<tr><td align="left" balign="left"> + getApplication() : Application </td></tr>
+<tr><td align="left" balign="left"> + setApplication(arg0 : Application) </td></tr>
+<tr><td align="left" balign="left"> + getLimit() : int </td></tr>
+<tr><td align="left" balign="left"> + setLimit(arg0 : int) </td></tr>
+<tr><td align="left" balign="left"> + getDistance() : String </td></tr>
+<tr><td align="left" balign="left"> + setDistance(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getQueryJSON() : String </td></tr>
+<tr><td align="left" balign="left"> + setQueryJSON(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getX() : String </td></tr>
+<tr><td align="left" balign="left"> + setX(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getY() : String </td></tr>
+<tr><td align="left" balign="left"> + setY(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + isEdit() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setEdit(arg0 : boolean) </td></tr>
+<tr><td align="left" balign="left"> + isArrays() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setArrays(arg0 : boolean) </td></tr>
+<tr><td align="left" balign="left"> + getRequestId() : String </td></tr>
+<tr><td align="left" balign="left"> + setRequestId(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getAttributesToInclude() : List&lt;Long&gt; </td></tr>
+<tr><td align="left" balign="left"> + setAttributesToInclude(arg0 : List&lt;Long&gt;) </td></tr>
+<tr><td align="left" balign="left"> + isGraph() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setGraph(arg0 : boolean) </td></tr>
+<tr><td align="left" balign="left"> + getLayer() : Layer </td></tr>
+<tr><td align="left" balign="left"> + info() : Resolution </td></tr>
+<tr><td align="left" balign="left"> # executeQuery(arg0 : ApplicationLayer, arg1 : SimpleFeatureType, arg2 : FeatureSource&lt;&gt;, arg3 : Query) : JSONArray </td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
