@@ -299,6 +299,7 @@ Ext.define("viewer.components.IbisFactsheet", {
                 properties.overview = new Object();
                 properties.overview.overviewUrl = url;
                 properties.overview.extent = overview.config.lox + "," + overview.config.loy + "," + overview.config.rbx + "," + overview.config.rby;
+                properties.overview.protocol = url.toLowerCase().indexOf("getmap") > 0 ? 'WMS' : 'IMAGE';
             }
         }
 
