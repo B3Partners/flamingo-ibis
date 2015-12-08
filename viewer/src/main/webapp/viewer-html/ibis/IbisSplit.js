@@ -60,6 +60,13 @@ Ext.define("viewer.components.IbisSplit", {
         // obj[redenFieldName] = 'splitsing';
         return Ext.util.JSON.encode(obj);
     },
+    handleFeature: function (feature) {
+        this.superclass.handleFeature.call(this, feature);
+        if (feature !== null) {
+            this.maincontainer.getComponent(mutatiedatumFieldName).setMinValue(
+                    getMinMutatiedatum(feature[mutatiedatumFieldName]));
+        }
+    },
     saveSucces: function (response, me) {
         Ext.Object.eachValue(me.config.viewerController.app.appLayers, function (appLayer) {
             if (appLayer.layerName === terreinenLayerName) {

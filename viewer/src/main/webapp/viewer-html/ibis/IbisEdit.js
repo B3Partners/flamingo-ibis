@@ -161,11 +161,9 @@ Ext.define("viewer.components.IbisEdit", {
                 store: 'IbisWorkflowStore'
             });
         }
-        // set date to one hour before feature date
-        var mdVeld = this.inputContainer.getForm().findField('datummutatie');
-        var minMutDate = Ext.Date.parse(feature[mutatiedatumFieldName], mdVeld.format)
-        minMutDate = Ext.Date.subtract(minMutDate, 1, Ext.Date.HOUR);
-        mdVeld.setMinValue(minMutDate);
+        
+        this.inputContainer.getForm().findField('datummutatie').setMinValue(
+                getMinMutatiedatum(feature[mutatiedatumFieldName]));
 
         if (this.mode === "copy") {
             setNextIbisWorkflowStatus({}, 'bewerkt', Ext.getCmp(this.workflow_fieldname));

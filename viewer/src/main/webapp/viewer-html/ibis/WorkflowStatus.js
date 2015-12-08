@@ -123,3 +123,18 @@ function setNextIbisWorkflowStatus(userRoles, statusId, comboBox) {
     }
 }
 
+/**
+ * return a date  one hour before feature date.
+ * @param {String} date
+ * @returns {Date} minimum mutatie datum
+ */
+function getMinMutatiedatum(date) {
+    // the format is fixed in Flamingo, see Edit.js and FeatureToJson#formatValue
+    if (date) {
+        var minMutDate = Ext.Date.parse(date, 'd-m-Y H:i:s');
+        minMutDate = Ext.Date.subtract(minMutDate, 1, Ext.Date.HOUR);
+    } else {
+        minMutDate = new date();
+    }
+    return minMutDate;
+}
