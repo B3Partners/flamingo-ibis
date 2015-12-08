@@ -24,6 +24,8 @@ Ext.define("viewer.components.IbisMerge", {
     /** (cached) workflow status. */
     labelA: 'Hoofdperceel',
     labelB: 'Vervallen perceel',
+    mutDateA: null,
+    mutDateB: null,
     config: {
         // custom url
         actionbeanUrl: "/viewer/action/feature/ibismerge",
@@ -63,6 +65,22 @@ Ext.define("viewer.components.IbisMerge", {
         // reden veld ontbreekt in datamodel!
         // obj[redenFieldName] = 'samenvoeging';
         return Ext.util.JSON.encode(obj);
+    },
+    handleFeature: function (feature) {
+        this.superclass.handleFeature.call(this, feature);
+        if (feature !== null) {
+            if (this.mode === "selectA") {
+                this.mutDateA = getMinMutatiedatum(feature[mutatiedatumFieldName]);
+                this.maincontainer.getComponent(mutatiedatumFieldName).setMinValue(this.mutDateA);
+            }
+            else if (this.mode === "selectB") {
+                this.mutDateB = getMinMutatiedatum(feature[mutatiedatumFieldName]);
+                // Instellen op een uur vóór de feature mutatiedatum van de jongste feature.
+                var minMutDate = (this.mutDateA.getTime() > this.mutDateB.getTime()) ? this.mutDateA : this.mutDateB;
+                this.maincontainer.getComponent(mutatiedatumFieldName).setMinValue(minMutDate);
+            }
+
+        }
     },
     saveSucces: function (response, me) {
         Ext.Object.eachValue(me.config.viewerController.app.appLayers, function (appLayer) {
