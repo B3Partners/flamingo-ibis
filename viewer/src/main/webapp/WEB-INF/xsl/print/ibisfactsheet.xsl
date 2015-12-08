@@ -33,7 +33,7 @@
 
     <!-- legend variables -->
     <!-- See legend.xsl (does not currently affect size of other elements!) -->
-    <xsl:variable name="legend-width-cm" select="3.5"/>
+    <xsl:variable name="legend-width-cm" select="3.1"/>
     <!-- See legend.xsl ('none', 'before', 'right') -->
     <xsl:variable name="legend-labels-pos" select="'before'"/>
     <xsl:variable name="legend-scale-images-same-ratio" select="true()"/>
