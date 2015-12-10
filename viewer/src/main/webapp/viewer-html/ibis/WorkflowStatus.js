@@ -23,12 +23,14 @@ var workflowFieldName = "workflow_status";
 var mutatiedatumFieldName = "datummutatie";
 var redenFieldName = "reden";
 var idFieldName = "id";
+var terreinidFieldName = "terreinid";
 var planNaamFieldName = "a_plannaam";
 var bboxTerreinFieldName = "bbox_terrein";
 var gemeenteFieldName = "naam";
 var bboxGemeenteFieldName = "bbox_gemeente";
 var regioFieldName = "vvr_naam";
 var bboxRegioFieldName = "bbox_regio";
+var rinnrFieldName = "rin_nr";
 
 /**
  * @description this file provides some globals regarding workflow status voor Ibis.
