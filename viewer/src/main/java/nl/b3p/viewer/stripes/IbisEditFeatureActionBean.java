@@ -93,7 +93,6 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
         Filter filter = ff.id(new FeatureIdImpl(fid));
 
         try {
-            //this.getStore().removeFeatures(fidFilter);
             this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd, filter);
             SimpleFeature original = this.getStore().getFeatures(filter).features().next();
             transaction.commit();
@@ -168,9 +167,9 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
             Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);
 
             // make a copy of the original feature and set (new) attribute values on the copy
-            SimpleFeature copy = createCopy(original);
+            SimpleFeature editedNewFeature = createCopy(original);
             for (int i = 0; i < attributes.size(); i++) {
-                copy.setAttribute(attributes.get(i), values.get(i));
+                editedNewFeature.setAttribute(attributes.get(i), values.get(i));
             }
 
             Filter definitief = ff.and(
@@ -179,19 +178,21 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
             );
             boolean definitiefExists = (this.getStore().getFeatures(definitief).size() > 0);
 
-            // Filter bewerkt = ff.and(
-            //         ff.equals(ff.property(ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME))),
-            //         ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.name()), false)
-            // );
-            // boolean bewerktExists = (this.getStore().getFeatures(bewerkt).size() > 0);
+            Filter bewerkt = ff.and(
+                    ff.equals(ff.property(ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME))),
+                    ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.name()), false)
+            );
+            boolean bewerktExists = (this.getStore().getFeatures(bewerkt).size() > 0);
+
             switch (incomingWorkflowStatus) {
                 case bewerkt:
                     if (original.getAttribute(WORKFLOW_FIELDNAME).toString().equalsIgnoreCase(WorkflowStatus.definitief.name())) {
+                        //definitief -> bewerkt
                         // insert new record with original id and workflowstatus "bewerkt", leave original "definitief"
-                        this.getStore().addFeatures(DataUtilities.collection(copy));
-                    } else if (!isSameMutatiedatum(original.getAttribute(MUTATIEDATUM_FIELDNAME), copy.getAttribute(MUTATIEDATUM_FIELDNAME))) {
-                        // original is bewerkt, but different date, add new "bewerkt"
-                        this.getStore().addFeatures(DataUtilities.collection(copy));
+                        this.getStore().addFeatures(DataUtilities.collection(editedNewFeature));
+                    } else if (!isSameMutatiedatum(original.getAttribute(MUTATIEDATUM_FIELDNAME), editedNewFeature.getAttribute(MUTATIEDATUM_FIELDNAME))) {
+                        //bewerkt -> bewerkt w/ new date
+                        this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);
                     } else {
                         // same date and workflow status, overwite existing
                         this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);
@@ -204,7 +205,7 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
                     }
                     if (original.getAttribute(WORKFLOW_FIELDNAME).toString().equalsIgnoreCase(WorkflowStatus.definitief.name())) {
                         // if the original was "definitief" insert a new "definitief"
-                        this.getStore().addFeatures(DataUtilities.collection(copy));
+                        this.getStore().addFeatures(DataUtilities.collection(editedNewFeature));
                     } else if (original.getAttribute(WORKFLOW_FIELDNAME).toString().equalsIgnoreCase(WorkflowStatus.bewerkt.name())) {
                         // if original was "bewerkt" update this to "definitief" with the edits
                         this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);
