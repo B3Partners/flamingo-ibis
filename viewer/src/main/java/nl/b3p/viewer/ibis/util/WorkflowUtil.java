@@ -19,6 +19,7 @@ package nl.b3p.viewer.ibis.util;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Polygon;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,7 +39,9 @@ import org.geotools.data.simple.SimpleFeatureStore;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.feature.collection.AbstractFeatureVisitor;
 import org.geotools.geometry.jts.JTSFactoryFinder;
+import org.geotools.util.GeometryTypeConverterFactory;
 import org.opengis.feature.Feature;
+import org.opengis.feature.type.GeometryType;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
 import org.opengis.filter.sort.SortBy;
@@ -78,18 +81,9 @@ public class WorkflowUtil implements IbisConstants {
         Transaction terreinTransaction = new DefaultTransaction("edit-terrein-geom");
         Transaction kavelTransaction = new DefaultTransaction("get-kavel-geom");
         try {
-            // determin whichs kavels to use for calcutating new geometry
+            // determine whichs kavels to use for calcutating new geometry
             Filter kavelFilter = Filter.EXCLUDE;
             switch (kavelStatus) {
-                case archief:
-                case afgevoerd:
-                case definitief:
-                    // find all "definitief" kavel for terreinID
-                    kavelFilter = ff.and(
-                            ff.equals(ff.property(KAVEL_TERREIN_ID_FIELDNAME), ff.literal(terreinID)),
-                            ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.toString()), false)
-                    );
-                    break;
                 case bewerkt:
                     // find all "definitief" and "bewerkt" kavel for terreinID
                     kavelFilter = ff.and(
@@ -99,7 +93,17 @@ public class WorkflowUtil implements IbisConstants {
                                     ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.toString()), false)
                             ));
                     break;
+                case archief:
+                case afgevoerd:
+                case definitief:
+                    // find all "definitief" kavel for terreinID
+                    kavelFilter = ff.and(
+                            ff.equals(ff.property(KAVEL_TERREIN_ID_FIELDNAME), ff.literal(terreinID)),
+                            ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.toString()), false)
+                    );
+                    break;
                 default:
+                // do nothing / should not happen
             }
             log.debug("Looking for kavel with filter: " + kavelFilter);
 
@@ -122,6 +126,10 @@ public class WorkflowUtil implements IbisConstants {
             GeometryFactory factory = JTSFactoryFinder.getGeometryFactory(null);
             GeometryCollection geometryCollection = (GeometryCollection) factory.buildGeometry(kavelGeoms);
             Geometry newTerreinGeom = geometryCollection.union();
+            if (!newTerreinGeom.getGeometryType().equalsIgnoreCase("MultiPolygon")) {
+                GeometryFactory f = JTSFactoryFinder.getGeometryFactory();
+                newTerreinGeom = f.createMultiPolygon(new Polygon[]{(Polygon) newTerreinGeom});
+            }
 
             // find terrein appLayer
             ApplicationLayer terreinAppLyr = null;
@@ -139,12 +147,6 @@ public class WorkflowUtil implements IbisConstants {
             // determine which terrein to update
             Filter terreinFilter = Filter.EXCLUDE;
             switch (kavelStatus) {
-                case definitief:
-                    terreinFilter = ff.and(
-                            ff.equals(ff.property(ID_FIELDNAME), ff.literal(terreinID)),
-                            ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false)
-                    );
-                    break;
                 case bewerkt:
                     terreinFilter = ff.and(
                             ff.equals(ff.property(ID_FIELDNAME), ff.literal(terreinID)),
@@ -153,6 +155,12 @@ public class WorkflowUtil implements IbisConstants {
                     break;
                 case archief:
                 case afgevoerd:
+                case definitief:
+                    terreinFilter = ff.and(
+                            ff.equals(ff.property(ID_FIELDNAME), ff.literal(terreinID)),
+                            ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false)
+                    );
+                    break;
                 default:
                 // won't do anything
             }

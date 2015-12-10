@@ -8,8 +8,6 @@
 
 ~~ reference: http://maven.apache.org/doxia/references/apt-format.html
 
-~~ Note that we're using eg. ${project.properties.get("jruby.version")} to work
-~~     around a limitation getting pom properties with a dot.
 
 ${project.name} ${project.version} Release Notes
 
@@ -19,18 +17,18 @@ ${project.name} ${project.version} Release Notes
 
 * ${project.version} Release Notes
 
-  A complete list of issues can be seen in the tracker
-  {{{${project.issueManagement.url}?q=milestone%3A${project.version}+is%3Aclosed}milestone ${project.version} }}.
+  A complete list of issues for this release can be seen in the tracker:
+  {{{${project.issueManagement.url}?q=milestone%3A${project.version}+is%3Aclosed}milestone ${project.version} issues}}.
 
 ** New
 
-  *
+  * Initial release
 
   []
 
-** Enhancements and Fixes
-
-  *
-
-  []
+~~ ** Enhancements and Fixes
+~~
+~~   *
+~~
+~~   []
 

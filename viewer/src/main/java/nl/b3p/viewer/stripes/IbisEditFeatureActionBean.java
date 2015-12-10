@@ -187,7 +187,7 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
             switch (incomingWorkflowStatus) {
                 case bewerkt:
                     if (original.getAttribute(WORKFLOW_FIELDNAME).toString().equalsIgnoreCase(WorkflowStatus.definitief.name())) {
-                        //definitief -> bewerkt
+                        // definitief -> bewerkt
                         // insert new record with original id and workflowstatus "bewerkt", leave original "definitief"
                         this.getStore().addFeatures(DataUtilities.collection(editedNewFeature));
                     } else if (!isSameMutatiedatum(original.getAttribute(MUTATIEDATUM_FIELDNAME), editedNewFeature.getAttribute(MUTATIEDATUM_FIELDNAME))) {
