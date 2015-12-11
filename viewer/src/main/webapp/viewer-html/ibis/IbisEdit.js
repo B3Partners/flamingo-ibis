@@ -161,7 +161,7 @@ Ext.define("viewer.components.IbisEdit", {
                 store: 'IbisWorkflowStore'
             });
         }
-        
+
         this.inputContainer.getForm().findField('datummutatie').setMinValue(
                 getMinMutatiedatum(feature[mutatiedatumFieldName]));
 
@@ -174,6 +174,26 @@ Ext.define("viewer.components.IbisEdit", {
             s = this.workflowStore.getById(wf).get("label");
         }
         Ext.getCmp(this.name + "workflowLabel").setText("Oude workflow status: " + s);
+
+        // titelgegevens uit het formulier lezen
+        var t = '';
+        if (this.inputContainer.getForm().findField('gemeentenaam')) {
+            t += this.inputContainer.getForm().findField('gemeentenaam').getRawValue() + ', ';
+        }
+        if (this.inputContainer.getForm().findField(planNaamFieldName)) {
+            t += this.inputContainer.getForm().findField(planNaamFieldName).getRawValue() + ', ';
+        }
+        if (this.inputContainer.getForm().findField(terreinidFieldName)) {
+            t += this.inputContainer.getForm().findField(terreinidFieldName).getRawValue() + ' ';
+        }
+        if (this.inputContainer.getForm().findField(rinnrFieldName)) {
+            t += 'RIN:' + this.inputContainer.getForm().findField(rinnrFieldName).getRawValue();
+        }
+        this.popup.popupWin.setTitle(t);
+    },
+    resetForm: function () {
+        this.superclass.resetForm.call(this);
+        this.popup.popupWin.setTitle(this.config.title);
     },
     createNew: function () {
         this.superclass.createNew.call(this);
