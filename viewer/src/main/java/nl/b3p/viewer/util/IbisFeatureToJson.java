@@ -22,7 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,29 +36,20 @@ import static nl.b3p.viewer.ibis.util.IbisConstants.MUTATIEDATUM_FIELDNAME;
 import static nl.b3p.viewer.ibis.util.IbisConstants.WORKFLOW_FIELDNAME;
 import nl.b3p.viewer.ibis.util.WorkflowStatus;
 import static nl.b3p.viewer.stripes.FeatureInfoActionBean.FID;
-import nl.b3p.viewer.stripes.IbisFeatureInfoActionBean;
-import static nl.b3p.viewer.util.FeatureToJson.MAX_FEATURES;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureSource;
 import org.geotools.data.Query;
 import org.geotools.data.simple.SimpleFeatureCollection;
-import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.factory.CommonFactoryFinder;
-import org.geotools.factory.GeoTools;
-import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.FeatureIterator;
-import org.geotools.feature.collection.AbstractFeatureVisitor;
 import org.geotools.feature.collection.SortedSimpleFeatureCollection;
-import org.geotools.feature.visitor.UniqueVisitor;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.visitor.SimplifyingFilterVisitor;
-import org.geotools.util.NullProgressListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opengis.feature.Feature;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
@@ -83,14 +73,11 @@ public class IbisFeatureToJson {
     private List<Long> attributesToInclude = new ArrayList<>();
     private static final int TIMEOUT = 5000;
 
-    private final FeatureToJson featureToJson;
-
     public IbisFeatureToJson(boolean arrays, boolean edit, boolean graph, List<Long> attributesToInclude) {
         this.arrays = arrays;
         this.edit = edit;
         this.graph = graph;
         this.attributesToInclude = attributesToInclude;
-        this.featureToJson = new FeatureToJson(arrays, edit, graph, attributesToInclude);
     }
 
     /**
@@ -106,6 +93,7 @@ public class IbisFeatureToJson {
      * @throws Exception
      */
     public JSONArray getWorkflowJSONFeatures(ApplicationLayer al, SimpleFeatureType ft, FeatureSource fs, Query q) throws IOException, JSONException, Exception {
+        log.debug("Ophalen workflow json features met: " + q);
         Map<String, String> attributeAliases = new HashMap<>();
         if (!edit) {
             for (AttributeDescriptor ad : ft.getAttributes()) {
@@ -184,6 +172,75 @@ public class IbisFeatureToJson {
                 }
                 featureIndex++;
             }
+        } finally {
+            fs.getDataStore().dispose();
+        }
+        return features;
+    }
+
+    /**
+     * Get the features as JSONArray with the given params
+     *
+     * @param al The application layer(if there is a application layer)
+     * @param ft The featuretype that must be used to get the features
+     * @param fs The featureSource
+     * @param q The query
+     * @return JSONArray with features.
+     * @throws IOException
+     * @throws JSONException
+     * @throws Exception
+     */
+    public JSONArray getDefinitiefJSONFeatures(ApplicationLayer al, SimpleFeatureType ft, FeatureSource fs, Query q) throws IOException, JSONException, Exception {
+        log.debug("Ophalen definitief json features met: " + q);
+        Map<String, String> attributeAliases = new HashMap<>();
+        if (!edit) {
+            for (AttributeDescriptor ad : ft.getAttributes()) {
+                if (ad.getAlias() != null) {
+                    attributeAliases.put(ad.getName(), ad.getAlias());
+                }
+            }
+        }
+        List<String> propertyNames;
+        if (al != null) {
+            propertyNames = this.setPropertyNames(al, q, ft, edit);
+        } else {
+            propertyNames = new ArrayList<>();
+            for (AttributeDescriptor ad : ft.getAttributes()) {
+                propertyNames.add(ad.getName());
+            }
+        }
+
+        Integer start = q.getStartIndex();
+        if (start == null) {
+            start = 0;
+        }
+        boolean offsetSupported = fs.getQueryCapabilities().isOffsetSupported();
+        //if offSet is not supported, get more features (start + the wanted features)
+        if (!offsetSupported && q.getMaxFeatures() < MAX_FEATURES) {
+            q.setMaxFeatures(q.getMaxFeatures() + start);
+        }
+
+        JSONArray features = new JSONArray();
+        try {
+            // only get 'definitief'
+            SimpleFeatureCollection feats = (SimpleFeatureCollection) fs.getFeatures(q);
+            FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
+            Filter definitief = ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false);
+            SimpleFeatureCollection defn = feats.subCollection(definitief);
+            SimpleFeature feature;
+
+            int featureIndex = 0;
+            while (defn.features().hasNext()) {
+                feature = defn.features().next();
+                /* if offset not supported and there are more features returned then
+                 * only get the features after index >= start*/
+                if (offsetSupported || featureIndex >= start) {
+                    JSONObject j = this.toJSONFeature(new JSONObject(), feature, ft, al, propertyNames, attributeAliases, 0);
+                    features.put(j);
+                }
+                featureIndex++;
+            }
+            defn.features().close();
         } finally {
             fs.getDataStore().dispose();
         }
@@ -386,18 +443,18 @@ public class IbisFeatureToJson {
         }
     }
 
-    public static Filter reformatFilter(Filter filter, SimpleFeatureType ft) throws Exception {
-        FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
-        if (Filter.INCLUDE.equals(filter) || Filter.EXCLUDE.equals(filter)) {
-            return filter;
-        }
-        for (FeatureTypeRelation rel : ft.getRelations()) {
-            if (FeatureTypeRelation.JOIN.equals(rel.getType())) {
-                filter = reformatFilter(filter, rel.getForeignFeatureType());
-                filter = (Filter) filter.accept(new ValidFilterExtractor(rel), filter);
-            }
-        }
-        filter = (Filter) filter.accept(new SimplifyingFilterVisitor(), null);
-        return filter;
-    }
+//    public static Filter reformatFilter(Filter filter, SimpleFeatureType ft) throws Exception {
+//        FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
+//        if (Filter.INCLUDE.equals(filter) || Filter.EXCLUDE.equals(filter)) {
+//            return filter;
+//        }
+//        for (FeatureTypeRelation rel : ft.getRelations()) {
+//            if (FeatureTypeRelation.JOIN.equals(rel.getType())) {
+//                filter = reformatFilter(filter, rel.getForeignFeatureType());
+//                filter = (Filter) filter.accept(new ValidFilterExtractor(rel), filter);
+//            }
+//        }
+//        filter = (Filter) filter.accept(new SimplifyingFilterVisitor(), null);
+//        return filter;
+//    }
 }

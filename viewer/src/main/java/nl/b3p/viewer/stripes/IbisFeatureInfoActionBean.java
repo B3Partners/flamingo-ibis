@@ -20,6 +20,7 @@ import java.io.IOException;
 import net.sourceforge.stripes.action.StrictBinding;
 import net.sourceforge.stripes.action.UrlBinding;
 import nl.b3p.viewer.config.app.ApplicationLayer;
+import nl.b3p.viewer.config.security.Authorizations;
 import nl.b3p.viewer.config.services.SimpleFeatureType;
 import nl.b3p.viewer.ibis.util.IbisConstants;
 import nl.b3p.viewer.util.FeatureToJson;
@@ -30,6 +31,7 @@ import org.geotools.data.FeatureSource;
 import org.geotools.data.Query;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.stripesstuff.stripersist.Stripersist;
 
 /**
  * Override feature info for {@link KAVEL_LAYER_NAME} and
@@ -64,10 +66,20 @@ public class IbisFeatureInfoActionBean extends FeatureInfoActionBean implements 
         JSONArray features;
         if (this.getLayer().getName().equalsIgnoreCase(KAVEL_LAYER_NAME)
                 || this.getLayer().getName().equalsIgnoreCase(TERREIN_LAYER_NAME)) {
-            // workflow behaviour
-            IbisFeatureToJson ftjson = new IbisFeatureToJson(this.isArrays(), this.isEdit(), this.isGraph(), this.getAttributesToInclude());
-            features = ftjson.getWorkflowJSONFeatures(al, this.getLayer().getFeatureType(), fs, q);
+
+            if (Authorizations.isAppLayerWriteAuthorized(this.getApplication(), al,
+                    this.getContext().getRequest(), Stripersist.getEntityManager())) {
+                // workflow/edit behaviour
+                log.debug("Executing custom IBIS featureinfo for authorized user on layer " + this.getLayer().getName());
+                IbisFeatureToJson ftjson = new IbisFeatureToJson(this.isArrays(), this.isEdit(), this.isGraph(), this.getAttributesToInclude());
+                features = ftjson.getWorkflowJSONFeatures(al, this.getLayer().getFeatureType(), fs, q);
+            } else {
+                log.debug("Executing custom IBIS featureinfo for non-authorized user on layer " + this.getLayer().getName());
+                IbisFeatureToJson ftjson = new IbisFeatureToJson(this.isArrays(), this.isEdit(), this.isGraph(), this.getAttributesToInclude());
+                features = ftjson.getDefinitiefJSONFeatures(al, this.getLayer().getFeatureType(), fs, q);
+            }
         } else {
+            log.debug("Executing default IBIS featureinfo for any user on layer " + this.getLayer().getName());
             // default behaviour for any other layers
             FeatureToJson ftjson = new FeatureToJson(this.isArrays(), this.isEdit(), this.isGraph(), this.getAttributesToInclude());
             features = ftjson.getJSONFeatures(al, this.getLayer().getFeatureType(), fs, q, null, null);
