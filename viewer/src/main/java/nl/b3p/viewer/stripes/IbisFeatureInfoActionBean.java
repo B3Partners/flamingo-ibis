@@ -67,18 +67,23 @@ public class IbisFeatureInfoActionBean extends FeatureInfoActionBean implements 
         if (this.getLayer().getName().equalsIgnoreCase(KAVEL_LAYER_NAME)
                 || this.getLayer().getName().equalsIgnoreCase(TERREIN_LAYER_NAME)) {
 
+            IbisFeatureToJson ftjson = new IbisFeatureToJson(
+                    this.isArrays(),
+                    this.isEdit(),
+                    this.isGraph(),
+                    this.getAttributesToInclude());
+
             if (Authorizations.isAppLayerWriteAuthorized(this.getApplication(), al,
                     this.getContext().getRequest(), Stripersist.getEntityManager())) {
                 // workflow/edit behaviour
                 log.debug("Executing custom IBIS featureinfo for authorized user on layer " + this.getLayer().getName());
-                IbisFeatureToJson ftjson = new IbisFeatureToJson(this.isArrays(), this.isEdit(), this.isGraph(), this.getAttributesToInclude());
                 features = ftjson.getWorkflowJSONFeatures(al, this.getLayer().getFeatureType(), fs, q);
             } else {
                 log.debug("Executing custom IBIS featureinfo for non-authorized user on layer " + this.getLayer().getName());
-                IbisFeatureToJson ftjson = new IbisFeatureToJson(this.isArrays(), this.isEdit(), this.isGraph(), this.getAttributesToInclude());
                 features = ftjson.getDefinitiefJSONFeatures(al, this.getLayer().getFeatureType(), fs, q);
             }
-        } else {
+
+        } else /* not a special layer in this application */ {
             log.debug("Executing default IBIS featureinfo for any user on layer " + this.getLayer().getName());
             // default behaviour for any other layers
             FeatureToJson ftjson = new FeatureToJson(this.isArrays(), this.isEdit(), this.isGraph(), this.getAttributesToInclude());

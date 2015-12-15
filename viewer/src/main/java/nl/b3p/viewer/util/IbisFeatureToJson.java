@@ -42,11 +42,11 @@ import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureSource;
 import org.geotools.data.Query;
 import org.geotools.data.simple.SimpleFeatureCollection;
+import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.feature.collection.SortedSimpleFeatureCollection;
 import org.geotools.filter.text.cql2.CQL;
-import org.geotools.filter.visitor.SimplifyingFilterVisitor;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -190,7 +190,8 @@ public class IbisFeatureToJson {
      * @throws JSONException
      * @throws Exception
      */
-    public JSONArray getDefinitiefJSONFeatures(ApplicationLayer al, SimpleFeatureType ft, FeatureSource fs, Query q) throws IOException, JSONException, Exception {
+    public JSONArray getDefinitiefJSONFeatures(ApplicationLayer al, SimpleFeatureType ft, FeatureSource fs, Query q)
+            throws IOException, JSONException, Exception {
         log.debug("Ophalen definitief json features met: " + q);
         Map<String, String> attributeAliases = new HashMap<>();
         if (!edit) {
@@ -226,28 +227,30 @@ public class IbisFeatureToJson {
             SimpleFeatureCollection feats = (SimpleFeatureCollection) fs.getFeatures(q);
             FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
             Filter definitief = ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false);
-            SimpleFeatureCollection defn = feats.subCollection(definitief);
-            SimpleFeature feature;
-
+            SimpleFeatureCollection defSFC = DataUtilities.collection(feats.subCollection(definitief));
+            
             int featureIndex = 0;
-            while (defn.features().hasNext()) {
-                feature = defn.features().next();
-                /* if offset not supported and there are more features returned then
-                 * only get the features after index >= start*/
-                if (offsetSupported || featureIndex >= start) {
-                    JSONObject j = this.toJSONFeature(new JSONObject(), feature, ft, al, propertyNames, attributeAliases, 0);
-                    features.put(j);
+            SimpleFeature feature;
+            try (SimpleFeatureIterator defs = defSFC.features()) {
+                while (defs.hasNext()) {
+                    feature = defs.next();
+                    /* if offset not supported and there are more features returned then
+                     * only get the features after index >= start*/
+                    if (offsetSupported || featureIndex >= start) {
+                        JSONObject j = this.toJSONFeature(new JSONObject(), feature, ft, al, propertyNames, attributeAliases, 0);
+                        features.put(j);
+                    }
+                    featureIndex++;
                 }
-                featureIndex++;
             }
-            defn.features().close();
         } finally {
             fs.getDataStore().dispose();
         }
         return features;
     }
 
-    private JSONObject toJSONFeature(JSONObject j, SimpleFeature f, SimpleFeatureType ft, ApplicationLayer al, List<String> propertyNames, Map<String, String> attributeAliases, int index) throws JSONException, Exception {
+    private JSONObject toJSONFeature(JSONObject j, SimpleFeature f, SimpleFeatureType ft, ApplicationLayer al, List<String> propertyNames, Map<String, String> attributeAliases, int index)
+            throws JSONException, Exception {
         if (arrays) {
             for (String name : propertyNames) {
                 Object value = f.getAttribute(name);
@@ -442,19 +445,4 @@ public class IbisFeatureToJson {
             return null;
         }
     }
-
-//    public static Filter reformatFilter(Filter filter, SimpleFeatureType ft) throws Exception {
-//        FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
-//        if (Filter.INCLUDE.equals(filter) || Filter.EXCLUDE.equals(filter)) {
-//            return filter;
-//        }
-//        for (FeatureTypeRelation rel : ft.getRelations()) {
-//            if (FeatureTypeRelation.JOIN.equals(rel.getType())) {
-//                filter = reformatFilter(filter, rel.getForeignFeatureType());
-//                filter = (Filter) filter.accept(new ValidFilterExtractor(rel), filter);
-//            }
-//        }
-//        filter = (Filter) filter.accept(new SimplifyingFilterVisitor(), null);
-//        return filter;
-//    }
 }
