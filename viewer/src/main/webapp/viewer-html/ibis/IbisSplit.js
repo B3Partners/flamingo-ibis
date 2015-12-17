@@ -56,7 +56,7 @@ Ext.define("viewer.components.IbisSplit", {
         var obj = {};
         obj[workflowFieldName] = this.status.get("id");
         obj[mutatiedatumFieldName] = this.maincontainer.getComponent(mutatiedatumFieldName).getValue();
-        // reden veld ontbreekt in datamodel!
+        // reden veld ontbreekt in datamodel! en terreinen kunnen niet gesplitst worden
         // obj[redenFieldName] = 'splitsing';
         return Ext.util.JSON.encode(obj);
     },

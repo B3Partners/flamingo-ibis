@@ -62,7 +62,7 @@ Ext.define("viewer.components.IbisMerge", {
         var obj = {};
         obj[mutatiedatumFieldName] = this.maincontainer.getComponent(mutatiedatumFieldName).getValue();
         obj[workflowFieldName] = this.status.get("id");
-        // reden veld ontbreekt in datamodel!
+        // reden veld ontbreekt in datamodel van kavels en terreinen kunnen niet samengevoegd worden!
         // obj[redenFieldName] = 'samenvoeging';
         return Ext.util.JSON.encode(obj);
     },
