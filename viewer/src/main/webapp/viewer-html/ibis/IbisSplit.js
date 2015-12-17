@@ -67,6 +67,11 @@ Ext.define("viewer.components.IbisSplit", {
                     getMinMutatiedatum(feature[mutatiedatumFieldName]));
         }
     },
+    save: function () {
+        if (this.maincontainer.getComponent(mutatiedatumFieldName).isValid()) {
+            this.superclass.save.call(this);
+        }
+    },
     saveSucces: function (response, me) {
         Ext.Object.eachValue(me.config.viewerController.app.appLayers, function (appLayer) {
             if (appLayer.layerName === terreinenLayerName) {

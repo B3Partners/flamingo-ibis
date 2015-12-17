@@ -79,7 +79,11 @@ Ext.define("viewer.components.IbisMerge", {
                 var minMutDate = (this.mutDateA.getTime() > this.mutDateB.getTime()) ? this.mutDateA : this.mutDateB;
                 this.maincontainer.getComponent(mutatiedatumFieldName).setMinValue(minMutDate);
             }
-
+        }
+    },
+    save: function () {
+        if (this.maincontainer.getComponent(mutatiedatumFieldName).isValid()) {
+            this.superclass.save.call(this);
         }
     },
     saveSucces: function (response, me) {

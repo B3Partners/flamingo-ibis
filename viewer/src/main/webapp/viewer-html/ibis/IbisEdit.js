@@ -227,6 +227,9 @@ Ext.define("viewer.components.IbisEdit", {
      * @override
      */
     save: function () {
+        if (!this.inputContainer.getForm().findField('datummutatie').isValid()) {
+            return;
+        }
         if (this.mode === "delete") {
             this.remove();
             return;
