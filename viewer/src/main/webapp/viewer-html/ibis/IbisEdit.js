@@ -46,10 +46,12 @@ Ext.define("viewer.components.IbisEdit", {
         viewer.components.IbisEdit.superclass.constructor.call(this, conf);
         this.workflow_fieldname = workflowFieldName;
         this.workflowStore = Ext.data.StoreManager.lookup('IbisWorkflowStore');
-        this.maincontainer.add([{id: this.name + "workflowLabel",
+        this.maincontainer.add([{
+                id: this.name + "workflowLabel",
                 margin: 5,
                 text: '',
-                xtype: "label"}]);
+                xtype: "label"}
+        ]);
 
         return this;
     },
@@ -144,13 +146,14 @@ Ext.define("viewer.components.IbisEdit", {
     },
     handleFeature: function (feature) {
         this.superclass.handleFeature.call(this, feature);
-        var s = "";
+        
+        //console.debug('Ext.getCmp(this.workflow_fieldname)', Ext.getCmp(this.workflow_fieldname));
 
         if (Ext.getCmp(this.workflow_fieldname) === undefined) {
+
             // workflow field is missing, add a hidden one to __unprefixed__ accordion of the form panels
-            // if added it inputContainer it will throw a layout error
+            // if added to inputContainer it will throw a layout error
             this.tabbedFormPanels.__unprefixed__.add({
-                //xtype: 'hidden',
                 xtype: 'combo',
                 hidden: true,
                 name: this.workflow_fieldname,
@@ -163,13 +166,14 @@ Ext.define("viewer.components.IbisEdit", {
         }
 
         this.inputContainer.getForm().findField('datummutatie').setMinValue(
-                getMinMutatiedatum(feature[mutatiedatumFieldName]));
-
+                getMinMutatiedatum(feature[mutatiedatumFieldName]
+                        ));
+        var s = "";
         if (this.mode === "copy") {
             setNextIbisWorkflowStatus({}, 'bewerkt', Ext.getCmp(this.workflow_fieldname));
             s = this.workflowStore.getById('bewerkt').get("label");
         } else {
-            setNextIbisWorkflowStatus(user.roles, feature.workflow_status, Ext.getCmp(this.workflow_fieldname));
+            setNextIbisWorkflowStatus(user.roles, feature[this.workflow_fieldname], Ext.getCmp(this.workflow_fieldname));
             var wf = feature[this.workflow_fieldname] || 'bewerkt';
             s = this.workflowStore.getById(wf).get("label");
         }
@@ -318,7 +322,7 @@ Ext.define("viewer.components.IbisEdit", {
      */
     changeFeatureBeforeSave: function (feature) {
         if (this.mode === "copy") {
-            // in copy mode force nieuw and delete the fid
+            // in copy mode force 'bewerkt' and delete the fid
             feature[this.workflow_fieldname] = this.workflowStore.getById('bewerkt').getId();
             this.currentFID = null;
             delete feature.__fid;

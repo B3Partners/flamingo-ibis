@@ -86,7 +86,7 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
     protected void deleteFeature(String fid) throws IOException, Exception {
         log.debug("ibis deleteFeature: " + fid);
 
-        Transaction transaction = new DefaultTransaction("edit");
+        Transaction transaction = new DefaultTransaction("ibis_delete");
         this.getStore().setTransaction(transaction);
 
         FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
@@ -157,7 +157,7 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
         log.debug(String.format("Modifying feature source #%d fid=%s, attributes=%s, values=%s",
                 this.getLayer().getFeatureType().getId(), fid, attributes.toString(), values.toString()));
 
-        Transaction editTransaction = new DefaultTransaction("edit");
+        Transaction editTransaction = new DefaultTransaction("ibis_edit");
         this.getStore().setTransaction(editTransaction);
         try {
             if (incomingWorkflowStatus == null) {
@@ -165,6 +165,7 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
             }
             SimpleFeature original = this.getStore().getFeatures(fidFilter).features().next();
             Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);
+            WorkflowStatus originalWorkflowStatus = WorkflowStatus.valueOf(original.getAttribute(WORKFLOW_FIELDNAME).toString());
 
             // make a copy of the original feature and set (new) attribute values on the copy
             SimpleFeature editedNewFeature = createCopy(original);
@@ -182,20 +183,34 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
                     ff.equals(ff.property(ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME))),
                     ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.name()), false)
             );
-            boolean bewerktExists = (this.getStore().getFeatures(bewerkt).size() > 0);
+            int aantalBewerkt = this.getStore().getFeatures(bewerkt).size();
+            boolean bewerktExists = (aantalBewerkt > 0);
 
             switch (incomingWorkflowStatus) {
                 case bewerkt:
-                    if (original.getAttribute(WORKFLOW_FIELDNAME).toString().equalsIgnoreCase(WorkflowStatus.definitief.name())) {
+                    if (originalWorkflowStatus.equals(WorkflowStatus.definitief)) {
                         // definitief -> bewerkt
+                        if (bewerktExists) {
+                            // delete existing bewerkt
+                            this.getStore().removeFeatures(bewerkt);
+                        }
                         // insert new record with original id and workflowstatus "bewerkt", leave original "definitief"
                         this.getStore().addFeatures(DataUtilities.collection(editedNewFeature));
-                    } else if (!isSameMutatiedatum(original.getAttribute(MUTATIEDATUM_FIELDNAME), editedNewFeature.getAttribute(MUTATIEDATUM_FIELDNAME))) {
-                        //bewerkt -> bewerkt w/ new date
+                    } else if (originalWorkflowStatus.equals(WorkflowStatus.bewerkt)) {
+                        // bewerkt -> bewerkt, overwrite, only one 'bewerkt' is allowed
+                        if (aantalBewerkt > 1) {
+                            log.error("Er is meer dan 1 bewerkt kavel/terrein voor " + ID_FIELDNAME + "=" + original.getAttribute(ID_FIELDNAME));
+                            // more than 1 bewerkt, move them to archief
+                            this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, bewerkt);
+                        }
                         this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);
                     } else {
-                        // same date and workflow status, overwite existing
-                        this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);
+                        // other behaviour not documented eg. archief -> bewerkt, afgevoerd -> bewerkt
+                        //  and not possible to occur in the application as only definitief and bewerkt can be edited
+                        throw new IllegalArgumentException(String.format(
+                                "Niet ondersteunde workflow stap van %s naar %s",
+                                originalWorkflowStatus.label(),
+                                incomingWorkflowStatus.label()));
                     }
                     break;
                 case definitief:
@@ -203,14 +218,19 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
                         // check if any "definitief" exists for this id and move that to "archief"
                         this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, definitief);
                     }
-                    if (original.getAttribute(WORKFLOW_FIELDNAME).toString().equalsIgnoreCase(WorkflowStatus.definitief.name())) {
+                    if (originalWorkflowStatus.equals(WorkflowStatus.definitief)) {
                         // if the original was "definitief" insert a new "definitief"
                         this.getStore().addFeatures(DataUtilities.collection(editedNewFeature));
-                    } else if (original.getAttribute(WORKFLOW_FIELDNAME).toString().equalsIgnoreCase(WorkflowStatus.bewerkt.name())) {
+                    } else if (originalWorkflowStatus.equals(WorkflowStatus.bewerkt)) {
                         // if original was "bewerkt" update this to "definitief" with the edits
                         this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);
                     } else {
                         // other behaviour not documented eg. archief -> definitief, afgevoerd -> definitief
+                        //  and not possible to occur in the application as only definitief and bewerkt can be edited
+                        throw new IllegalArgumentException(String.format(
+                                "Niet ondersteunde workflow stap van %s naar %s",
+                                originalWorkflowStatus.label(),
+                                incomingWorkflowStatus.label()));
                     }
                     break;
                 case afgevoerd:
@@ -237,14 +257,14 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
             }
 
             editTransaction.commit();
-
+            editTransaction.close();
             // update terrein geometry
             if (terreinID != null) {
                 WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), this.getLayer(), incomingWorkflowStatus, this.getApplication(), Stripersist.getEntityManager());
             }
         } catch (IllegalArgumentException | IOException | NoSuchElementException e) {
             editTransaction.rollback();
-            log.error("editFeature error", e);
+            log.error("Ibis editFeature error", e);
             throw e;
         }
     }
