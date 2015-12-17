@@ -147,30 +147,41 @@ public class IbisFeatureToJson {
                 ff.sort(WORKFLOW_FIELDNAME, SortOrder.ASCENDING),
                 ff.sort(MUTATIEDATUM_FIELDNAME, SortOrder.DESCENDING)
             };
-            for (Object id : idlist) {
-                filter = ff.and(
-                        ff.equals(ff.property(ID_FIELDNAME), ff.literal(id)),
-                        ff.or(
-                                ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false),
-                                ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.name()), false)
-                        ));
-                sorted = new SortedSimpleFeatureCollection(inMem.subCollection(filter), sortBy);
-                actFeat = DataUtilities.first(sorted);
-                if (actFeat != null) {
-                    actueel.add(actFeat);
-                }
-            }
+            if (idlist != null && idlist.size() > 0) {
+                for (Object id : idlist) {
+                    filter = ff.and(
+                            ff.equals(ff.property(ID_FIELDNAME), ff.literal(id)),
+                            ff.or(
+                                    ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false),
+                                    ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.name()), false)
+                            ));
+                    sorted = new SortedSimpleFeatureCollection(inMem.subCollection(filter), sortBy);
 
-            int featureIndex = 0;
+                    if (log.isDebugEnabled()) {
+                        SimpleFeatureIterator sfi = sorted.features();
+                        while (sfi.hasNext()) {
+                            log.debug("gevonden feature: " + sfi.next());
+                        }
+                    }
 
-            for (SimpleFeature feature : actueel) {
-                /* if offset not supported and there are more features returned then
-                 * only get the features after index >= start*/
-                if (offsetSupported || featureIndex >= start) {
-                    JSONObject j = this.toJSONFeature(new JSONObject(), feature, ft, al, propertyNames, attributeAliases, 0);
-                    features.put(j);
+                    actFeat = DataUtilities.first(sorted);
+                    log.debug("actuele feature: " + actFeat);
+                    if (actFeat != null) {
+                        actueel.add(actFeat);
+                    }
                 }
-                featureIndex++;
+
+                int featureIndex = 0;
+
+                for (SimpleFeature feature : actueel) {
+                    /* if offset not supported and there are more features returned then
+                     * only get the features after index >= start*/
+                    if (offsetSupported || featureIndex >= start) {
+                        JSONObject j = this.toJSONFeature(new JSONObject(), feature, ft, al, propertyNames, attributeAliases, 0);
+                        features.put(j);
+                    }
+                    featureIndex++;
+                }
             }
         } finally {
             fs.getDataStore().dispose();
@@ -228,7 +239,7 @@ public class IbisFeatureToJson {
             FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
             Filter definitief = ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false);
             SimpleFeatureCollection defSFC = DataUtilities.collection(feats.subCollection(definitief));
-            
+
             int featureIndex = 0;
             SimpleFeature feature;
             try (SimpleFeatureIterator defs = defSFC.features()) {
