@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// nl.b3p.viewer.util.IbisFeatureToJson
-	c216 [label=<<table title="nl.b3p.viewer.util.IbisFeatureToJson" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisFeatureToJson.html">
+	c214 [label=<<table title="nl.b3p.viewer.util.IbisFeatureToJson" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisFeatureToJson.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisFeatureToJson </td></tr>
 		</table></td></tr>
@@ -23,28 +23,8 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + IbisFeatureToJson(arrays : boolean, edit : boolean, graph : boolean, attributesToInclude : List&lt;Long&gt;) </td></tr>
 <tr><td align="left" balign="left"> + getWorkflowJSONFeatures(al : ApplicationLayer, ft : SimpleFeatureType, fs : FeatureSource&lt;&gt;, q : Query) : JSONArray </td></tr>
-<tr><td align="left" balign="left"> + reformatFilter(filter : Filter, ft : SimpleFeatureType) : Filter </td></tr>
+<tr><td align="left" balign="left"> + getDefinitiefJSONFeatures(al : ApplicationLayer, ft : SimpleFeatureType, fs : FeatureSource&lt;&gt;, q : Query) : JSONArray </td></tr>
 		</table></td></tr>
 		</table>>, URL="./IbisFeatureToJson.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// nl.b3p.viewer.util.IbisFeatureToJson NAVASSOC nl.b3p.viewer.util.FeatureToJson
-	c216:p -> c217:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// nl.b3p.viewer.util.FeatureToJson
-	c217 [label=<<table title="nl.b3p.viewer.util.FeatureToJson" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> FeatureToJson </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + MAX_FEATURES : int </td></tr>
-<tr><td align="left" balign="left"> ~ propertyNamesQueryCache : HashMap&lt;Long, List&lt;String&gt;&gt; </td></tr>
-<tr><td align="left" balign="left"> ~ haveInvisiblePropertiesCache : HashMap&lt;Long, Boolean&gt; </td></tr>
-<tr><td align="left" balign="left"> ~ propertyNamesReturnCache : HashMap&lt;Long, List&lt;String&gt;&gt; </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + FeatureToJson(arg0 : boolean, arg1 : boolean) </td></tr>
-<tr><td align="left" balign="left"> + FeatureToJson(arg0 : boolean, arg1 : boolean, arg2 : boolean, arg3 : List&lt;Long&gt;) </td></tr>
-<tr><td align="left" balign="left"> + getJSONFeatures(arg0 : ApplicationLayer, arg1 : SimpleFeatureType, arg2 : FeatureSource&lt;&gt;, arg3 : Query, arg4 : String, arg5 : String) : JSONArray </td></tr>
-<tr><td align="left" balign="left"> + reformatFilter(arg0 : Filter, arg1 : SimpleFeatureType) : Filter </td></tr>
-		</table></td></tr>
-		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
 
