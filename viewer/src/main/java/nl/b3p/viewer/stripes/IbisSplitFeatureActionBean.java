@@ -51,9 +51,9 @@ import org.stripesstuff.stripersist.Stripersist;
 @UrlBinding("/action/feature/ibissplit")
 @StrictBinding
 public class IbisSplitFeatureActionBean extends SplitFeatureActionBean implements IbisConstants {
-    
+
     private static final Log log = LogFactory.getLog(IbisSplitFeatureActionBean.class);
-    
+
     private Object terreinID = null;
     private WorkflowStatus newWorkflowStatus = WorkflowStatus.definitief;
 
@@ -92,30 +92,22 @@ public class IbisSplitFeatureActionBean extends SplitFeatureActionBean implement
     @Override
     protected List<FeatureId> handleStrategy(SimpleFeature feature, List<? extends Geometry> geoms,
             Filter filter, SimpleFeatureStore localStore, String localStrategy) throws Exception {
-        
+
+        if (!this.getLayer().getName().equalsIgnoreCase(KAVEL_LAYER_NAME)) {
+            throw new IllegalArgumentException("Aborting as split layer is not " + KAVEL_LAYER_NAME);
+        }
+
         List<SimpleFeature> newFeats = new ArrayList();
         GeometryTypeConverterFactory cf = new GeometryTypeConverterFactory();
         Converter c = cf.createConverter(Geometry.class, localStore.getSchema().getGeometryDescriptor().getType().getBinding(), null);
         GeometryType type = localStore.getSchema().getGeometryDescriptor().getType();
         String geomAttribute = localStore.getSchema().getGeometryDescriptor().getLocalName();
-        
+
         boolean firstFeature = true;
         int newID = (int) (new Date().getTime() / 1000);
         for (Geometry newGeom : geoms) {
             log.debug("Creating feature with geom: " + newGeom.getLength());
             if (firstFeature) {
-//                if (localStrategy.equalsIgnoreCase("replace")) {
-//                    // IBIS MUST USE add STRATEGY
-//                    // use first/largest geom to update existing feature geom
-//                    feature.setAttribute(geomAttribute, c.convert(newGeom, type.getBinding()));
-//                    feature = this.handleExtraData(feature);
-//                    Object[] attributevalues = feature.getAttributes().toArray(new Object[feature.getAttributeCount()]);
-//                    AttributeDescriptor[] attributes = feature.getFeatureType().getAttributeDescriptors()
-//                            .toArray(new AttributeDescriptor[feature.getAttributeCount()]);
-//                    localStore.modifyFeatures(attributes, attributevalues, filter);
-//                    firstFeature = false;
-//                    continue;
-//                } else
                 if (localStrategy.equalsIgnoreCase("add")) {
                     // existing feature to "archief"
                     feature.setAttribute(WORKFLOW_FIELDNAME, WorkflowStatus.archief);
@@ -131,7 +123,6 @@ public class IbisSplitFeatureActionBean extends SplitFeatureActionBean implement
                             DataUtilities.encodeFeature(feature, false));
                     newFeat.setAttribute(geomAttribute, c.convert(newGeom, type.getBinding()));
                     newFeats.add(newFeat);
-                    
                     firstFeature = false;
                     continue;
                 } else {

@@ -88,6 +88,11 @@ public class IbisMergeFeaturesActionBean extends MergeFeaturesActionBean impleme
     protected List<FeatureId> handleStrategy(SimpleFeature featureA, SimpleFeature featureB,
             Geometry newGeom, Filter filterA, Filter filterB, SimpleFeatureStore localStore, String localStrategy) throws Exception {
         List<FeatureId> ids = new ArrayList();
+
+        if (!this.getLayer().getName().equalsIgnoreCase(KAVEL_LAYER_NAME)) {
+            throw new IllegalArgumentException("Aborting as merge layer is not " + KAVEL_LAYER_NAME);
+        }
+
         String geomAttrName = localStore.getSchema().getGeometryDescriptor().getLocalName();
         GeometryType type = localStore.getSchema().getGeometryDescriptor().getType();
         GeometryTypeConverterFactory cf = new GeometryTypeConverterFactory();
@@ -95,33 +100,11 @@ public class IbisMergeFeaturesActionBean extends MergeFeaturesActionBean impleme
                 localStore.getSchema().getGeometryDescriptor().getType().getBinding(),
                 null);
 
-//        if (this.getStrategy().equalsIgnoreCase("replace")) {
-//
-//            //create a copy of A and add status archief
-//            SimpleFeature archiveFeatA = DataUtilities.createFeature(featureA.getType(),
-//                    DataUtilities.encodeFeature(featureA, false));
-//            archiveFeatA.setAttribute(IbisConstants.WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd);
-//            localStore.addFeatures(DataUtilities.collection(archiveFeatA));
-//
-//            // update feature A, add new geom and new status
-//            featureA.setAttribute(geomAttrName, c.convert(newGeom, type.getBinding()));
-//            featureA = this.handleExtraData(featureA);
-//            Object[] attributevalues = featureA.getAttributes().toArray(new Object[featureA.getAttributeCount()]);
-//            AttributeDescriptor[] attributes = featureA.getFeatureType().getAttributeDescriptors().toArray(new AttributeDescriptor[featureA.getAttributeCount()]);
-//            localStore.modifyFeatures(attributes, attributevalues, filterA);
-//
-//            // update B with status afgevoerd, null terreinid
-//            String[] fields = new String[]{WORKFLOW_FIELDNAME, KAVEL_TERREIN_ID_FIELDNAME};
-//            Object[] values = new Object[]{WorkflowStatus.afgevoerd, null};
-//            localStore.modifyFeatures(fields, values, filterB);
-//
-//            ids.add(new FeatureIdImpl(this.getFidA()));
-//        } else
         if (this.getStrategy().equalsIgnoreCase("new")) {
             // archive the source feature (A)
             localStore.modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, filterA);
 
-            // update B with status afgevoerd, null terreinid
+            // update B with status afgevoerd, and a null terreinid
             String[] fields = new String[]{WORKFLOW_FIELDNAME, KAVEL_TERREIN_ID_FIELDNAME};
             Object[] values = new Object[]{WorkflowStatus.afgevoerd, null};
             localStore.modifyFeatures(fields, values, filterB);
