@@ -2,8 +2,10 @@
 
 -- DROP VIEW "IBIS".v_kavel_oppervlakte;
 
-CREATE OR REPLACE VIEW "IBIS".v_kavel_oppervlakte AS 
- SELECT v_actuele_kavels.id,
+CREATE OR REPLACE VIEW "IBIS".v_kavel_oppervlakte AS
+ SELECT
+    v_actuele_kavels.gt_key,
+    v_actuele_kavels.ibis_id,
     v_actuele_kavels.terreinid,
     v_actuele_kavels.status,
     round(st_area(v_actuele_kavels.geom)::numeric / 10000::numeric, 8) AS opp_geometrie_ha

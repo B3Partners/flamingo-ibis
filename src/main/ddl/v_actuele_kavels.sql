@@ -3,7 +3,8 @@
 -- DROP VIEW "IBIS".v_actuele_kavels;
 
 CREATE OR REPLACE VIEW "IBIS".v_actuele_kavels AS 
- SELECT bedrijvenkavels.id,
+ SELECT bedrijvenkavels.gt_key,
+    bedrijvenkavels.ibis_id,
     bedrijvenkavels.workflow_status,
     bedrijvenkavels.datummutatie,
     bedrijvenkavels.terreinid,
@@ -12,7 +13,6 @@ CREATE OR REPLACE VIEW "IBIS".v_actuele_kavels AS
     bedrijvenkavels.uitgegevenaan,
     bedrijvenkavels.eerstejaaruitgifte,
     bedrijvenkavels.faseveroudering,
-    bedrijvenkavels.gemeenteid,
     bedrijvenkavels.gemeentenaam,
     bedrijvenkavels.geom
    FROM bedrijvenkavels

@@ -2,8 +2,10 @@
 
 -- DROP VIEW "IBIS".v_component_ibis_report_uitgifte;
 
-CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report_uitgifte AS 
- SELECT v_actuele_kavels.id AS kavelid,
+CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report_uitgifte AS
+SELECT
+    v_actuele_kavels.gt_key,
+    v_actuele_kavels.ibis_id AS kavelid,
     v_actuele_kavels.terreinid,
     v_actuele_kavels.status,
     v_actuele_kavels.uitgegevenaan,
@@ -16,7 +18,7 @@ CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report_uitgifte AS
     bedrijventerrein,
     v_kavel_oppervlakte,
     v_gemeente_en_regio_envelopes
-  WHERE v_actuele_kavels.id = v_kavel_oppervlakte.id AND bedrijventerrein.id = v_actuele_kavels.terreinid AND bedrijventerrein.gemeenteid = v_gemeente_en_regio_envelopes.gem_id;
+  WHERE v_actuele_kavels.gt_key = v_kavel_oppervlakte.gt_key AND bedrijventerrein.ibis_id = v_actuele_kavels.terreinid AND bedrijventerrein.gemeente_naam = v_gemeente_en_regio_envelopes.naam;
 
 ALTER TABLE "IBIS".v_component_ibis_report_uitgifte
   OWNER TO ibis;

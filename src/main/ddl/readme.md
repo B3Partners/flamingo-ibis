@@ -3,6 +3,7 @@
 ## Views
 Some views depend on others, use the following order to create the views:
 
+1. v_actuele_kavels.sql
 1. v_kavel_oppervlakte.sql
 1. v_terrein_oppervlakte.sql
 1. v_gemeente_en_regio_envelopes.sql

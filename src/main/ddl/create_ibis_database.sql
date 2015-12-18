@@ -5,7 +5,7 @@
 -- Dumped from database version 9.3.9
 -- Dumped by pg_dump version 9.4.5
 -- using /usr/bin/pg_dump --host ibis.b3p.nl --port 5432 --username "ibis" --no-password  --format plain --schema-only --create --verbose --file "/home/mark/Desktop/create_ibis_database.sql" --schema "\"IBIS\"" "flamingo-ibis-test"
--- Started on 2015-12-18 16:41:28 CET
+-- Started on 2015-12-18 18:20:09 CET
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -149,7 +149,7 @@ SET default_with_oids = true;
 --
 
 CREATE TABLE bedrijvenkavels (
-    id bigint NOT NULL,
+    ibis_id bigint NOT NULL,
     workflow_status character varying(50) NOT NULL,
     datummutatie date NOT NULL,
     terreinid integer,
@@ -158,7 +158,6 @@ CREATE TABLE bedrijvenkavels (
     uitgegevenaan character varying(255),
     eerstejaaruitgifte integer,
     faseveroudering character varying(100),
-    gemeenteid bigint,
     gemeentenaam character varying(100),
     geom public.geometry(Polygon,28992),
     gt_key bigint NOT NULL,
@@ -169,7 +168,7 @@ CREATE TABLE bedrijvenkavels (
 ALTER TABLE bedrijvenkavels OWNER TO ibis;
 
 --
--- TOC entry 208 (class 1259 OID 5522288)
+-- TOC entry 200 (class 1259 OID 5522288)
 -- Name: bedrijvenkavels_gt_key_seq; Type: SEQUENCE; Schema: IBIS; Owner: ibis
 --
 
@@ -185,7 +184,7 @@ ALTER TABLE bedrijvenkavels_gt_key_seq OWNER TO ibis;
 
 --
 -- TOC entry 3300 (class 0 OID 0)
--- Dependencies: 208
+-- Dependencies: 200
 -- Name: bedrijvenkavels_gt_key_seq; Type: SEQUENCE OWNED BY; Schema: IBIS; Owner: ibis
 --
 
@@ -198,7 +197,7 @@ ALTER SEQUENCE bedrijvenkavels_gt_key_seq OWNED BY bedrijvenkavels.gt_key;
 --
 
 CREATE TABLE bedrijventerrein (
-    id integer NOT NULL,
+    ibis_id integer NOT NULL,
     rin_nr integer,
     datummutatie date NOT NULL,
     reden character varying(70),
@@ -242,9 +241,9 @@ CREATE TABLE bedrijventerrein (
     o_spoorontsluiting character varying(100),
     o_waterontsluiting character varying(100),
     o_wegontsluiting character varying(100),
-    gemeenteid integer,
     geom public.geometry(MultiPolygon,28992),
     gt_pkey bigint NOT NULL,
+    gemeente_naam character varying(100),
     CONSTRAINT valid_workflow_status CHECK (((workflow_status)::text = ANY (ARRAY[('definitief'::character varying)::text, ('bewerkt'::character varying)::text, ('archief'::character varying)::text, ('afgevoerd'::character varying)::text])))
 );
 
@@ -252,7 +251,7 @@ CREATE TABLE bedrijventerrein (
 ALTER TABLE bedrijventerrein OWNER TO ibis;
 
 --
--- TOC entry 209 (class 1259 OID 5522808)
+-- TOC entry 201 (class 1259 OID 5522808)
 -- Name: bedrijventerrein_gt_pkey_seq; Type: SEQUENCE; Schema: IBIS; Owner: ibis
 --
 
@@ -268,7 +267,7 @@ ALTER TABLE bedrijventerrein_gt_pkey_seq OWNER TO ibis;
 
 --
 -- TOC entry 3301 (class 0 OID 0)
--- Dependencies: 209
+-- Dependencies: 201
 -- Name: bedrijventerrein_gt_pkey_seq; Type: SEQUENCE OWNED BY; Schema: IBIS; Owner: ibis
 --
 
@@ -384,12 +383,13 @@ CREATE TABLE gt_pk_metadata (
 ALTER TABLE gt_pk_metadata OWNER TO ibis;
 
 --
--- TOC entry 195 (class 1259 OID 5499678)
+-- TOC entry 202 (class 1259 OID 5552611)
 -- Name: v_actuele_kavels; Type: VIEW; Schema: IBIS; Owner: ibis
 --
 
 CREATE VIEW v_actuele_kavels AS
- SELECT bedrijvenkavels.id,
+ SELECT bedrijvenkavels.gt_key,
+    bedrijvenkavels.ibis_id,
     bedrijvenkavels.workflow_status,
     bedrijvenkavels.datummutatie,
     bedrijvenkavels.terreinid,
@@ -398,7 +398,6 @@ CREATE VIEW v_actuele_kavels AS
     bedrijvenkavels.uitgegevenaan,
     bedrijvenkavels.eerstejaaruitgifte,
     bedrijvenkavels.faseveroudering,
-    bedrijvenkavels.gemeenteid,
     bedrijvenkavels.gemeentenaam,
     bedrijvenkavels.geom
    FROM bedrijvenkavels
@@ -408,7 +407,7 @@ CREATE VIEW v_actuele_kavels AS
 ALTER TABLE v_actuele_kavels OWNER TO ibis;
 
 --
--- TOC entry 196 (class 1259 OID 5499682)
+-- TOC entry 205 (class 1259 OID 5552624)
 -- Name: owner; Type: VIEW; Schema: IBIS; Owner: ibis
 --
 
@@ -423,7 +422,7 @@ ALTER TABLE owner OWNER TO ibis;
 
 --
 -- TOC entry 3304 (class 0 OID 0)
--- Dependencies: 196
+-- Dependencies: 205
 -- Name: VIEW owner; Type: COMMENT; Schema: IBIS; Owner: ibis
 --
 
@@ -433,7 +432,7 @@ COMMENT ON VIEW owner IS 'Geeft de het aantal beschikbare panden op een terrein'
 SET default_with_oids = true;
 
 --
--- TOC entry 197 (class 1259 OID 5499686)
+-- TOC entry 195 (class 1259 OID 5499686)
 -- Name: regio; Type: TABLE; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
@@ -448,7 +447,7 @@ CREATE TABLE regio (
 ALTER TABLE regio OWNER TO ibis;
 
 --
--- TOC entry 198 (class 1259 OID 5499692)
+-- TOC entry 196 (class 1259 OID 5499692)
 -- Name: v_gemeente_en_regio_envelopes; Type: VIEW; Schema: IBIS; Owner: ibis
 --
 
@@ -472,7 +471,7 @@ ALTER TABLE v_gemeente_en_regio_envelopes OWNER TO ibis;
 
 --
 -- TOC entry 3305 (class 0 OID 0)
--- Dependencies: 198
+-- Dependencies: 196
 -- Name: VIEW v_gemeente_en_regio_envelopes; Type: COMMENT; Schema: IBIS; Owner: ibis
 --
 
@@ -480,12 +479,13 @@ COMMENT ON VIEW v_gemeente_en_regio_envelopes IS 'Geeft de MBR van de gemeenten 
 
 
 --
--- TOC entry 199 (class 1259 OID 5499696)
+-- TOC entry 203 (class 1259 OID 5552615)
 -- Name: v_kavel_oppervlakte; Type: VIEW; Schema: IBIS; Owner: ibis
 --
 
 CREATE VIEW v_kavel_oppervlakte AS
- SELECT v_actuele_kavels.id,
+ SELECT v_actuele_kavels.gt_key,
+    v_actuele_kavels.ibis_id,
     v_actuele_kavels.terreinid,
     v_actuele_kavels.status,
     round(((public.st_area(v_actuele_kavels.geom))::numeric / (10000)::numeric), 8) AS opp_geometrie_ha
@@ -495,61 +495,62 @@ CREATE VIEW v_kavel_oppervlakte AS
 ALTER TABLE v_kavel_oppervlakte OWNER TO ibis;
 
 --
--- TOC entry 200 (class 1259 OID 5499700)
+-- TOC entry 204 (class 1259 OID 5552619)
 -- Name: v_terrein_oppervlakte; Type: VIEW; Schema: IBIS; Owner: ibis
 --
 
 CREATE VIEW v_terrein_oppervlakte AS
- SELECT t.id,
+ SELECT t.gt_pkey,
+    t.ibis_id,
     t.rin_nr,
     COALESCE(NULLIF(round(((public.st_area(t.geom))::numeric / (10000)::numeric), 4), (0)::numeric), (0)::numeric) AS opp_geom,
     COALESCE(NULLIF(round(( SELECT sum(v_kavel_oppervlakte.opp_geometrie_ha) AS sum
            FROM v_kavel_oppervlakte
-          WHERE ((v_kavel_oppervlakte.terreinid = t.id) AND ((v_kavel_oppervlakte.status)::text = 'Woonbebouwing'::text))
+          WHERE ((v_kavel_oppervlakte.terreinid = t.ibis_id) AND ((v_kavel_oppervlakte.status)::text = 'Woonbebouwing'::text))
           GROUP BY v_kavel_oppervlakte.terreinid), 4), (0)::numeric), (0)::numeric) AS opp_woonbebouwing,
     COALESCE(NULLIF(round(( SELECT sum(v_kavel_oppervlakte.opp_geometrie_ha) AS sum
            FROM v_kavel_oppervlakte
-          WHERE ((v_kavel_oppervlakte.terreinid = t.id) AND ((v_kavel_oppervlakte.status)::text = 'Openbare ruimte'::text))
+          WHERE ((v_kavel_oppervlakte.terreinid = t.ibis_id) AND ((v_kavel_oppervlakte.status)::text = 'Openbare ruimte'::text))
           GROUP BY v_kavel_oppervlakte.terreinid), 4), (0)::numeric), (0)::numeric) AS opp_openbare_ruimte,
     COALESCE(NULLIF(round(( SELECT sum(v_kavel_oppervlakte.opp_geometrie_ha) AS sum
            FROM v_kavel_oppervlakte
-          WHERE ((v_kavel_oppervlakte.terreinid = t.id) AND ((v_kavel_oppervlakte.status)::text = 'Niet terstond uitgeefbaar particulier'::text))
+          WHERE ((v_kavel_oppervlakte.terreinid = t.ibis_id) AND ((v_kavel_oppervlakte.status)::text = 'Niet terstond uitgeefbaar particulier'::text))
           GROUP BY v_kavel_oppervlakte.terreinid), 4), (0)::numeric), (0)::numeric) AS opp_niet_terstond_uitgeefbaar_part,
     COALESCE(NULLIF(round(( SELECT sum(v_kavel_oppervlakte.opp_geometrie_ha) AS sum
            FROM v_kavel_oppervlakte
-          WHERE ((v_kavel_oppervlakte.terreinid = t.id) AND ((v_kavel_oppervlakte.status)::text = 'Niet terstond uitgeefbaar gemeente'::text))
+          WHERE ((v_kavel_oppervlakte.terreinid = t.ibis_id) AND ((v_kavel_oppervlakte.status)::text = 'Niet terstond uitgeefbaar gemeente'::text))
           GROUP BY v_kavel_oppervlakte.terreinid), 4), (0)::numeric), (0)::numeric) AS opp_niet_terstond_uitgeefbaar_gem,
     COALESCE(NULLIF(round(( SELECT sum(v_kavel_oppervlakte.opp_geometrie_ha) AS sum
            FROM v_kavel_oppervlakte
-          WHERE ((v_kavel_oppervlakte.terreinid = t.id) AND ((v_kavel_oppervlakte.status)::text = 'Uitgegeven'::text))
+          WHERE ((v_kavel_oppervlakte.terreinid = t.ibis_id) AND ((v_kavel_oppervlakte.status)::text = 'Uitgegeven'::text))
           GROUP BY v_kavel_oppervlakte.terreinid), 4), (0)::numeric), (0)::numeric) AS opp_uitgegeven,
     COALESCE(NULLIF(round(( SELECT sum(v_kavel_oppervlakte.opp_geometrie_ha) AS sum
            FROM v_kavel_oppervlakte
-          WHERE ((v_kavel_oppervlakte.terreinid = t.id) AND ((v_kavel_oppervlakte.status)::text = 'Terstond uitgeefbaar gemeente'::text))
+          WHERE ((v_kavel_oppervlakte.terreinid = t.ibis_id) AND ((v_kavel_oppervlakte.status)::text = 'Terstond uitgeefbaar gemeente'::text))
           GROUP BY v_kavel_oppervlakte.terreinid), 4), (0)::numeric), (0)::numeric) AS opp_uitgeefbaar_gem,
     COALESCE(NULLIF(round(( SELECT sum(v_kavel_oppervlakte.opp_geometrie_ha) AS sum
            FROM v_kavel_oppervlakte
-          WHERE ((v_kavel_oppervlakte.terreinid = t.id) AND ((v_kavel_oppervlakte.status)::text = 'Terstond uitgeefbaar particulier'::text))
+          WHERE ((v_kavel_oppervlakte.terreinid = t.ibis_id) AND ((v_kavel_oppervlakte.status)::text = 'Terstond uitgeefbaar particulier'::text))
           GROUP BY v_kavel_oppervlakte.terreinid), 4), (0)::numeric), (0)::numeric) AS opp_uitgeefbaar_part,
     COALESCE(NULLIF(round(( SELECT sum(v_kavel_oppervlakte.opp_geometrie_ha) AS sum
            FROM v_kavel_oppervlakte
-          WHERE ((v_kavel_oppervlakte.terreinid = t.id) AND ((v_kavel_oppervlakte.status)::text = 'Niet bekend'::text))
+          WHERE ((v_kavel_oppervlakte.terreinid = t.ibis_id) AND ((v_kavel_oppervlakte.status)::text = 'Niet bekend'::text))
           GROUP BY v_kavel_oppervlakte.terreinid), 4), (0)::numeric), (0)::numeric) AS opp_niet_bekend,
     COALESCE(NULLIF(round(( SELECT sum(v_kavel_oppervlakte.opp_geometrie_ha) AS sum
            FROM v_kavel_oppervlakte
-          WHERE ((v_kavel_oppervlakte.terreinid = t.id) AND ((v_kavel_oppervlakte.status)::text = 'Optie'::text))
+          WHERE ((v_kavel_oppervlakte.terreinid = t.ibis_id) AND ((v_kavel_oppervlakte.status)::text = 'Optie'::text))
           GROUP BY v_kavel_oppervlakte.terreinid), 4), (0)::numeric), (0)::numeric) AS opp_optie,
     COALESCE(NULLIF(round(( SELECT sum(v_kavel_oppervlakte.opp_geometrie_ha) AS sum
            FROM v_kavel_oppervlakte
-          WHERE ((v_kavel_oppervlakte.terreinid = t.id) AND (v_kavel_oppervlakte.status IS NULL))
+          WHERE ((v_kavel_oppervlakte.terreinid = t.ibis_id) AND (v_kavel_oppervlakte.status IS NULL))
           GROUP BY v_kavel_oppervlakte.terreinid), 4), (0)::numeric), (0)::numeric) AS opp_leeg,
     COALESCE(NULLIF(round(( SELECT sum(v_kavel_oppervlakte.opp_geometrie_ha) AS sum
            FROM v_kavel_oppervlakte
-          WHERE ((v_kavel_oppervlakte.terreinid = t.id) AND ((v_kavel_oppervlakte.status)::text = ANY (ARRAY['Terstond uitgeefbaar gemeente'::text, 'Terstond uitgeefbaar particulier'::text, 'Optie'::text, 'Uitgegeven'::text, 'Niet terstond uitgeefbaar gemeente'::text, 'Niet terstond uitgeefbaar particulier'::text])))
+          WHERE ((v_kavel_oppervlakte.terreinid = t.ibis_id) AND ((v_kavel_oppervlakte.status)::text = ANY (ARRAY['Terstond uitgeefbaar gemeente'::text, 'Terstond uitgeefbaar particulier'::text, 'Optie'::text, 'Uitgegeven'::text, 'Niet terstond uitgeefbaar gemeente'::text, 'Niet terstond uitgeefbaar particulier'::text])))
           GROUP BY v_kavel_oppervlakte.terreinid), 4), (0)::numeric), (0)::numeric) AS opp_netto,
     COALESCE(NULLIF(round(( SELECT sum(v_kavel_oppervlakte.opp_geometrie_ha) AS sum
            FROM v_kavel_oppervlakte
-          WHERE (v_kavel_oppervlakte.terreinid = t.id)
+          WHERE (v_kavel_oppervlakte.terreinid = t.ibis_id)
           GROUP BY v_kavel_oppervlakte.terreinid), 4), (0)::numeric), (0)::numeric) AS opp_bruto
    FROM bedrijventerrein t;
 
@@ -557,12 +558,12 @@ CREATE VIEW v_terrein_oppervlakte AS
 ALTER TABLE v_terrein_oppervlakte OWNER TO ibis;
 
 --
--- TOC entry 201 (class 1259 OID 5499705)
+-- TOC entry 209 (class 1259 OID 5552643)
 -- Name: v_component_ibis_report; Type: VIEW; Schema: IBIS; Owner: ibis
 --
 
 CREATE VIEW v_component_ibis_report AS
- SELECT bedrijventerrein.id,
+ SELECT bedrijventerrein.ibis_id,
     bedrijventerrein.rin_nr,
     bedrijventerrein.datummutatie,
     bedrijventerrein.reden,
@@ -606,7 +607,7 @@ CREATE VIEW v_component_ibis_report AS
     bedrijventerrein.o_spoorontsluiting,
     bedrijventerrein.o_waterontsluiting,
     bedrijventerrein.o_wegontsluiting,
-    bedrijventerrein.gemeenteid,
+    bedrijventerrein.gemeente_naam,
     bedrijventerrein.geom,
     (public.st_envelope(public.st_snaptogrid((public.st_buffer(public.st_envelope(bedrijventerrein.geom), (100)::double precision))::public.geometry(Polygon,28992), (1)::double precision, (1)::double precision)))::public.geometry(Polygon,28992) AS bbox_terrein,
     v_gemeente_en_regio_envelopes.naam,
@@ -624,8 +625,8 @@ CREATE VIEW v_component_ibis_report AS
     v_terrein_oppervlakte.opp_netto,
     v_terrein_oppervlakte.opp_bruto
    FROM ((bedrijventerrein
-     LEFT JOIN v_gemeente_en_regio_envelopes ON ((bedrijventerrein.gemeenteid = v_gemeente_en_regio_envelopes.gem_id)))
-     JOIN v_terrein_oppervlakte ON ((bedrijventerrein.id = v_terrein_oppervlakte.id)))
+     LEFT JOIN v_gemeente_en_regio_envelopes ON (((bedrijventerrein.gemeente_naam)::text = (v_gemeente_en_regio_envelopes.naam)::text)))
+     JOIN v_terrein_oppervlakte ON ((bedrijventerrein.gt_pkey = v_terrein_oppervlakte.gt_pkey)))
   ORDER BY v_gemeente_en_regio_envelopes.vvr_naam, v_gemeente_en_regio_envelopes.naam, bedrijventerrein.a_plannaam;
 
 
@@ -633,7 +634,7 @@ ALTER TABLE v_component_ibis_report OWNER TO ibis;
 
 --
 -- TOC entry 3306 (class 0 OID 0)
--- Dependencies: 201
+-- Dependencies: 209
 -- Name: VIEW v_component_ibis_report; Type: COMMENT; Schema: IBIS; Owner: ibis
 --
 
@@ -641,12 +642,13 @@ COMMENT ON VIEW v_component_ibis_report IS 'Uitgifte gegevens voor IbisReport co
 
 
 --
--- TOC entry 202 (class 1259 OID 5499710)
+-- TOC entry 210 (class 1259 OID 5552649)
 -- Name: v_component_ibis_report_uitgifte; Type: VIEW; Schema: IBIS; Owner: ibis
 --
 
 CREATE VIEW v_component_ibis_report_uitgifte AS
- SELECT v_actuele_kavels.id AS kavelid,
+ SELECT v_actuele_kavels.gt_key,
+    v_actuele_kavels.ibis_id AS kavelid,
     v_actuele_kavels.terreinid,
     v_actuele_kavels.status,
     v_actuele_kavels.uitgegevenaan,
@@ -659,13 +661,13 @@ CREATE VIEW v_component_ibis_report_uitgifte AS
     bedrijventerrein,
     v_kavel_oppervlakte,
     v_gemeente_en_regio_envelopes
-  WHERE (((v_actuele_kavels.id = v_kavel_oppervlakte.id) AND (bedrijventerrein.id = v_actuele_kavels.terreinid)) AND (bedrijventerrein.gemeenteid = v_gemeente_en_regio_envelopes.gem_id));
+  WHERE (((v_actuele_kavels.gt_key = v_kavel_oppervlakte.gt_key) AND (bedrijventerrein.ibis_id = v_actuele_kavels.terreinid)) AND ((bedrijventerrein.gemeente_naam)::text = (v_gemeente_en_regio_envelopes.naam)::text));
 
 
 ALTER TABLE v_component_ibis_report_uitgifte OWNER TO ibis;
 
 --
--- TOC entry 203 (class 1259 OID 5499716)
+-- TOC entry 197 (class 1259 OID 5499716)
 -- Name: v_totaal_bedrijven_en_medewerkers_op_rin_nr; Type: VIEW; Schema: IBIS; Owner: ibis
 --
 
@@ -681,7 +683,7 @@ ALTER TABLE v_totaal_bedrijven_en_medewerkers_op_rin_nr OWNER TO ibis;
 
 --
 -- TOC entry 3307 (class 0 OID 0)
--- Dependencies: 203
+-- Dependencies: 197
 -- Name: VIEW v_totaal_bedrijven_en_medewerkers_op_rin_nr; Type: COMMENT; Schema: IBIS; Owner: ibis
 --
 
@@ -689,13 +691,12 @@ COMMENT ON VIEW v_totaal_bedrijven_en_medewerkers_op_rin_nr IS 'Geeft het totaal
 
 
 --
--- TOC entry 210 (class 1259 OID 5536801)
+-- TOC entry 208 (class 1259 OID 5552638)
 -- Name: v_factsheet_terrein_info; Type: VIEW; Schema: IBIS; Owner: ibis
 --
 
 CREATE VIEW v_factsheet_terrein_info AS
- SELECT bedrijventerrein.id AS terreinid,
-    bedrijventerrein.id,
+ SELECT bedrijventerrein.ibis_id AS terreinid,
     bedrijventerrein.rin_nr,
     bedrijventerrein.datummutatie,
     bedrijventerrein.reden,
@@ -738,7 +739,6 @@ CREATE VIEW v_factsheet_terrein_info AS
     bedrijventerrein.o_spoorontsluiting,
     bedrijventerrein.o_waterontsluiting,
     bedrijventerrein.o_wegontsluiting,
-    bedrijventerrein.gemeenteid,
     bedrijventerrein.geom,
         CASE
             WHEN (owner.beschikbare_panden IS NULL) THEN (0)::bigint
@@ -763,9 +763,9 @@ CREATE VIEW v_factsheet_terrein_info AS
     v_totaal_bedrijven_en_medewerkers_op_rin_nr.bedrijven AS aantal_bedrijven,
     v_totaal_bedrijven_en_medewerkers_op_rin_nr.medewerkers AS aantal_werkzame_personen
    FROM ((((bedrijventerrein
-     LEFT JOIN owner ON ((bedrijventerrein.id = owner.terreinid)))
-     LEFT JOIN v_terrein_oppervlakte ON ((v_terrein_oppervlakte.id = bedrijventerrein.id)))
-     LEFT JOIN v_gemeente_en_regio_envelopes ON ((bedrijventerrein.gemeenteid = v_gemeente_en_regio_envelopes.gem_id)))
+     LEFT JOIN owner ON ((bedrijventerrein.ibis_id = owner.terreinid)))
+     LEFT JOIN v_terrein_oppervlakte ON ((v_terrein_oppervlakte.gt_pkey = bedrijventerrein.gt_pkey)))
+     LEFT JOIN v_gemeente_en_regio_envelopes ON (((bedrijventerrein.gemeente_naam)::text = (v_gemeente_en_regio_envelopes.naam)::text)))
      LEFT JOIN v_totaal_bedrijven_en_medewerkers_op_rin_nr ON ((bedrijventerrein.rin_nr = v_totaal_bedrijven_en_medewerkers_op_rin_nr.rin_nr)));
 
 
@@ -773,7 +773,7 @@ ALTER TABLE v_factsheet_terrein_info OWNER TO ibis;
 
 --
 -- TOC entry 3308 (class 0 OID 0)
--- Dependencies: 210
+-- Dependencies: 208
 -- Name: VIEW v_factsheet_terrein_info; Type: COMMENT; Schema: IBIS; Owner: ibis
 --
 
@@ -781,7 +781,7 @@ COMMENT ON VIEW v_factsheet_terrein_info IS 'Geeft de terrein informatie bij een
 
 
 --
--- TOC entry 204 (class 1259 OID 5499725)
+-- TOC entry 198 (class 1259 OID 5499725)
 -- Name: v_grootste_10_bedrijven_op_rin_nr; Type: VIEW; Schema: IBIS; Owner: ibis
 --
 
@@ -807,7 +807,7 @@ ALTER TABLE v_grootste_10_bedrijven_op_rin_nr OWNER TO ibis;
 
 --
 -- TOC entry 3309 (class 0 OID 0)
--- Dependencies: 204
+-- Dependencies: 198
 -- Name: VIEW v_grootste_10_bedrijven_op_rin_nr; Type: COMMENT; Schema: IBIS; Owner: ibis
 --
 
@@ -815,12 +815,12 @@ COMMENT ON VIEW v_grootste_10_bedrijven_op_rin_nr IS 'Geeft de 10 grootste actie
 
 
 --
--- TOC entry 205 (class 1259 OID 5499730)
+-- TOC entry 206 (class 1259 OID 5552628)
 -- Name: v_grootste_10_bedrijven_op_terrein; Type: VIEW; Schema: IBIS; Owner: ibis
 --
 
 CREATE VIEW v_grootste_10_bedrijven_op_terrein AS
- SELECT bedrijventerrein.id AS terreinid,
+ SELECT bedrijventerrein.ibis_id AS terreinid,
     bedrijventerrein.rin_nr,
     v_grootste_10_bedrijven_op_rin_nr.naam,
     v_grootste_10_bedrijven_op_rin_nr.activiteit,
@@ -829,14 +829,14 @@ CREATE VIEW v_grootste_10_bedrijven_op_terrein AS
    FROM ((bedrijventerrein
      LEFT JOIN v_grootste_10_bedrijven_op_rin_nr ON ((bedrijventerrein.rin_nr = v_grootste_10_bedrijven_op_rin_nr.rin_nr)))
      LEFT JOIN bedrijven_grootteklasse ON (((v_grootste_10_bedrijven_op_rin_nr.grootte_klasse)::text = (bedrijven_grootteklasse.klasse)::text)))
-  ORDER BY bedrijventerrein.id, v_grootste_10_bedrijven_op_rin_nr.grootte_klasse DESC;
+  ORDER BY bedrijventerrein.ibis_id, v_grootste_10_bedrijven_op_rin_nr.grootte_klasse DESC;
 
 
 ALTER TABLE v_grootste_10_bedrijven_op_terrein OWNER TO ibis;
 
 --
 -- TOC entry 3310 (class 0 OID 0)
--- Dependencies: 205
+-- Dependencies: 206
 -- Name: VIEW v_grootste_10_bedrijven_op_terrein; Type: COMMENT; Schema: IBIS; Owner: ibis
 --
 
@@ -844,16 +844,16 @@ COMMENT ON VIEW v_grootste_10_bedrijven_op_terrein IS 'Geeft de 10 grootste bedr
 
 
 --
--- TOC entry 206 (class 1259 OID 5499735)
+-- TOC entry 207 (class 1259 OID 5552633)
 -- Name: v_grootste_10_kavels_op_terrein; Type: VIEW; Schema: IBIS; Owner: ibis
 --
 
 CREATE VIEW v_grootste_10_kavels_op_terrein AS
  SELECT a.terreinid AS id_terrein,
     a.uitgegevenaan,
-    a.id AS id_kavel,
+    a.ibis_id AS id_kavel,
     (public.st_area(a.geom))::numeric AS opp_geometrie
-   FROM ( SELECT v_actuele_kavels.id,
+   FROM ( SELECT v_actuele_kavels.ibis_id,
             v_actuele_kavels.workflow_status,
             v_actuele_kavels.datummutatie,
             v_actuele_kavels.terreinid,
@@ -862,7 +862,6 @@ CREATE VIEW v_grootste_10_kavels_op_terrein AS
             v_actuele_kavels.uitgegevenaan,
             v_actuele_kavels.eerstejaaruitgifte,
             v_actuele_kavels.faseveroudering,
-            v_actuele_kavels.gemeenteid,
             v_actuele_kavels.gemeentenaam,
             v_actuele_kavels.geom,
             row_number() OVER (PARTITION BY v_actuele_kavels.terreinid ORDER BY (public.st_area(v_actuele_kavels.geom))::numeric DESC) AS row_id
@@ -876,7 +875,7 @@ ALTER TABLE v_grootste_10_kavels_op_terrein OWNER TO ibis;
 
 --
 -- TOC entry 3311 (class 0 OID 0)
--- Dependencies: 206
+-- Dependencies: 207
 -- Name: VIEW v_grootste_10_kavels_op_terrein; Type: COMMENT; Schema: IBIS; Owner: ibis
 --
 
@@ -884,12 +883,12 @@ COMMENT ON VIEW v_grootste_10_kavels_op_terrein IS 'Geeft de 10 grootste kavels 
 
 
 --
--- TOC entry 207 (class 1259 OID 5499740)
+-- TOC entry 199 (class 1259 OID 5499740)
 -- Name: v_totaal_bedrijven_en_medewerkers_op_terrein; Type: VIEW; Schema: IBIS; Owner: ibis
 --
 
 CREATE VIEW v_totaal_bedrijven_en_medewerkers_op_terrein AS
- SELECT bedrijventerrein.id AS terreinid,
+ SELECT bedrijventerrein.ibis_id AS terreinid,
     v_totaal_bedrijven_en_medewerkers_op_rin_nr.rin_nr,
     v_totaal_bedrijven_en_medewerkers_op_rin_nr.bedrijven,
     v_totaal_bedrijven_en_medewerkers_op_rin_nr.medewerkers
@@ -901,7 +900,7 @@ ALTER TABLE v_totaal_bedrijven_en_medewerkers_op_terrein OWNER TO ibis;
 
 --
 -- TOC entry 3312 (class 0 OID 0)
--- Dependencies: 207
+-- Dependencies: 199
 -- Name: VIEW v_totaal_bedrijven_en_medewerkers_op_terrein; Type: COMMENT; Schema: IBIS; Owner: ibis
 --
 
@@ -1072,7 +1071,7 @@ CREATE INDEX regio_geom_1448368417357 ON regio USING gist (geom);
 -- Name: unique_actueel_kavel_idx; Type: INDEX; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
-CREATE UNIQUE INDEX unique_actueel_kavel_idx ON bedrijvenkavels USING btree (id, workflow_status, datummutatie) WHERE (((workflow_status)::text = 'definitief'::text) OR ((workflow_status)::text = 'bewerkt'::text));
+CREATE UNIQUE INDEX unique_actueel_kavel_idx ON bedrijvenkavels USING btree (ibis_id, workflow_status, datummutatie) WHERE (((workflow_status)::text = 'definitief'::text) OR ((workflow_status)::text = 'bewerkt'::text));
 
 
 --
@@ -1080,7 +1079,7 @@ CREATE UNIQUE INDEX unique_actueel_kavel_idx ON bedrijvenkavels USING btree (id,
 -- Name: unique_actueel_terrein_idx; Type: INDEX; Schema: IBIS; Owner: ibis; Tablespace: 
 --
 
-CREATE UNIQUE INDEX unique_actueel_terrein_idx ON bedrijventerrein USING btree (id, workflow_status, datummutatie) WHERE (((workflow_status)::text = 'definitief'::text) OR ((workflow_status)::text = 'bewerkt'::text));
+CREATE UNIQUE INDEX unique_actueel_terrein_idx ON bedrijventerrein USING btree (ibis_id, workflow_status, datummutatie) WHERE (((workflow_status)::text = 'definitief'::text) OR ((workflow_status)::text = 'bewerkt'::text));
 
 
 --
@@ -1094,7 +1093,7 @@ REVOKE ALL ON SCHEMA "IBIS" FROM ibis;
 GRANT ALL ON SCHEMA "IBIS" TO ibis;
 
 
--- Completed on 2015-12-18 16:41:29 CET
+-- Completed on 2015-12-18 18:20:11 CET
 
 --
 -- PostgreSQL database dump complete

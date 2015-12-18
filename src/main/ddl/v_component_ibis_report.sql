@@ -2,8 +2,8 @@
 
 -- DROP VIEW "IBIS".v_component_ibis_report;
 
-CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report AS 
- SELECT bedrijventerrein.id,
+CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report AS
+ SELECT bedrijventerrein.ibis_id,
     bedrijventerrein.rin_nr,
     bedrijventerrein.datummutatie,
     bedrijventerrein.reden,
@@ -47,7 +47,7 @@ CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report AS
     bedrijventerrein.o_spoorontsluiting,
     bedrijventerrein.o_waterontsluiting,
     bedrijventerrein.o_wegontsluiting,
-    bedrijventerrein.gemeenteid,
+    bedrijventerrein.gemeente_naam,
     bedrijventerrein.geom,
     st_envelope(st_snaptogrid(st_buffer(st_envelope(bedrijventerrein.geom), 100::double precision)::geometry(Polygon,28992), 1::double precision, 1::double precision))::geometry(Polygon,28992) AS bbox_terrein,
     v_gemeente_en_regio_envelopes.naam,
@@ -65,8 +65,8 @@ CREATE OR REPLACE VIEW "IBIS".v_component_ibis_report AS
     v_terrein_oppervlakte.opp_netto,
     v_terrein_oppervlakte.opp_bruto
    FROM bedrijventerrein
-     LEFT JOIN v_gemeente_en_regio_envelopes ON bedrijventerrein.gemeenteid = v_gemeente_en_regio_envelopes.gem_id
-     JOIN v_terrein_oppervlakte ON bedrijventerrein.id = v_terrein_oppervlakte.id
+     LEFT JOIN v_gemeente_en_regio_envelopes ON bedrijventerrein.gemeente_naam = v_gemeente_en_regio_envelopes.naam
+     JOIN v_terrein_oppervlakte ON bedrijventerrein.gt_pkey = v_terrein_oppervlakte.gt_pkey
   ORDER BY v_gemeente_en_regio_envelopes.vvr_naam, v_gemeente_en_regio_envelopes.naam, bedrijventerrein.a_plannaam;
 
 ALTER TABLE "IBIS".v_component_ibis_report
