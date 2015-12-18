@@ -38,7 +38,7 @@ public interface IbisConstants {
     /**
      * name of the ID field in the datamodel ({@value}).
      */
-    public static final String ID_FIELDNAME = "id";
+    public static final String ID_FIELDNAME = "ibis_id";
     /**
      * name of the workflow field in the datamodel ({@value}).
      */

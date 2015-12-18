@@ -2,9 +2,8 @@
 
 -- DROP VIEW "IBIS".v_factsheet_terrein_info;
 
-CREATE OR REPLACE VIEW "IBIS".v_factsheet_terrein_info AS 
- SELECT bedrijventerrein.id AS terreinid,
-    bedrijventerrein.id,
+CREATE OR REPLACE VIEW "IBIS".v_factsheet_terrein_info AS
+ SELECT bedrijventerrein.ibis_id AS terreinid,
     bedrijventerrein.rin_nr,
     bedrijventerrein.datummutatie,
     bedrijventerrein.reden,
@@ -47,7 +46,6 @@ CREATE OR REPLACE VIEW "IBIS".v_factsheet_terrein_info AS
     bedrijventerrein.o_spoorontsluiting,
     bedrijventerrein.o_waterontsluiting,
     bedrijventerrein.o_wegontsluiting,
-    bedrijventerrein.gemeenteid,
     bedrijventerrein.geom,
         CASE
             WHEN owner.beschikbare_panden IS NULL THEN 0::bigint
@@ -72,9 +70,9 @@ CREATE OR REPLACE VIEW "IBIS".v_factsheet_terrein_info AS
     v_totaal_bedrijven_en_medewerkers_op_rin_nr.bedrijven AS aantal_bedrijven,
     v_totaal_bedrijven_en_medewerkers_op_rin_nr.medewerkers AS aantal_werkzame_personen
    FROM bedrijventerrein
-     LEFT JOIN owner ON bedrijventerrein.id = owner.terreinid
-     LEFT JOIN v_terrein_oppervlakte ON v_terrein_oppervlakte.id = bedrijventerrein.id
-     LEFT JOIN v_gemeente_en_regio_envelopes ON bedrijventerrein.gemeenteid = v_gemeente_en_regio_envelopes.gem_id
+     LEFT JOIN owner ON bedrijventerrein.ibis_id = owner.terreinid
+     LEFT JOIN v_terrein_oppervlakte ON v_terrein_oppervlakte.gt_pkey = bedrijventerrein.gt_pkey
+     LEFT JOIN v_gemeente_en_regio_envelopes ON bedrijventerrein.gemeente_naam = v_gemeente_en_regio_envelopes.naam
      LEFT JOIN v_totaal_bedrijven_en_medewerkers_op_rin_nr ON bedrijventerrein.rin_nr = v_totaal_bedrijven_en_medewerkers_op_rin_nr.rin_nr;
 
 ALTER TABLE "IBIS".v_factsheet_terrein_info
