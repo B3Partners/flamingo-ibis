@@ -162,11 +162,11 @@
 
 <ul>
   
-<li>relate to <tt>v_grootste_10_bedrijven_op_terrein</tt> which provide the 10 biggest companies on the terrain that the kavel is part of (<tt>terreinid</tt> = <tt>terreinid</tt>).</li>
-  
-<li>join to the view that provides area information for the kavels <tt>v_kavel_oppervlakte</tt> (<tt>id</tt> = <tt>id</tt>)</li>
+<li>join to the view that provides area information for the kavels <tt>v_kavel_oppervlakte</tt> (<tt>gt_key</tt> = <tt>gt_key</tt>)</li>
   
 <li>join to the view that provides factsheet information <tt>v_factsheet_terrein_info</tt> (<tt>terreinid</tt> = <tt>terreinid</tt>)</li>
+  
+<li>relate to <tt>v_grootste_10_bedrijven_op_terrein</tt> which provide the 10 biggest companies on the terrain that the kavel is part of (<tt>terreinid</tt> = <tt>terreinid</tt>).</li>
 </ul>
 <p>In the components &#x201c;Selecteer de kaartlagen waarop deze tool van toepassing is&#x201d; list check the layers to be part of the legend (Bedrijventerrein begrenzing and Bedrijventerrein kavels)</p></div>
 <div class="section">
@@ -177,7 +177,7 @@
   
 <li>Create a layer &#x201c;ibis report component&#x201d; based on the <tt>v_component_ibis_report</tt> that is created from the same view. Attach a WFS attribue source to this layer.</li>
   
-<li>Create a <tt>relate</tt> feature type relation to the view <tt>v_component_ibis_report_uitgifte</tt> linking &#x201c;v_component_ibis_report&#x201d;:id to &#x201c;v_component_ibis_report_uitgifte&#x201d;:terreinid</li>
+<li>Create a <tt>relate</tt> feature type relation to the view <tt>v_component_ibis_report_uitgifte</tt> linking &#x201c;v_component_ibis_report&#x201d;:ibis_id to &#x201c;v_component_ibis_report_uitgifte&#x201d;:terreinid</li>
   
 <li>Add the layer to the application, but give it a place of it&#x2019;s own in &#x201c;Boomstructuuur met kaart&#x201d; so it won&#x2019;t show up in the legend. eg. <tt>Applicatie &gt; niet in de kaart &gt; ibis report component &gt; ibis report component</tt>, turn on <b>all</b> attributes. (Do <b>not</b> add the layer to the &#x201c;Kaartbeeld&#x201d;)</li>
   
@@ -191,9 +191,9 @@
 
 <ul>
   
-<li>join <tt>bedrijventerrein</tt> to <tt>gemeente</tt> (<tt>gemeenteid</tt> = <tt>id</tt>)</li>
+<li>join <tt>bedrijventerrein</tt> to <tt>gemeente</tt> (<tt>gemeente_naam</tt> = <tt>naam</tt>)</li>
   
-<li>join <tt>bedrijventerrein</tt> to <tt>v_terrein_oppervlakte</tt> (<tt>id</tt> = <tt>id</tt>)</li>
+<li>join <tt>bedrijventerrein</tt> to <tt>v_terrein_oppervlakte</tt> (<tt>gt_pkey</tt> = <tt>gt_pkey</tt>)</li>
 </ul></div>
 <div class="section">
 <h3><a name="Workflow"></a>Workflow</h3>
