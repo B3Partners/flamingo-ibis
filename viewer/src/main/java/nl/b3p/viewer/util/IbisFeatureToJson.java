@@ -111,6 +111,11 @@ public class IbisFeatureToJson {
                 propertyNames.add(ad.getName());
             }
         }
+        boolean shouldRemoveID_FIELDbeforeJSONify = false;
+        if (!propertyNames.contains(ID_FIELDNAME)) {
+            shouldRemoveID_FIELDbeforeJSONify = propertyNames.add(ID_FIELDNAME);
+        }
+        q.setPropertyNames(propertyNames);
 
         Integer start = q.getStartIndex();
         if (start == null) {
@@ -156,14 +161,13 @@ public class IbisFeatureToJson {
                                     ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.name()), false)
                             ));
                     sorted = new SortedSimpleFeatureCollection(inMem.subCollection(filter), sortBy);
-
+                    log.debug("aantal gevonden: " + sorted.size());
                     if (log.isDebugEnabled()) {
                         SimpleFeatureIterator sfi = sorted.features();
                         while (sfi.hasNext()) {
                             log.debug("gevonden feature: " + sfi.next());
                         }
                     }
-
                     actFeat = DataUtilities.first(sorted);
                     log.debug("actuele feature: " + actFeat);
                     if (actFeat != null) {
@@ -172,6 +176,10 @@ public class IbisFeatureToJson {
                 }
 
                 int featureIndex = 0;
+
+                if (shouldRemoveID_FIELDbeforeJSONify) {
+                    propertyNames.remove(ID_FIELDNAME);
+                }
 
                 for (SimpleFeature feature : actueel) {
                     /* if offset not supported and there are more features returned then
