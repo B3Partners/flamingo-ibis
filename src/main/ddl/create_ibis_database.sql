@@ -3,9 +3,9 @@
 --
 
 -- Dumped from database version 9.3.9
--- Dumped by pg_dump version 9.4.5
 -- using /usr/bin/pg_dump --host ibis.b3p.nl --port 5432 --username "ibis" --no-password  --format plain --schema-only --create --verbose --file "/home/mark/Desktop/create_ibis_database.sql" --schema "\"IBIS\"" "flamingo-ibis-test"
--- Started on 2015-12-18 18:20:09 CET
+-- Dumped by pg_dump version 9.4.5
+-- Started on 2015-12-21 11:37:04 CET
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1093,7 +1093,7 @@ REVOKE ALL ON SCHEMA "IBIS" FROM ibis;
 GRANT ALL ON SCHEMA "IBIS" TO ibis;
 
 
--- Completed on 2015-12-18 18:20:11 CET
+-- Completed on 2015-12-21 11:37:08 CET
 
 --
 -- PostgreSQL database dump complete

@@ -147,8 +147,6 @@ Ext.define("viewer.components.IbisEdit", {
     handleFeature: function (feature) {
         this.superclass.handleFeature.call(this, feature);
 
-        //console.debug('Ext.getCmp(this.workflow_fieldname)', Ext.getCmp(this.workflow_fieldname));
-
         if (Ext.getCmp(this.workflow_fieldname) === undefined) {
 
             // workflow field is missing, add a hidden one to __unprefixed__ accordion of the form panels
@@ -215,8 +213,8 @@ Ext.define("viewer.components.IbisEdit", {
         // var newID = new Date().getTime();
         // for now we'll use second precision
         this.newID = new Date() / 1000 | 0;
-        if (this.inputContainer.getForm().findField('id')) {
-            this.inputContainer.getForm().findField('id').setValue(this.newID);
+        if (this.inputContainer.getForm().findField(idFieldName)) {
+            this.inputContainer.getForm().findField(idFieldName).setValue(this.newID);
         }
     },
     deleteFeature: function () {
@@ -255,8 +253,8 @@ Ext.define("viewer.components.IbisEdit", {
         }
 
         if ((this.mode === "new")) {
-            if (!feature.id) {
-                feature.id = this.newID;
+            if (!feature[idFieldName]) {
+                feature[idFieldName] = this.newID;
             }
         }
 
