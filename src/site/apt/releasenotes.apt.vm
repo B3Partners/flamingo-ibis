@@ -32,3 +32,13 @@ ${project.name} ${project.version} Release Notes
 ~~
 ~~   []
 
+* 2.0-RC2 Release Notes
+
+  A complete list of issues for this release can be seen in the tracker:
+  {{{${project.issueManagement.url}?q=milestone%3A2.0-RC2+is%3Aclosed}milestone 2.0-RC2 issues}}.
+
+* 2.0-RC1 Release Notes
+
+  A complete list of issues for this release can be seen in the tracker:
+  {{{${project.issueManagement.url}?q=milestone%3A2.0-RC1+is%3Aclosed}milestone 2.0-RC1 issues}}.
+
