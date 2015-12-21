@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2013 B3Partners B.V.
+ * Copyright (C) 2012-2015 B3Partners B.V.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,9 +20,9 @@
  */
 // called from the control
 function factsheet__layerIdToAppLayerId(config) {
-    var factsheetLayer = config.factsheetLayer;
+//    var factsheetLayer = config.factsheetLayer;
 
-    console.debug("factsheet__layerIdToAppLayerId", config);
+//    console.debug("factsheet__layerIdToAppLayerId", config);
 
     //Ext.Array.each(config.sliders, function (slider) {
 //        var newSelectedLayers = [];
@@ -41,7 +41,7 @@ function factsheet__appLayerIdToLayerId(config) {
     // Change app layer id's to indexes in config.layers array
 
     //config.factsheetLayer = null;
-    console.debug("factsheet__appLayerIdToLayerId", config);
+    //  console.debug("factsheet__appLayerIdToLayerId", config);
     //console.debug("layer id", config.viewerController.getLayer(config.factsheetLayer, false));
 //    Ext.Array.each(config.sliders, function (slider) {
 //        for (var i = 0; i < slider.selectedLayers.length; i++) {

@@ -146,7 +146,7 @@ Ext.define("viewer.components.IbisEdit", {
     },
     handleFeature: function (feature) {
         this.superclass.handleFeature.call(this, feature);
-        
+
         //console.debug('Ext.getCmp(this.workflow_fieldname)', Ext.getCmp(this.workflow_fieldname));
 
         if (Ext.getCmp(this.workflow_fieldname) === undefined) {
@@ -165,9 +165,9 @@ Ext.define("viewer.components.IbisEdit", {
             });
         }
 
-        this.inputContainer.getForm().findField('datummutatie').setMinValue(
-                getMinMutatiedatum(feature[mutatiedatumFieldName]
-                        ));
+        this.inputContainer.getForm().findField(mutatiedatumFieldName).setMinValue(
+                getMinMutatiedatum(feature[mutatiedatumFieldName]));
+
         var s = "";
         if (this.mode === "copy") {
             setNextIbisWorkflowStatus({}, 'bewerkt', Ext.getCmp(this.workflow_fieldname));

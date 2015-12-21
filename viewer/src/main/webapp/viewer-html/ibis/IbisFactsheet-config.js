@@ -73,7 +73,7 @@ Ext.define("viewer.components.CustomConfiguration", {
                         listeners: {
                             scope: me,
                             select: function (scope, event, control) {
-                                console.debug(scope, event, control);
+                                //console.debug(scope, event, control);
                             }
                         }
                     }, {
