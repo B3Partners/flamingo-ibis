@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+    <id>bin</id>
+    <formats>
+        <!--format>tar.gz</format -->
+        <format>zip</format>
+        <!--format>tar.bz2</format-->
+        <!--format>dir</format -->
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <dependencySets>
+        <dependencySet>
+            <useTransitiveDependencies>false</useTransitiveDependencies>
+            <useProjectArtifact>${project.groupId}:ibis-viewer</useProjectArtifact>
+            <outputDirectory>wars</outputDirectory>
+            <unpack>false</unpack>
+            <outputFileNameMapping>${artifact.build.finalName}.${artifact.extension}</outputFileNameMapping>
+        </dependencySet>
+    </dependencySets>
+    <fileSets>
+        <fileSet>
+            <directory>../${project.basedir}/src/main/ddl/</directory>
+            <outputDirectory>db</outputDirectory>
+            <includes>
+                <include>**/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../${project.basedir}/src/site/markdown/</directory>
+            <outputDirectory>.</outputDirectory>
+            <includes>
+                <include>**/notes.md</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</assembly>

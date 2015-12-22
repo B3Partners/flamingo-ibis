@@ -19,7 +19,6 @@
         <name>${project.name}</name>
         <href>${project.url}</href>
     </bannerRight>
-
     <body>
         <head>
             <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
@@ -31,7 +30,7 @@
             <item name="Issues dashboard" href="${project.issueManagement.url}" />
         </links>
         <menu name="Information" inherit="top">
-            <item name="Home" href="/index.html" />
+            <item name="About" href="/index.html" />
             <item name="Deployment notes" href="/notes.html" />
             <item name="Release notes" href="/releasenotes.html" />
             <item name="Developer Notes" href="/development.html" />

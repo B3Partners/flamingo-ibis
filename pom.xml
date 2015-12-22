@@ -5,7 +5,7 @@
     <artifactId>ibis-flamingo-mc</artifactId>
     <version>2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>ibis-flamingo-mc</name>
+    <name>IBIS Flamingo-mc</name>
     <description>A Flamingo based project to provide for busines park development.</description>
     <url>https://github.com/B3Partners/flamingo-ibis/</url>
     <parent>
@@ -76,6 +76,11 @@
                         <source>${java.version}</source>
                         <target>${java.version}</target>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.6</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -217,13 +222,6 @@
                             </configuration>
                         </plugin>
                         <plugin>
-                            <artifactId>maven-jxr-plugin</artifactId>
-                            <configuration>
-                                <linkJavadoc>true</linkJavadoc>
-                                <javadocDir>${basedir}/target/site/apidocs</javadocDir>
-                            </configuration>
-                        </plugin>
-                        <plugin>
                             <groupId>org.codehaus.mojo</groupId>
                             <artifactId>versions-maven-plugin</artifactId>
                             <reportSets>
@@ -241,7 +239,6 @@
                                 <reportSet>
                                     <reports>
                                         <report>javadoc-no-fork</report>
-                                        <report>test-javadoc-no-fork</report>
                                     </reports>
                                 </reportSet>
                             </reportSets>
@@ -310,6 +307,13 @@
                             </configuration>
                         </plugin>
                         <plugin>
+                            <artifactId>maven-jxr-plugin</artifactId>
+                            <configuration>
+                                <linkJavadoc>true</linkJavadoc>
+                                <javadocDir>${basedir}/target/site/apidocs</javadocDir>
+                            </configuration>
+                        </plugin>
+                        <plugin>
                             <groupId>org.codehaus.mojo</groupId>
                             <artifactId>taglist-maven-plugin</artifactId>
                         </plugin>
@@ -324,7 +328,8 @@
                             <artifactId>maven-changes-plugin</artifactId>
                             <configuration>
                                 <includeOpenIssues>false</includeOpenIssues>
-                                <columnNames>Type,Key,Summary,Assignee,Status,Fix Version</columnNames>
+                                <columnNames>Fix Version,Id,Type,Summary,Status,Updated</columnNames>
+                                <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
                             </configuration>
                         </plugin>
                     </reportPlugins>
@@ -345,6 +350,7 @@
     <modules>
         <module>viewer</module>
         <module>viewer-admin</module>
+        <module>dist</module>
     </modules>
     <developers>
         <developer>
