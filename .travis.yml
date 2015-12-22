@@ -21,13 +21,13 @@ before_install:
 
 install:
   # install without testing
-  - mvn install -Dmaven.test.skip=true -B -V -fae -q
+  - mvn install -Dmaven.test.skip=true -B -V -fae -q -pl '!dist'
 
 before_script:
 
 script:
   # execute unit and integration tests
-  - mvn -e test verify -B
+  - mvn -e test verify -B -pl '!dist'
 
 after_success:
 
