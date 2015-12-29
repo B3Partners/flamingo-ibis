@@ -157,7 +157,7 @@ Ext.define('viewer.components.IbisLocationFinder', {
             renderTo: this.getContentDiv()
         });
     },
-    /*
+    /**
      * Reset the terreinenStore filters and comboboxes, optionally reset the maps extent.
      *
      * @param {Boolean} resetMapExtend true to rest the map extend to the startExtent

@@ -464,7 +464,7 @@ Ext.define('viewer.components.IbisReport', {
         this.dataGridPopup.show();
         this.setDoneLoading();
     },
-    /*
+    /**
      * Reset the terreinenStore filters and comboboxes, optionally reset the maps extent.
      *
      * @param {Boolean} resetMapExtend true to rest the map extend to the startExtent
