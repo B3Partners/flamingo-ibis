@@ -358,7 +358,7 @@ public class IbisAttributeListActionBean implements ActionBean, IbisConstants {
             SimpleFeatureCollection inMem = DataUtilities.collection(fs.getFeatures(q).features());
             StringBuilder in = new StringBuilder();
             SimpleFeatureIterator inMemFeats = inMem.features();
-            Set<String> terreinNames = new TreeSet<String>(
+            Set<String> terreinNames = new TreeSet<>(
                     new Comparator<String>() {
                         @Override
                         public int compare(String a, String b) {
@@ -366,13 +366,13 @@ public class IbisAttributeListActionBean implements ActionBean, IbisConstants {
                         }
                     }
             );
-            Set<String> regioNames = new TreeSet<String>(new Comparator<String>() {
+            Set<String> regioNames = new TreeSet<>(new Comparator<String>() {
                 @Override
                 public int compare(String a, String b) {
                     return a.compareTo(b);
                 }
             });
-            Set<String> gemeenteNames = new TreeSet<String>(new Comparator<String>() {
+            Set<String> gemeenteNames = new TreeSet<>(new Comparator<String>() {
                 @Override
                 public int compare(String a, String b) {
                     return a.compareTo(b);
@@ -414,7 +414,7 @@ public class IbisAttributeListActionBean implements ActionBean, IbisConstants {
                     "id:String,*geom:MultiPolygon:28992,maand:String,oppervlakte:Double,gebied:String");
 
             // create flamingo attribute descriptors for AGGREGATE
-            List<AttributeDescriptor> relFeatureTypeAttributes = new ArrayList<AttributeDescriptor>();
+            List<AttributeDescriptor> relFeatureTypeAttributes = new ArrayList<>();
             AttributeDescriptor maand = new AttributeDescriptor();
             maand.setName("maand");
             maand.setAlias("maand");
@@ -505,7 +505,7 @@ public class IbisAttributeListActionBean implements ActionBean, IbisConstants {
 
         final int months = differenceInMonths(fromDate, toDate);
         final SimpleDateFormat YYYYMM = new SimpleDateFormat("YYYY.MM");
-        Map<String, SimpleFeature> newfeats = new TreeMap<String, SimpleFeature>();
+        Map<String, SimpleFeature> newfeats = new TreeMap<>();
 
         // create a feature for each month for each 'gebiedFieldName' with 0 area and null geom
         for (String fName : featNames) {
@@ -532,7 +532,7 @@ public class IbisAttributeListActionBean implements ActionBean, IbisConstants {
         }
         items.close();
 
-        ArrayList<SimpleFeature> feats = new ArrayList<SimpleFeature>(newfeats.values());
+        ArrayList<SimpleFeature> feats = new ArrayList<>(newfeats.values());
         return DataUtilities.collection(feats);
     }
 
@@ -551,7 +551,7 @@ public class IbisAttributeListActionBean implements ActionBean, IbisConstants {
             Set<String> featNames, final String gebiedFieldName) {
 
         // create a feature for each 'gebiedFieldName' with 0 area and null date and null geom
-        Map<String, SimpleFeature> newfeats = new TreeMap<String, SimpleFeature>();
+        Map<String, SimpleFeature> newfeats = new TreeMap<>();
         for (String fName : featNames) {
             SimpleFeature newfeat = DataUtilities.
                     createFeature(type, fName + "|null|null|0d|" + fName);
@@ -688,7 +688,7 @@ public class IbisAttributeListActionBean implements ActionBean, IbisConstants {
             SimpleFeatureSource foreignFs = (SimpleFeatureSource) relFt.openGeoToolsFeatureSource();
             // compose IN query criteria and store parent features in a map so we can easily get them later
             StringBuilder in = new StringBuilder();
-            HashMap<Integer, SimpleFeature> parentFeatures = new HashMap<Integer, SimpleFeature>();
+            HashMap<Integer, SimpleFeature> parentFeatures = new HashMap<>();
             SimpleFeatureIterator inMemFeats = mainFSinMem.features();
             while (inMemFeats.hasNext()) {
                 SimpleFeature f = inMemFeats.next();
@@ -725,7 +725,7 @@ public class IbisAttributeListActionBean implements ActionBean, IbisConstants {
 
                 SimpleFeatureBuilder sfBuilder = new SimpleFeatureBuilder(type);
                 SimpleFeatureIterator sfcIter = relatedFC.features();
-                ArrayList<SimpleFeature> newfeats = new ArrayList<SimpleFeature>();
+                ArrayList<SimpleFeature> newfeats = new ArrayList<>();
                 while (sfcIter.hasNext()) {
                     // create as many new features as children
                     SimpleFeature f = sfcIter.next();
@@ -754,7 +754,7 @@ public class IbisAttributeListActionBean implements ActionBean, IbisConstants {
         SimpleFeatureSource fs = (SimpleFeatureSource) ft.openGeoToolsFeatureSource();
 
         List<String> tPropnames = new ArrayList(attrNames);
-        List<String> foreignAttrNames = new ArrayList<String>();
+        List<String> foreignAttrNames = new ArrayList<>();
         // find out which attribute names -if any- are from related features
         for (String a : attrNames) {
             if (fs.getSchema().getDescriptor(a) == null) {
@@ -817,7 +817,7 @@ public class IbisAttributeListActionBean implements ActionBean, IbisConstants {
 
                 // compose IN query criteria and store parent features in a map so we can easily get them later
                 StringBuilder in = new StringBuilder();
-                HashMap<Integer, SimpleFeature> parentFeatures = new HashMap<Integer, SimpleFeature>();
+                HashMap<Integer, SimpleFeature> parentFeatures = new HashMap<>();
                 SimpleFeatureIterator inMemFeats = sfc.features();
                 while (inMemFeats.hasNext()) {
                     SimpleFeature f = inMemFeats.next();
@@ -839,10 +839,10 @@ public class IbisAttributeListActionBean implements ActionBean, IbisConstants {
                     SimpleFeatureCollection relatedFC = foreignFs.getFeatures(foreignQ);
                     SimpleFeatureBuilder sfBuilder = new SimpleFeatureBuilder(type);
                     SimpleFeatureIterator sfcIter = relatedFC.features();
-                    ArrayList<SimpleFeature> newfeats = new ArrayList<SimpleFeature>();
+                    ArrayList<SimpleFeature> newfeats = new ArrayList<>();
 
                     boolean firsttimeForP = true;
-                    Set<SimpleFeature> firsttimeForPSet = new HashSet<SimpleFeature>();
+                    Set<SimpleFeature> firsttimeForPSet = new HashSet<>();
                     while (sfcIter.hasNext()) {
                         // create as many new features as related/children
                         SimpleFeature f = sfcIter.next();
@@ -875,7 +875,7 @@ public class IbisAttributeListActionBean implements ActionBean, IbisConstants {
             }
 
             // aggregation
-            Set<String> regions = new HashSet<String>();
+            Set<String> regions = new HashSet<>();
             switch (aggregationLevel) {
                 case REGIO:
                     // max number for regio is 1
@@ -948,7 +948,7 @@ public class IbisAttributeListActionBean implements ActionBean, IbisConstants {
             String gebiedFieldName) {
 
         // create a feature for each (regio|gemeente|terrein) name with 0 value
-        Map<String, SimpleFeature> newfeats = new TreeMap<String, SimpleFeature>();
+        Map<String, SimpleFeature> newfeats = new TreeMap<>();
         for (String fName : featNames) {
             SimpleFeature newfeat = DataUtilities.template(type);
             for (String aggrName : aggregateFieldNames) {
@@ -976,7 +976,7 @@ public class IbisAttributeListActionBean implements ActionBean, IbisConstants {
             }
         }
         items.close();
-        ArrayList<SimpleFeature> feats = new ArrayList<SimpleFeature>(newfeats.values());
+        ArrayList<SimpleFeature> feats = new ArrayList<>(newfeats.values());
         return DataUtilities.collection(feats);
     }
 

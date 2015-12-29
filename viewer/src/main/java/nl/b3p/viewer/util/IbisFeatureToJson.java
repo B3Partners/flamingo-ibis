@@ -58,7 +58,7 @@ import org.opengis.filter.sort.SortBy;
 import org.opengis.filter.sort.SortOrder;
 
 /**
- * This is a wrapped version of {@link FeatureToJson}.
+ * This is a custom version of {@link FeatureToJson}.
  *
  * @author Mark Prins
  */
@@ -323,7 +323,7 @@ public class IbisFeatureToJson {
                         if (al != null) {
                             propertyNames = setPropertyNames(al, foreignQ, rel.getForeignFeatureType(), edit);
                         } else {
-                            propertyNames = new ArrayList<String>();
+                            propertyNames = new ArrayList<>();
                             for (AttributeDescriptor ad : rel.getForeignFeatureType().getAttributes()) {
                                 propertyNames.add(ad.getName());
                             }
@@ -333,7 +333,7 @@ public class IbisFeatureToJson {
                             continue;
                         }
                         //get aliases
-                        Map<String, String> attributeAliases = new HashMap<String, String>();
+                        Map<String, String> attributeAliases = new HashMap<>();
                         if (!edit) {
                             for (AttributeDescriptor ad : rel.getForeignFeatureType().getAttributes()) {
                                 if (ad.getAlias() != null) {
@@ -426,7 +426,7 @@ public class IbisFeatureToJson {
         }
     }
 
-    private DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    private final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
     private Object formatValue(Object value) {
         if (value instanceof Date) {
