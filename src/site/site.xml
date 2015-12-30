@@ -47,7 +47,7 @@
               img="https://ci.appveyor.com/api/projects/status/q1ot2g75acadrbw0/branch/master?svg=true"
               name="AppVeyor Build status (master branch)" />
         <logo href="https://github.com/flamingo-geocms"
-              img="https://avatars1.githubusercontent.com/u/4628473?v=3&s=200"
+              img="https://avatars1.githubusercontent.com/u/4628473?v=3&amp;s=200"
               name="Flamingo Geo CMS" />
     </poweredBy>
 </project>
