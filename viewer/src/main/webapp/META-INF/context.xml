@@ -6,7 +6,7 @@
     <Server ...>
         ...
         <GlobalNamingResources>
-            <Resource name="jdbc/geo_viewer"
+          <Resource name="jdbc/geo_viewer-ibis"
                 auth="Container"
                 type="javax.sql.DataSource"
                 username="geo_viewer"
