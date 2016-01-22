@@ -19,7 +19,7 @@ ${project.name} ${project.version} Release Notes
 
 ** New
 
-  * 
+  * Rename '''dist''' artifact to '''ibis-dist''' to easily identify in the repository
 
   []
 
@@ -39,12 +39,6 @@ ${project.name} ${project.version} Release Notes
   * Initial release
 
   []
-
-~~ ** Enhancements and Fixes
-~~
-~~   *
-~~
-~~   []
 
 * 2.0-RC2 Release Notes
 
