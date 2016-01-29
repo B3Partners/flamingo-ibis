@@ -11,42 +11,42 @@
 
 ${project.name} ${project.version} Release Notes
 
-  These are the release notes for ${project.name} version ${project.version}.
+  Dit zijn de release notes voor ${project.name} versie ${project.version}.
 
 %{toc|section=1|fromDepth=2|toDepth=2}
 
-* ${project.version} Release Notes
+* Versie ${project.version}
 
-** New
+** Nieuw
 
-  * Rename '''dist''' artifact to '''ibis-dist''' to easily identify in the repository
-
-  []
-
- ** Enhancements and Fixes
-
-  *
+  * hernoem '''dist''' artifact naar '''ibis-dist''' zodat het beter herkenbaar is in de repository
 
   []
 
-* 2.0 Release Notes
+ ** Verbeteringen en oplossingen
 
-  A complete list of issues for this release can be seen in the tracker:
+  * Gebruik Flamingo versie ${project.properties.get("flamingo.version")}
+
+  []
+
+* 2.0
+
+  De complete lijst met issues voor deze release is beschikbaar in de tracker:
   {{{${project.issueManagement.url}?q=milestone%3A2.0+is%3Aclosed}milestone 2.0 issues}}.
 
-** New
+** Nieuw
 
-  * Initial release
+  * Initiele release
 
   []
 
-* 2.0-RC2 Release Notes
+* Versie 2.0-RC2
 
-  A complete list of issues for this release can be seen in the tracker:
+  De complete lijst met issues voor deze release is beschikbaar in de tracker:
   {{{${project.issueManagement.url}?q=milestone%3A2.0-RC2+is%3Aclosed}milestone 2.0-RC2 issues}}.
 
-* 2.0-RC1 Release Notes
+* Versie 2.0-RC1
 
-  A complete list of issues for this release can be seen in the tracker:
+  De complete lijst met issues voor deze release is beschikbaar in de tracker:
   {{{${project.issueManagement.url}?q=milestone%3A2.0-RC1+is%3Aclosed}milestone 2.0-RC1 issues}}.
 
