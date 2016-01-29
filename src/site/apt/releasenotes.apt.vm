@@ -19,7 +19,7 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
-  * hernoem '''dist''' artifact naar '''ibis-dist''' zodat het beter herkenbaar is in de repository
+  * hernoem '''dist''' artifact naar '''{{{http://repo.b3p.nl/nexus/#nexus-search;quick~ibis-dist}ibis-dist}}''' zodat het beter herkenbaar is in de repository
 
   []
 
