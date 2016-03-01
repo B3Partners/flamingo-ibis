@@ -314,7 +314,7 @@ Ext.define("viewer.components.IbisFactsheet", {
      */
     handleAction: function (feature, appLayer) {
         var me = this;
-        me.factsheetFeature = feature;
+        me.factsheetFeature = me.remapFeatureInfo(feature, appLayer);
 
         var options = {
             arrays: 1,
@@ -363,21 +363,23 @@ Ext.define("viewer.components.IbisFactsheet", {
                     if (me.factsheetFeature[appLayer.geometryAttribute]) {
                         // if we have a feature geometry use that
                         var feat = Ext.create("viewer.viewercontroller.controller.Feature",
-                                {_wktgeom: me.factsheetFeature[appLayer.geometryAttribute], color: 'FF0000', label: naam});
+                                {_wktgeom: me.factsheetFeature[appLayer.geometryAttribute], color: '0000FF', label: naam, strokeWidth: 4});
                         properties.bbox = feat.getExtent().toString();
-                        mapvalues.geometries = [{_wktgeom: me.factsheetFeature[appLayer.geometryAttribute], color: 'FF0000', label: naam}];
+                        mapvalues.geometries = [{_wktgeom: me.factsheetFeature[appLayer.geometryAttribute], color: '0000FF', label: naam, strokeWidth: 4}];
                     } else if (relatedGeom) {
                         // if we have a geometry on the related feature use that
                         var feat = Ext.create("viewer.viewercontroller.controller.Feature",
                                 {_wktgeom: relatedGeom, color: 'FF00FF', label: naam});
                         properties.bbox = feat.getExtent().toString();
-                        mapvalues.geometries = [{_wktgeom: relatedGeom, color: 'FF00FF', label: naam}];
+                        mapvalues.geometries = [{_wktgeom: relatedGeom, color: '0000FF', label: naam, strokeWidth: 4}];
                     } else {
                         // TODO geometrie of bbox ophalen voor feature?
                     }
                     // click-ed location
                     mapvalues.geometries.push({_wktgeom: 'POINT(' + this.featureInfoClick.coord.x +
-                                ' ' + this.featureInfoClick.coord.y + ')', color: 'FF00FF', label: '*'});
+                                ' ' + this.featureInfoClick.coord.y + ')',
+                        color: 'FF00FF', label: 'Geselecteerde kavel', strokeWidth: 8}
+                    );
 
                     Ext.merge(mapvalues, properties);
                     me.submitSettings(mapvalues);
@@ -390,12 +392,39 @@ Ext.define("viewer.components.IbisFactsheet", {
                 me);
     },
     /**
+     * Remap attribute aliases to fields.
+     * @param {Feature} feature
+     * @param {AppLayer} appLayer
+     * @returns {Feature}
+     */
+    remapFeatureInfo: function (feature, appLayer) {
+        var attributes = appLayer.attributes;
+        var f = Ext.clone(feature);
+
+        for (var alias in feature) {
+            // except related_features or related_featuretypes
+            if (!feature.hasOwnProperty(alias) || alias === 'related_features' ||
+                    alias === 'related_featuretypes' || alias === '__fid') {
+                continue;
+            }
+            // find alias in attributes
+            var attr = Ext.Array.findBy(attributes, function (attribute) {
+                return (attribute.alias && attribute.alias === alias);
+            });
+            // add attribute with value
+            if (attr) {
+                f[attr.name] = feature[alias];
+            }
+        }
+        return f;
+    },
+    /**
      * Called when the PDF request can be submitted.
      * @param {Object} mapvalues an object containg data for the form to be posted to the printservice
      * @override
      */
     submitSettings: function (mapvalues) {
-        // console.debug("submitting mapvalues: ", mapvalues);
+        console.debug("submitting mapvalues: ", mapvalues);
         Ext.getCmp(this.name + 'formParams').setValue(Ext.JSON.encode(mapvalues));
         this.printForm.submit({
             target: '_blank'
