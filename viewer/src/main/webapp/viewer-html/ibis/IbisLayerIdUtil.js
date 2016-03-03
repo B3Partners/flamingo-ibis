@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2015 B3Partners B.V.
+ * Copyright (C) 2012-2016 B3Partners B.V.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,44 +16,64 @@
  */
 
 /**
- * global method for modifying the layer ids
+ * change layerindexes.
+ * @param {type} config
  */
-// called from the control
-function factsheet__layerIdToAppLayerId(config) {
-//    var factsheetLayer = config.factsheetLayer;
-
-//    console.debug("factsheet__layerIdToAppLayerId", config);
-
-    //Ext.Array.each(config.sliders, function (slider) {
-//        var newSelectedLayers = [];
-//        for (var i = 0; i < slider.selectedLayers.length; i++) {
-//            var index = slider.selectedLayers[i];
-//            if (index >= 0 && index < layers.length) {
-//                newSelectedLayers.push(layers[index]);
-//            }
-//        }
-//        slider.selectedLayers = newSelectedLayers;
-    //});
+function factsheet__layersArrayIndexesToAppLayerIds(config) {
+    if (config.legendLayers) {
+        for (var i = 0; i < config.legendLayers.length; i++) {
+            var appLayerIdx = config.legendLayers[i];
+            config.legendLayers[i] = config.layers[appLayerIdx];
+        }
+    }
+    if (config.factsheetLayerId !== undefined && config.factsheetLayerId !== null) {
+        config.factsheetLayerId = config.layers[config.factsheetLayerId];
+    }
 }
 
-function factsheet__appLayerIdToLayerId(config) {
-// called frm the config
-    // Change app layer id's to indexes in config.layers array
+/**
+ * Change app layer id's to indexes in config.layers array.
+ * @param {type} config
+ * @returns {undefined}
+ */
+function factsheet__appLayerIdToLayerIndex(config) {
+    config.layers = [];
+    for (var i = 0; i < config.legendLayers.length; i++) {
+        var appLayerId = config.legendLayers[i];
+        var index = Ext.Array.indexOf(config.layers, appLayerId);
+        if (index === -1) {
+            config.layers.push(appLayerId);
+            config.legendLayers[i] = config.layers.length - 1;
+        } else {
+            config.legendLayers[i] = index;
+        }
+    }
+    var appLayerId = config.factsheetLayerId;
 
-    //config.factsheetLayer = null;
-    //  console.debug("factsheet__appLayerIdToLayerId", config);
-    //console.debug("layer id", config.viewerController.getLayer(config.factsheetLayer, false));
-//    Ext.Array.each(config.sliders, function (slider) {
-//        for (var i = 0; i < slider.selectedLayers.length; i++) {
-//            var appLayerId = slider.selectedLayers[i];
-//            var index = Ext.Array.indexOf(config.layers, appLayerId);
-//            if (index == -1) {
-//                config.layers.push(appLayerId);
-//                slider.selectedLayers[i] = config.layers.length - 1;
-//            } else {
-//                slider.selectedLayers[i] = index;
-//            }
-//        }
-//    });
+    var index = Ext.Array.indexOf(config.layers, appLayerId);
+    if (index === -1) {
+        config.layers.push(appLayerId);
+        config.factsheetLayerId = config.layers.length - 1;
+    } else {
+        config.factsheetLayerId = index;
+    }
+}
 
+function reportbase__layersArrayIndexesToAppLayerIds(config) {
+    if (config.componentLayer !== undefined && config.componentLayer !== null) {
+        config.componentLayer = config.layers[config.componentLayer];
+    }
+}
+
+function reportbase__appLayerIdToLayerIndex(config) {
+    config.layers = [];
+    var appLayerId = config.componentLayer;
+    var index = Ext.Array.indexOf(config.layers, appLayerId);
+
+    if (index === -1) {
+        config.layers.push(appLayerId);
+        config.componentLayer = config.layers.length - 1;
+    } else {
+        config.componentLayer = index;
+    }
 }

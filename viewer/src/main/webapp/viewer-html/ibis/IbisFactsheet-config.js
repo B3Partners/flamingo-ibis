@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 B3Partners B.V.
+ * Copyright (C) 2015-2016 B3Partners B.V.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
  */
 Ext.define("viewer.components.CustomConfiguration", {
     extend: "viewer.components.SelectionWindowConfig",
-    configObject: {},
     /**
      * @constructor
      * @param {type} parentId
@@ -28,13 +27,19 @@ Ext.define("viewer.components.CustomConfiguration", {
      * @returns void
      */
     constructor: function (parentId, configObject) {
-        this.configObject = configObject || {};
-        this.configObject.showLabelconfig = true;
-        viewer.components.CustomConfiguration.superclass.constructor.call(this, parentId, this.configObject);
-        this.configObject.showPrintRtf = false;
-        // printable layers?
-        this.createCheckBoxes(this.configObject.layers);
+        if (configObject === null) {
+            configObject = {};
+        }
+        configObject.showLabelconfig = true;
+        configObject.title = "Factsheet";
+        configObject.showPrintRtf = false;
+        viewer.components.CustomConfiguration.superclass.constructor.call(this, parentId, configObject);
+        
+        factsheet__layersArrayIndexesToAppLayerIds(this.configObject);
+        this.createCheckBoxes(this.configObject.legendLayers);
         this.addLayerSelector();
+        // in LayerSelector
+        this.checkPanel.setTitle("Selecteer de kaartlagen voor de legenda");
     },
     /**
      * Execute an AJAX request to retrieve a list of layers and add some dropdowns
@@ -69,7 +74,7 @@ Ext.define("viewer.components.CustomConfiguration", {
                         name: 'factsheetLayerId',
                         displayField: 'alias',
                         valueField: 'id',
-                        value: this.configObject.factsheetLayerId || null,
+                        value: me.configObject.factsheetLayerId || null,
                         listeners: {
                             scope: me,
                             select: function (scope, event, control) {
@@ -89,5 +94,15 @@ Ext.define("viewer.components.CustomConfiguration", {
                         "Er is een onbekende fout opgetreden waardoor de lijst met kaartlagen niet kan worden weergegeven");
             }
         });
+    },
+    getConfiguration: function () {
+        var config = new Object();
+        if (this.checkBoxes != null) {
+            config.legendLayers = this.checkBoxes.getChecked();
+        }
+        Ext.apply(config, this.getValuesFromContainer(this.form));
+        factsheet__appLayerIdToLayerIndex(config);
+        return config;
     }
+
 });

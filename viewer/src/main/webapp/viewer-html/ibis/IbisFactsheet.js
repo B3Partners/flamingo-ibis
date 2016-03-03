@@ -21,9 +21,8 @@
 Ext.define("viewer.components.IbisFactsheet", {
     extend: "viewer.components.Print",
     config: {
-        factsheetLayerId: null,
         title: "Factsheet",
-        layers: null
+        legendLayers: null
     },
     factsheetLayer: null,
     /** a reference to the selected feature.*/
@@ -35,12 +34,12 @@ Ext.define("viewer.components.IbisFactsheet", {
      */
     constructor: function (conf) {
         viewer.components.IbisFactsheet.superclass.constructor.call(this, conf);
+        factsheet__layersArrayIndexesToAppLayerIds(this.config);
         var me = this;
         var requestParams = {};
-
         requestParams[this.config.restriction] = true;
         requestParams["appId"] = appId;
-        requestParams["layers"] = me.config.layers;
+        requestParams["layers"] = me.config.legendLayers;
         requestParams["hasConfiguredLayers"] = true;
         Ext.Ajax.request({
             url: actionBeans["layerlist"],

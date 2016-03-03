@@ -55,13 +55,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <td>${builddetails.build.user.name}</td>
 </tr>
 <tr>
-    <td colspan="2">
+    <td colspan="2" align="center">
         <b>Git details</b>
     </td>
 </tr>
 <tr>
     <td><b>Git branch:</b></td>
     <td>${builddetails.branch}</td>
+</tr>
+<tr>
+    <td><b>Git branch:</b></td>
+    <td>${builddetails.tags}</td>
 </tr>
 <tr>
     <td><b>Git remote url</b></td>

@@ -32,6 +32,7 @@ Ext.define("viewer.components.CustomConfiguration", {
         this.configObject = configObject || {};
         this.configObject.showLabelconfig = true;
         viewer.components.CustomConfiguration.superclass.constructor.call(this, parentId, this.configObject);
+        reportbase__layersArrayIndexesToAppLayerIds(this.configObject);
         this.addLayerLists();
     },
     /**
@@ -123,5 +124,10 @@ Ext.define("viewer.components.CustomConfiguration", {
             }
             this.form.getComponent('aggrAttrs').add(numberAttributes);
         }
+    },
+    getConfiguration: function () {
+        var config = viewer.components.CustomConfiguration.superclass.getConfiguration.call(this);
+        reportbase__appLayerIdToLayerIndex(config);
+        return config;
     }
 });

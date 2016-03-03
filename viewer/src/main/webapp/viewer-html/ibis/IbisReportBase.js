@@ -73,6 +73,8 @@ Ext.define("viewer.components.IbisReportBase", {
     constructor: function (conf) {
         viewer.components.IbisReportBase.superclass.constructor.call(this, conf);
         this.initConfig(conf);
+
+        reportbase__layersArrayIndexesToAppLayerIds(this.config);
         // update custom url, global var contextPath is not available until after page load
         this.config.actionbeanUrl = contextPath + '/action/ibisattributes';
         //this.schema = new Ext.data.schema.Schema();

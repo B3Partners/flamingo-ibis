@@ -21,7 +21,6 @@
  */
 Ext.define("viewer.components.CustomConfiguration", {
     extend: "viewer.components.SelectionWindowConfig",
-    configObject: {},
     /**
      * @constructor
      * @param {type} parentId
@@ -29,9 +28,12 @@ Ext.define("viewer.components.CustomConfiguration", {
      * @returns void
      */
     constructor: function (parentId, configObject) {
-        this.configObject = configObject || {};
-        this.configObject.showLabelconfig = true;
-        viewer.components.CustomConfiguration.superclass.constructor.call(this, parentId, this.configObject);
+        if (configObject === null) {
+            configObject = {};
+        }
+        configObject.showLabelconfig = true;
+        viewer.components.CustomConfiguration.superclass.constructor.call(this, parentId, configObject);
+        reportbase__layersArrayIndexesToAppLayerIds(this.configObject);
         this.addLayerLists();
     },
     /**
@@ -72,4 +74,9 @@ Ext.define("viewer.components.CustomConfiguration", {
             }
         });
     },
+    getConfiguration: function () {
+        var config = viewer.components.CustomConfiguration.superclass.getConfiguration.call(this);
+        reportbase__appLayerIdToLayerIndex(config);
+        return config;
+    }
 });
