@@ -424,7 +424,7 @@ Ext.define("viewer.components.IbisFactsheet", {
      * @override
      */
     submitSettings: function (mapvalues) {
-        console.debug("submitting mapvalues: ", mapvalues);
+        // console.debug("submitting mapvalues: ", mapvalues);
         Ext.getCmp(this.name + 'formParams').setValue(Ext.JSON.encode(mapvalues));
         this.printForm.submit({
             target: '_blank'
