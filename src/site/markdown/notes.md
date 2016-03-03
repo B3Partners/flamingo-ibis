@@ -13,8 +13,11 @@ The kavels layer should have the following joins and relates configured:
   - relate to `v_grootste_10_bedrijven_op_terrein` which provide the 10 biggest 
     companies on the terrain that the kavel is part of (`terreinid` = `terreinid`).
 
-In the components "Selecteer de kaartlagen waarop deze tool van toepassing is" list 
+In the components "Selecteer de kaartlagen voor de legenda" list 
 check the layers to be part of the legend (Bedrijventerrein begrenzing and Bedrijventerrein kavels)
+
+To be able to zoom in to the terrein the geometry field of the `v_factsheet_terrein_info` must 
+be checked in the attributes tab.
 
 ### IbisReport component
 

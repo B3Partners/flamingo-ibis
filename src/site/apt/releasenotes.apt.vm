@@ -28,6 +28,20 @@ ${project.name} ${project.version} Release Notes
 
   []
 
+** upgrade notitie
+
+  De volgende componenten moeten opnieuw worden geconfigureerd / aan de kaart worden toegevoegd:
+  
+  * IbisZoeker
+  
+  * FeatureInfo
+  
+  * IbisFactsheet (kaartlaag "kavel" voor factsheet kaartlaag en "kavels" en "terreinen" voor legenda)
+  
+  * evt. IbisReport (mits {{{https://github.com/B3Partners/flamingo-ibis/issues/26}issue #26}} is opgelost)
+  
+  []
+
 * Versie 2.1
 
   De complete lijst met issues voor deze release is beschikbaar in de tracker:
