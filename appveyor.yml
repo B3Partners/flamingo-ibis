@@ -14,12 +14,12 @@ environment:
 
 install:
   - set MVN_VERSION=3.3.3
-  - set PATH=%PATH%;C:\bin\apache-maven-%MVN_VERSION%\bin
-  - IF NOT exist "C:\bin\apache-maven-%MVN_VERSION%\bin\*.*" (echo Maven %MVN_VERSION% not installed, so install it & cinst maven -Version %MVN_VERSION%) ELSE (echo Maven %MVN_VERSION% already installed)
+  - set PATH=%PATH%;C:\tools\apache-maven-%MVN_VERSION%\bin
+  - IF NOT exist "C:\tools\apache-maven-%MVN_VERSION%\bin\*.*" (echo Maven %MVN_VERSION% not installed, so install it & cinst maven -Version %MVN_VERSION%) ELSE (echo Maven %MVN_VERSION% already installed)
   - mvn install -Dmaven.test.skip=true -B -V -fae -q -pl "!dist"
 
 cache:
-  - C:\bin\apache-maven-3.3.3 -> appveyor.yml
+  - C:\tools\apache-maven-3.3.3 -> appveyor.yml
   - C:\Users\appveyor\.m2\repository -> pom.xml
 
 build: off
