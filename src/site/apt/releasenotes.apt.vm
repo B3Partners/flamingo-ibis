@@ -22,7 +22,8 @@ ${project.name} ${project.version} Release Notes
 
 ** Verbeteringen en oplossingen
 
-  * Gebruik Flamingo versie ${project.properties.get("flamingo.version")}
+  * Gebruik Flamingo versie ${project.properties.get("flamingo.version")}, zie ook:
+    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v${project.properties.get("flamingo.version")}}Flamingo release notes}}
 
   * verschillende bugs opgelost
 
