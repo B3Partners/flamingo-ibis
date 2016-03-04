@@ -8,7 +8,7 @@
     <skin>
         <groupId>org.apache.maven.skins</groupId>
         <artifactId>maven-fluido-skin</artifactId>
-        <version>1.4</version>
+        <version>1.5</version>
     </skin>
     <bannerLeft>
         <name>${project.organization.name}</name>
@@ -19,24 +19,6 @@
         <name>${project.name}</name>
         <href>${project.url}</href>
     </bannerRight>
-    <body>
-        <head>
-            <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-            <link rel="icon" href="favicon.ico" type="image/x-icon" />
-        </head>
-        <links>
-            <item name="Issues dashboard" href="${project.url}issues" />
-        </links>
-        <menu name="Information" inherit="top">
-            <item name="About" href="/index.html" />
-            <item name="Deployment notes" href="/notes.html" />
-            <item name="Release notes" href="/releasenotes.html" />
-            <item name="Developer Notes" href="/development.html" />
-            <item name="Flamingo Wiki" href="https://github.com/flamingo-geocms/flamingo/wiki/" />
-        </menu>
-        <menu ref="modules" />
-        <menu ref="reports" />
-    </body>
     <poweredBy>
         <logo href="https://travis-ci.org/B3Partners/flamingo-ibis"
               img="https://travis-ci.org/B3Partners/flamingo-ibis.svg?branch=master"
@@ -48,4 +30,22 @@
               img="https://avatars1.githubusercontent.com/u/4628473?v=3&amp;s=200"
               name="Flamingo Geo CMS" />
     </poweredBy>
+    <body>
+        <head>
+            <![CDATA[<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />]]>
+            <![CDATA[<link rel="icon" href="favicon.ico" type="image/x-icon" />]]>
+        </head>
+        <links>
+            <item name="Issues dashboard" href="https://github.com/B3Partners/flamingo-ibis/issues/" />
+        </links>
+        <menu name="Information" inherit="top">
+            <item name="About" href="/index.html" />
+            <item name="Deployment notes" href="/notes.html" />
+            <item name="Release notes" href="/releasenotes.html" />
+            <item name="Developer Notes" href="/development.html" />
+            <item name="Flamingo Wiki" href="https://github.com/flamingo-geocms/flamingo/wiki/" />
+        </menu>
+        <menu ref="modules" />
+        <menu ref="reports" />
+    </body>
 </project>

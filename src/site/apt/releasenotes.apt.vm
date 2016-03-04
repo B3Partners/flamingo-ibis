@@ -3,7 +3,7 @@
 	 -----
 	 mprins
 	 -----
-	 12 oct 2015
+	 2015-10-12
 	 -----
 
 ~~ reference: http://maven.apache.org/doxia/references/apt-format.html
@@ -39,7 +39,7 @@ ${project.name} ${project.version} Release Notes
   
   * IbisFactsheet (kaartlaag "kavel" voor factsheet kaartlaag en "kavels" en "terreinen" voor legenda)
   
-  * evt. IbisReport (mits {{{https://github.com/B3Partners/flamingo-ibis/issues/26}issue #26}} is opgelost)
+~~  * evt. IbisReport (mits {{{https://github.com/B3Partners/flamingo-ibis/issues/26}issue #26}} is opgelost)
   
   []
 
