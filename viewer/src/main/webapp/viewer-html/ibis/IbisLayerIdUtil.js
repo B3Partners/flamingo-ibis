@@ -16,8 +16,8 @@
  */
 
 /**
- * change layerindexes.
- * @param {type} config
+ * change layerindexes for factsheet component.
+ * @param {Object} config configObject
  */
 function factsheet__layersArrayIndexesToAppLayerIds(config) {
     if (config.legendLayers) {
@@ -32,9 +32,8 @@ function factsheet__layersArrayIndexesToAppLayerIds(config) {
 }
 
 /**
- * Change app layer id's to indexes in config.layers array.
- * @param {type} config
- * @returns {undefined}
+ * Change app layer id's to indexes in config.layers array for factsheet component.
+ * @param {Object} config configObject
  */
 function factsheet__appLayerIdToLayerIndex(config) {
     config.layers = [];
@@ -59,12 +58,20 @@ function factsheet__appLayerIdToLayerIndex(config) {
     }
 }
 
+/**
+ * change layerindexes for locationFinder and report component.
+ * @param {Object} config configObject
+ */
 function reportbase__layersArrayIndexesToAppLayerIds(config) {
     if (config.componentLayer !== undefined && config.componentLayer !== null) {
         config.componentLayer = config.layers[config.componentLayer];
     }
 }
 
+/**
+ * Change app layer id's to indexes in config.layers array for locationFinder and report component.
+ * @param {Object} config configObject
+ */
 function reportbase__appLayerIdToLayerIndex(config) {
     config.layers = [];
     var appLayerId = config.componentLayer;
