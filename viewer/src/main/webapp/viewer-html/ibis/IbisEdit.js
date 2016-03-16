@@ -23,6 +23,7 @@ Ext.define("viewer.components.IbisEdit", {
     workflow_fieldname: null,
     workflowStore: null,
     tabbedFormPanels: {},
+    addedTabPanels: [],
     config: {
         prefixConfig: []
     },
@@ -90,14 +91,15 @@ Ext.define("viewer.components.IbisEdit", {
         this.tabbedFormPanels = {
             '__unprefixed__': Ext.create('Ext.panel.Panel', Ext.Object.merge({}, defaultConfig, {title: 'Algemeen', collapsed: false, dockedItems: this.getBottomBar(this.getPrefix(this.config.prefixConfig[0].prefix))}))
         };
-        var next, nextPrefix;
+        var next;
+        var prefix;
         for (var i = 0; i < this.config.prefixConfig.length; i++) {
-            next = this.config.prefixConfig[i + 1] || {};
-            nextPrefix = this.getPrefix(next.prefix);
-            this.tabbedFormPanels[this.getPrefix(this.config.prefixConfig[i].prefix)] = Ext.create('Ext.panel.Panel',
+            next = this.config.prefixConfig[i + 1] || null;
+            prefix = this.getPrefix(this.config.prefixConfig[i].prefix);
+            this.tabbedFormPanels[prefix] = Ext.create('Ext.panel.Panel',
                     Ext.Object.merge({}, defaultConfig, {
                         title: this.config.prefixConfig[i].label,
-                        dockedItems: nextPrefix ? this.getBottomBar(nextPrefix) : {}
+                        dockedItems: next !== null ? this.getBottomBar(prefix) : {}
                     })
                     );
         }
@@ -111,10 +113,14 @@ Ext.define("viewer.components.IbisEdit", {
             me.tabbedFormPanels[fieldPrefix].add(item);
             return true;
         });
-        for (var key in this.tabbedFormPanels)
+        this.addedTabPanels = [];
+        for (var key in this.tabbedFormPanels) {
             if (this.tabbedFormPanels.hasOwnProperty(key)) {
-                this.addFieldSet(this.tabbedFormPanels[key]);
+                if (this.addFieldSet(this.tabbedFormPanels[key])) {
+                    this.addedTabPanels.push(key);
+                }
             }
+        }
         this.inputContainer.getLayout().multi = false;
     },
     getPrefix: function (prefix) {
@@ -136,13 +142,23 @@ Ext.define("viewer.components.IbisEdit", {
             }];
     },
     nextStep: function (step) {
-        this.tabbedFormPanels[step].expand();
+        var nextPrefix = null;
+        for(var i = 0; i < this.addedTabPanels.length; i++) {
+            if(step === this.addedTabPanels[i]) {
+                nextPrefix = this.addedTabPanels[i + 1] || null;
+            }
+        }
+        if(nextPrefix === null) {
+            return;
+        }
+        this.tabbedFormPanels[nextPrefix].expand();
     },
     addFieldSet: function (fieldSet) {
         if (fieldSet.items.length === 0) {
-            return;
+            return false;
         }
         this.inputContainer.add(fieldSet);
+        return true;
     },
     handleFeature: function (feature) {
         this.superclass.handleFeature.call(this, feature);
