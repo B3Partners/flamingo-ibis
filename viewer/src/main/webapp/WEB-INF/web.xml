@@ -8,9 +8,6 @@
         <listener-class>nl.b3p.web.stripes.StripersistCleanupListener</listener-class>
     </listener>
     <listener>
-        <listener-class>nl.b3p.web.geotools.GeotoolsLoggingInit</listener-class>
-    </listener>
-    <listener>
         <listener-class>nl.b3p.web.SharedSessionData</listener-class>
     </listener>
     <listener>
@@ -64,6 +61,12 @@
     </filter>
 
     <filter>
+        <description>Filter to clean up GeoTools thread locals</description>
+        <filter-name>GeoToolsFilter</filter-name>
+        <filter-class>nl.b3p.web.geotools.GeoToolsFilter</filter-class>
+    </filter>
+
+    <filter>
         <display-name>Stripes Filter</display-name>
         <filter-name>StripesFilter</filter-name>
         <filter-class>net.sourceforge.stripes.controller.StripesFilter</filter-class>
@@ -101,6 +104,12 @@
         <filter-name>SetCharacterEncodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>GeoToolsFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
 
     <filter-mapping>
         <filter-name>StripesFilter</filter-name>
