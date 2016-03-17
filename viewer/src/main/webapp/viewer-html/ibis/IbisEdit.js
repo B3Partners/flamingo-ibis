@@ -89,7 +89,7 @@ Ext.define("viewer.components.IbisEdit", {
             }
         };
         this.tabbedFormPanels = {
-            '__unprefixed__': Ext.create('Ext.panel.Panel', Ext.Object.merge({}, defaultConfig, {title: 'Algemeen', collapsed: false, dockedItems: this.getBottomBar(this.getPrefix(this.config.prefixConfig[0].prefix))}))
+            '__unprefixed__': Ext.create('Ext.panel.Panel', Ext.Object.merge({}, defaultConfig, {title: 'Algemeen', collapsed: false, dockedItems: this.getBottomBar('__unprefixed__')}))
         };
         var next;
         var prefix;
@@ -120,6 +120,12 @@ Ext.define("viewer.components.IbisEdit", {
                     this.addedTabPanels.push(key);
                 }
             }
+        }
+        if(this.addedTabPanels.length === 1) {
+        	var bottombar = this.tabbedFormPanels[this.addedTabPanels[0]].getDockedItems('toolbar[dock="bottom"]');
+        	if(bottombar.length === 1) {
+        		this.tabbedFormPanels[this.addedTabPanels[0]].removeDocked(bottombar[0]);
+        	}
         }
         this.inputContainer.getLayout().multi = false;
     },
