@@ -114,7 +114,8 @@
                         <xsl:for-each select="extra/info[@classname='viewer.components.IbisFactsheet.ontsluitingTerrein']/root">
                             <fo:block xsl:use-attribute-sets="subtitle-font">Ontsluiting Terrein</fo:block>
                             <xsl:call-template name="ibis-tabel-2column">
-                                <xsl:with-param name="tWidth" select="130" />
+                                <xsl:with-param name="tWidthLeft" select="50" />
+                                <xsl:with-param name="tWidthRight" select="80" />
                             </xsl:call-template>
                         </xsl:for-each>
                     </fo:block-container>
@@ -124,7 +125,8 @@
                         <fo:block xsl:use-attribute-sets="subtitle-font">Aantal gevestigde bedrijven en bijbehorend aantal banen</fo:block>
                         <xsl:for-each select="extra/info[@classname='viewer.components.IbisFactsheet.gegevensGevestigd']/root">
                             <xsl:call-template name="ibis-tabel-2column">
-                                <xsl:with-param name="tWidth" select="120" />
+                                <xsl:with-param name="tWidthLeft" select="80" />
+                                <xsl:with-param name="tWidthRight" select="40" />
                             </xsl:call-template>
                         </xsl:for-each>
                         <fo:block xsl:use-attribute-sets="subtitle-font">Grootste bedrijven</fo:block>
@@ -138,7 +140,8 @@
                         <xsl:for-each select="extra/info[@classname='viewer.components.IbisFactsheet.gegevensVerkoopOntwikkelaar']/root">
                             <fo:block xsl:use-attribute-sets="subtitle-font">Contactgegevens verkoper/ontwikkelaar</fo:block>
                             <xsl:call-template name="ibis-tabel-2column">
-                                <xsl:with-param name="tWidth" select="102" />
+                                <xsl:with-param name="tWidthLeft" select="2" />
+                                <xsl:with-param name="tWidthRight" select="100" />
                             </xsl:call-template>
                         </xsl:for-each>
                     </fo:block-container>
@@ -147,7 +150,8 @@
                         <xsl:for-each select="extra/info[@classname='viewer.components.IbisFactsheet.gegevensVerkoopOverheid']/root">
                             <fo:block xsl:use-attribute-sets="subtitle-font">Contactgegevens overheid</fo:block>
                             <xsl:call-template name="ibis-tabel-2column">
-                                <xsl:with-param name="tWidth" select="102" />
+                                <xsl:with-param name="tWidthLeft" select="2" />
+                                <xsl:with-param name="tWidthRight" select="100" />
                             </xsl:call-template>
                         </xsl:for-each>
                     </fo:block-container>
@@ -184,14 +188,16 @@
     </xsl:template>
 
     <xsl:template name="ibis-tabel-2column">
-        <!-- maak een eenvoudige tabel met de extra info, de breedte van de tabel kan in mm opgegeven worden als parameter, dafult is 60 -->
-        <xsl:param name="tWidth">60</xsl:param>
+        <!-- maak een eenvoudige tabel met de extra info, de breedte van de tabel kolommen kan in mm opgegeven worden als parameter, default is 30 -->
+        <xsl:param name="tWidthLeft">30</xsl:param>
+        <xsl:param name="tWidthRight">30</xsl:param>
         <fo:block font-size="8pt">
-            <fo:table table-layout="fixed" width="{$tWidth}mm">
-                <fo:table-column column-width="{$tWidth div 2}mm"/>
-                <fo:table-column column-width="{$tWidth div 2}mm"/>
+            <fo:table table-layout="fixed" width="{$tWidthLeft + $tWidthRight}mm">
+                <fo:table-column column-width="{$tWidthLeft}mm"/>
+                <fo:table-column column-width="{$tWidthRight}mm"/>
                 <fo:table-body>
                     <xsl:for-each select="*">
+                        <xsl:sort select="local-name()" data-type="qname" />
                         <fo:table-row>
                             <fo:table-cell>
                                 <fo:block>
@@ -200,7 +206,7 @@
                                     <xsl:call-template name="string-remove-underscore-prefix">
                                         <xsl:with-param name="text" select="local-name()" />
                                     </xsl:call-template>
-                                    <xsl:value-of select="': '" />
+                                    <!--xsl:value-of select="': '" / -->
                                 </fo:block>
                             </fo:table-cell>
                             <fo:table-cell>

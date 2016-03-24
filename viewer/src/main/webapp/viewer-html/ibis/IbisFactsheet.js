@@ -131,7 +131,7 @@ Ext.define("viewer.components.IbisFactsheet", {
 
         if (lijst.length < 1) {
             // result.k0 = 'Geen gevestigde bedrijven gevonden.' + DELIM + '' + DELIM;
-            result.push('Geen gevestigde bedrijven gevonden.' + DELIM + '' + DELIM);
+            result.push('Geen gevestigde bedrijven gevonden.' + DELIM + '' + DELIM + '');
         } else {
             // result.k0 = 'Naam' + DELIM + 'Hoofdactiviteit' + DELIM + 'Grootteklasse';
             result.push('Naam' + DELIM + 'Hoofdactiviteit' + DELIM + 'Grootteklasse');
@@ -154,6 +154,7 @@ Ext.define("viewer.components.IbisFactsheet", {
         var result = {}, key;
         for (key in factsheetFeature) {
             if (key.indexOf("opp_geometrie") > -1 ||
+                    key.indexOf("Kaveloppervlakte") > -1 ||
                     (key.lastIndexOf("status", 0) === 0) ||
                     key.indexOf("milieuzone") > -1) {
                 result[key] = factsheetFeature[key];
@@ -161,6 +162,9 @@ Ext.define("viewer.components.IbisFactsheet", {
         }
         if (Ext.isEmpty(result)) {
             result.gegevens = 'onbekend';
+        }
+        if (result['Kaveloppervlakte']) {
+            result['Kaveloppervlakte'] = result['Kaveloppervlakte'] + ' ha';
         }
         return result;
     },
@@ -190,15 +194,29 @@ Ext.define("viewer.components.IbisFactsheet", {
         if (Ext.isEmpty(result)) {
             result.terrein_kenmerken = 'onbekend';
         }
+        // rename o_milieuwet o_milieuwetcode
+        if (result['o_milieuwet_code']) {
+            result['Maximaal_toegestane_hindercategorie'] = result['o_milieuwet_code'];
+            delete result['o_milieuwet_code'];
+        }
+
         return result;
     },
     /** verzamel verkoop contact gegevens van kavel. */
     gegevensVerkoopOntwikkelaar: function (factsheetFeature) {
         var result = {}, key;
         for (key in factsheetFeature) {
-            if (key.lastIndexOf("c_verkoop", 0) === 0 ||
-                    key.lastIndexOf("c_website", 0) === 0) {
-                result[key] = factsheetFeature[key];
+            if (key.lastIndexOf("c_verkoopnaam", 0) === 0) {
+                result['a_'] = factsheetFeature[key];
+            }
+            if (key.lastIndexOf("c_verkooptelefoon", 0) === 0) {
+                result['b_'] = 'T: ' + factsheetFeature[key];
+            }
+            if (key.lastIndexOf("c_verkoopemail", 0) === 0) {
+                result['c_'] = 'e: ' + factsheetFeature[key];
+            }
+            if (key.lastIndexOf("c_verkoopwebsite", 0) === 0) {
+                result['d_'] = 'W: ' + factsheetFeature[key];
             }
         }
         if (Ext.isEmpty(result)) {
@@ -210,16 +228,26 @@ Ext.define("viewer.components.IbisFactsheet", {
     gegevensVerkoopOverheid: function (factsheetFeature) {
         var result = {}, key;
         for (key in factsheetFeature) {
-            if ((key.lastIndexOf("c_onderhoud", 0) === 0) ||
-                    (key.lastIndexOf("c_hyperlink", 0) === 0) ||
-                    (key.lastIndexOf("c_organisatie", 0) === 0)
-                    ) {
-                result[key] = factsheetFeature[key];
+            if (key.lastIndexOf("c_onderhoudnaam", 0) === 0) {
+                result['a_'] = factsheetFeature[key];
+            }
+            if (key.lastIndexOf("c_organisatie", 0) === 0) {
+                result['b_'] = factsheetFeature[key];
+            }
+            if (key.lastIndexOf("c_onderhoudtelefoon", 0) === 0) {
+                result['c_'] = 'T: ' + factsheetFeature[key];
+            }
+            if (key.lastIndexOf("c_onderhoudemail", 0) === 0) {
+                result['d_'] = 'e: ' + factsheetFeature[key];
+            }
+            if (key.lastIndexOf("c_hyperlink", 0) === 0) {
+                result['e_'] = 'W: ' + factsheetFeature[key];
             }
         }
         if (Ext.isEmpty(result)) {
             result.contact_gegevens = 'onbekend';
         }
+
         return result;
     },
     /**
@@ -423,7 +451,7 @@ Ext.define("viewer.components.IbisFactsheet", {
      * @override
      */
     submitSettings: function (mapvalues) {
-        // console.debug("submitting mapvalues: ", mapvalues);
+        console.debug("submitting mapvalues: ", mapvalues);
         Ext.getCmp(this.name + 'formParams').setValue(Ext.JSON.encode(mapvalues));
         this.printForm.submit({
             target: '_blank'

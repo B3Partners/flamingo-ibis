@@ -29,6 +29,8 @@ ${project.name} ${project.version} Release Notes
 
 ** Verbeteringen en oplossingen
 
+  * Layout factsheet
+
   * Het filtermechanisme werkt nu consequent
 
   * De factsheet werkt nu op onze productieomgeving. Was configuratie issue doordat er aliassen waren ingesteld.
