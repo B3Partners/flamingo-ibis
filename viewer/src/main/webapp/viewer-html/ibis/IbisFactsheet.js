@@ -116,8 +116,8 @@ Ext.define("viewer.components.IbisFactsheet", {
             }
         }
 
-        if (Ext.isEmpty(result)) {
-            result.bedrijvigheidsgegevens = 'onbekend';
+        if (Ext.Object.isEmpty(result)) {
+            result['aantal_bedrijven_en_werkzame_personen '] = 'onbekend';
         }
         return result;
     },
@@ -130,10 +130,8 @@ Ext.define("viewer.components.IbisFactsheet", {
         var lijst = factsheetFeature.related_features.bedrijven;
 
         if (lijst.length < 1) {
-            // result.k0 = 'Geen gevestigde bedrijven gevonden.' + DELIM + '' + DELIM;
-            result.push('Geen gevestigde bedrijven gevonden.' + DELIM + '' + DELIM + '');
+            result.push('geen gevestigde bedrijven gevonden' + DELIM + '' + DELIM + '');
         } else {
-            // result.k0 = 'Naam' + DELIM + 'Hoofdactiviteit' + DELIM + 'Grootteklasse';
             result.push('Naam' + DELIM + 'Hoofdactiviteit' + DELIM + 'Grootteklasse');
             // reverse sort lijst on grootte_klasse
             lijst = lijst.sort(function (a, b) {
@@ -144,7 +142,6 @@ Ext.define("viewer.components.IbisFactsheet", {
                 return 0;
             });
             for (var k = 0; k < lijst.length; k++) {
-                // result['k' + (k + 1)] = lijst[k]['naam'] + DELIM + lijst[k]['activiteit'] + DELIM + lijst[k]['grootte_klasse'];
                 result.push(lijst[k]['naam'] + DELIM + lijst[k]['activiteit'] + DELIM + lijst[k]['grootte_beschrijving']);
             }
         }
@@ -160,7 +157,7 @@ Ext.define("viewer.components.IbisFactsheet", {
                 result[key] = factsheetFeature[key];
             }
         }
-        if (Ext.isEmpty(result)) {
+        if (Ext.Object.isEmpty(result)) {
             result.gegevens = 'onbekend';
         }
         if (result['Kaveloppervlakte']) {
@@ -175,7 +172,7 @@ Ext.define("viewer.components.IbisFactsheet", {
                 result[key] = factsheetFeature[key];
             }
         }
-        if (Ext.isEmpty(result)) {
+        if (Ext.Object.isEmpty(result)) {
             result.panden = 'onbekend';
         }
         return result;
@@ -191,12 +188,12 @@ Ext.define("viewer.components.IbisFactsheet", {
                 result[key] = factsheetFeature[key];
             }
         }
-        if (Ext.isEmpty(result)) {
+        if (Ext.Object.isEmpty(result)) {
             result.terrein_kenmerken = 'onbekend';
         }
         // rename o_milieuwet o_milieuwetcode
         if (result['o_milieuwet_code']) {
-            result['Maximaal_toegestane_hindercategorie'] = result['o_milieuwet_code'];
+            result['maximaal_toegestane_hindercategorie'] = result['o_milieuwet_code'];
             delete result['o_milieuwet_code'];
         }
 
@@ -219,7 +216,7 @@ Ext.define("viewer.components.IbisFactsheet", {
                 result['d_'] = 'W: ' + factsheetFeature[key];
             }
         }
-        if (Ext.isEmpty(result)) {
+        if (Ext.Object.isEmpty(result)) {
             result.contact_gegevens = 'onbekend';
         }
         return result;
@@ -244,7 +241,7 @@ Ext.define("viewer.components.IbisFactsheet", {
                 result['e_'] = 'W: ' + factsheetFeature[key];
             }
         }
-        if (Ext.isEmpty(result)) {
+        if (Ext.Object.isEmpty(result)) {
             result.contact_gegevens = 'onbekend';
         }
 
@@ -263,7 +260,7 @@ Ext.define("viewer.components.IbisFactsheet", {
             }
 
         }
-        if (Ext.isEmpty(result)) {
+        if (Ext.Object.isEmpty(result)) {
             result.ontsluiting_gegevens = 'onbekend';
         }
         return result;
@@ -372,11 +369,13 @@ Ext.define("viewer.components.IbisFactsheet", {
                             // copy attributes and add them to the feature
                             var relatedFactsheetFeature = {};
                             for (var i = 0; i < relatedAttr.length; i++) {
-                                if (relatedAttr[i].visible) {
+                                if (relatedAttr[i].visible && (result[f]["c" + i])) {
                                     relatedFactsheetFeature[relatedAttr[i].name] = result[f]["c" + i];
                                 }
                             }
-                            me.factsheetFeature.related_features.bedrijven.push(relatedFactsheetFeature);
+                            if (!Ext.Object.isEmpty(relatedFactsheetFeature)) {
+                                me.factsheetFeature.related_features.bedrijven.push(relatedFactsheetFeature);
+                            }
                         }
                     }
 
