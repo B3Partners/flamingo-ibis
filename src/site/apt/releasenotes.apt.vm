@@ -22,14 +22,15 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
-  * ...
+  * Gebruik Flamingo versie 4.7.0-SNAPSHOT, zie ook:
+    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.7.0-SNAPSHOT}Flamingo release notes}}
 
   []
 
 
 ** Verbeteringen en oplossingen
 
-  * ...
+  * betere foutafhandeling in Factsheet
 
   []
 
