@@ -18,7 +18,7 @@ install:
   - IF NOT exist "C:\tools\apache-maven-%MVN_VERSION%\bin\*.*" (echo Maven %MVN_VERSION% not installed, so install it & cinst maven -Version %MVN_VERSION%) ELSE (echo Maven %MVN_VERSION% already installed)
   - ps: pwd
 #  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-http-proxy.ps1'))
-  - ps: (new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-http-proxy.ps1','.\enable-http-proxy.ps1')
+  - ps: (New-Object Net.WebClient).DownloadFile("https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-http-proxy.ps1","$env:USERPROFILE\enable-http-proxy.ps1")
   - ps: dir
   - ps: .\enable-http-proxy.ps1
   - mvn install -Dmaven.test.skip=true -B -V -fae -q -pl "!dist"
