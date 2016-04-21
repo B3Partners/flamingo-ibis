@@ -211,8 +211,20 @@
                             </fo:table-cell>
                             <fo:table-cell>
                                 <fo:block>
+                                <!-- if local-name() == 'W'
+
+                                <fo:basic-link external-destination="{url}">
+                                    <xsl:value-of select="normalize-space(.)" />
+                                 </fo:basic-link>
+                                
+                                    else
+                                    -->
+
+
+                                
                                     <xsl:value-of select="normalize-space(.)" />
                                 </fo:block>
+
                             </fo:table-cell>
                         </fo:table-row>
                     </xsl:for-each>
