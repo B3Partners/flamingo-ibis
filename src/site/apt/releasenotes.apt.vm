@@ -30,7 +30,9 @@ ${project.name} ${project.version} Release Notes
 
 ** Verbeteringen en oplossingen
 
-  * betere foutafhandeling in Factsheet
+  * Betere foutafhandeling in factsheet
+
+  * Factsheet styling: link blauw
 
   []
 

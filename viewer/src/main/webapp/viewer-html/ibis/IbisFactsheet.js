@@ -142,7 +142,8 @@ Ext.define("viewer.components.IbisFactsheet", {
                 return 0;
             });
             for (var k = 0; k < lijst.length; k++) {
-                result.push(lijst[k]['naam'] + DELIM + lijst[k]['activiteit'] + DELIM + lijst[k]['grootte_beschrijving']);
+                // quick fix/hack ë -> e
+                result.push((lijst[k]['naam'] + DELIM + lijst[k]['activiteit'] + DELIM + lijst[k]['grootte_beschrijving']).replace("ë", "e", "gi"));
             }
         }
         return {'item': result};

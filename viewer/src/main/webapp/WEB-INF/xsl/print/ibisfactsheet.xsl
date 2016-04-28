@@ -201,30 +201,27 @@
                         <fo:table-row>
                             <fo:table-cell>
                                 <fo:block>
-                                    <!-- of xsl:value-of select="name(.)" -->
-                                    <!-- xsl:value-of select="translate(local-name(),'_', ' ')" / -->
                                     <xsl:call-template name="string-remove-underscore-prefix">
                                         <xsl:with-param name="text" select="local-name()" />
                                     </xsl:call-template>
-                                    <!--xsl:value-of select="': '" / -->
                                 </fo:block>
                             </fo:table-cell>
                             <fo:table-cell>
-                                <fo:block>
-                                <!-- if local-name() == 'W'
-
-                                <fo:basic-link external-destination="{url}">
-                                    <xsl:value-of select="normalize-space(.)" />
-                                 </fo:basic-link>
-                                
-                                    else
-                                    -->
-
-
-                                
-                                    <xsl:value-of select="normalize-space(.)" />
-                                </fo:block>
-
+                                <xsl:choose>
+                                    <xsl:when test="starts-with(normalize-space(.),'W: ')">
+                                        <fo:block>
+                                            <xsl:text>W: </xsl:text>
+                                            <fo:inline color="#0000FF">
+                                                <xsl:value-of select="substring(normalize-space(.), 4)" />
+                                            </fo:inline>
+                                        </fo:block>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <fo:block>
+                                            <xsl:value-of select="normalize-space(.)" />
+                                        </fo:block>
+                                    </xsl:otherwise>
+                                </xsl:choose>
                             </fo:table-cell>
                         </fo:table-row>
                     </xsl:for-each>
@@ -247,7 +244,7 @@
     </xsl:template>
 
     <!-- splits een string met ';' in delen die elk een tabel cel vullen -->
-    <xsl:template match="text()" name="split">
+    <xsl:template name="split" match="text()">
         <xsl:param name="pText" select="."/>
         <xsl:if test="string-length($pText)">
             <fo:table-cell>
