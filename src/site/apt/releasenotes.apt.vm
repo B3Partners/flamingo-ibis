@@ -34,6 +34,8 @@ ${project.name} ${project.version} Release Notes
 
   * Factsheet styling: link blauw
 
+  * Gebruik de generieke Flamingo databron naam (geo_viewer ipv. geo_viewer-ibis)
+
   []
 
 
