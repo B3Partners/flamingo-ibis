@@ -197,7 +197,7 @@
                 <fo:table-column column-width="{$tWidthRight}mm"/>
                 <fo:table-body>
                     <xsl:for-each select="*">
-                        <xsl:sort select="local-name()" data-type="qname" />
+                        <xsl:sort select="local-name()" data-type="text"/>
                         <fo:table-row>
                             <fo:table-cell>
                                 <fo:block>
@@ -209,6 +209,7 @@
                             <fo:table-cell>
                                 <xsl:choose>
                                     <xsl:when test="starts-with(normalize-space(.),'W: ')">
+                                        <!-- voor contact info blok -->
                                         <fo:block>
                                             <xsl:text>W: </xsl:text>
                                             <fo:inline color="#0000FF">
