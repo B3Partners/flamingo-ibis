@@ -142,8 +142,10 @@ Ext.define("viewer.components.IbisFactsheet", {
                 return 0;
             });
             for (var k = 0; k < lijst.length; k++) {
-                // quick fix/hack ë -> e
-                result.push((lijst[k]['naam'] + DELIM + lijst[k]['activiteit'] + DELIM + lijst[k]['grootte_beschrijving']).replace("ë", "e", "gi"));
+                // quick fix/hack  ; -> ,
+                result.push((lijst[k]['naam'] + DELIM + (lijst[k]['activiteit']).replace(DELIM, ",", "gi") + DELIM + lijst[k]['grootte_beschrijving'])
+                        //ë -> e
+                        .replace("ë", "e", "gi"));
             }
         }
         return {'item': result};
@@ -153,8 +155,10 @@ Ext.define("viewer.components.IbisFactsheet", {
         for (key in factsheetFeature) {
             if (key.indexOf("opp_geometrie") > -1 ||
                     key.indexOf("Kaveloppervlakte") > -1 ||
-                    (key.lastIndexOf("status", 0) === 0) ||
-                    key.indexOf("milieuzone") > -1) {
+                    key.indexOf("kaveloppervlak_ha") > -1 ||
+                    (key.lastIndexOf("status", 0) === 0) 
+                // || key.indexOf("milieuzone") > -1)
+                    ) {
                 result[key] = factsheetFeature[key];
             }
         }
@@ -163,6 +167,10 @@ Ext.define("viewer.components.IbisFactsheet", {
         }
         if (result['Kaveloppervlakte']) {
             result['Kaveloppervlakte'] = result['Kaveloppervlakte'] + ' ha';
+        }
+        if (result['kaveloppervlak_ha']) {
+            result['kaveloppervlak'] = result['kaveloppervlak_ha'] + ' ha';
+            delete result['kaveloppervlak_ha'];
         }
         return result;
     },
@@ -192,9 +200,9 @@ Ext.define("viewer.components.IbisFactsheet", {
         if (Ext.Object.isEmpty(result)) {
             result.terrein_kenmerken = 'onbekend';
         }
-        // rename o_milieuwet o_milieuwetcode
+        // verwijder o_milieuwet_code
         if (result['o_milieuwet_code']) {
-            result['maximaal_toegestane_hindercategorie'] = result['o_milieuwet_code'];
+            // result['maximaal_toegestane_hindercategorie'] = result['o_milieuwet_code'];
             delete result['o_milieuwet_code'];
         }
 

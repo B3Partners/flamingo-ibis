@@ -32,7 +32,8 @@ ${project.name} ${project.version} Release Notes
 
   * Betere foutafhandeling in factsheet
 
-  * Factsheet styling: link blauw, labeling/weergave van vliegveld & afstand
+  * Factsheet styling aanpassingen: link blauw, labeling/weergave van vliegveld & afstand,
+    milieuzone info,
 
   * Gebruik de generieke Flamingo databron naam (geo_viewer ipv. geo_viewer-ibis)
 
