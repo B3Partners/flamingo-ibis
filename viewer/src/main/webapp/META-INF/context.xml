@@ -6,7 +6,7 @@
     <Server ...>
         ...
         <GlobalNamingResources>
-          <Resource name="jdbc/geo_viewer"
+        <Resource name="jdbc/${ibis-flamingo-ds-name}"
                 auth="Container"
                 type="javax.sql.DataSource"
                 username="geo_viewer"
@@ -24,13 +24,11 @@
     </Server>
     -->
     <!-- Tomcat resource link -->
-  <!--<ResourceLink global="jdbc/geo_viewer-ibis" name="jdbc/geo_viewer" type="javax.sql.Datasource"/>-->
-  <ResourceLink global="jdbc/geo_viewer" name="jdbc/geo_viewer" type="javax.sql.Datasource"/>
+  <ResourceLink global="jdbc/${ibis-flamingo-ds-name}" name="jdbc/geo_viewer" type="javax.sql.Datasource"/>
     <ResourceLink global="mail/session" name="mail/session" type="javax.mail.Session"/>
     <!-- Optional: use LockoutRealm instead of CombinedRealm to prevent brute-forcing -->
     <Realm className="org.apache.catalina.realm.CombinedRealm">
-        <!--<Realm allRolesMode="authOnly" className="org.apache.catalina.realm.DataSourceRealm" dataSourceName="jdbc/geo_viewer-ibis" digest="SHA-1" roleNameCol="group_" userCredCol="password" userNameCol="username" userRoleTable="user_groups" userTable="user_"/>-->
-        <Realm allRolesMode="authOnly" className="org.apache.catalina.realm.DataSourceRealm" dataSourceName="jdbc/geo_viewer" digest="SHA-1" roleNameCol="group_" userCredCol="password" userNameCol="username" userRoleTable="user_groups" userTable="user_"/>
+        <Realm allRolesMode="authOnly" className="org.apache.catalina.realm.DataSourceRealm" dataSourceName="jdbc/${ibis-flamingo-ds-name}" digest="SHA-1" roleNameCol="group_" userCredCol="password" userNameCol="username" userRoleTable="user_groups" userTable="user_"/>
         <!-- Use JNDIRealm for authenticating against a LDAP server (such as
              Active Directory):
              http://tomcat.apache.org/tomcat-6.0-doc/config/realm.html

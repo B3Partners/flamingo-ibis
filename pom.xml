@@ -17,6 +17,8 @@
         <flamingo.version>4.6.4</flamingo.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.7</java.version>
+        <ibis-flamingo-ds-name>geo_viewer</ibis-flamingo-ds-name>
+        <!-- voor een deploment op ibis.b3p.nl gebruik je -Dibis-flamingo-ds-name=geo_viewer-ibis tijdens bouwen -->
     </properties>
     <prerequisites>
         <maven>3.2.5</maven>
