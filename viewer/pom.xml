@@ -55,6 +55,8 @@
                         <filter>${basedir}/src/main/resources/git.properties</filter>
                     </filters>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <warSourceExcludes>**/calc.xsl, **/legend.xsl, **/styles.xsl</warSourceExcludes>
+                    <packagingExcludes>**/print.xml, **/print.html</packagingExcludes>
                     <webResources>
                         <resource>
                             <directory>src/main/webapp</directory>
@@ -63,8 +65,16 @@
                                 <include>about.jsp</include>
                             </includes>
                         </resource>
+                        <resource>
+                            <directory>src/main/webapp/WEB-INF/xsl/print</directory>
+                            <filtering>true</filtering>
+                            <excludes>
+                                <exclude>calc.xsl</exclude>
+                                <exclude>legend.xsl</exclude>
+                                <exclude>styles.xsl</exclude>
+                            </excludes>
+                        </resource>
                     </webResources>
-                    <useCache>false</useCache>
                     <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
                     <overlays>
                         <overlay>
@@ -75,6 +85,16 @@
                                 <exclude>**/git.properties</exclude>
                             </excludes>
                         </overlay>
+                        <!-- empty groupId/artifactId represents the current build -->
+                        <!--                        <overlay>
+                            <excludes>
+                                <exclude>**/calc.xsl</exclude>
+                                <exclude>**/legend.xsl</exclude>
+                                <exclude>**/styles.xsl</exclude>
+                                <exclude>**/print.xsl</exclude>
+                                <exclude>**/print.html</exclude>
+                            </excludes>
+                        </overlay>-->
                     </overlays>
                     <archive>
                         <manifestEntries>
