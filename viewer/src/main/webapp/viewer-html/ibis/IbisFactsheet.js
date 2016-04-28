@@ -256,10 +256,19 @@ Ext.define("viewer.components.IbisFactsheet", {
         for (key in factsheetFeature) {
             if (key.indexOf("ontsluiting") > -1 ||
                     key.indexOf("internet") > -1 ||
-                    key.indexOf("afstand") > -1) {
-                result[key] = factsheetFeature[key];
+                    key.indexOf("afstand") > -1 ||
+                    key.indexOf("vliegveld") > -1) {
+                if (key === 'o_afstandvliegveld') {
+                    //o_afstandvliegveld -> afstand vliegveld XX km
+                    result['afstand_vliegveld'] = factsheetFeature[key] + " km";
+                } else if (key === 'o_naamvliegveld') {
+                    //o_naamvliegveld -> dichtstbijzijnde vliegveld
+                    result['dichtstbijzijnde_vliegveld'] = factsheetFeature[key];
+                }
+                else {
+                    result[key] = factsheetFeature[key];
+                }
             }
-
         }
         if (Ext.Object.isEmpty(result)) {
             result.ontsluiting_gegevens = 'onbekend';
