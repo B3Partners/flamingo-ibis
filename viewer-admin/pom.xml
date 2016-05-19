@@ -6,11 +6,11 @@
     <packaging>war</packaging>
     <name>IBIS viewer-admin</name>
     <description>Flamingo viewer-admin war overlay project voor IBIS.</description>
-    <version>2.4-SNAPSHOT</version>
+    <version>2.5-SNAPSHOT</version>
     <parent>
         <groupId>org.flamingo-mc</groupId>
         <artifactId>ibis-flamingo-mc</artifactId>
-        <version>2.4-SNAPSHOT</version>
+        <version>2.5-SNAPSHOT</version>
     </parent>
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -53,8 +53,12 @@
                                 <include>about.jsp</include>
                             </includes>
                         </resource>
+                        <resource>
+                            <directory>src/main/webapp/META-INF</directory>
+                            <filtering>true</filtering>
+                            <targetPath>META-INF</targetPath>
+                        </resource>
                     </webResources>
-                    <useCache>false</useCache>
                     <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
                     <overlays>
                         <overlay>

@@ -142,7 +142,10 @@ Ext.define("viewer.components.IbisFactsheet", {
                 return 0;
             });
             for (var k = 0; k < lijst.length; k++) {
-                result.push(lijst[k]['naam'] + DELIM + lijst[k]['activiteit'] + DELIM + lijst[k]['grootte_beschrijving']);
+                // quick fix/hack  ; -> ,
+                result.push((lijst[k]['naam'] + DELIM + (lijst[k]['activiteit']).replace(DELIM, ",", "gi") + DELIM + lijst[k]['grootte_beschrijving'])
+                        //ë -> e
+                        .replace("ë", "e", "gi"));
             }
         }
         return {'item': result};
@@ -152,8 +155,10 @@ Ext.define("viewer.components.IbisFactsheet", {
         for (key in factsheetFeature) {
             if (key.indexOf("opp_geometrie") > -1 ||
                     key.indexOf("Kaveloppervlakte") > -1 ||
-                    (key.lastIndexOf("status", 0) === 0) ||
-                    key.indexOf("milieuzone") > -1) {
+                    key.indexOf("kaveloppervlak_ha") > -1 ||
+                    (key.lastIndexOf("status", 0) === 0) 
+                // || key.indexOf("milieuzone") > -1)
+                    ) {
                 result[key] = factsheetFeature[key];
             }
         }
@@ -162,6 +167,10 @@ Ext.define("viewer.components.IbisFactsheet", {
         }
         if (result['Kaveloppervlakte']) {
             result['Kaveloppervlakte'] = result['Kaveloppervlakte'] + ' ha';
+        }
+        if (result['kaveloppervlak_ha']) {
+            result['kaveloppervlak'] = result['kaveloppervlak_ha'] + ' ha';
+            delete result['kaveloppervlak_ha'];
         }
         return result;
     },
@@ -191,9 +200,9 @@ Ext.define("viewer.components.IbisFactsheet", {
         if (Ext.Object.isEmpty(result)) {
             result.terrein_kenmerken = 'onbekend';
         }
-        // rename o_milieuwet o_milieuwetcode
+        // verwijder o_milieuwet_code
         if (result['o_milieuwet_code']) {
-            result['maximaal_toegestane_hindercategorie'] = result['o_milieuwet_code'];
+            // result['maximaal_toegestane_hindercategorie'] = result['o_milieuwet_code'];
             delete result['o_milieuwet_code'];
         }
 
@@ -255,10 +264,19 @@ Ext.define("viewer.components.IbisFactsheet", {
         for (key in factsheetFeature) {
             if (key.indexOf("ontsluiting") > -1 ||
                     key.indexOf("internet") > -1 ||
-                    key.indexOf("afstand") > -1) {
-                result[key] = factsheetFeature[key];
+                    key.indexOf("afstand") > -1 ||
+                    key.indexOf("vliegveld") > -1) {
+                if (key === 'o_afstandvliegveld') {
+                    //o_afstandvliegveld -> afstand vliegveld XX km
+                    result['afstand_vliegveld'] = factsheetFeature[key] + " km";
+                } else if (key === 'o_naamvliegveld') {
+                    //o_naamvliegveld -> dichtstbijzijnde vliegveld
+                    result['dichtstbijzijnde_vliegveld'] = factsheetFeature[key];
+                }
+                else {
+                    result[key] = factsheetFeature[key];
+                }
             }
-
         }
         if (Ext.Object.isEmpty(result)) {
             result.ontsluiting_gegevens = 'onbekend';

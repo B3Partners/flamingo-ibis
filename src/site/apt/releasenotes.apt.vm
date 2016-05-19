@@ -22,15 +22,20 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
-  * Gebruik Flamingo versie 4.7.0-SNAPSHOT, zie ook:
-    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.7.0-SNAPSHOT}Flamingo release notes}}
+  * Gebruik Flamingo versie 4.6.4, zie ook:
+    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.6.4}Flamingo release notes}}
 
   []
 
 
 ** Verbeteringen en oplossingen
 
-  * betere foutafhandeling in Factsheet
+  * Betere foutafhandeling in factsheet
+
+  * Factsheet styling aanpassingen: link blauw, labeling/weergave van vliegveld & afstand,
+    milieuzone info,
+
+  * Gebruik de generieke Flamingo databron naam (geo_viewer ipv. geo_viewer-ibis)
 
   []
 

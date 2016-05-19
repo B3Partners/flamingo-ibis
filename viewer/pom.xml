@@ -5,11 +5,11 @@
     <packaging>war</packaging>
     <name>IBIS viewer</name>
     <description>Flamingo viewer war overlay project voor IBIS.</description>
-    <version>2.4-SNAPSHOT</version>
+    <version>2.5-SNAPSHOT</version>
     <parent>
         <groupId>org.flamingo-mc</groupId>
         <artifactId>ibis-flamingo-mc</artifactId>
-        <version>2.4-SNAPSHOT</version>
+        <version>2.5-SNAPSHOT</version>
     </parent>
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -55,6 +55,8 @@
                         <filter>${basedir}/src/main/resources/git.properties</filter>
                     </filters>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <warSourceExcludes>**/calc.xsl, **/legend.xsl, **/styles.xsl</warSourceExcludes>
+                    <packagingExcludes>**/print.xml, **/print.html</packagingExcludes>
                     <webResources>
                         <resource>
                             <directory>src/main/webapp</directory>
@@ -63,8 +65,21 @@
                                 <include>about.jsp</include>
                             </includes>
                         </resource>
+                        <resource>
+                            <directory>src/main/webapp/META-INF</directory>
+                            <filtering>true</filtering>
+                            <targetPath>META-INF</targetPath>
+                        </resource>
+                        <resource>
+                            <directory>src/main/webapp/WEB-INF/xsl/print</directory>
+                            <filtering>true</filtering>
+                            <excludes>
+                                <exclude>calc.xsl</exclude>
+                                <exclude>legend.xsl</exclude>
+                                <exclude>styles.xsl</exclude>
+                            </excludes>
+                        </resource>
                     </webResources>
-                    <useCache>false</useCache>
                     <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
                     <overlays>
                         <overlay>
