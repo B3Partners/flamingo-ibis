@@ -340,6 +340,8 @@ digraph G {
 <tr><td align="left" balign="left"> + setStartLayers(arg0 : List&lt;StartLayer&gt;) </td></tr>
 <tr><td align="left" balign="left"> + getStartLevels() : List&lt;StartLevel&gt; </td></tr>
 <tr><td align="left" balign="left"> + setStartLevels(arg0 : List&lt;StartLevel&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getReaders() : Set&lt;String&gt; </td></tr>
+<tr><td align="left" balign="left"> + setReaders(arg0 : Set&lt;String&gt;) </td></tr>
 <tr><td align="left" balign="left"> + getNameWithVersion() : String </td></tr>
 <tr><td align="left" balign="left"> + getTreeCache() : Application.TreeCache </td></tr>
 <tr><td align="left" balign="left"> + setTreeCache(arg0 : Application.TreeCache) </td></tr>
