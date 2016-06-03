@@ -26,12 +26,12 @@ Ext.define("viewer.components.CustomConfiguration", {
      * @constructor
      * @param {type} parentId
      * @param {type} configObject
+     * @param {type} configPage
      * @returns void
      */
-    constructor: function (parentId, configObject) {
-        this.configObject = configObject || {};
+    constructor: function (parentId, configObject, configPage) {
         this.configObject.showLabelconfig = true;
-        viewer.components.CustomConfiguration.superclass.constructor.call(this, parentId, this.configObject);
+        viewer.components.CustomConfiguration.superclass.constructor.call(this, parentId, configObject, configPage);
         reportbase__layersArrayIndexesToAppLayerIds(this.configObject);
         this.addLayerLists();
     },
@@ -46,7 +46,7 @@ Ext.define("viewer.components.CustomConfiguration", {
         Ext.Ajax.request({
             url: me.requestPath, //contextPath + "/action/componentConfigLayerList",
             params: {
-                appId: applicationId,
+                appId: this.getApplicationId(),
                 filterable: true
             },
             success: function (result, request) {
@@ -108,7 +108,7 @@ Ext.define("viewer.components.CustomConfiguration", {
             var checked = 0;
             var attr = null;
 
-            var appLayer = appConfig.appLayers[attrId];
+            var appLayer = this.getAppConfig().appLayers[attrId];
             for (var i = 0; i < appLayer.attributes.length; i++) {
                 attr = appLayer.attributes[i];
                 if (attr.type === "integer" || attr.type === "double") {

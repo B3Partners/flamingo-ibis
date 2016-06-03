@@ -25,14 +25,12 @@ Ext.define("viewer.components.CustomConfiguration", {
      * @constructor
      * @param {type} parentId
      * @param {type} configObject
+     * @param {type} configPage
      * @returns void
      */
-    constructor: function (parentId, configObject) {
-        if (configObject === null) {
-            configObject = {};
-        }
+    constructor: function (parentId, configObject, configPage) {
         configObject.showLabelconfig = true;
-        viewer.components.CustomConfiguration.superclass.constructor.call(this, parentId, configObject);
+        viewer.components.CustomConfiguration.superclass.constructor.call(this, parentId, configObject, configPage);
         reportbase__layersArrayIndexesToAppLayerIds(this.configObject);
         this.addLayerLists();
     },
@@ -47,7 +45,7 @@ Ext.define("viewer.components.CustomConfiguration", {
         Ext.Ajax.request({
             url: me.requestPath, //contextPath + "/action/componentConfigLayerList",
             params: {
-                appId: applicationId,
+                appId: this.getApplicationId(),
                 filterable: true
             },
             success: function (result, request) {

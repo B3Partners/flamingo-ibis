@@ -24,16 +24,14 @@ Ext.define("viewer.components.CustomConfiguration", {
      * @constructor
      * @param {type} parentId
      * @param {type} configObject
+     * @param {type} configPage
      * @returns void
      */
-    constructor: function (parentId, configObject) {
-        if (configObject === null) {
-            configObject = {};
-        }
+    constructor: function (parentId, configObject, configPage) {
         configObject.showLabelconfig = true;
         configObject.title = "Factsheet";
         configObject.showPrintRtf = false;
-        viewer.components.CustomConfiguration.superclass.constructor.call(this, parentId, configObject);
+        viewer.components.CustomConfiguration.superclass.constructor.call(this, parentId, configObject, configPage);
         
         factsheet__layersArrayIndexesToAppLayerIds(this.configObject);
         this.createCheckBoxes(this.configObject.legendLayers);
@@ -51,9 +49,9 @@ Ext.define("viewer.components.CustomConfiguration", {
         var me = this;
 
         Ext.Ajax.request({
-            url: contextPath + "/action/componentConfigLayerList",
+            url: this.getContextpath() + "/action/componentConfigLayerList",
             params: {
-                appId: applicationId,
+                appId: this.getApplicationId(),
                 filterable: true
             },
             success: function (result, request) {
