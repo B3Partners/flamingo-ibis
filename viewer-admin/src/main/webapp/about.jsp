@@ -40,11 +40,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 ${project.version}
             </c:otherwise>
         </c:choose>
-    </td>
-</tr>
+        <span id="actuele-versie"><!-- jsonp request to GH api --></span>
+            </td>
+        </tr>
 <tr>
     <td><b>Flamingo Version:</b></td>
-    <td>${flamingo.version}</td>
+    <td>${flamingo.version} <span id="flamingo-versie"><!-- jsonp request to GH api --></span></td>
 </tr>
 <tr>
     <td><b>Build time:</b></td>
@@ -80,5 +81,49 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <td>${builddetails.commit.time}</td>
 </tr>
 </table>
-</body>
+<h2>Runtime information</h2>
+<table>
+    <tr>
+        <td><b>OS info:</b></td>
+        <td>
+            <jsp:expression>System.getProperty("os.name")</jsp:expression>
+            <jsp:expression>System.getProperty("os.version")</jsp:expression>
+            <jsp:expression>System.getProperty("os.arch")</jsp:expression>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Java version:</b></td>
+            <td>
+            <jsp:expression>System.getProperty("java.vendor")</jsp:expression>
+            <jsp:expression>System.getProperty("java.version")</jsp:expression>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Servlet container info:</b></td>
+            <td><jsp:expression>getServletContext().getServerInfo()</jsp:expression></td>
+    </tr>
+</table>
+<script>
+     // use jsonp to retrieve latest release info
+     function v(json){
+         var versie=json.data.name;
+         var datum = new Date( json.data.published_at).toDateString();
+         document.getElementById('actuele-versie').innerHTML = '(laatste release: '+versie+', dd. '+datum+')';
+     }
+
+     var scriptTag = document.createElement("script");
+     scriptTag.src = "https://api.github.com/repos/B3Partners/flamingo-ibis/releases/latest?callback=v";
+     document.getElementsByTagName('head')[0].appendChild(scriptTag);
+
+     function vf(json){
+         var versie=json.data.name;
+         var datum = new Date( json.data.published_at).toDateString();
+         document.getElementById('flamingo-versie').innerHTML = '(laatste release: '+versie+', dd. '+datum+')';
+     }
+
+     var scriptTag = document.createElement("script");
+     scriptTag.src = "https://api.github.com/repos/flamingo-geocms/flamingo/releases/latest?callback=vf";
+     document.getElementsByTagName('head')[0].appendChild(scriptTag);
+</script>
+    </body>
 </html>
