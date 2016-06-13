@@ -29,13 +29,13 @@ ${project.name} ${project.version} Release Notes
 
 ** Verbeteringen en oplossingen
 
+  * aanpassingen factsheet {{{https://github.com/B3Partners/flamingo-ibis/pull/36}issue #39}}
+
   * Relevante Flamingo issues:
 
     * {{{https://github.com/flamingo-geocms/flamingo/pull/611}#611 css klasse voor edit labels}}
 
     * {{{https://github.com/flamingo-geocms/flamingo/pull/606}#606 Getalrange SimpleFilter, Vinkvak per default "aan" optie}}
-
-  * aanpassingen factsheet 
 
   []
 

@@ -270,6 +270,7 @@
         data moet het scheidingsteken ';' hebben, bijvoorbeeld:
         < a2>TODO dummy bedrijf 2;Dummy hoofdactiviteit 2;dummy grootteklasse 2< /a2>
         zie ook: template "split"
+        De eerste regel wordt vet gemaakt
         -->
         <xsl:param name="tWidth">204</xsl:param>
         <fo:block font-size="8pt">
@@ -279,12 +280,22 @@
                 <fo:table-column column-width="{$tWidth div 3}mm"/>
                 <fo:table-body>
                     <xsl:for-each select="*">
-                        <!-- xsl:sort select="name()" / -->
-                        <fo:table-row>
-                            <xsl:call-template name="split">
-                                <xsl:with-param name="pText" select="."/>
-                            </xsl:call-template>
-                        </fo:table-row>
+                        <xsl:choose>
+                            <xsl:when test="position()=1">
+                                <fo:table-row font-weight="bold">
+                                    <xsl:call-template name="split">
+                                        <xsl:with-param name="pText" select="." />
+                                    </xsl:call-template>
+                                </fo:table-row>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <fo:table-row>
+                                    <xsl:call-template name="split">
+                                        <xsl:with-param name="pText" select="." />
+                                    </xsl:call-template>
+                                </fo:table-row>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </xsl:for-each>
                 </fo:table-body>
             </fo:table>
