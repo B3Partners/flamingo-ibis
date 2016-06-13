@@ -268,10 +268,10 @@ Ext.define("viewer.components.IbisFactsheet", {
                     key.indexOf("vliegveld") > -1) {
                 if (key === 'o_afstandvliegveld') {
                     //o_afstandvliegveld -> afstand vliegveld XX km
-                    result['afstand_vliegveld'] = factsheetFeature[key] + " km";
+                    result['b_afstand_vliegveld'] = factsheetFeature[key] + " km";
                 } else if (key === 'o_naamvliegveld') {
                     //o_naamvliegveld -> dichtstbijzijnde vliegveld
-                    result['dichtstbijzijnde_vliegveld'] = factsheetFeature[key];
+                    result['a_dichtstbijzijnde_vliegveld'] = factsheetFeature[key];
                 }
                 else {
                     result[key] = factsheetFeature[key];
