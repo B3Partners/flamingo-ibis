@@ -22,20 +22,20 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
-  * Gebruik Flamingo versie 4.7.1, zie ook:
+  * Gebruik Flamingo versie 4.7.1-SNAPSHOT, zie ook:
     {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.7.1}Flamingo release notes}}
 
   []
 
 ** Verbeteringen en oplossingen
 
-    * Relevante Flamingo issues:
+  * Relevante Flamingo issues:
 
     * {{{https://github.com/flamingo-geocms/flamingo/pull/611}#611 css klasse voor edit labels}}
 
     * {{{https://github.com/flamingo-geocms/flamingo/pull/606}#606 Getalrange SimpleFilter, Vinkvak per default "aan" optie}}
 
-  *
+  * aanpassingen factsheet 
 
   []
 

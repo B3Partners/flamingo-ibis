@@ -313,7 +313,7 @@ Ext.define("viewer.components.IbisFactsheet", {
             action: action,
             title: this.config.title + ' kerngegevens bedrijventerrein: ' +
                     this.factsheetFeature.a_plannaam + ', ' +
-                    this.factsheetFeature.a_kernnaam,
+                    this.factsheetFeature.a_kernnaam + ' (' + Ext.Date.format(new Date(), "j M Y") + ')',
             mailTo: "",
             xsltemplate: "ibisfactsheet.xsl",
             includeLegend: true,
