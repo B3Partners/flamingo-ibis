@@ -28,7 +28,7 @@
     <xsl:param name="versionParam" select="'1.0'"/>
 
     <!-- map variables --> 
-    <xsl:variable name="map-width-px" select="'366'"/>
+    <xsl:variable name="map-width-px" select="'368'"/>
     <xsl:variable name="map-height-px" select="'196'"/>
 
     <!-- legend variables -->
@@ -72,7 +72,7 @@
                     </fo:block-container>
                     -->
 
-                    <fo:block-container width="13cm" height="7cm" top="1.6cm" margin-top="0cm" margin-left="0cm" left="0cm" xsl:use-attribute-sets="column-block-border">
+                    <fo:block-container width="13.1cm" height="7cm" top="1.6cm" margin-top="0cm" margin-left="0cm" left="0cm" xsl:use-attribute-sets="column-block-border">
                         <xsl:call-template name="map-block"/>
                     </fo:block-container>
 
@@ -110,7 +110,7 @@
                         </xsl:for-each>
                     </fo:block-container>
 
-                    <fo:block-container width="13.2cm" height="4.0cm" top="13.7cm" left="0cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
+                    <fo:block-container width="13.1cm" height="4.0cm" top="13.7cm" left="0cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
                         <xsl:for-each select="extra/info[@classname='viewer.components.IbisFactsheet.ontsluitingTerrein']/root">
                             <fo:block xsl:use-attribute-sets="subtitle-font">Ontsluiting Terrein</fo:block>
                             <xsl:call-template name="ibis-tabel-2column">
@@ -121,7 +121,7 @@
                     </fo:block-container>
 
                     <!-- bedrijvigheid -->
-                    <fo:block-container overflow="hidden" width="20.4cm" height="7.0cm" top="17.8cm" left="0cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
+                    <fo:block-container overflow="hidden" width="20.4cm" height="7.1cm" top="17.8cm" left="0cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
                         <fo:block xsl:use-attribute-sets="subtitle-font">Aantal gevestigde bedrijven en bijbehorend aantal banen</fo:block>
                         <xsl:for-each select="extra/info[@classname='viewer.components.IbisFactsheet.gegevensGevestigd']/root">
                             <xsl:call-template name="ibis-tabel-2column">
