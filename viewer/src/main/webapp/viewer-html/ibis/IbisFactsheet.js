@@ -205,6 +205,11 @@ Ext.define("viewer.components.IbisFactsheet", {
             // result['maximaal_toegestane_hindercategorie'] = result['o_milieuwet_code'];
             delete result['o_milieuwet_code'];
         }
+        // hernoem milieuzone
+        if (result['o_milieuzone']) {
+            result['o_milieuzonering'] = result['o_milieuwet_code'];
+            delete result['o_milieuzone'];
+        }
 
         return result;
     },
