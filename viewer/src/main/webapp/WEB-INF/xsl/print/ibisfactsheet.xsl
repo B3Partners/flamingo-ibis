@@ -129,6 +129,10 @@
                                 <xsl:with-param name="tWidthRight" select="40" />
                             </xsl:call-template>
                         </xsl:for-each>
+                        <fo:block xsl:use-attribute-sets="default-font"> 
+                            <!-- witregel -->
+                            <fo:leader />
+                        </fo:block>
                         <fo:block xsl:use-attribute-sets="subtitle-font">Grootste bedrijven</fo:block>
                         <xsl:for-each select="extra/info[@classname='viewer.components.IbisFactsheet.gegevensGevestigdLijst']/root">
                             <xsl:call-template name="ibis-tabel-3column"/>
