@@ -178,7 +178,7 @@
                                 <param>${viewerhtml.path}/ibis/IbisLayerIdUtil.js</param>
                                 <param>${viewerhtml.path}/ibis/IbisLocationFinder.js</param>
                                 <param>${viewerhtml.path}/ibis/IbisMerge.js</param>
-                                <param>${viewerhtml.path}/ibis/IbisReport.js</param>
+                                <param>${viewerhtml.path}/ibis/IbisReports.js</param>
                                 <param>${viewerhtml.path}/ibis/IbisSplit.js</param>
                                 <param>${viewerhtml.path}/ibis/WorkflowStatus.js</param>
                             </sourceFiles>
