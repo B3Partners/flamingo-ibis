@@ -29,7 +29,7 @@
 
     <!-- map variables --> 
     <xsl:variable name="map-width-px" select="'368'"/>
-    <xsl:variable name="map-height-px" select="'196'"/>
+    <xsl:variable name="map-height-px" select="'220'"/>
 
     <!-- legend variables -->
     <!-- See legend.xsl (does not currently affect size of other elements!) -->
@@ -72,23 +72,28 @@
                     </fo:block-container>
                     -->
 
-                    <fo:block-container width="13.1cm" height="7cm" top="1.6cm" margin-top="0cm" margin-left="0cm" left="0cm" xsl:use-attribute-sets="column-block-border">
+                    <fo:block-container width="13.1cm" height="7.9cm" top="1.6cm" margin-top="0cm" margin-left="0cm" left="0cm" xsl:use-attribute-sets="column-block-border">
                         <xsl:call-template name="map-block"/>
                     </fo:block-container>
 
-                    <fo:block-container width="5.8cm" height="2.9cm" top="1.6cm" left="13.2cm" margin-left="0cm" xsl:use-attribute-sets="column-block">
+                    <fo:block-container width="4.0cm" height="2.9cm" top="1.6cm" left="13.2cm" margin-left="0cm" xsl:use-attribute-sets="column-block">
                         <xsl:call-template name="overview-block">
-                            <xsl:with-param name="width" select="'160'" />
+                            <xsl:with-param name="width" select="'112'" />
                             <xsl:with-param name="height" select="'80'" />
                         </xsl:call-template>
                     </fo:block-container>
 
-                    <fo:block-container overflow="hidden" width="6.5cm" height="4cm" top="4.6cm" left="13.2cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
-                        <xsl:call-template name="legend"/>
+                    <fo:block-container width="2.5cm" top="1.6cm" margin-top="0cm" margin-left="0cm" left="17.1cm" height="1cm" xsl:use-attribute-sets="column-block">
+                        <xsl:call-template name="PG-logo-block"/>
                     </fo:block-container>
 
-                    <!-- tabellen -->
-                   
+                    <fo:block-container overflow="hidden" width="6.5cm" height="4.9cm" top="4.6cm" left="13.2cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
+                        <xsl:call-template name="legend"/>
+                        <!-- evt. statische afbeelding(en) voor legenda -->
+                        <!-- xsl:call-template name="static-legend-block"/ -->
+                    </fo:block-container>
+
+                    <!-- tabellen -->                   
                     <fo:block-container width="6.5cm" height="4.0cm" top="9.6cm" left="0cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
                         <xsl:for-each select="extra/info[@classname='viewer.components.IbisFactsheet.kenmerkenTerrein']/root">
                             <fo:block xsl:use-attribute-sets="subtitle-font">Kenmerken Terrein</fo:block>
@@ -121,7 +126,7 @@
                     </fo:block-container>
 
                     <!-- bedrijvigheid -->
-                    <fo:block-container overflow="hidden" width="20.4cm" height="7.1cm" top="17.8cm" left="0cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
+                    <fo:block-container overflow="hidden" width="19.7cm" height="7.3cm" top="17.8cm" left="0cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
                         <fo:block xsl:use-attribute-sets="subtitle-font">Aantal gevestigde bedrijven en bijbehorend aantal banen</fo:block>
                         <xsl:for-each select="extra/info[@classname='viewer.components.IbisFactsheet.gegevensGevestigd']/root">
                             <xsl:call-template name="ibis-tabel-2column">
@@ -140,7 +145,7 @@
                     </fo:block-container>
 
                     <!-- contact gegevens -->
-                    <fo:block-container width="10.2cm" height="3.0cm" top="25cm" left="0cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
+                    <fo:block-container width="9.8cm" height="3.0cm" top="25.2cm" left="0cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
                         <xsl:for-each select="extra/info[@classname='viewer.components.IbisFactsheet.gegevensVerkoopOntwikkelaar']/root">
                             <fo:block xsl:use-attribute-sets="subtitle-font">Contactgegevens verkoper/ontwikkelaar</fo:block>
                             <xsl:call-template name="ibis-tabel-2column">
@@ -150,7 +155,7 @@
                         </xsl:for-each>
                     </fo:block-container>
                         
-                    <fo:block-container width="10.2cm" height="3.0cm" top="25cm" left="10.2cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
+                    <fo:block-container width="9.8cm" height="3.0cm" top="25.2cm" left="9.9cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
                         <xsl:for-each select="extra/info[@classname='viewer.components.IbisFactsheet.gegevensVerkoopOverheid']/root">
                             <fo:block xsl:use-attribute-sets="subtitle-font">Contactgegevens overheid</fo:block>
                             <xsl:call-template name="ibis-tabel-2column">
@@ -378,10 +383,17 @@
         </fo:block>
     </xsl:template>
 
-    <xsl:template name="logo-block">
+    <xsl:template name="PG-logo-block">
         <fo:block>
-            <fo:external-graphic src="url('b3p_logo.png')" width="231px" height="56px"/>
+            <!-- fo:external-graphic src="url('PG-logo-zw-200x71-px.png')" width="3cm" scaling="uniform" content-height="scale-to-fit" content-width="scale-to-fit" /-->
+            <fo:external-graphic src="url('PG-logo-zw-200x72px.jpg')" width="3cm" scaling="uniform" content-height="scale-to-fit" content-width="scale-to-fit" />
         </fo:block>
     </xsl:template>
 
+    <xsl:template name="static-legend-block">
+        <fo:block>
+            <!--  -->
+            <fo:external-graphic src="url('TODO.png')" width="231px" height="56px" scaling="uniform" content-height="scale-to-fit" content-width="scale-to-fit"/>
+        </fo:block>
+    </xsl:template>
 </xsl:stylesheet>
