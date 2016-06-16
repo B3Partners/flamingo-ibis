@@ -156,6 +156,7 @@ Ext.define("viewer.components.IbisFactsheet", {
             if (key.indexOf("opp_geometrie") > -1 ||
                     key.indexOf("Kaveloppervlakte") > -1 ||
                     key.indexOf("kaveloppervlak_ha") > -1 ||
+                    key.indexOf("kaveloppervlak_m2") > -1 ||
                     key.indexOf("o_milieuwet_code") > -1 ||
                     (key.lastIndexOf("status", 0) === 0) 
                 // || key.indexOf("milieuzone") > -1)
@@ -166,12 +167,17 @@ Ext.define("viewer.components.IbisFactsheet", {
         if (Ext.Object.isEmpty(result)) {
             result.gegevens = 'onbekend';
         }
+
         if (result['Kaveloppervlakte']) {
-            result['Kaveloppervlakte'] = result['Kaveloppervlakte'] + ' ha';
+            result['Kaveloppervlakte'] = result['Kaveloppervlakte'] + ' m2';
         }
         if (result['kaveloppervlak_ha']) {
             result['kaveloppervlak'] = result['kaveloppervlak_ha'] + ' ha';
             delete result['kaveloppervlak_ha'];
+        }
+        if (result['kaveloppervlak_m2']) {
+            result['kaveloppervlak'] = result['kaveloppervlak_m2'] + ' m2';
+            delete result['kaveloppervlak_m2'];
         }
 
         // hernoem o_milieuwet_code
