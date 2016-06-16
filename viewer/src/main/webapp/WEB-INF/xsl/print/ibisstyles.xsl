@@ -19,6 +19,7 @@
     <xsl:attribute-set name="subtitle-font">
         <xsl:attribute name="font-size">11pt</xsl:attribute>
         <xsl:attribute name="color">#000066</xsl:attribute>
+        <xsl:attribute name="margin-top">1mm</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="table-border" use-attribute-sets="simple-border">
