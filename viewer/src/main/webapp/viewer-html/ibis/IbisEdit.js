@@ -187,7 +187,7 @@ Ext.define("viewer.components.IbisEdit", {
 
         this.inputContainer.getForm().findField(mutatiedatumFieldName).setMinValue(
                 getMinMutatiedatum(feature[mutatiedatumFieldName]));
-
+        this.inputContainer.getForm().findField(mutatiedatumFieldName).setValue(new Date());
         var s = "";
         if (this.mode === "copy") {
             setNextIbisWorkflowStatus({}, 'bewerkt', Ext.getCmp(this.workflow_fieldname));
@@ -225,7 +225,7 @@ Ext.define("viewer.components.IbisEdit", {
         var s = this.workflowStore.getById('bewerkt').get("label");
         Ext.getCmp(this.name + "workflowLabel").setText("Huidige workflow status: " + s);
 
-        this.inputContainer.getForm().findField('datummutatie').setValue(new Date());
+        this.inputContainer.getForm().findField(mutatiedatumFieldName).setValue(new Date());
         this.inputContainer.getForm().findField('status').setValue('Niet bekend');
 
         // generate a new, pseudo-unique id for this feature
@@ -251,7 +251,7 @@ Ext.define("viewer.components.IbisEdit", {
      * @override
      */
     save: function () {
-        if (!this.inputContainer.getForm().findField('datummutatie').isValid()) {
+        if (!this.inputContainer.getForm().findField(mutatiedatumFieldName).isValid()) {
             return;
         }
         if (this.mode === "delete") {
