@@ -197,7 +197,8 @@ Ext.define("viewer.components.IbisEdit", {
             var wf = feature[this.workflow_fieldname] || 'bewerkt';
             s = this.workflowStore.getById(wf).get("label");
         }
-        Ext.getCmp(this.name + "workflowLabel").setText("Oude workflow status: " + s);
+        // label uitgezet mail Ruben 12/6
+        // Ext.getCmp(this.name + "workflowLabel").setText("Oude workflow status: " + s);
 
         // titelgegevens uit het formulier lezen
         var t = '';
