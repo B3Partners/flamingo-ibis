@@ -21,7 +21,6 @@
  */
 Ext.define("viewer.components.CustomConfiguration", {
     extend: "viewer.components.SelectionWindowConfig",
-    configObject: {},
     /**
      * @constructor
      * @param {type} parentId
@@ -30,10 +29,125 @@ Ext.define("viewer.components.CustomConfiguration", {
      * @returns void
      */
     constructor: function (parentId, configObject, configPage) {
-        this.configObject.showLabelconfig = true;
+        configObject.showLabelconfig = true;
         viewer.components.CustomConfiguration.superclass.constructor.call(this, parentId, configObject, configPage);
+        reportbase__layersArrayIndexesToAppLayerIds(this.configObject);
+        var me = this;
+        me.addForm(configObject);
+        me.addLayerLists();
+        me.addAttributeSources();
+    },
+    /**
+     * Execute an AJAX request to retrieve a list of layers and add some dropdowns
+     * to this form so a selection can be made.
+     *
+     * @returns void
+     */
+    addLayerLists: function () {
+        var me = this;
+        Ext.Ajax.request({
+            url: me.requestPath, //contextPath + "/action/componentConfigLayerList",
+            params: {
+                appId: this.getApplicationId(),
+                filterable: true
+            },
+            success: function (result, request) {
+                var json = Ext.JSON.decode(result.responseText);
+                var layers = Ext.create('Ext.data.Store', {fields: ['id', 'alias'], data: json});
+                me.form.getComponent("componentLayer").setStore(layers);
+                me.form.getComponent("componentLayer").setValue(me.configObject.componentLayer);
+                me.form.getComponent("componentLayer").validate();
 
-        this.form.add([{
+//                me.form.insert(4, {
+//                    xtype: 'combobox',
+//                    fieldLabel: 'IbisRapportage component kaartlaag (component view)',
+//                    labelWidth: me.labelWidth,
+//                    emptyText: 'Maak uw keuze',
+//                    store: layers,
+//                    queryMode: 'local',
+//                    itemId: 'componentLayer',
+//                    name: 'componentLayer',
+//                    displayField: 'alias',
+//                    valueField: 'id',
+//                    value: me.configObject.componentLayer || null
+//                });
+            },
+            failure: function () {
+                Ext.MessageBox.alert("Foutmelding", "Er is een onbekende fout opgetreden waardoor de lijst met kaartlagen niet kan worden weergegeven");
+            }
+        });
+    },
+    addAttributeSources: function () {
+        var me = this;
+        Ext.Ajax.request({
+            url: '/viewer-admin/action/attributesource/getGridData',
+            params: {
+                page: 1,
+                start: 0,
+                sort: 'name',
+                dir: 'ASC',
+                limit: 100,
+                filter: Ext.util.JSON.encode([{property: "protocol", value: "JDBC", label: "Type"}])
+            },
+            success: function (result, request) {
+                var json = Ext.JSON.decode(result.responseText);
+                var sources = Ext.create('Ext.data.Store', {
+                    fields: ['protocol', 'name', 'id', 'url', 'status'],
+                    data: json.gridrows
+                });
+                me.form.getComponent("attrSource").setStore(sources);
+                me.form.getComponent("attrSource").setValue(me.configObject.attrSource);
+                me.form.getComponent("attrSource").validate();
+
+//                me.form.insert(5, {
+//                    xtype: 'combobox',
+//                    fieldLabel: 'IbisReports attribuutbron',
+//                    labelWidth: me.labelWidth,
+//                    emptyText: 'Maak uw keuze',
+//                    store: sources,
+//                    queryMode: 'local',
+//                    itemId: 'attrSource',
+//                    name: 'attrSource',
+//                    displayField: 'name',
+//                    valueField: 'id',
+//                    value: me.configObject.attrSource || null
+//                });
+            },
+            failure: function () {
+                Ext.MessageBox.alert("Foutmelding", "Er is een onbekende fout opgetreden waardoor de lijst met attribuutbronnen niet kan worden weergegeven");
+            }
+        });
+    },
+    addForm: function (configObject) {
+        var me = this;
+        me.form.add([
+            {
+                xtype: 'combobox',
+                fieldLabel: 'IbisRapportage component kaartlaag (component view)',
+                labelWidth: me.labelWidth,
+                emptyText: 'Maak uw keuze',
+                //store: layers,
+                queryMode: 'local',
+                itemId: 'componentLayer',
+                name: 'componentLayer',
+                displayField: 'alias',
+                valueField: 'id',
+                //value: me.configObject.componentLayer || null
+            },
+            {
+                xtype: 'combobox',
+                fieldLabel: 'IbisReports attribuutbron',
+                labelWidth: me.labelWidth,
+                emptyText: 'Maak uw keuze',
+                //store: sources,
+                queryMode: 'local',
+                itemId: 'attrSource',
+                name: 'attrSource',
+                displayField: 'name',
+                valueField: 'id',
+                //value: me.configObject.attrSource || null
+            },
+            {
                 itemId: 'rapportLabels',
                 xtype: 'panel',
                 collapsible: true,
@@ -77,8 +191,12 @@ Ext.define("viewer.components.CustomConfiguration", {
         }
         this.form.setAutoScroll(true);
     },
+    /**
+     *
+     * @param {type} conf
+     * @returns {undefined}
+     */
     addRapportLabel: function (conf) {
-        console.log('addRapportLabel', conf);
         var container = Ext.ComponentQuery.query('#rapportLabels')[0];
         container.add({
             xtype: 'form',
@@ -92,10 +210,11 @@ Ext.define("viewer.components.CustomConfiguration", {
             items: [{
                     xtype: 'textfield',
                     name: 'repTitle',
-                    fieldLabel: 'Titel',
+                    fieldLabel: 'Knop titel',
                     value: conf ? conf.repTitle : '',
                     maxLength: 1
                 }, {
+                    // TODO maybe replace with dropdown..
                     xtype: 'textfield',
                     name: 'repTable',
                     fieldLabel: 'view naam',
@@ -106,15 +225,18 @@ Ext.define("viewer.components.CustomConfiguration", {
     },
     getConfiguration: function () {
         var config = viewer.components.CustomConfiguration.superclass.getConfiguration.call(this);
-        var prefixContainer = Ext.ComponentQuery.query('#rapportLabels')[0];
-        var prefixes = [];
-        prefixContainer.items.each(function (row) {
+        reportbase__appLayerIdToLayerIndex(config);
+
+        var lblContainer = Ext.ComponentQuery.query('#rapportLabels')[0];
+        var reports = [];
+        lblContainer.items.each(function (row) {
             var values = row.getValues();
             if (values.repTitle !== '' && values.repTable !== '') {
-                prefixes.push(values);
+                reports.push(values);
             }
         });
-        config.rapportConfig = prefixes;
+        config.rapportConfig = reports;
+
         return config;
     }
 });

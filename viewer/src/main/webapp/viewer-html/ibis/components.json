@@ -7,10 +7,9 @@
                 name: "IbisReports",
                 group: "Ibis",
                 shortName: "IR",
-                /* "WorkflowStatus.js", "IbisReportBase.js", "IbisLayerIdUtil.js", "GridPanel.js", */
-                sources: [ "IbisReports.js"],
-                /*"IbisLayerIdUtil.js", */
-                configSource: ["ConfigObject.js", "SelectionWindowConfig.js", "IbisReports-config.js"],
+                /* "WorkflowStatus.js", "GridPanel.js", */
+                sources: [ "IbisLayerIdUtil.js", "IbisReportBase.js", "IbisReports.js"],
+                configSource: ["ConfigObject.js", "SelectionWindowConfig.js", "IbisLayerIdUtil.js", "IbisReports-config.js"],
                 singleton: true,
                 type: "popup",
                 restrictions: ["rightmargin_top", "leftmargin_top"],

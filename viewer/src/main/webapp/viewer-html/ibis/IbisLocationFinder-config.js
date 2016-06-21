@@ -63,7 +63,7 @@ Ext.define("viewer.components.CustomConfiguration", {
                         name: 'componentLayer',
                         displayField: 'alias',
                         valueField: 'id',
-                        value: me.configObject.componentLayer || null,
+                        value: me.configObject.componentLayer || null
                     }
                 ]);
             },

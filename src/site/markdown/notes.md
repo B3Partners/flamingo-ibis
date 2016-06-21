@@ -19,6 +19,7 @@ check the layers to be part of the legend (Bedrijventerrein begrenzing and Bedri
 To be able to zoom in to the terrein the geometry field of the `v_factsheet_terrein_info` must 
 be checked in the attributes tab.
 
+<!--
 ### IbisReport component
 
 The IbisReport uses a special layer that is only to be used for the component
@@ -35,6 +36,25 @@ and not anything else.
   - Add the IbisReport component to the application, either as a sidebar component 
     or a popup, configure it to use "ibis report component" as layer, select
     which attributes should be available as aggregate.
+-->
+### IbisReports component
+
+The IbisReports uses a special layer that is only to be used for the component
+and not anything else. Next to that it directly uses an "Attribuutbron" to retrieve
+data of the views specified in the control admin.
+
+  - Create a layer "ibis report component" based on the `v_component_ibis_report`
+    that is created from the same view. Attach a WFS attribute source to this layer.
+  - Add the layer to the application, but give it a place of it's own in
+    "Boomstructuuur met kaart" so it won't show up in the legend. eg.
+    `Applicatie > niet in de kaart > ibis report component > ibis report component`,
+    turn on __all__ attributes. (Do __not__ add the layer to the "Kaartbeeld")
+  - Add the IbisReports component to the application, either as a sidebar component 
+    or a popup, configure it to use "ibis report component" as layer (IbisRapportages 
+    component kaartlaag (component view))
+  - choose the IbisReports attribuutbron to use for locating the views
+  - add the views to generate reporting buttons using the "Rapport toevoegen" button
+
 
 ### IbisLocationFinder component
 
