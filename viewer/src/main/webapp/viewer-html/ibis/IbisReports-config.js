@@ -57,20 +57,6 @@ Ext.define("viewer.components.CustomConfiguration", {
                 me.form.getComponent("componentLayer").setStore(layers);
                 me.form.getComponent("componentLayer").setValue(me.configObject.componentLayer);
                 me.form.getComponent("componentLayer").validate();
-
-//                me.form.insert(4, {
-//                    xtype: 'combobox',
-//                    fieldLabel: 'IbisRapportage component kaartlaag (component view)',
-//                    labelWidth: me.labelWidth,
-//                    emptyText: 'Maak uw keuze',
-//                    store: layers,
-//                    queryMode: 'local',
-//                    itemId: 'componentLayer',
-//                    name: 'componentLayer',
-//                    displayField: 'alias',
-//                    valueField: 'id',
-//                    value: me.configObject.componentLayer || null
-//                });
             },
             failure: function () {
                 Ext.MessageBox.alert("Foutmelding", "Er is een onbekende fout opgetreden waardoor de lijst met kaartlagen niet kan worden weergegeven");
@@ -98,20 +84,6 @@ Ext.define("viewer.components.CustomConfiguration", {
                 me.form.getComponent("attrSource").setStore(sources);
                 me.form.getComponent("attrSource").setValue(me.configObject.attrSource);
                 me.form.getComponent("attrSource").validate();
-
-//                me.form.insert(5, {
-//                    xtype: 'combobox',
-//                    fieldLabel: 'IbisReports attribuutbron',
-//                    labelWidth: me.labelWidth,
-//                    emptyText: 'Maak uw keuze',
-//                    store: sources,
-//                    queryMode: 'local',
-//                    itemId: 'attrSource',
-//                    name: 'attrSource',
-//                    displayField: 'name',
-//                    valueField: 'id',
-//                    value: me.configObject.attrSource || null
-//                });
             },
             failure: function () {
                 Ext.MessageBox.alert("Foutmelding", "Er is een onbekende fout opgetreden waardoor de lijst met attribuutbronnen niet kan worden weergegeven");
@@ -126,26 +98,22 @@ Ext.define("viewer.components.CustomConfiguration", {
                 fieldLabel: 'IbisRapportage component kaartlaag (component view)',
                 labelWidth: me.labelWidth,
                 emptyText: 'Maak uw keuze',
-                //store: layers,
                 queryMode: 'local',
                 itemId: 'componentLayer',
                 name: 'componentLayer',
                 displayField: 'alias',
                 valueField: 'id',
-                //value: me.configObject.componentLayer || null
             },
             {
                 xtype: 'combobox',
                 fieldLabel: 'IbisReports attribuutbron',
                 labelWidth: me.labelWidth,
                 emptyText: 'Maak uw keuze',
-                //store: sources,
                 queryMode: 'local',
                 itemId: 'attrSource',
                 name: 'attrSource',
                 displayField: 'name',
                 valueField: 'id',
-                //value: me.configObject.attrSource || null
             },
             {
                 itemId: 'rapportLabels',

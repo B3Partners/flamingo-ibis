@@ -52,8 +52,15 @@ data of the views specified in the control admin.
   - Add the IbisReports component to the application, either as a sidebar component 
     or a popup, configure it to use "ibis report component" as layer (IbisRapportages 
     component kaartlaag (component view))
-  - choose the IbisReports attribuutbron to use for locating the views
-  - add the views to generate reporting buttons using the "Rapport toevoegen" button
+  - choose the IbisReports attribuutbron to use for locating the views (make sure it is up-to-date)
+  - add the views to generate reporting buttons using the "Rapport toevoegen" button,
+    enter a button label and a table or view name (clear the to remove an entry)
+
+ There are some css classes available for additional styling:
+
+  - `IbisReportBtn` for the sidebar button
+  - `IbisReportFormTitel` for the headers in the criteria form
+  - `IbisReportFormBtn` for the report buttons
 
 
 ### IbisLocationFinder component

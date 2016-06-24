@@ -162,7 +162,6 @@ Ext.define('viewer.components.IbisReports', {
 
         // formulier maken
         me.form = Ext.create('Ext.form.FormPanel', {
-            //padding: '5 0 0 5',
             flex: 0.25,
             layout: 'vbox',
             title: 'Criteria',
@@ -173,8 +172,8 @@ Ext.define('viewer.components.IbisReports', {
             items: [{
                     xtype: 'container',
                     html: 'Kies een regio en/of gemeente',
-                    margin: '10 0 10 0',
-                    cls: 'IbisReportFormTitel'
+                    margin: '10 0 10 5',
+                    cls: 'IbisReportFormTitel x-panel-header-title-default'
                 }, {
                     xtype: 'combobox',
                     store: this.terreinenStore.collect(this.regioVeldNaam, true/*allowNull*/, true /*bypassFilter*/),
@@ -200,8 +199,8 @@ Ext.define('viewer.components.IbisReports', {
                 }, {
                     xtype: 'container',
                     html: 'Kies eventueel een periode (voor uitgifte)',
-                    margin: '10 0 10 0',
-                    cls: 'IbisReportFormTitel'
+                    margin: '10 0 10 5',
+                    cls: 'IbisReportFormTitel x-panel-header-title-default'
                 }, {
                     xtype: 'datefield',
                     fieldLabel: 'begin datum',
@@ -213,15 +212,18 @@ Ext.define('viewer.components.IbisReports', {
                 }, {
                     xtype: 'button',
                     text: 'Reset selecties',
+                    scope: me,
                     handler: function (button, e) {
                         me.form.reset();
                         me.resetStoreFilters();
+                        me.toggleGridButtons(true);
+                        me.resultsgrid.reconfigure(null);
                     }
                 }, {
                     xtype: 'container',
                     html: 'Beschikbare rapporten',
-                    margin: '10 0 10 0',
-                    cls: 'IbisReportFormTitel'
+                    margin: '10 0 10 5',
+                    cls: 'IbisReportFormTitel x-panel-header-title-default'
                 }]
         });
 
@@ -232,7 +234,8 @@ Ext.define('viewer.components.IbisReports', {
                 text: me.config.rapportConfig[i].repTitle,
                 value: me.config.rapportConfig[i].repTable,
                 scope: me,
-                margin: '10 0 0 10',
+                margin: '5 0 5 10',
+                cls: 'IbisReportFormBtn',
                 handler: function (button, e) {
                     me.report = button.value;
                     me.createReport();
@@ -308,9 +311,9 @@ Ext.define('viewer.components.IbisReports', {
                     type: 'json'
                 },
                 listeners: {
-                    exception: function (store, request, operation, eOpts) {
-                        //console.error("FOUT:", operation.error);
-                    }
+//                    exception: function (store, request, operation, eOpts) {
+//                        console.error("FOUT:", operation.error);
+//                    }
                 }
             },
             autoLoad: {
@@ -320,8 +323,8 @@ Ext.define('viewer.components.IbisReports', {
             listeners: {
                 metachange: function (store, meta) {
                     // save a copy of the columns array to use when opening grid in popup
-                    me.dataGridColumns = [].concat(meta.columns); // [].concat creates a copy of the array
-                    // reconfigure grid and update model (up2date model is required for excel download)
+                    me.dataGridColumns = [].concat(meta.columns);
+                    // reconfigure grid and update model
                     me.resultsgrid.reconfigure(store, meta.columns);
                     me.reportdataStore.model.fields = meta.fields;
                     me.toggleGridButtons(/*disabled=*/false);
