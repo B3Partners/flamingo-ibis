@@ -33,7 +33,6 @@ import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.action.Before;
 import net.sourceforge.stripes.action.DefaultHandler;
-import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.StreamingResolution;
 import net.sourceforge.stripes.action.StrictBinding;
@@ -43,7 +42,6 @@ import net.sourceforge.stripes.validation.DateTypeConverter;
 import net.sourceforge.stripes.validation.Validate;
 import nl.b3p.viewer.config.app.Application;
 import nl.b3p.viewer.config.app.ConfiguredAttribute;
-import nl.b3p.viewer.config.app.ConfiguredComponent;
 import nl.b3p.viewer.config.security.Authorizations;
 import nl.b3p.viewer.config.services.AttributeDescriptor;
 import nl.b3p.viewer.config.services.JDBCFeatureSource;
@@ -53,7 +51,6 @@ import nl.b3p.viewer.features.ExcelDownloader;
 import nl.b3p.viewer.features.FeatureDownloader;
 import nl.b3p.viewer.features.ShapeDownloader;
 import nl.b3p.viewer.ibis.util.IbisConstants;
-import nl.b3p.viewer.util.FeatureToJson;
 import nl.b3p.web.stripes.ErrorMessageResolution;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -71,7 +68,6 @@ import org.json.JSONObject;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
-import org.opengis.filter.expression.Expression;
 import org.stripesstuff.stripersist.Stripersist;
 
 /**
@@ -140,7 +136,7 @@ public class IbisReportsActionBean implements ActionBean, IbisConstants {
             log.debug(q);
 
             // cannot forward to download action bean as that uses layers/appLayers
-            //return new ForwardResolution(DownloadFeaturesActionBean.class, "download").addParameter("filter", f.toString());
+            //  while we use an attributesource
             Map<String, AttributeDescriptor> featureTypeAttributes = new HashMap();
             List<ConfiguredAttribute> attributes = new ArrayList();
             ConfiguredAttribute ca;
@@ -149,16 +145,13 @@ public class IbisReportsActionBean implements ActionBean, IbisConstants {
                 ca = new ConfiguredAttribute();
                 ca.setVisible(true);
                 ca.setAttributeName(ad.getName());
-                //ca.setFeatureType(sft);
                 attributes.add(ca);
             }
 
             output = convert(sft, fs, q, attributes, featureTypeAttributes);
             json.put("success", true);
-
         } catch (Exception e) {
             log.error("Error loading features", e);
-
             json.put("success", false);
 
             String message = "Fout bij ophalen features: " + e.toString();
@@ -188,7 +181,7 @@ public class IbisReportsActionBean implements ActionBean, IbisConstants {
                 res.setAttachment(true);
                 return res;
             } finally {
-                 output.delete();
+                output.delete();
             }
         } else {
             return new ErrorMessageResolution(json.getString("message"));
@@ -260,10 +253,10 @@ public class IbisReportsActionBean implements ActionBean, IbisConstants {
             filters.add(ff.equals(ff.property("gemeentenaam"), ff.literal(gemeente)));
         }
         if (this.toDate != null && sft.getAttribute("datum") != null) {
-            filters.add(ff.ends(ff.property("datum"), ff.literal(toDate)));
+            filters.add(ff.before(ff.property("datum"), ff.literal(toDate)));
         }
         if (this.fromDate != null && sft.getAttribute("datum") != null) {
-            filters.add(ff.begins(ff.property("datum"), ff.literal(fromDate)));
+            filters.add(ff.after(ff.property("datum"), ff.literal(fromDate)));
         }
 
         if (filters.size() > 1) {

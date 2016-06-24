@@ -69,11 +69,21 @@ data of the views specified in the control admin.
   - add the views to generate reporting buttons using the "Rapport toevoegen" button,
     enter a button label and a table or view name (clear the to remove an entry)
 
- There are some css classes available for additional styling:
+There are some css classes available for additional styling:
 
   - `IbisReportBtn` for the sidebar button
   - `IbisReportFormTitel` for the headers in the criteria form
   - `IbisReportFormBtn` for the report buttons
+
+Filtering occurs on the following fields:
+
+  - Regio: [vvr_naam = `value`]
+  - Gemeente: [gemeentenaam = `value`]
+  - Begindatum: [datum after `value`]
+  - Einddatum: [datum before `value`]
+
+If fields don't match they won't be used for filtering, eg. if a table has no `einddatum` field but
+the user selects on anyway it will be ignored.
 
 
 ### IbisLocationFinder component

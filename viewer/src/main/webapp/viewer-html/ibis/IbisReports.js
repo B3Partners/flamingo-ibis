@@ -55,6 +55,7 @@ Ext.define('viewer.components.IbisReports', {
         // update custom url, global var contextPath is not available until after page load
         me.config.reportactionbeanUrl = contextPath + '/action/ibisreports';
 
+        // sidebar panel
         me.container = Ext.create('Ext.container.Container', {
             width: '100%',
             height: '100%',
@@ -74,8 +75,8 @@ Ext.define('viewer.components.IbisReports', {
             viewerController: me.config.viewerController,
             title: me.config.title,
             details: {
-                width: '98%',
-                height: '98%',
+                width: '99%',
+                height: '99%',
                 changeablePosition: false,
                 useExtLayout: true,
                 changeableSize: false
@@ -203,11 +204,11 @@ Ext.define('viewer.components.IbisReports', {
                     cls: 'IbisReportFormTitel x-panel-header-title-default'
                 }, {
                     xtype: 'datefield',
-                    fieldLabel: 'begin datum',
+                    fieldLabel: 'Begindatum',
                     name: 'fromDate'
                 }, {
                     xtype: 'datefield',
-                    fieldLabel: 'eind datum',
+                    fieldLabel: 'Einddatum',
                     name: 'toDate'
                 }, {
                     xtype: 'button',
@@ -217,7 +218,8 @@ Ext.define('viewer.components.IbisReports', {
                         me.form.reset();
                         me.resetStoreFilters();
                         me.toggleGridButtons(true);
-                        me.resultsgrid.reconfigure(null);
+                        me.resultsgrid.reconfigure(null, null);
+                        me.resultsgrid.getView().refresh();
                     }
                 }, {
                     xtype: 'container',
@@ -227,7 +229,7 @@ Ext.define('viewer.components.IbisReports', {
                 }]
         });
 
-        // knoppen toevoegen
+        // knoppen voor de rapporten toevoegen
         for (var i = 0; i < this.config.rapportConfig.length; i++) {
             this.form.add({
                 xtype: 'button',
@@ -333,6 +335,9 @@ Ext.define('viewer.components.IbisReports', {
                     if (!successful) {
                         Ext.MessageBox.alert("Fout", "Fout tijdens opvragen van de data: " + eOpts.error);
                         me.toggleGridButtons(/*disabled=*/true);
+                    }
+                    if (records.length < 1) {
+                        Ext.MessageBox.alert("Informatie", "Er zijn geen gegevens gevonden bij de gebruikte criteria.");
                     }
                     me.setDoneLoading();
                 }
