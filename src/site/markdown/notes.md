@@ -1,5 +1,18 @@
 # Deployment notes
 
+
+### IbisEdit component
+
+ This is a subclass of the regular Edit component to support workflow.
+
+ The title of this component is update when attribute data is loaded to reflect
+ the object being edited, the fields supported for this are:
+
+  - gemeentenaam
+  - a_plannaam
+  - terreinid
+  - rin_nr
+
 ### IbisFactsheet component
 
 This component extends the featureinfo popup with a link to provide extra information on
