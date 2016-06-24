@@ -4,7 +4,7 @@
 <Context antiJARLocking="true" crossContext="true" disableURLRewriting="true" path="/viewer-admin">
   <Parameter name="componentregistry.path" override="false" value="/viewer-html/components"/>
   <!-- Customized context parameters; see web.xml -->
-  <Parameter name="viewer.url" value="" override="false"/>
+  <Parameter name="viewer.url" override="false" value=""/>
   <!--Parameter name="monitoring.mail.from.email" value="no-reply@b3partners.nl" override="false"/-->
   <!--Parameter name="monitoring.mail.from.name" value="Geo services monitoring" override="false"/-->
   <!--Parameter name="monitoring.schedule.minutes" value="30" override="false"/-->
@@ -56,17 +56,17 @@
         ...
     </Server>
     -->
-    <ResourceLink global="mail/session" name="mail/session" type="javax.mail.Session"/>
-    <!-- Security configuration -->
-    <!-- Optional: use LockoutRealm instead of CombinedRealm to prevent brute-forcing -->
-    <Realm className="org.apache.catalina.realm.CombinedRealm">
-        <Realm allRolesMode="authOnly" className="org.apache.catalina.realm.DataSourceRealm" dataSourceName="jdbc/${ibis-flamingo-ds-name}" digest="SHA-1" roleNameCol="group_" userCredCol="password" userNameCol="username" userRoleTable="user_groups" userTable="user_"/>
-        <!-- Use JNDIRealm for authenticating against a LDAP server (such as
+  <ResourceLink global="mail/session" name="mail/session" type="javax.mail.Session"/>
+  <!-- Security configuration -->
+  <!-- Optional: use LockoutRealm instead of CombinedRealm to prevent brute-forcing -->
+  <Realm className="org.apache.catalina.realm.CombinedRealm">
+    <Realm allRolesMode="authOnly" className="org.apache.catalina.realm.DataSourceRealm" dataSourceName="jdbc/${ibis-flamingo-ds-name}" digest="SHA-1" roleNameCol="group_" userCredCol="password" userNameCol="username" userRoleTable="user_groups" userTable="user_"/>
+    <!-- Use JNDIRealm for authenticating against a LDAP server (such as
              Active Directory):
              http://tomcat.apache.org/tomcat-6.0-doc/config/realm.html
              http://tomcat.apache.org/tomcat-6.0-doc/realm-howto.html#JNDIRealm
         -->
-        <!--Realm className="org.apache.catalina.realm.JNDIRealm"
+    <!--Realm className="org.apache.catalina.realm.JNDIRealm"
             allRolesMode="authOnly"
             connectionURL="ldap://ldap:389"
             connectionName="cn=ServiceUser,ou=Services,o=MyOrg"
@@ -76,5 +76,5 @@
             userSearch="cn={0}"
             commonRole="ExtendedUser"
         /-->
-    </Realm>
+  </Realm>
 </Context>

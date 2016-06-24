@@ -82,7 +82,7 @@ Ext.define("viewer.components.IbisEdit", {
             bodyPadding: 15,
             layout: {
                 type: 'vbox',
-                align: 'strecth'
+                align: 'stretch'
             },
             defaults: {
                 margin: '0 0 5 0'
