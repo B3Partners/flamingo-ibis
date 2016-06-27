@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -176,7 +177,8 @@ public class IbisReportsActionBean implements ActionBean, IbisConstants {
                 };
                 String name = output.getName();
                 String extension = name.substring(name.lastIndexOf("."));
-                String newName = "Download-" + report + "-" + type + extension;
+                SimpleDateFormat today = new SimpleDateFormat("yyyy_MM_dd");
+                String newName = "download-" + report + "-" + today.format(new Date()) + extension;
                 res.setFilename(newName);
                 res.setAttachment(true);
                 return res;

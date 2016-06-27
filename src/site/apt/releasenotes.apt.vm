@@ -22,6 +22,20 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
+** Verbeteringen en oplossingen
+
+  * datum in excel downloadbestandsnaam
+
+  []
+
+
+* Versie 2.5
+
+  De complete lijst met issues voor deze release is beschikbaar in de tracker:
+  {{{${project.issueManagement.url}?q=milestone%3A2.5+is%3Aclosed}milestone 2.5 issues}}.
+
+** Nieuw
+
   * Gebruik Flamingo versie 4.7.1, zie ook:
     {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.7.1}Flamingo release notes}}
 
