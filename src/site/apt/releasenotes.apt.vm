@@ -22,11 +22,21 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
+  * Gebruik Flamingo versie 4.7.2-SNAPSHOT, zie ook:
+    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.7.2}Flamingo release notes}}
+
+  []
+
 ** Verbeteringen en oplossingen
 
   * datum in excel downloadbestandsnaam
 
-  []
+  * Relevante Flamingo issues:
+
+    * {{{https://github.com/flamingo-geocms/flamingo/pull/623}#623 gebruik juiste datatype in Excel sheet}}
+
+ []
+
 
 
 * Versie 2.5
