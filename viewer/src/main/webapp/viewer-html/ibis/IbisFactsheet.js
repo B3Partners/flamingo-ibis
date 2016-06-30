@@ -157,6 +157,7 @@ Ext.define("viewer.components.IbisFactsheet", {
                     key.indexOf("Kaveloppervlakte") > -1 ||
                     key.indexOf("kaveloppervlak_ha") > -1 ||
                     key.indexOf("kaveloppervlak_m2") > -1 ||
+                    key.indexOf("kaveloppervlak") > -1 ||
                     key.indexOf("o_milieuwet_code") > -1 ||
                     (key.lastIndexOf("status", 0) === 0) 
                 // || key.indexOf("milieuzone") > -1)
@@ -179,7 +180,9 @@ Ext.define("viewer.components.IbisFactsheet", {
             result['kaveloppervlak'] = result['kaveloppervlak_m2'] + ' m2';
             delete result['kaveloppervlak_m2'];
         }
-
+        if (result['kaveloppervlak']) {
+            result['kaveloppervlak'] = result['kaveloppervlak'] + ' m2';
+        }
         // hernoem o_milieuwet_code
         if (result['o_milieuwet_code']) {
             result['maximaal_toegestane_hindercategorie'] = result['o_milieuwet_code'];
