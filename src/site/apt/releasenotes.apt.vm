@@ -35,6 +35,9 @@ ${project.name} ${project.version} Release Notes
 
     * {{{https://github.com/flamingo-geocms/flamingo/pull/623}#623 gebruik juiste datatype in Excel sheet}}
 
+    * {{{https://github.com/flamingo-geocms/flamingo/pull/626}#626 geen kaart in print/factsheet}}
+      ({{{https://github.com/B3Partners/flamingo-ibis/issues/45}issue #45}})
+
  []
 
 
