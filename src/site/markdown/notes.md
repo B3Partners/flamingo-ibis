@@ -21,7 +21,7 @@ the kavels layer, the link text is the title of the component (no title - no lin
 Configure the component to use the kavels layer as the "Factsheet kaartlaag".
 The kavels layer should have the following joins and relates configured:
 
-  - join to the view that provides area information for the kavels `v_kavel_oppervlakte` (`gt_key` = `gt_key`)
+  - this view no longer exists; `kaveloppervlak` is a field in kavel table ~~join to the view that provides area information for the kavels `v_kavel_oppervlakte` (`gt_key` = `gt_key`)~~
   - join to the view that provides factsheet information `v_factsheet_terrein_info` (`terreinid` = `terreinid`)
   - relate to `v_grootste_10_bedrijven_op_terrein` which provide the 10 biggest 
     companies on the terrain that the kavel is part of (`terreinid` = `terreinid`).
