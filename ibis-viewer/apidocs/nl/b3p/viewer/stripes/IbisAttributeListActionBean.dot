@@ -194,6 +194,8 @@ digraph G {
 <tr><td align="left" balign="left"> + DETAIL_WMS_STYLES : String </td></tr>
 <tr><td align="left" balign="left"> + DETAIL_ALL_CHILDREN : String </td></tr>
 <tr><td align="left" balign="left"> + DETAIL_ALTERNATE_LEGEND_IMAGE_URL : String </td></tr>
+<tr><td align="left" balign="left"> + writers : Set&lt;String&gt; </td></tr>
+<tr><td align="left" balign="left"> + preventGeomEditors : Set&lt;String&gt; </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + Layer() </td></tr>
