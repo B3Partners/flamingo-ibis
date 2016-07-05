@@ -22,6 +22,20 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
+  * Gebruik Flamingo versie 4.7.4-SNAPSHOT, zie ook:
+    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.7.4}Flamingo release notes}}
+
+  []
+
+
+
+* Versie 2.6
+
+  De complete lijst met issues voor deze release is beschikbaar in de tracker:
+  {{{${project.issueManagement.url}?q=milestone%3A2.6+is%3Aclosed}milestone 2.6 issues}}.
+
+** Nieuw
+
   * Gebruik Flamingo versie 4.7.3, zie ook:
     {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.7.3}Flamingo release notes}}
 
