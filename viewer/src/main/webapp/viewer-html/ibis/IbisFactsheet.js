@@ -220,7 +220,7 @@ Ext.define("viewer.components.IbisFactsheet", {
 
         // hernoem milieuzone
         if (result['o_milieuzone']) {
-            result['o_milieuzonering'] = result['o_milieuwet_code'];
+            result['o_milieuzonering'] = result['o_milieuzone'];
             delete result['o_milieuzone'];
         }
 
