@@ -197,24 +197,6 @@ Ext.define("viewer.components.IbisEdit", {
             var wf = feature[this.workflow_fieldname] || 'bewerkt';
             s = this.workflowStore.getById(wf).get("label");
         }
-        // label uitgezet mail Ruben 12/6
-        // Ext.getCmp(this.name + "workflowLabel").setText("Oude workflow status: " + s);
-
-        // titelgegevens uit het formulier lezen
-        var t = '';
-        if (this.inputContainer.getForm().findField('gemeentenaam')) {
-            t += this.inputContainer.getForm().findField('gemeentenaam').getRawValue() + ', ';
-        }
-        if (this.inputContainer.getForm().findField(planNaamFieldName)) {
-            t += this.inputContainer.getForm().findField(planNaamFieldName).getRawValue() + ', ';
-        }
-        if (this.inputContainer.getForm().findField(terreinidFieldName)) {
-            t += this.inputContainer.getForm().findField(terreinidFieldName).getRawValue() + ' ';
-        }
-        if (this.inputContainer.getForm().findField(rinnrFieldName)) {
-            t += 'RIN:' + this.inputContainer.getForm().findField(rinnrFieldName).getRawValue();
-        }
-        this.popup.popupWin.setTitle(t);
     },
     resetForm: function () {
         this.superclass.resetForm.call(this);

@@ -27,7 +27,13 @@ ${project.name} ${project.version} Release Notes
 
   []
 
+** Verbeteringen en oplossingen
 
+  * vullen milieuzonering attribuut met juiste waarde in factsheet
+
+  * titel edit venster niet meer dynamisch
+
+  []
 
 * Versie 2.6
 
