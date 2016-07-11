@@ -42,6 +42,8 @@ ${project.name} ${project.version} Release Notes
 
     * documentatie Internet Explorer gedrag {{{https://github.com/flamingo-geocms/flamingo/pull/630}#630}}
 
+    * fix edit from featureinfo popup when geometry is not-editable {{{https://github.com/flamingo-geocms/flamingo/pull/645}#645}}
+
   []
 
 * Versie 2.6
