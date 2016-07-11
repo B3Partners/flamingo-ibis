@@ -22,8 +22,10 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
-  * Gebruik Flamingo versie 4.7.4-SNAPSHOT, zie ook:
+  * Gebruik Flamingo versie 4.7.4, zie ook:
     {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.7.4}Flamingo release notes}}
+
+  * auto-size van de kolommen in de excel export
 
   []
 

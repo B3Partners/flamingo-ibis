@@ -106,6 +106,9 @@ public class IbisReportsActionBean implements ActionBean, IbisConstants {
     @Validate
     private JDBCFeatureSource attrSource;
 
+    @Validate
+    private String params;
+
     private boolean unauthorized;
 
     @Before(stages = LifecycleStage.EventHandling)
@@ -348,9 +351,14 @@ public class IbisReportsActionBean implements ActionBean, IbisConstants {
 //        }
         SimpleFeatureCollection fc = (SimpleFeatureCollection) fs.getFeatures(q);
         File f = null;
+        // alle kolommen autosizen op inhoud
+        StringBuilder autosizeAttr = new StringBuilder(",autoSize=");
+        for (ConfiguredAttribute configuredAttribute : attributes) {
+            autosizeAttr.append(configuredAttribute.getAttributeName()).append("|");
+        }
+        params = params + autosizeAttr;
 
         FeatureDownloader downloader = null;
-        final String params = null;
         if (type.equalsIgnoreCase("SHP")) {
             downloader = new ShapeDownloader(attributes, (SimpleFeatureSource) fs, featureTypeAttributes, attributeAliases, params);
         } else if (type.equalsIgnoreCase("XLS")) {
@@ -459,5 +467,13 @@ public class IbisReportsActionBean implements ActionBean, IbisConstants {
         this.attrSource = attrSource;
     }
 
+    
+    public String getParams() {
+        return params;
+    }
+
+    public void setParams(String params) {
+        this.params = params;
+    }
     //</editor-fold>
 }

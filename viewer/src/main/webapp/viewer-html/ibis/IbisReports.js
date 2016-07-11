@@ -280,6 +280,8 @@ Ext.define('viewer.components.IbisReports', {
         var formData = me.getFormData();
         formData.download = 1;
         formData.type = 'xls';
+        // niet de autoSize optie instellen hier, dat gebeurt in de AB
+        formData.params = 'rowHeight=-1';
 
         Ext.create('Ext.form.Panel', {
             standardSubmit: true,
@@ -336,7 +338,7 @@ Ext.define('viewer.components.IbisReports', {
                         Ext.MessageBox.alert("Fout", "Fout tijdens opvragen van de data: " + eOpts.error);
                         me.toggleGridButtons(/*disabled=*/true);
                     }
-                    if (records.length < 1) {
+                    if (records && records.length < 1) {
                         Ext.MessageBox.alert("Informatie", "Er zijn geen gegevens gevonden bij de gebruikte criteria.");
                     }
                     me.setDoneLoading();
