@@ -336,11 +336,11 @@ Ext.define("viewer.components.IbisEdit", {
     saveSucces: function (fid) {
         var me = this;
         Ext.Object.eachValue(this.config.viewerController.app.appLayers, function (appLayer) {
-            if (appLayer.layerName === terreinenLayerName) {
+            // alle aangevinkte lagen verversen
+            if (me.config.viewerController.getLayerChecked(appLayer)) {
                 me.config.viewerController.getLayer(appLayer).reload();
             }
         });
-        this.editingLayer.reload();
         this.currentFID = fid;
         this.cancel();
     },

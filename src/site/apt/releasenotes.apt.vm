@@ -33,6 +33,15 @@ ${project.name} ${project.version} Release Notes
 
   * titel edit venster niet meer dynamisch
 
+  * na edit alle aangevinkte kaartlagen herladen, niet alleen de zojuist bewerkte en terreinen kaartlaag
+
+  * Relevante Flamingo issues:
+
+    * Simplefilter fixes ({{{https://github.com/flamingo-geocms/flamingo/pull/642}#642}},
+      {{{https://github.com/flamingo-geocms/flamingo/pull/643}#643}})
+
+    * documentatie Internet Explorer gedrag {{{https://github.com/flamingo-geocms/flamingo/pull/630}#630}}
+
   []
 
 * Versie 2.6
