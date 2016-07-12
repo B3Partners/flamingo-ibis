@@ -335,7 +335,7 @@ Ext.define('viewer.components.IbisReports', {
                 },
                 load: function (store, records, successful, eOpts) {
                     if (!successful) {
-                        Ext.MessageBox.alert("Fout", "Fout tijdens opvragen van de data: " + eOpts.error);
+                        Ext.MessageBox.alert("Fout", "Fout tijdens opvragen van het rapport: code " + eOpts.error.status + ': ' + eOpts.error.statusText);
                         me.toggleGridButtons(/*disabled=*/true);
                     }
                     if (records && records.length < 1) {
