@@ -175,6 +175,8 @@ digraph G {
 <tr><td align="left" balign="left"> + setApplication(application : Application) </td></tr>
 <tr><td align="left" balign="left"> + getAttrSource() : JDBCFeatureSource </td></tr>
 <tr><td align="left" balign="left"> + setAttrSource(attrSource : JDBCFeatureSource) </td></tr>
+<tr><td align="left" balign="left"> + getParams() : String </td></tr>
+<tr><td align="left" balign="left"> + setParams(params : String) </td></tr>
 		</table></td></tr>
 		</table>>, URL="../../stripes/IbisReportsActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//nl.b3p.viewer.ibis.util.WorkflowUtil implements nl.b3p.viewer.ibis.util.IbisConstants
