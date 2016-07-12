@@ -19,7 +19,7 @@ package nl.b3p.viewer.ibis.util;
 /**
  * Utility interface with constants for IBIS.
  *
- * @author Mark Prins <mark@b3partners.nl>
+ * @author mprins
  */
 public interface IbisConstants {
     /**

@@ -38,7 +38,7 @@ import org.stripesstuff.stripersist.Stripersist;
  * {@link TERREIN_LAYER_NAME} to make sure we only get to see the current
  * feature in the client.
  *
- * @author Mark Prins <mark@b3partners.nl>
+ * @author mprins
  */
 @UrlBinding("/action/ibisfeatureinfo")
 @StrictBinding

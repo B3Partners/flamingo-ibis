@@ -23,7 +23,7 @@ import java.util.GregorianCalendar;
 /**
  * Utility class with various date manipulation methods.
  *
- * @author Mark Prins <mark@b3partners.nl>
+ * @author mprins
  */
 public class DateUtils {
     /**

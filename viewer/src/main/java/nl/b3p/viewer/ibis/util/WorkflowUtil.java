@@ -45,7 +45,7 @@ import org.opengis.filter.FilterFactory2;
 /**
  * Utility method that come in handy hadling workflow.
  *
- * @author Mark Prins <mark@b3partners.nl>
+ * @author mprins
  */
 public class WorkflowUtil implements IbisConstants {
 

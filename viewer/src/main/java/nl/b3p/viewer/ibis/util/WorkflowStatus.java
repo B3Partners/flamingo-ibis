@@ -19,7 +19,7 @@ package nl.b3p.viewer.ibis.util;
 /**
  * mimic WorkflowStatus.js, specifically the the status.
  *
- * @author Mark Prins <mark@b3partners.nl>
+ * @author mprins
  */
 public enum WorkflowStatus {
 

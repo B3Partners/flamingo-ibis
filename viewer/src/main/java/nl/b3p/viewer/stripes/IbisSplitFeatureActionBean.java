@@ -46,7 +46,7 @@ import org.stripesstuff.stripersist.Stripersist;
 /**
  * A workflow-supporting split action bean for ibis.
  *
- * @author Mark Prins <mark@b3partners.nl>
+ * @author mprins
  */
 @UrlBinding("/action/feature/ibissplit")
 @StrictBinding

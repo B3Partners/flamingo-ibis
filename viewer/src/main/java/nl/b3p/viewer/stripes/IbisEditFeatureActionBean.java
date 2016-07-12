@@ -53,7 +53,7 @@ import org.stripesstuff.stripersist.Stripersist;
 /**
  * edit component met ibis workflow.
  *
- * @author Mark Prins <mark@b3partners.nl>
+ * @author mprins
  */
 @UrlBinding("/action/feature/ibisedit")
 @StrictBinding

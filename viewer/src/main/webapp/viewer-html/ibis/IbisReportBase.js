@@ -18,7 +18,7 @@
 /**
  * Shared base for the IbisReport and IbisLocationFinder components.
  *
- * @author Mark Prins
+ * @author mprins
  */
 Ext.define("viewer.components.IbisReportBase", {
     extend: 'viewer.components.Component',
@@ -203,7 +203,7 @@ Ext.define("viewer.components.IbisReportBase", {
      */
     createForms: function () {
     },
-    /*
+    /**
      * Reset the terreinenStore filters and comboboxes, optionally reset the maps extent.
      *
      * @param {Boolean} resetMapExtend true to rest the map extend to the startExtent
@@ -226,7 +226,6 @@ Ext.define("viewer.components.IbisReportBase", {
     },
     /**
      *  clear loading messages.
-
      */
     setDoneLoading: function () {
         if (this.config.isPopup) {
