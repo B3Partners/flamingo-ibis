@@ -293,38 +293,34 @@ public class IbisReportsActionBean implements ActionBean, IbisConstants {
         // fData payload
         JSONArray datas = new JSONArray();
 
-        SimpleFeatureIterator sfIter = sfc.features();
-
         boolean getMetadataFromFirstFeature = true;
-        while (sfIter.hasNext()) {
-            SimpleFeature feature = sfIter.next();
-            JSONObject fData = new JSONObject();
+        try (SimpleFeatureIterator sfIter = sfc.features()) {
+            while (sfIter.hasNext()) {
+                SimpleFeature feature = sfIter.next();
+                JSONObject fData = new JSONObject();
 
-            for (AttributeDescriptor attr : featureTypeAttributes) {
-                String name = attr.getName();
-                if (getMetadataFromFirstFeature) {
-                    //if (outputPropNames.contains(name)) {
-                    // only load metadata into json this for first feature
-                    JSONObject field = new JSONObject().put("name", name).put("type", attr.getExtJSType());
-                    if (/*reportType == IbisAttributeListActionBean.ReportType.ISSUE && */attr.getType().equals(AttributeDescriptor.TYPE_DATE)) {
-                        field.put("dateFormat", "Y-m");
+                for (AttributeDescriptor attr : featureTypeAttributes) {
+                    String name = attr.getName();
+                    if (getMetadataFromFirstFeature) {
+                        // only load metadata into json this for first feature
+                        JSONObject field = new JSONObject().put("name", name).put("type", attr.getExtJSType());
+                        if (attr.getType().equals(AttributeDescriptor.TYPE_DATE)) {
+                            field.put("dateFormat", "Y-m");
+                        }
+                        fields.put(field);
+                        columns.put(new JSONObject().put("text", (attr.getAlias() != null ? attr.getAlias() : name)).put("dataIndex", name));
                     }
-                    fields.put(field);
-                    columns.put(new JSONObject().put("text", (attr.getAlias() != null ? attr.getAlias() : name)).put("dataIndex", name));
-                    //}
+                    fData.put(attr.getName(), feature.getAttribute(attr.getName()));
                 }
-                fData.put(attr.getName(), feature.getAttribute(attr.getName()));
+                datas.put(fData);
+                getMetadataFromFirstFeature = false;
             }
-            datas.put(fData);
-            getMetadataFromFirstFeature = false;
+
+            json.getJSONObject(JSON_METADATA).put("fields", fields);
+            json.getJSONObject(JSON_METADATA).put("columns", columns);
+            json.put("data", datas);
+            json.put("total", datas.length());
         }
-
-        json.getJSONObject(JSON_METADATA).put("fields", fields);
-        json.getJSONObject(JSON_METADATA).put("columns", columns);
-        json.put("data", datas);
-        json.put("total", datas.length());
-
-        sfIter.close();
     }
 
     private File convert(SimpleFeatureType ft, FeatureSource fs, Query q, List<ConfiguredAttribute> attributes,
@@ -338,17 +334,7 @@ public class IbisReportsActionBean implements ActionBean, IbisConstants {
                 attributeAliases.put(ad.getName(), ad.getName());
             }
         }
-//        List<String> propertyNames = new ArrayList<>();
-//        for (AttributeDescriptor ad : ft.getAttributes()) {
-//            propertyNames.add(ad.getName());
-//        }
 
-//        /* Use the first property as sort field, otherwise geotools while give a error when quering
-//         * a JDBC featureType without a primary key.
-//         */
-//        if (fs instanceof org.geotools.jdbc.JDBCFeatureSource && !propertyNames.isEmpty()) {
-//            setSortBy(q, propertyNames.get(0));
-//        }
         SimpleFeatureCollection fc = (SimpleFeatureCollection) fs.getFeatures(q);
         File f = null;
         // alle kolommen autosizen op inhoud
@@ -371,15 +357,11 @@ public class IbisReportsActionBean implements ActionBean, IbisConstants {
 
         try {
             downloader.init();
-
-            SimpleFeatureIterator it = fc.features();
-            try {
+            try (SimpleFeatureIterator it = fc.features()) {
                 while (it.hasNext()) {
                     SimpleFeature feature = it.next();
                     downloader.processFeature(feature);
                 }
-            } finally {
-                it.close();
             }
             f = downloader.write();
         } catch (IOException ex) {
