@@ -1,88 +1,158 @@
-/*
-        * NB WorkflowStatus.js contains some globals, so each Ibis component is likely to depend on that.
-        */
-        [{
-        className: "viewer.components.IbisReports",
-                notInCombinationWith: ["viewer.mapcomponents.FlamingoMap"],
-                name: "IbisReports",
-                group: "Ibis",
-                shortName: "IR",
-                /* "WorkflowStatus.js", "GridPanel.js", */
-                sources: [ "IbisLayerIdUtil.js", "IbisReportBase.js", "IbisReports.js"],
-                configSource: ["ConfigObject.js", "SelectionWindowConfig.js", "IbisLayerIdUtil.js", "IbisReports-config.js"],
-                singleton: true,
-                type: "popup",
-                restrictions: ["rightmargin_top", "leftmargin_top"],
-                showHelp: true
-        }, {
-        className: "viewer.components.IbisLocationFinder",
-                notInCombinationWith: ["viewer.mapcomponents.FlamingoMap"],
-                name: "IbisZoeker",
-                group: "Ibis",
-                shortName: "IZ",
-                sources: ["WorkflowStatus.js", "IbisReportBase.js", "IbisLayerIdUtil.js", "IbisLocationFinder.js"],
-                configSource: ["ConfigObject.js", "SelectionWindowConfig.js", "IbisLayerIdUtil.js", "IbisLocationFinder-config.js"],
-                singleton: true,
-                type: "popup",
-                restrictions: ["rightmargin_top", "leftmargin_top"],
-                showHelp: true
-        }, {
-        className: "viewer.components.IbisFactsheet",
-                notInCombinationWith: ["viewer.mapcomponents.FlamingoMap"],
-                name: "IbisFactsheet",
-                group: "Ibis",
-                shortName: "IF",
-                sources: ["WorkflowStatus.js", "Print.js", "IbisLayerIdUtil.js", "IbisFactsheet.js"],
-                configSource: ["ConfigObject.js", "SelectionWindowConfig.js", "IbisLayerIdUtil.js", "IbisFactsheet-config.js"],
-                singleton: true,
-                restrictions: ["content"],
-                showHelp: true
-        }, {
-        className: "viewer.components.IbisEdit",
-                name: "Edit",
-                shortName: "Ed",
-                group: "Ibis",
-                sources: ["WorkflowStatus.js", "Edit.js", "IbisEdit.js"],
-                configSource: ["WorkflowStatus.js", "ConfigObject.js", "SelectionWindowConfig.js", "IbisEdit-config.js"],
-                restrictions: ["left_menu"],
-                type: "popup",
-                singleton: true,
-                showHelp: true
-        }, {
-        className: "viewer.components.IbisSplit",
-                name: "Splitsen",
-                shortName: "Sp",
-                group: "Ibis",
-                sources: ["WorkflowStatus.js", "Split.js", "IbisSplit.js"],
-                configSource: ["WorkflowStatus.js", "ConfigObject.js", "SelectionWindowConfig.js", "IbisSplit-config.js"],
-                restrictions: ["left_menu"],
-                notInCombinationWith: ["viewer.mapcomponents.FlamingoMap"],
-                type: "popup",
-                singleton: true,
-                showHelp: true
-        }, {
-        className: "viewer.components.IbisMerge",
-                name: "Samenvoegen",
-                shortName: "Sa",
-                group: "Ibis",
-                sources: ["WorkflowStatus.js", "Merge.js", "IbisMerge.js"],
-                configSource: ["WorkflowStatus.js", "ConfigObject.js", "SelectionWindowConfig.js", "IbisMerge-config.js"],
-                restrictions: ["left_menu"],
-                notInCombinationWith: ["viewer.mapcomponents.FlamingoMap"],
-                type: "popup",
-                singleton: true,
-                showHelp: true
-        }
-        /*, {className: "viewer.components.IbisReport",
-                notInCombinationWith: ["viewer.mapcomponents.FlamingoMap"],
-                name: "IbisReport",
-                group: "Ibis",
-                shortName: "IR",
-                sources: ["WorkflowStatus.js", "IbisReportBase.js", "IbisLayerIdUtil.js", "GridPanel.js", "IbisReport.js"],
-                configSource: ["ConfigObject.js", "SelectionWindowConfig.js", "IbisLayerIdUtil.js", "IbisReport-config.js"],
-                singleton: true,
-                type: "popup",
-                restrictions: ["left_menu", "rightmargin_top", "leftmargin_top"],
-                showHelp: true
-        } */
-        ]
+[
+    {
+        "className": "viewer.components.IbisReports",
+        "notInCombinationWith": [
+            "viewer.mapcomponents.FlamingoMap"
+        ],
+        "name": "IbisReports",
+        "group": "Ibis",
+        "shortName": "IR",
+        "sources": [
+            "IbisLayerIdUtil.js",
+            "IbisReportBase.js",
+            "IbisReports.js"
+        ],
+        "configSource": [
+            "ConfigObject.js",
+            "SelectionWindowConfig.js",
+            "IbisLayerIdUtil.js",
+            "IbisReports-config.js"
+        ],
+        "singleton": true,
+        "type": "popup",
+        "restrictions": [
+            "rightmargin_top",
+            "leftmargin_top"
+        ],
+        "showHelp": true
+    },
+    {
+        "className": "viewer.components.IbisLocationFinder",
+        "notInCombinationWith": [
+            "viewer.mapcomponents.FlamingoMap"
+        ],
+        "name": "IbisZoeker",
+        "group": "Ibis",
+        "shortName": "IZ",
+        "sources": [
+            "WorkflowStatus.js",
+            "IbisReportBase.js",
+            "IbisLayerIdUtil.js",
+            "IbisLocationFinder.js"
+        ],
+        "configSource": [
+            "ConfigObject.js",
+            "SelectionWindowConfig.js",
+            "IbisLayerIdUtil.js",
+            "IbisLocationFinder-config.js"
+        ],
+        "singleton": true,
+        "type": "popup",
+        "restrictions": [
+            "rightmargin_top",
+            "leftmargin_top"
+        ],
+        "showHelp": true
+    },
+    {
+        "className": "viewer.components.IbisFactsheet",
+        "notInCombinationWith": [
+            "viewer.mapcomponents.FlamingoMap"
+        ],
+        "name": "IbisFactsheet",
+        "group": "Ibis",
+        "shortName": "IF",
+        "sources": [
+            "WorkflowStatus.js",
+            "Print.js",
+            "IbisLayerIdUtil.js",
+            "IbisFactsheet.js"
+        ],
+        "configSource": [
+            "ConfigObject.js",
+            "SelectionWindowConfig.js",
+            "IbisLayerIdUtil.js",
+            "IbisFactsheet-config.js"
+        ],
+        "singleton": true,
+        "restrictions": [
+            "content"
+        ],
+        "showHelp": true
+    },
+    {
+        "className": "viewer.components.IbisEdit",
+        "name": "Edit",
+        "shortName": "Ed",
+        "group": "Ibis",
+        "sources": [
+            "WorkflowStatus.js",
+            "Edit.js",
+            "IbisEdit.js"
+        ],
+        "configSource": [
+            "WorkflowStatus.js",
+            "ConfigObject.js",
+            "SelectionWindowConfig.js",
+            "IbisEdit-config.js"
+        ],
+        "restrictions": [
+            "left_menu"
+        ],
+        "type": "popup",
+        "singleton": true,
+        "showHelp": true
+    },
+    {
+        "className": "viewer.components.IbisSplit",
+        "name": "Splitsen",
+        "shortName": "Sp",
+        "group": "Ibis",
+        "sources": [
+            "WorkflowStatus.js",
+            "Split.js",
+            "IbisSplit.js"
+        ],
+        "configSource": [
+            "WorkflowStatus.js",
+            "ConfigObject.js",
+            "SelectionWindowConfig.js",
+            "IbisSplit-config.js"
+        ],
+        "restrictions": [
+            "left_menu"
+        ],
+        "notInCombinationWith": [
+            "viewer.mapcomponents.FlamingoMap"
+        ],
+        "type": "popup",
+        "singleton": true,
+        "showHelp": true
+    },
+    {
+        "className": "viewer.components.IbisMerge",
+        "name": "Samenvoegen",
+        "shortName": "Sa",
+        "group": "Ibis",
+        "sources": [
+            "WorkflowStatus.js",
+            "Merge.js",
+            "IbisMerge.js"
+        ],
+        "configSource": [
+            "WorkflowStatus.js",
+            "ConfigObject.js",
+            "SelectionWindowConfig.js",
+            "IbisMerge-config.js"
+        ],
+        "restrictions": [
+            "left_menu"
+        ],
+        "notInCombinationWith": [
+            "viewer.mapcomponents.FlamingoMap"
+        ],
+        "type": "popup",
+        "singleton": true,
+        "showHelp": true
+    }
+]

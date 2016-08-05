@@ -1,0 +1,15 @@
+/* NB WorkflowStatus.js contains some globals, so each Ibis component is likely to depend on that. */
+
+, {
+     "className": "viewer.components.IbisReport",
+     "notInCombinationWith": ["viewer.mapcomponents.FlamingoMap"],
+     "name": "IbisReport",
+     "group": "Ibis",
+     "shortName": "IR",
+     "sources": ["WorkflowStatus.js", "IbisReportBase.js", "IbisLayerIdUtil.js", "GridPanel.js", "IbisReport.js"],
+     "configSource": ["ConfigObject.js", "SelectionWindowConfig.js", "IbisLayerIdUtil.js", "IbisReport-config.js"],
+     "singleton": true,
+     "type": "popup",
+     "restrictions": ["left_menu", "rightmargin_top", "leftmargin_top"],
+     "showHelp": true
+ }
