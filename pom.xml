@@ -123,7 +123,8 @@
                         <dependency>
                             <groupId>net.trajano.wagon</groupId>
                             <artifactId>wagon-git</artifactId>
-                            <version>2.0.4</version>
+                            <!-- 2.0.4 heeft problemen met accepteren/toevoegen van de RSA fingerprint -->
+                            <version>2.0.3</version>
                         </dependency>
                     </dependencies>
                 </plugin>
