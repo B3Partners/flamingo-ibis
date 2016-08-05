@@ -173,8 +173,8 @@ digraph G {
 <tr><td align="left" balign="left"> + getDisplayName(arg0 : EntityManager) : String </td></tr>
 <tr><td align="left" balign="left"> + toJSONObject(arg0 : EntityManager) : JSONObject </td></tr>
 <tr><td align="left" balign="left"> + toJSONObject(arg0 : boolean, arg1 : boolean, arg2 : EntityManager, arg3 : Application) : JSONObject </td></tr>
-<tr><td align="left" balign="left"> + addAttributesJSON(arg0 : JSONObject, arg1 : boolean) </td></tr>
-<tr><td align="left" balign="left"> + getRelationsJSON() : JSONArray </td></tr>
+<tr><td align="left" balign="left"> + addAttributesJSON(arg0 : JSONObject, arg1 : boolean, arg2 : EntityManager) </td></tr>
+<tr><td align="left" balign="left"> + getRelationsJSON(arg0 : EntityManager) : JSONArray </td></tr>
 <tr><td align="left" balign="left"> ~ processStartLayers(arg0 : Application, arg1 : ApplicationLayer) </td></tr>
 <tr><td align="left" balign="left"> ~ deepCopy(arg0 : Map&lt;&gt;, arg1 : Application) : ApplicationLayer </td></tr>
 <tr><td align="left" balign="left"> + toString() : String </td></tr>

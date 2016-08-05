@@ -229,7 +229,7 @@
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 
 <a class="jxr_linenumber" name="L222" href="#L222">222</a>     @After(stages = LifecycleStage.BindingAndValidation)
 <a class="jxr_linenumber" name="L223" href="#L223">223</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> loadLayer() {
-<a class="jxr_linenumber" name="L224" href="#L224">224</a>         <strong class="jxr_keyword">this</strong>.layer = appLayer.getService().getSingleLayer(appLayer.getLayerName());
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>         <strong class="jxr_keyword">this</strong>.layer = appLayer.getService().getSingleLayer(appLayer.getLayerName(), Stripersist.getEntityManager());
 <a class="jxr_linenumber" name="L225" href="#L225">225</a>     }
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 
 <a class="jxr_linenumber" name="L227" href="#L227">227</a>     @Before(stages = LifecycleStage.EventHandling)
