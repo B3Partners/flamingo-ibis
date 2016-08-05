@@ -221,7 +221,7 @@ public class IbisAttributeListActionBean implements ActionBean, IbisConstants {
 
     @After(stages = LifecycleStage.BindingAndValidation)
     public void loadLayer() {
-        this.layer = appLayer.getService().getSingleLayer(appLayer.getLayerName());
+        this.layer = appLayer.getService().getSingleLayer(appLayer.getLayerName(), Stripersist.getEntityManager());
     }
 
     @Before(stages = LifecycleStage.EventHandling)
