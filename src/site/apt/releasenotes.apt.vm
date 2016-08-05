@@ -22,6 +22,23 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
+  * Gebruik Flamingo versie 4.7.5, zie ook:
+    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.7.5}Flamingo release notes}}
+
+  []
+
+** Verbeteringen en oplossingen
+
+  * Relevante Flamingo issues:
+
+    * Edit vanuit featureinfo voor initieel niet zichtbare laag ({{{https://github.com/flamingo-geocms/flamingo/pull/656}#656}})
+
+  []
+
+* Versie 2.7
+
+** Nieuw
+
   * Gebruik Flamingo versie 4.7.4, zie ook:
     {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.7.4}Flamingo release notes}}
 
