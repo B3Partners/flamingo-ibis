@@ -30,7 +30,6 @@ install:
   - mvn install -Dmaven.test.skip=true -B -V -fae -q -pl "!dist"
 
 cache:
-cache:
   - C:\maven\apache-maven-%MVN_VERSION% -> appveyor.yml
   # don't cache maven repo, AppVeyor has 500MB cache limit - C:\Users\appveyor\.m2\repository -> pom.xml
 
