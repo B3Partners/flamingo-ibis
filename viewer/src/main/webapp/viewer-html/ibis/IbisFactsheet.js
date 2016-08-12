@@ -336,7 +336,8 @@ Ext.define("viewer.components.IbisFactsheet", {
             xsltemplate: "ibisfactsheet.xsl",
             includeLegend: true,
             legendUrl: this.getLegendsToPrint(),
-            quality: this.getMapQuality()
+            quality: this.getMapQuality(),
+            appId: appId
         };
         // Process registered extra info callbacks
         var extraInfos = new Array();
