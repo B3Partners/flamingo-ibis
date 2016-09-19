@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// nl.b3p.viewer.ibis.util.IbisConstants
-	c202 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
+	c201 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> IbisConstants </td></tr>
@@ -28,7 +28,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="../ibis/util/IbisConstants.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisFeatureInfoActionBean
-	c205 [label=<<table title="nl.b3p.viewer.stripes.IbisFeatureInfoActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisFeatureInfoActionBean.html">
+	c204 [label=<<table title="nl.b3p.viewer.stripes.IbisFeatureInfoActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisFeatureInfoActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisFeatureInfoActionBean </td></tr>
 		</table></td></tr>
@@ -41,11 +41,11 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./IbisFeatureInfoActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//nl.b3p.viewer.stripes.IbisFeatureInfoActionBean extends nl.b3p.viewer.stripes.FeatureInfoActionBean
-	c215:p -> c205:p [dir=back,arrowtail=empty];
+	c214:p -> c204:p [dir=back,arrowtail=empty];
 	//nl.b3p.viewer.stripes.IbisFeatureInfoActionBean implements nl.b3p.viewer.ibis.util.IbisConstants
-	c202:p -> c205:p [dir=back,arrowtail=empty,style=dashed];
+	c201:p -> c204:p [dir=back,arrowtail=empty,style=dashed];
 	// nl.b3p.viewer.stripes.FeatureInfoActionBean
-	c215 [label=<<table title="nl.b3p.viewer.stripes.FeatureInfoActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c214 [label=<<table title="nl.b3p.viewer.stripes.FeatureInfoActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> FeatureInfoActionBean </td></tr>
 		</table></td></tr>

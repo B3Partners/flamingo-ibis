@@ -126,7 +126,7 @@ digraph G {
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.config.app.Application
 	c95:p -> c117:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.config.app.ApplicationLayer
-	c95:p -> c120:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c95:p -> c119:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.ReportType
 	c95:p -> c97:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea
@@ -134,11 +134,11 @@ digraph G {
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.AggregationLevelDate
 	c95:p -> c98:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.config.services.Layer
-	c95:p -> c126:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c95:p -> c125:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea
 	c95:p -> c96:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.config.app.ApplicationLayer
-	c120 [label=<<table title="nl.b3p.viewer.config.app.ApplicationLayer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c119 [label=<<table title="nl.b3p.viewer.config.app.ApplicationLayer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ApplicationLayer </td></tr>
 		</table></td></tr>
@@ -149,10 +149,6 @@ digraph G {
 <tr><td align="left" balign="left"> + ApplicationLayer() </td></tr>
 <tr><td align="left" balign="left"> + getAttributes() : List&lt;ConfiguredAttribute&gt; </td></tr>
 <tr><td align="left" balign="left"> + setAttributes(arg0 : List&lt;ConfiguredAttribute&gt;) </td></tr>
-<tr><td align="left" balign="left"> + isChecked() : boolean </td></tr>
-<tr><td align="left" balign="left"> + setChecked(arg0 : boolean) </td></tr>
-<tr><td align="left" balign="left"> + getSelectedIndex() : Integer </td></tr>
-<tr><td align="left" balign="left"> + setSelectedIndex(arg0 : Integer) </td></tr>
 <tr><td align="left" balign="left"> + getDetails() : Map&lt;String, ClobElement&gt; </td></tr>
 <tr><td align="left" balign="left"> + setDetails(arg0 : Map&lt;String, ClobElement&gt;) </td></tr>
 <tr><td align="left" balign="left"> + getId() : Long </td></tr>
@@ -181,7 +177,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.config.services.Layer
-	c126 [label=<<table title="nl.b3p.viewer.config.services.Layer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c125 [label=<<table title="nl.b3p.viewer.config.services.Layer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Layer </td></tr>
 		</table></td></tr>
@@ -209,6 +205,7 @@ digraph G {
 <tr><td align="left" balign="left"> + getDisplayName() : String </td></tr>
 <tr><td align="left" balign="left"> + toJSONObject() : JSONObject </td></tr>
 <tr><td align="left" balign="left"> + getCachedChildren(arg0 : EntityManager) : List&lt;Layer&gt; </td></tr>
+<tr><td align="left" balign="left"> + getApplicationLayers(arg0 : EntityManager) : List&lt;ApplicationLayer&gt; </td></tr>
 <tr><td align="left" balign="left"> + getParent() : Layer </td></tr>
 <tr><td align="left" balign="left"> + setParent(arg0 : Layer) </td></tr>
 <tr><td align="left" balign="left"> + isVirtual() : boolean </td></tr>
@@ -353,6 +350,7 @@ digraph G {
 <tr><td align="left" balign="left"> + toJSON(arg0 : HttpServletRequest, arg1 : boolean, arg2 : boolean, arg3 : boolean, arg4 : boolean, arg5 : EntityManager) : String </td></tr>
 <tr><td align="left" balign="left"> + isMashup() : Boolean </td></tr>
 <tr><td align="left" balign="left"> + createMashup(arg0 : String, arg1 : EntityManager, arg2 : boolean) : Application </td></tr>
+<tr><td align="left" balign="left"> + getMashups(arg0 : EntityManager) : List&lt;Application&gt; </td></tr>
 <tr><td align="left" balign="left"> + deepCopy() : Application </td></tr>
 <tr><td align="left" balign="left"> + transferMashup(arg0 : Application, arg1 : EntityManager) </td></tr>
 <tr><td align="left" balign="left"> + postPersist() </td></tr>
