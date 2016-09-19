@@ -22,8 +22,8 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
-  * Gebruik Flamingo versie 4.7.5, zie ook:
-    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.7.5}Flamingo release notes}}
+  * Gebruik Flamingo versie ${project.properties.get("flamingo.version")}, zie ook:
+    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v${project.properties.get("flamingo.version")}}Flamingo release notes}}
 
   []
 
