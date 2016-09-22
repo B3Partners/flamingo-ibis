@@ -47,16 +47,16 @@ Ext.define("viewer.components.CustomConfiguration", {
                 labelWidth: me.labelWidth
             } , {
                 xtype: 'combobox',
-                fieldLabel: 'Nieuwe Workflow status (Definitief)',
+                fieldLabel: 'Nieuwe Workflow status (Bewerkt)',
                 labelWidth: this.labelWidth,
-                emptyText: 'Maak uw keuze (definitief)',
+                emptyText: 'Maak uw keuze (bewerkt)',
                 store: 'IbisWorkflowStore',
                 queryMode: 'local',
                 name: 'workflowstatus',
                 itemId: 'workflowstatus',
                 displayField: 'label',
                 valueField: 'id',
-                value: me.configObject.workflowstatus ? me.configObject.workflowstatus : "definitief"
+                value: me.configObject.workflowstatus ? me.configObject.workflowstatus : "bewerkt"
             }
         ]);
     }
