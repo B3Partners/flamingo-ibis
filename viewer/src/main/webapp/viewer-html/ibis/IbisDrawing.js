@@ -56,11 +56,11 @@ Ext.define("viewer.components.IbisDrawing", {
      */
     loadWindow: function () {
         this.superclass.loadWindow.call(this);
-        // remove some things we don't need form superclass
+        // remove some panels we don't need from our superclass
         var cPanel = this.mainContainer.getComponent(this.name + 'ContentPanel');
         cPanel.remove(this.formopen);
         cPanel.remove(this.formsave);
-        // redefine formsave panel
+        // redefine formsave panel to creat a bookmark
         this.formsave = new Ext.form.FormPanel({
             border: 0,
             standardSubmit: true,
@@ -71,7 +71,7 @@ Ext.define("viewer.components.IbisDrawing", {
             items: [
                 {
                     xtype: 'button',
-                    text: 'Schets link maken en versturen',
+                    text: 'Schets link maken en bericht opstellen',
                     listeners: {
                         click: {
                             scope: this,
@@ -92,7 +92,9 @@ Ext.define("viewer.components.IbisDrawing", {
             if (param.name === 'url') {
                 this.url = param.value;
                 this.baseUrl = param.value;
-                this.shareSource = 'ibis-drawing';
+                this.shareSource = this.baseUrl.substring(
+                        this.baseUrl.lastIndexOf('app/') + 4,
+                        this.baseUrl.lastIndexOf('?'));
             } else if (param.name === 'extent') {
                 parameters += param.name + "=";
                 var extent = param.value;
@@ -102,7 +104,7 @@ Ext.define("viewer.components.IbisDrawing", {
                 var layers = param.value;
                 for (var x = 0; x < layers.length; x++) {
                     parameters += layers[x];
-                    if (x != (layers.length - 1)) {
+                    if (x !== (layers.length - 1)) {
                         parameters += ",";
                     }
                 }
@@ -158,6 +160,10 @@ Ext.define("viewer.components.IbisDrawing", {
     },
     succesCompactUrl: function (code) {
         var bookmarkUrl = this.baseUrl + "bookmark=" + code;
+        // search/replace with other mashup target
+        if (this.config.shareTarget && this.config.shareTarget !== '') {
+            bookmarkUrl = bookmarkUrl.replace(this.shareSource, encodeURIComponent(this.config.shareTarget));
+        }
         // copied/modified from bookmark control share function.
         var url = this.shareUrls["email"];
         if (!bookmarkUrl || bookmarkUrl === "") {
@@ -178,8 +184,7 @@ Ext.define("viewer.components.IbisDrawing", {
         if (url.indexOf("[mail]") !== -1) {
             url = url.replace("[mail]", encodeURIComponent(this.config.shareMail));
         }
-        window.open(url);
-        // window.location.href(url);
+        window.open(url, '_self');
         this.popup.hide();
     },
     failureCompactUrl: function (code) {

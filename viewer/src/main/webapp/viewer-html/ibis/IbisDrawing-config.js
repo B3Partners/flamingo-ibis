@@ -40,9 +40,10 @@ Ext.define("viewer.components.CustomConfiguration", {
             name: 'reactivateTools',
             value: this.configObject.reactivateTools !== undefined ? this.configObject.reactivateTools : false,
             labelWidth: this.labelWidth
-        }, {
+        },
+        {
             xtype: 'textfield',
-            fieldLabel: 'Default mail adres',
+            fieldLabel: 'Default bericht adres',
             name: 'shareMail',
             value: this.configObject.shareMail !== undefined ? this.configObject.shareMail : "",
             labelWidth: this.labelWidth,
@@ -55,7 +56,8 @@ Ext.define("viewer.components.CustomConfiguration", {
             value: this.configObject.shareTitle !== undefined ? this.configObject.shareTitle : "schets voorstel",
             labelWidth: this.labelWidth,
             width: 700
-        }, {
+        },
+        {
             xtype: 'textareafield',
             fieldLabel: 'Default bericht inhoud',
             name: 'shareText',
@@ -64,21 +66,13 @@ Ext.define("viewer.components.CustomConfiguration", {
             labelWidth: this.labelWidth,
             width: 700
         },
-//        {
-//            xtype: 'textfield',
-//            fieldLabel: 'Bron Flamingo applicatie',
-//            name: 'shareSource',
-//            value: this.configObject.shareSource !== undefined ? this.configObject.shareSource : "",
-//            labelWidth: this.labelWidth,
-//            width: 300
-//        },
         {
             xtype: 'textfield',
-            fieldLabel: 'Doel Flamingo applicatie, bijv. PROVINCIE',
+            fieldLabel: 'Bookmark doel Flamingo applicatie (mashup), bijv. PROVINCIE',
             name: 'shareTarget',
             value: this.configObject.shareTarget !== undefined ? this.configObject.shareTarget : "",
             labelWidth: this.labelWidth,
-            width: 300
+            width: 700
         });
     },
     getDefaultValues: function () {
