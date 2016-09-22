@@ -154,5 +154,32 @@
         "type": "popup",
         "singleton": true,
         "showHelp": true
+    },
+    {
+        "className": "viewer.components.IbisDrawing",
+        "name": "Tekenen",
+        "shortName": "Te",
+        "group": "Ibis",
+        "sources": [
+            "WorkflowStatus.js",
+            "../common/ColorField.js",
+            "Drawing.js",
+            "IbisDrawing.js"
+        ],
+        "configSource": [
+            "WorkflowStatus.js",
+            "ConfigObject.js",
+            "SelectionWindowConfig.js",
+            "IbisDrawing-config.js"
+        ],
+        "restrictions": [
+            "left_menu"
+        ],
+        "notInCombinationWith": [
+            "viewer.mapcomponents.FlamingoMap"
+        ],
+        "type": "popup",
+        "singleton": true,
+        "showHelp": true
     }
 ]
