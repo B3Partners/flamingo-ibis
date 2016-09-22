@@ -1,5 +1,13 @@
 # Deployment notes
 
+### IbisDrawing component
+
+This is a comonent similar to the regular drawing component, however it combines bookmark 
+functionality so that once a sketch has been made a message can be sent with a bookmark link 
+that points to the drawing. When configuring the `Doel Flamingo applicatie`
+to open the bookmark in a different viewer (eg. PROVINCIE) than the originating viewer (eg. GEMEENTE)
+this must be a mashup to make things work.
+Note that bookmarks on the "Beheer bookmarks" page will always point to the originating application.
 
 ### IbisEdit component
 
