@@ -93,8 +93,7 @@
                     </overlays>
                     <archive>
                         <manifestEntries>
-                            <Implementation-Build>branch: ${scmBranch} rev: ${buildNumber} timestamp: ${timestamp}</Implementation-Build>
-                            <SCM-Revision>${buildNumber}</SCM-Revision>
+                            <SCM-info>branch: ${builddetails.branch}, sha1: ${builddetails.commit.id.abbrev}, timestamp: ${builddetails.commit.time}</SCM-info>
                             <release>${project.version}</release>
                         </manifestEntries>
                     </archive>
@@ -143,6 +142,7 @@
                     <generateGitPropertiesFile>true</generateGitPropertiesFile>
                     <generateGitPropertiesFilename>src/main/resources/git.properties</generateGitPropertiesFilename>
                     <failOnNoGitDirectory>false</failOnNoGitDirectory>
+                    <injectAllReactorProjects>true</injectAllReactorProjects>
                     <gitDescribe>
                         <skip>true</skip>
                         <always>true</always>
