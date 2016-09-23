@@ -342,7 +342,7 @@
                                         <report>github-report</report>
                                     </reports>
                                 </reportSet>
-                            <reportSets>
+                            </reportSets>
                         </plugin>
                     </reportPlugins>
                 </configuration>
