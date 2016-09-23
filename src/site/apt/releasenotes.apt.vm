@@ -20,12 +20,17 @@ ${project.name} ${project.version} Release Notes
   De complete lijst met issues voor deze release is beschikbaar in de tracker:
   {{{${project.issueManagement.url}?q=milestone%3A${project.version}+is%3Aclosed}milestone ${project.version} issues}}.
 
-~~ * Versie 2.8
+~~ ** Nieuw
+
+~~  * Gebruik Flamingo versie ${project.properties.get("flamingo.version")}, zie ook:
+~~    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v${project.properties.get("flamingo.version")}}Flamingo release notes}}
+
+* Versie 2.8
 
 ** Nieuw
 
-  * Gebruik Flamingo versie ${project.properties.get("flamingo.version")}, zie ook:
-    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v${project.properties.get("flamingo.version")}}Flamingo release notes}}
+  * Gebruik Flamingo versie 4.7.6, zie ook:
+    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.7.6}}Flamingo release notes}}
 
   * Schets component welke een bookmark verstuurd met daarin de schets (#52)
 
@@ -36,6 +41,8 @@ ${project.name} ${project.version} Release Notes
   * Relevante Flamingo issues:
 
     * Edit vanuit featureinfo voor initieel niet zichtbare laag ({{{https://github.com/flamingo-geocms/flamingo/pull/656}#656}})
+    
+    * Verbeteringen featureinfo component  ({{{https://github.com/flamingo-geocms/flamingo/pull/685}#685}})
 
   * aanpassen default waarde van workflow statusbij splits en merge component (
     {{{https://github.com/B3Partners/flamingo-ibis/issues/54}issue #54}}, {{{https://github.com/B3Partners/flamingo-ibis/issues/55}issue #55}})
