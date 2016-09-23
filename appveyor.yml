@@ -26,7 +26,7 @@ install:
   - cmd: SET PATH=C:\maven\apache-maven-%MVN_VERSION%\bin;%JAVA_HOME%\bin;%PATH%
   - cmd: echo %PATH%
   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-http-proxy.ps1'))
-  - ps: .\set-maven-proxy.ps1
+  - ps: .\.appveyor\set-maven-proxy.ps1
   - mvn install -Dmaven.test.skip=true -B -V -fae -q -pl "!dist"
 
 cache:
