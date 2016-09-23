@@ -27,7 +27,7 @@ Ext.define("viewer.components.IbisDrawing", {
     config: {
         details: {
             minWidth: 405,
-            minHeight: 415
+            minHeight: 215
         },
         shareMail: null,
         shareTitle: null,
