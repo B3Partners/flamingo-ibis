@@ -336,6 +336,13 @@
                                 <columnNames>Fix Version,Id,Type,Summary,Status,Updated</columnNames>
                                 <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
                             </configuration>
+                            <reportSets>
+                                <reportSet>
+                                    <reports>
+                                        <report>github-report</report>
+                                    </reports>
+                                </reportSet>
+                            <reportSets>
                         </plugin>
                     </reportPlugins>
                 </configuration>

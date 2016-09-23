@@ -28,6 +28,9 @@ before_script:
 script:
   # execute unit and integration tests
   - mvn -e test verify -B -pl '!dist'
+  - if [ "$TRAVIS_JDK_VERSION" == oraclejdk8 ]; then
+         mvn javadoc:javadoc;
+    fi
 
 after_success:
 
