@@ -32,7 +32,7 @@ Ext.define("viewer.components.IbisDrawing", {
         shareMail: null,
         shareTitle: null,
         shareText: null,
-        shareTarget: null,
+        shareTarget: null
     },
     /**
      * Create our component.
