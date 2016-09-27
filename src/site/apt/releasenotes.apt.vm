@@ -19,11 +19,19 @@ ${project.name} ${project.version} Release Notes
 
   De complete lijst met issues voor deze release is beschikbaar in de tracker:
   {{{${project.issueManagement.url}?q=milestone%3A${project.version}+is%3Aclosed}milestone ${project.version} issues}}.
+  
+  Releases zijn beschikbaar op: {{{https://github.com/B3Partners/flamingo-ibis/releases/}github releases}}, snapshots 
+  zijn beschikbaar in de {{{http://repo.b3p.nl/nexus/#nexus-search;gav~~ibis-dist~~~}Maven repository}}.
 
 ~~** Nieuw
 
 ~~  * Gebruik Flamingo versie ${project.properties.get("flamingo.version")}, zie ook:
-~~    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v${project.properties.get("flamingo.version")}}Flamingo release notes}}
+~~    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v${project.properties.get("flamingo.version")}Flamingo release notes}}
+
+* Versie 2.9
+
+  De complete lijst met issues voor deze release is beschikbaar in de tracker:
+  {{{${project.issueManagement.url}?q=milestone%3A2.8+is%3Aclosed}milestone 2.8 issues}}.
 
 ** Verbeteringen en oplossingen
 
@@ -36,6 +44,9 @@ ${project.name} ${project.version} Release Notes
   []
 
 * Versie 2.8
+
+  De complete lijst met issues voor deze release is beschikbaar in de tracker:
+  {{{${project.issueManagement.url}?q=milestone%3A2.8+is%3Aclosed}milestone 2.8 issues}}.
 
 ** Nieuw
 
@@ -60,6 +71,9 @@ ${project.name} ${project.version} Release Notes
  []
 
 * Versie 2.7
+
+  De complete lijst met issues voor deze release is beschikbaar in de tracker:
+  {{{${project.issueManagement.url}?q=milestone%3A2.7+is%3Aclosed}milestone 2.7 issues}}.
 
 ** Nieuw
 
