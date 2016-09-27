@@ -31,7 +31,9 @@ ${project.name} ${project.version} Release Notes
 
   * toevoegen van bedrijventerrein lukt weer ({{{https://github.com/B3Partners/flamingo-ibis/issues/53}issue #53}})
 
-  * voorkom splitsen van "bewerkt" objecten ({{{https://github.com/B3Partners/flamingo-ibis/issues/54}issue #54}})
+  * voorkom splitsen van niet "definitief" objecten ({{{https://github.com/B3Partners/flamingo-ibis/issues/54}issue #54}})
+
+  * voorkom samenvoegen van niet "definitief" objecten ({{{https://github.com/B3Partners/flamingo-ibis/issues/55}issue #55}})
   
   []
 

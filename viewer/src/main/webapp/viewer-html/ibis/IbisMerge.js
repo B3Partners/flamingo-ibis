@@ -69,6 +69,13 @@ Ext.define("viewer.components.IbisMerge", {
     handleFeature: function (feature) {
         this.superclass.handleFeature.call(this, feature);
         if (feature !== null) {
+            if (feature[workflowFieldName] !== 'definitief') {
+                this.cancel();
+                Ext.Msg.alert('Samenvoegen niet toegestaan',
+                        'Alleen objecten met workflow status "definitief" mogen worden samengevoegd. <br/>Het geselecteerde object heeft status: '
+                        + feature[workflowFieldName]);
+                return;
+            }
             if (this.mode === "selectA") {
                 this.mutDateA = getMinMutatiedatum(feature[mutatiedatumFieldName]);
                 this.maincontainer.getComponent(mutatiedatumFieldName).setMinValue(this.mutDateA);
