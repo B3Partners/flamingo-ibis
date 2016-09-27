@@ -20,14 +20,12 @@ ${project.name} ${project.version} Release Notes
   De complete lijst met issues voor deze release is beschikbaar in de tracker:
   {{{${project.issueManagement.url}?q=milestone%3A${project.version}+is%3Aclosed}milestone ${project.version} issues}}.
 
-** Nieuw
+~~** Nieuw
 
-  * Gebruik Flamingo versie ${project.properties.get("flamingo.version")}, zie ook:
-    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v${project.properties.get("flamingo.version")}}Flamingo release notes}}
+~~  * Gebruik Flamingo versie ${project.properties.get("flamingo.version")}, zie ook:
+~~    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v${project.properties.get("flamingo.version")}}Flamingo release notes}}
 
 ** Verbeteringen en oplossingen
-
-  * kleine bugfixes
 
   * toevoegen van bedrijventerrein lukt weer ({{{https://github.com/B3Partners/flamingo-ibis/issues/53}issue #53}})
 
@@ -56,7 +54,7 @@ ${project.name} ${project.version} Release Notes
     
     * Verbeteringen featureinfo component  ({{{https://github.com/flamingo-geocms/flamingo/pull/685}#685}})
 
-  * aanpassen default waarde van workflow statusbij splits en merge component (
+  * aanpassen default waarde van workflow status bij splits en merge component (
     {{{https://github.com/B3Partners/flamingo-ibis/issues/54}issue #54}}, {{{https://github.com/B3Partners/flamingo-ibis/issues/55}issue #55}})
 
  []
