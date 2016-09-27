@@ -63,6 +63,13 @@ Ext.define("viewer.components.IbisSplit", {
     handleFeature: function (feature) {
         this.superclass.handleFeature.call(this, feature);
         if (feature !== null) {
+            if (feature[workflowFieldName] !== 'definitief') {
+                this.cancel();
+                Ext.Msg.alert('Splitsen niet toegestaan',
+                        'Alleen objecten met workflow status "definitief" mogen worden gesplitst. <br/>Het geselecteerde object heeft status: '
+                        + feature[workflowFieldName]);
+                return;
+            }
             this.maincontainer.getComponent(mutatiedatumFieldName).setMinValue(
                     getMinMutatiedatum(feature[mutatiedatumFieldName]));
         }
