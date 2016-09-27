@@ -204,13 +204,6 @@ Ext.define("viewer.components.IbisEdit", {
     },
     createNew: function () {
         this.superclass.createNew.call(this);
-        setNextIbisWorkflowStatus(user.roles, 'bewerkt', Ext.getCmp(this.workflow_fieldname));
-        var s = this.workflowStore.getById('bewerkt').get("label");
-        Ext.getCmp(this.name + "workflowLabel").setText("Huidige workflow status: " + s);
-
-        this.inputContainer.getForm().findField(mutatiedatumFieldName).setValue(new Date());
-        this.inputContainer.getForm().findField('status').setValue('Niet bekend');
-
         // generate a new, pseudo-unique id for this feature
         // millisecond precision requires database schema update to swith id from integer to bigint
         // alter table bedrijventerrein alter id type bigint;
@@ -218,8 +211,17 @@ Ext.define("viewer.components.IbisEdit", {
         // var newID = new Date().getTime();
         // for now we'll use second precision
         this.newID = new Date() / 1000 | 0;
+
+        setNextIbisWorkflowStatus(user.roles, 'bewerkt', Ext.getCmp(this.workflow_fieldname));
+        var s = this.workflowStore.getById('bewerkt').get("label");
+        Ext.getCmp(this.name + "workflowLabel").setText("Huidige workflow status: " + s);
+
+        this.inputContainer.getForm().findField(mutatiedatumFieldName).setValue(new Date());
         if (this.inputContainer.getForm().findField(idFieldName)) {
             this.inputContainer.getForm().findField(idFieldName).setValue(this.newID);
+        }
+        if (this.inputContainer.getForm().findField('status')) {
+            this.inputContainer.getForm().findField('status').setValue('Niet bekend');
         }
     },
     deleteFeature: function () {
