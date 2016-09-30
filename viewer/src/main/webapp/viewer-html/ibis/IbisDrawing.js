@@ -86,20 +86,23 @@ Ext.define("viewer.components.IbisDrawing", {
     bookmark: function () {
         var paramJSON = this.config.viewerController.getBookmarkUrl();
         var parameters = "";
-
+        var params = [];
         for (var i = 0; i < paramJSON["params"].length; i++) {
             var param = paramJSON["params"][i];
             if (param.name === 'url') {
+                params.push(param);
                 this.url = param.value;
                 this.baseUrl = param.value;
                 this.shareSource = this.baseUrl.substring(
                         this.baseUrl.lastIndexOf('app/') + 4,
                         this.baseUrl.lastIndexOf('?'));
             } else if (param.name === 'extent') {
+                params.push(param);
                 parameters += param.name + "=";
                 var extent = param.value;
                 parameters += extent.minx + "," + extent.miny + "," + extent.maxx + "," + extent.maxy + "&";
             } else if (param.name === 'layers') {
+              //  params.push(param);
                 parameters += param.name + "=";
                 var layers = param.value;
                 for (var x = 0; x < layers.length; x++) {
@@ -110,6 +113,7 @@ Ext.define("viewer.components.IbisDrawing", {
                 }
                 parameters += "&";
             } else if (param.name === 'levelOrder' && param.value.length > 0) {
+               // params.push(param);
                 parameters += param.name + "=";
                 parameters += param.value.join(",");
                 parameters += "&";
@@ -118,6 +122,12 @@ Ext.define("viewer.components.IbisDrawing", {
                 parameters += param.name + "=" + param.value + "&";
             }
         }
+        params.push({
+            name: "forceLoadLayers",
+            value: true
+        });
+        paramJSON["params"] = params;
+        
 
         var componentParams = "";
         //get all the params from components that need to be added to the bookmark
