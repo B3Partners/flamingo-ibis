@@ -20,13 +20,30 @@ ${project.name} ${project.version} Release Notes
   De complete lijst met issues voor deze release is beschikbaar in de tracker:
   {{{${project.issueManagement.url}?q=milestone%3A${project.version}+is%3Aclosed}milestone ${project.version} issues}}.
   
-  Releases zijn beschikbaar op: {{{https://github.com/B3Partners/flamingo-ibis/releases/}github releases}}, snapshots 
+  Releases zijn beschikbaar op: {{{https://github.com/B3Partners/flamingo-ibis/releases/}github releases}}, de laatste snapshots 
   zijn beschikbaar in de {{{http://repo.b3p.nl/nexus/#nexus-search;gav~~ibis-dist~~~}Maven repository}}.
 
-~~** Nieuw
+** Nieuw
 
-~~  * Gebruik Flamingo versie ${project.properties.get("flamingo.version")}, zie ook:
-~~    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v${project.properties.get("flamingo.version")}Flamingo release notes}}
+  * Gebruik Flamingo versie ${project.properties.get("flamingo.version")}, zie ook:
+    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v${project.properties.get("flamingo.version")}}Flamingo release notes}}
+
+  []
+
+* Versie 2.10
+
+** Nieuw
+
+  * Gebruik Flamingo versie 4.7.7-rc1, zie ook:
+    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.7.7-rc1}Flamingo release notes}}
+
+  []
+
+** Verbeteringen en oplossingen
+
+  * Laden van applicatie vanuit bookmark verbeterd
+  
+  []
 
 * Versie 2.9
 
