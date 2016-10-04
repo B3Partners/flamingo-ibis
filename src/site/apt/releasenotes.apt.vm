@@ -28,6 +28,8 @@ ${project.name} ${project.version} Release Notes
   * Gebruik Flamingo versie ${project.properties.get("flamingo.version")}, zie ook:
     {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v${project.properties.get("flamingo.version")}}Flamingo release notes}}
 
+  * configureerbare sliver detectie voor splitsen ({{{https://github.com/B3Partners/flamingo-ibis/pull/57}PR #57}})
+
   []
 
 * Versie 2.10
@@ -48,7 +50,7 @@ ${project.name} ${project.version} Release Notes
 * Versie 2.9
 
   De complete lijst met issues voor deze release is beschikbaar in de tracker:
-  {{{${project.issueManagement.url}?q=milestone%3A2.8+is%3Aclosed}milestone 2.8 issues}}.
+  {{{${project.issueManagement.url}?q=milestone%3A2.9+is%3Aclosed}milestone 2.9 issues}}.
 
 ** Verbeteringen en oplossingen
 

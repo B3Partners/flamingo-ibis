@@ -57,6 +57,28 @@ Ext.define("viewer.components.CustomConfiguration", {
                 displayField: 'label',
                 valueField: 'id',
                 value: me.configObject.workflowstatus ? me.configObject.workflowstatus : "bewerkt"
+            }, {
+                xtype: 'numberfield',
+                fieldLabel: 'Maximum oppervlakte voor een sliver',
+                labelWidth: this.labelWidth,
+                name: 'sliverMaxArea',
+                itemId: 'sliverMaxArea',
+                value: me.configObject.sliverMaxArea ? me.configObject.sliverMaxArea : 100,
+                minValue: 0,
+                maxValue: 1000,
+                step: 1
+            }
+            , {
+                xtype: 'numberfield',
+                fieldLabel: 'Thinness ratio (cirkel heeft ratio 1, polygoon heeft ratio =< 1, 0 betekent overslaan)',
+                // https://books.google.se/books?hl=sv&id=uGWmR0f_350C&q=thinness#v=onepage&q=thinness&f=false
+                labelWidth: this.labelWidth,
+                name: 'sliverRatio',
+                itemId: 'sliverRatio',
+                value: me.configObject.sliverRatio ? me.configObject.sliverRatio : 0,
+                minValue: 0,
+                maxValue: 1,
+                step: 0.02
             }
         ]);
     }

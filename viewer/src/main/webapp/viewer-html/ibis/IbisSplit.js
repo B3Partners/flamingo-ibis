@@ -24,8 +24,10 @@ Ext.define("viewer.components.IbisSplit", {
     config: {
         // custom url
         actionbeanUrl: "/viewer/action/feature/ibissplit",
-        // always "definitief" for split
-        workflowstatus: "definitief"
+        // always "bewerkt" for split
+        workflowstatus: "bewerkt",
+        sliverRatio: 0,
+        sliverMaxArea: 100
     },
     /** (cached) workflow status. */
     status: null,
@@ -56,6 +58,8 @@ Ext.define("viewer.components.IbisSplit", {
         var obj = {};
         obj[workflowFieldName] = this.status.get("id");
         obj[mutatiedatumFieldName] = this.maincontainer.getComponent(mutatiedatumFieldName).getValue();
+        obj['sliverRatio'] = this.config.sliverRatio;
+        obj['sliverMaxArea'] = this.config.sliverMaxArea;
         // reden veld ontbreekt in datamodel! en terreinen kunnen niet gesplitst worden
         // obj[redenFieldName] = 'splitsing';
         return Ext.util.JSON.encode(obj);

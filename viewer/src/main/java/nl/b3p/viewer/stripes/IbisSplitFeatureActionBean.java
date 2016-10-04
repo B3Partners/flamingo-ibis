@@ -58,6 +58,21 @@ public class IbisSplitFeatureActionBean extends SplitFeatureActionBean implement
     private WorkflowStatus newWorkflowStatus = WorkflowStatus.definitief;
 
     /**
+     * Thinness ratio of polygon; basically ratio of area/circumference of a
+     * polygon to detect slivers.
+     * <a href="http://gis.stackexchange.com/questions/151939/explanation-of-the-thinness-ratio-formula">Explanation
+     * of the Thinness ratio formula?</a> and
+     * <a href="https://books.google.se/books?hl=sv&id=uGWmR0f_350C&q=thinness#v=onepage&q=thinness&f=false">Microscope
+     * Image Processing</a>
+     */
+    private double sliverRatio;
+
+    /**
+     * max. area of a sliver.
+     */
+    private double sliverMaxArea;
+
+    /**
      * force the workflow status attribute on the feature. This will handle the
      * case where the {@code extraData} attribute is a piece of json with the
      * workflow, eg
@@ -72,6 +87,12 @@ public class IbisSplitFeatureActionBean extends SplitFeatureActionBean implement
     @Override
     protected List<SimpleFeature> handleExtraData(List<SimpleFeature> features) throws JSONException {
         JSONObject json = new JSONObject(this.getExtraData());
+        // ideally thses would be passed as regular request params, but that requires an upgrade in de base flamingo component
+        this.sliverMaxArea = json.getDouble("sliverMaxArea");
+        json.remove("sliverMaxArea");
+        this.sliverRatio = json.getDouble("sliverRatio");
+        json.remove("sliverRatio");
+
         Iterator items = json.keys();
         while (items.hasNext()) {
             String key = (String) items.next();
@@ -83,11 +104,12 @@ public class IbisSplitFeatureActionBean extends SplitFeatureActionBean implement
                 }
             }
         }
+        features = resolveSlivers(features);
         return features;
     }
 
     /**
-     * Overrides deleting features by archiving them instead. {@inheritDoc}
+     * {@inheritDoc} Overrides deleting features by archiving them instead.
      */
     @Override
     protected List<FeatureId> handleStrategy(SimpleFeature feature, List<? extends Geometry> geoms,
@@ -153,4 +175,65 @@ public class IbisSplitFeatureActionBean extends SplitFeatureActionBean implement
                     this.newWorkflowStatus, this.getApplication(), Stripersist.getEntityManager());
         }
     }
+
+    private List<SimpleFeature> resolveSlivers(List<SimpleFeature> features) {
+        List<SimpleFeature> nonSlivers = features;
+        if (this.sliverRatio > 0) {
+            ArrayList<SimpleFeature> slivers = new ArrayList();
+            nonSlivers = new ArrayList();
+            // determine slivers and 'real' polygons
+            for (SimpleFeature f : features) {
+                Geometry g = (Geometry) f.getDefaultGeometry();
+                // use minimum area and thinness ratio formula: 4 * pi * area/(length*length)
+                if (g.getArea() <= sliverMaxArea && 4 * Math.PI * (g.getArea() / (g.getLength() * g.getLength())) < sliverRatio) {
+                    log.debug("Sliver gevonden: " + f);
+                    slivers.add(f);
+                } else {
+                    nonSlivers.add(f);
+                }
+            }
+
+            // merge slivers to non-slivers..
+            for (SimpleFeature f : nonSlivers) {
+                Geometry g = (Geometry) f.getDefaultGeometry();
+                ArrayList<SimpleFeature> sliversToRemove = new ArrayList();
+                for (SimpleFeature s : slivers) {
+                    Geometry sg = (Geometry) s.getDefaultGeometry();
+                    if (sg.touches(g)) {
+                        log.debug("Samenvoegen van sliver: " + s + " met: " + g);
+                        g = sg.union(g);
+                        sliversToRemove.add(s);
+                    }
+                }
+                f.setDefaultGeometry(g);
+                slivers.removeAll(sliversToRemove);
+            }
+            // slivers should be empty
+            if (!slivers.isEmpty()) {
+                log.warn("Niet alle slivers zijn opgelost. Overblijvers:");
+                for (SimpleFeature s : slivers) {
+                    log.warn("  overblijvende sliver: " + s);
+                }
+            }
+        }
+        return nonSlivers;
+    }
+
+    //<editor-fold defaultstate="collapsed" desc="getters en setters">
+    public double getSliverRatio() {
+        return sliverRatio;
+    }
+
+    public void setSliverRatio(double sliverRatio) {
+        this.sliverRatio = sliverRatio;
+    }
+    
+    public double getSliverMaxArea() {
+        return sliverMaxArea;
+    }
+
+    public void setSliverMaxArea(double sliverMaxArea) {
+        this.sliverMaxArea = sliverMaxArea;
+    }
+    //</editor-fold>
 }
