@@ -24,8 +24,9 @@ This is required to publish the site into the gh-pages branch using the
 ## releasing
 
 Use the regular maven relase cycle; `mvn release:prepare` and then `mvn release:perform`.
+Upload the `dist` artifact to the github release.
 
 ## generating and deploying site
 
-`mvn site` will create a staged maven site, `mvn site site:deploy` should take
+`mvn site` will create a staged maven site, `mvn site site-deploy` should take
 care of deploying the site to https://b3partners.github.io/flamingo-ibis/.
