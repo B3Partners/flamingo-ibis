@@ -72,29 +72,6 @@ digraph G {
 	c256:p -> c260:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisReportsActionBean NAVASSOC nl.b3p.viewer.config.services.JDBCFeatureSource
 	c256:p -> c261:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// nl.b3p.viewer.config.services.JDBCFeatureSource
-	c261 [label=<<table title="nl.b3p.viewer.config.services.JDBCFeatureSource" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> JDBCFeatureSource </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + PROTOCOL : String </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + JDBCFeatureSource() </td></tr>
-<tr><td align="left" balign="left"> + JDBCFeatureSource(arg0 : Map&lt;&gt;) </td></tr>
-<tr><td align="left" balign="left"> + getSchema() : String </td></tr>
-<tr><td align="left" balign="left"> + setSchema(arg0 : String) </td></tr>
-<tr><td align="left" balign="left"> + loadFeatureTypes() </td></tr>
-<tr><td align="left" balign="left"> + loadFeatureTypes(arg0 : WaitPageStatus) </td></tr>
-<tr><td align="left" balign="left"> + createFeatureTypes() : List&lt;SimpleFeatureType&gt; </td></tr>
-<tr><td align="left" balign="left"> + createFeatureTypes(arg0 : WaitPageStatus) : List&lt;SimpleFeatureType&gt; </td></tr>
-<tr><td align="left" balign="left"> + createDataStore() : DataStore </td></tr>
-<tr><td align="left" balign="left"> ~ openGeoToolsFeatureSource(arg0 : SimpleFeatureType) : FeatureSource&lt;&gt; </td></tr>
-<tr><td align="left" balign="left"> ~ openGeoToolsFeatureSource(arg0 : SimpleFeatureType, arg1 : int) : FeatureSource&lt;&gt; </td></tr>
-<tr><td align="left" balign="left"> ~ getFeatures(arg0 : SimpleFeatureType, arg1 : Filter, arg2 : int) : FeatureCollection&lt;&gt; </td></tr>
-		</table></td></tr>
-		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.sourceforge.stripes.action.ActionBeanContext
 	c259 [label=<<table title="net.sourceforge.stripes.action.ActionBeanContext" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
@@ -133,8 +110,31 @@ digraph G {
 <tr><td align="left" balign="left">  </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + setContext(arg0 : ActionBeanContext) </td></tr>
-<tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
+<tr><td align="left" balign="left"><font face="Helvetica-Oblique" point-size="10.0"> + setContext(arg0 : ActionBeanContext) </font></td></tr>
+<tr><td align="left" balign="left"><font face="Helvetica-Oblique" point-size="10.0"> + getContext() : ActionBeanContext </font></td></tr>
+		</table></td></tr>
+		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// nl.b3p.viewer.config.services.JDBCFeatureSource
+	c261 [label=<<table title="nl.b3p.viewer.config.services.JDBCFeatureSource" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> JDBCFeatureSource </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + PROTOCOL : String </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + JDBCFeatureSource() </td></tr>
+<tr><td align="left" balign="left"> + JDBCFeatureSource(arg0 : Map&lt;&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getSchema() : String </td></tr>
+<tr><td align="left" balign="left"> + setSchema(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + loadFeatureTypes() </td></tr>
+<tr><td align="left" balign="left"> + loadFeatureTypes(arg0 : WaitPageStatus) </td></tr>
+<tr><td align="left" balign="left"> + createFeatureTypes() : List&lt;SimpleFeatureType&gt; </td></tr>
+<tr><td align="left" balign="left"> + createFeatureTypes(arg0 : WaitPageStatus) : List&lt;SimpleFeatureType&gt; </td></tr>
+<tr><td align="left" balign="left"> + createDataStore() : DataStore </td></tr>
+<tr><td align="left" balign="left"> ~ openGeoToolsFeatureSource(arg0 : SimpleFeatureType) : FeatureSource&lt;&gt; </td></tr>
+<tr><td align="left" balign="left"> ~ openGeoToolsFeatureSource(arg0 : SimpleFeatureType, arg1 : int) : FeatureSource&lt;&gt; </td></tr>
+<tr><td align="left" balign="left"> ~ getFeatures(arg0 : SimpleFeatureType, arg1 : Filter, arg2 : int) : FeatureCollection&lt;&gt; </td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.config.app.Application

@@ -213,6 +213,45 @@ digraph G {
 	c19:p -> c22:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea
 	c19:p -> c20:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// nl.b3p.viewer.stripes.FeatureInfoActionBean
+	c28 [label=<<table title="nl.b3p.viewer.stripes.FeatureInfoActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> FeatureInfoActionBean </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + FID : String </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + FeatureInfoActionBean() </td></tr>
+<tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
+<tr><td align="left" balign="left"> + setContext(arg0 : ActionBeanContext) </td></tr>
+<tr><td align="left" balign="left"> + getApplication() : Application </td></tr>
+<tr><td align="left" balign="left"> + setApplication(arg0 : Application) </td></tr>
+<tr><td align="left" balign="left"> + getLimit() : int </td></tr>
+<tr><td align="left" balign="left"> + setLimit(arg0 : int) </td></tr>
+<tr><td align="left" balign="left"> + getDistance() : String </td></tr>
+<tr><td align="left" balign="left"> + setDistance(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getQueryJSON() : String </td></tr>
+<tr><td align="left" balign="left"> + setQueryJSON(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getX() : String </td></tr>
+<tr><td align="left" balign="left"> + setX(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getY() : String </td></tr>
+<tr><td align="left" balign="left"> + setY(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + isEdit() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setEdit(arg0 : boolean) </td></tr>
+<tr><td align="left" balign="left"> + isArrays() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setArrays(arg0 : boolean) </td></tr>
+<tr><td align="left" balign="left"> + getRequestId() : String </td></tr>
+<tr><td align="left" balign="left"> + setRequestId(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getAttributesToInclude() : List&lt;Long&gt; </td></tr>
+<tr><td align="left" balign="left"> + setAttributesToInclude(arg0 : List&lt;Long&gt;) </td></tr>
+<tr><td align="left" balign="left"> + isGraph() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setGraph(arg0 : boolean) </td></tr>
+<tr><td align="left" balign="left"> + getLayer() : Layer </td></tr>
+<tr><td align="left" balign="left"> + info() : Resolution </td></tr>
+<tr><td align="left" balign="left"> # executeQuery(arg0 : ApplicationLayer, arg1 : SimpleFeatureType, arg2 : FeatureSource&lt;&gt;, arg3 : Query) : JSONArray </td></tr>
+		</table></td></tr>
+		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.MergeFeaturesActionBean
 	c30 [label=<<table title="nl.b3p.viewer.stripes.MergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
@@ -313,45 +352,6 @@ digraph G {
 <tr><td align="left" balign="left"> + getExtraData() : String </td></tr>
 <tr><td align="left" balign="left"> + setExtraData(arg0 : String) </td></tr>
 <tr><td align="left" balign="left"> + getLayer() : Layer </td></tr>
-		</table></td></tr>
-		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// nl.b3p.viewer.stripes.FeatureInfoActionBean
-	c28 [label=<<table title="nl.b3p.viewer.stripes.FeatureInfoActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> FeatureInfoActionBean </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + FID : String </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + FeatureInfoActionBean() </td></tr>
-<tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
-<tr><td align="left" balign="left"> + setContext(arg0 : ActionBeanContext) </td></tr>
-<tr><td align="left" balign="left"> + getApplication() : Application </td></tr>
-<tr><td align="left" balign="left"> + setApplication(arg0 : Application) </td></tr>
-<tr><td align="left" balign="left"> + getLimit() : int </td></tr>
-<tr><td align="left" balign="left"> + setLimit(arg0 : int) </td></tr>
-<tr><td align="left" balign="left"> + getDistance() : String </td></tr>
-<tr><td align="left" balign="left"> + setDistance(arg0 : String) </td></tr>
-<tr><td align="left" balign="left"> + getQueryJSON() : String </td></tr>
-<tr><td align="left" balign="left"> + setQueryJSON(arg0 : String) </td></tr>
-<tr><td align="left" balign="left"> + getX() : String </td></tr>
-<tr><td align="left" balign="left"> + setX(arg0 : String) </td></tr>
-<tr><td align="left" balign="left"> + getY() : String </td></tr>
-<tr><td align="left" balign="left"> + setY(arg0 : String) </td></tr>
-<tr><td align="left" balign="left"> + isEdit() : boolean </td></tr>
-<tr><td align="left" balign="left"> + setEdit(arg0 : boolean) </td></tr>
-<tr><td align="left" balign="left"> + isArrays() : boolean </td></tr>
-<tr><td align="left" balign="left"> + setArrays(arg0 : boolean) </td></tr>
-<tr><td align="left" balign="left"> + getRequestId() : String </td></tr>
-<tr><td align="left" balign="left"> + setRequestId(arg0 : String) </td></tr>
-<tr><td align="left" balign="left"> + getAttributesToInclude() : List&lt;Long&gt; </td></tr>
-<tr><td align="left" balign="left"> + setAttributesToInclude(arg0 : List&lt;Long&gt;) </td></tr>
-<tr><td align="left" balign="left"> + isGraph() : boolean </td></tr>
-<tr><td align="left" balign="left"> + setGraph(arg0 : boolean) </td></tr>
-<tr><td align="left" balign="left"> + getLayer() : Layer </td></tr>
-<tr><td align="left" balign="left"> + info() : Resolution </td></tr>
-<tr><td align="left" balign="left"> # executeQuery(arg0 : ApplicationLayer, arg1 : SimpleFeatureType, arg2 : FeatureSource&lt;&gt;, arg3 : Query) : JSONArray </td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }

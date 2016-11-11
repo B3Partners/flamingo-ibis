@@ -137,45 +137,6 @@ digraph G {
 	c95:p -> c125:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea
 	c95:p -> c96:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// nl.b3p.viewer.config.app.ApplicationLayer
-	c119 [label=<<table title="nl.b3p.viewer.config.app.ApplicationLayer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> ApplicationLayer </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + ApplicationLayer() </td></tr>
-<tr><td align="left" balign="left"> + getAttributes() : List&lt;ConfiguredAttribute&gt; </td></tr>
-<tr><td align="left" balign="left"> + setAttributes(arg0 : List&lt;ConfiguredAttribute&gt;) </td></tr>
-<tr><td align="left" balign="left"> + getDetails() : Map&lt;String, ClobElement&gt; </td></tr>
-<tr><td align="left" balign="left"> + setDetails(arg0 : Map&lt;String, ClobElement&gt;) </td></tr>
-<tr><td align="left" balign="left"> + getId() : Long </td></tr>
-<tr><td align="left" balign="left"> + setId(arg0 : Long) </td></tr>
-<tr><td align="left" balign="left"> + getReaders() : Set&lt;String&gt; </td></tr>
-<tr><td align="left" balign="left"> + setReaders(arg0 : Set&lt;String&gt;) </td></tr>
-<tr><td align="left" balign="left"> + getWriters() : Set&lt;String&gt; </td></tr>
-<tr><td align="left" balign="left"> + setWriters(arg0 : Set&lt;String&gt;) </td></tr>
-<tr><td align="left" balign="left"> + getService() : GeoService </td></tr>
-<tr><td align="left" balign="left"> + setService(arg0 : GeoService) </td></tr>
-<tr><td align="left" balign="left"> + getLayerName() : String </td></tr>
-<tr><td align="left" balign="left"> + setLayerName(arg0 : String) </td></tr>
-<tr><td align="left" balign="left"> + getStartLayers() : Map&lt;Application, StartLayer&gt; </td></tr>
-<tr><td align="left" balign="left"> + setStartLayers(arg0 : Map&lt;Application, StartLayer&gt;) </td></tr>
-<tr><td align="left" balign="left"> + getAttributes(arg0 : SimpleFeatureType) : List&lt;ConfiguredAttribute&gt; </td></tr>
-<tr><td align="left" balign="left"> + getAttributes(arg0 : SimpleFeatureType, arg1 : boolean) : List&lt;ConfiguredAttribute&gt; </td></tr>
-<tr><td align="left" balign="left"> + getAttribute(arg0 : SimpleFeatureType, arg1 : String) : ConfiguredAttribute </td></tr>
-<tr><td align="left" balign="left"> + getDisplayName(arg0 : EntityManager) : String </td></tr>
-<tr><td align="left" balign="left"> + toJSONObject(arg0 : EntityManager) : JSONObject </td></tr>
-<tr><td align="left" balign="left"> + toJSONObject(arg0 : boolean, arg1 : boolean, arg2 : EntityManager, arg3 : Application) : JSONObject </td></tr>
-<tr><td align="left" balign="left"> + addAttributesJSON(arg0 : JSONObject, arg1 : boolean, arg2 : EntityManager) </td></tr>
-<tr><td align="left" balign="left"> + getRelationsJSON(arg0 : EntityManager) : JSONArray </td></tr>
-<tr><td align="left" balign="left"> ~ processStartLayers(arg0 : Application, arg1 : ApplicationLayer) </td></tr>
-<tr><td align="left" balign="left"> ~ deepCopy(arg0 : Map&lt;&gt;, arg1 : Application) : ApplicationLayer </td></tr>
-<tr><td align="left" balign="left"> + toString() : String </td></tr>
-		</table></td></tr>
-		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.config.services.Layer
 	c125 [label=<<table title="nl.b3p.viewer.config.services.Layer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
@@ -290,8 +251,47 @@ digraph G {
 <tr><td align="left" balign="left">  </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + setContext(arg0 : ActionBeanContext) </td></tr>
-<tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
+<tr><td align="left" balign="left"><font face="Helvetica-Oblique" point-size="10.0"> + setContext(arg0 : ActionBeanContext) </font></td></tr>
+<tr><td align="left" balign="left"><font face="Helvetica-Oblique" point-size="10.0"> + getContext() : ActionBeanContext </font></td></tr>
+		</table></td></tr>
+		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// nl.b3p.viewer.config.app.ApplicationLayer
+	c119 [label=<<table title="nl.b3p.viewer.config.app.ApplicationLayer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ApplicationLayer </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + ApplicationLayer() </td></tr>
+<tr><td align="left" balign="left"> + getAttributes() : List&lt;ConfiguredAttribute&gt; </td></tr>
+<tr><td align="left" balign="left"> + setAttributes(arg0 : List&lt;ConfiguredAttribute&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getDetails() : Map&lt;String, ClobElement&gt; </td></tr>
+<tr><td align="left" balign="left"> + setDetails(arg0 : Map&lt;String, ClobElement&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getId() : Long </td></tr>
+<tr><td align="left" balign="left"> + setId(arg0 : Long) </td></tr>
+<tr><td align="left" balign="left"> + getReaders() : Set&lt;String&gt; </td></tr>
+<tr><td align="left" balign="left"> + setReaders(arg0 : Set&lt;String&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getWriters() : Set&lt;String&gt; </td></tr>
+<tr><td align="left" balign="left"> + setWriters(arg0 : Set&lt;String&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getService() : GeoService </td></tr>
+<tr><td align="left" balign="left"> + setService(arg0 : GeoService) </td></tr>
+<tr><td align="left" balign="left"> + getLayerName() : String </td></tr>
+<tr><td align="left" balign="left"> + setLayerName(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getStartLayers() : Map&lt;Application, StartLayer&gt; </td></tr>
+<tr><td align="left" balign="left"> + setStartLayers(arg0 : Map&lt;Application, StartLayer&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getAttributes(arg0 : SimpleFeatureType) : List&lt;ConfiguredAttribute&gt; </td></tr>
+<tr><td align="left" balign="left"> + getAttributes(arg0 : SimpleFeatureType, arg1 : boolean) : List&lt;ConfiguredAttribute&gt; </td></tr>
+<tr><td align="left" balign="left"> + getAttribute(arg0 : SimpleFeatureType, arg1 : String) : ConfiguredAttribute </td></tr>
+<tr><td align="left" balign="left"> + getDisplayName(arg0 : EntityManager) : String </td></tr>
+<tr><td align="left" balign="left"> + toJSONObject(arg0 : EntityManager) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + toJSONObject(arg0 : boolean, arg1 : boolean, arg2 : EntityManager, arg3 : Application) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + addAttributesJSON(arg0 : JSONObject, arg1 : boolean, arg2 : EntityManager) </td></tr>
+<tr><td align="left" balign="left"> + getRelationsJSON(arg0 : EntityManager) : JSONArray </td></tr>
+<tr><td align="left" balign="left"> ~ processStartLayers(arg0 : Application, arg1 : ApplicationLayer) </td></tr>
+<tr><td align="left" balign="left"> ~ deepCopy(arg0 : Map&lt;&gt;, arg1 : Application) : ApplicationLayer </td></tr>
+<tr><td align="left" balign="left"> + toString() : String </td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.config.app.Application
