@@ -18,7 +18,7 @@ import org.junit.Test;
 /**
  * testcases for {@link DateUtils}.
  *
- * @author Mark Prins <mark@b3partners.nl>
+ * @author mprins
  */
 public class DateUtilsTest {
 

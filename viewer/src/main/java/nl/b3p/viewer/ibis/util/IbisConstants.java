@@ -32,7 +32,7 @@ public interface IbisConstants {
     public static final String TERREIN_LAYER_NAME = "bedrijventerrein";
     /**
      * Name of the foreign TERREIN ID field in the datamodel ({@value}). (exists
-     * only in     * {@link IbisConstants#KAVEL_LAYER_NAME}).
+     * only in {@link IbisConstants#KAVEL_LAYER_NAME}).
      */
     public static final String KAVEL_TERREIN_ID_FIELDNAME = "terreinid";
     /**

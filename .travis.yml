@@ -30,6 +30,7 @@ script:
   - mvn -e test verify -B -pl '!dist'
   - if [ "$TRAVIS_JDK_VERSION" == oraclejdk8 ]; then
          mvn javadoc:javadoc;
+         mvn javadoc:test-javadoc;
     fi
 
 after_success:

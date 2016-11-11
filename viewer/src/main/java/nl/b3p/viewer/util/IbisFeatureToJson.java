@@ -81,16 +81,16 @@ public class IbisFeatureToJson {
     }
 
     /**
-     * Get the features as JSONArray with the given params
+     * Get the features as JSONArray with the given params.
      *
      * @param al The application layer(if there is a application layer)
      * @param ft The featuretype that must be used to get the features
      * @param fs The featureSource
      * @param q The query
      * @return JSONArray with features.
-     * @throws IOException
-     * @throws JSONException
-     * @throws Exception
+     * @throws IOException if any
+     * @throws JSONException if any
+     * @throws Exception if any
      */
     public JSONArray getWorkflowJSONFeatures(ApplicationLayer al, SimpleFeatureType ft, FeatureSource fs, Query q) throws IOException, JSONException, Exception {
         log.debug("Ophalen workflow json features met: " + q);
@@ -205,9 +205,9 @@ public class IbisFeatureToJson {
      * @param fs The featureSource
      * @param q The query
      * @return JSONArray with features.
-     * @throws IOException
-     * @throws JSONException
-     * @throws Exception
+     * @throws IOException if any
+     * @throws JSONException if any
+     * @throws Exception if any
      */
     public JSONArray getDefinitiefJSONFeatures(ApplicationLayer al, SimpleFeatureType ft, FeatureSource fs, Query q)
             throws IOException, JSONException, Exception {

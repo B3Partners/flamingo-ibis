@@ -60,13 +60,13 @@ public class WorkflowUtil implements IbisConstants {
     /**
      * Update the geometry of the TERREIN. Must be called after the kavels
      * transaction. voor definitief terrein definitief kavels gebruiken, voor
-     * bewerkt terrein definitef en bewerkt kavel genbruiken
+     * bewerkt terrein definitef en bewerkt kavel gebruiken
      *
-     * @param terreinID
+     * @param terreinID feature id van het terrein
      * @param layer kavels layer
-     * @param kavelStatus
-     * @param application
-     * @param em
+     * @param kavelStatus workflow status van te gebruiken kavels
+     * @param application flamingo applicatie
+     * @param em persistence manager
      */
     public static void updateTerreinGeometry(Integer terreinID, Layer layer, WorkflowStatus kavelStatus, Application application, EntityManager em) {
         log.debug("Updating terrein geometry for " + terreinID);

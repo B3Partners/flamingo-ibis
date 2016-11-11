@@ -281,7 +281,7 @@ public class IbisReportsActionBean implements ActionBean, IbisConstants {
      * @param featureTypeAttributes flamingo attribute descriptors for the
      * features
      * @param outputPropNames fieldnames to put in output
-     * @throws JSONException is any
+     * @throws JSONException if any
      */
     private void featuresToJson(SimpleFeatureCollection sfc, JSONObject json,
             List<AttributeDescriptor> featureTypeAttributes /*, List<String> outputPropNames */) throws JSONException {

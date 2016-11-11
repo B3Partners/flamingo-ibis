@@ -29,8 +29,8 @@ public class DateUtils {
     /**
      * calculate difference in months between the arguments.
      *
-     * @param beginningDate
-     * @param endingDate
+     * @param beginningDate begin datum
+     * @param endingDate eind datum
      * @return number of months
      *
      * @see #differenceInMonths(java.util.Calendar, java.util.Calendar)
@@ -49,8 +49,8 @@ public class DateUtils {
     /**
      * calculate difference in months between the arguments.
      *
-     * @param beginningDate
-     * @param endingDate
+     * @param beginningDate begin datum
+     * @param endingDate eind datum
      * @return number of months
      */
     public static int differenceInMonths(Calendar beginningDate, Calendar endingDate) {
@@ -65,8 +65,8 @@ public class DateUtils {
     /**
      * add a month to the date.
      *
-     * @param addTo
-     * @return
+     * @param addTo begin datum
+     * @return een maand later dan begin datum
      */
     public static Date addMonth(Date addTo) {
         Calendar cal = new GregorianCalendar();

@@ -48,16 +48,7 @@ public class IbisFeatureInfoActionBean extends FeatureInfoActionBean implements 
 
     /**
      * execute the query, can be overridden in subclasses to modify behaviour
-     * such as workflow.
-     *
-     * @param al
-     * @param ft
-     * @param fs
-     * @param q
-     * @return
-     * @throws IOException
-     * @throws JSONException
-     * @throws Exception
+     * such as workflow. {@inheritDoc }
      */
     @Override
     protected JSONArray executeQuery(ApplicationLayer al, SimpleFeatureType ft, FeatureSource fs, Query q)

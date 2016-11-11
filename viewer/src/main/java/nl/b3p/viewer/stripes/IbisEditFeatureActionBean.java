@@ -77,9 +77,9 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
      * Override to not delete a feature but set workflow status to
      * {@code WorkflowStatus.archief}
      *
-     * @param fid
-     * @throws IOException
-     * @throws Exception
+     * @param fid feature id
+     * @throws IOException if any
+     * @throws Exception if any
      * @see WorkflowStatus
      */
     @Override
@@ -111,8 +111,8 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
     /**
      * Override the method from the base class to process our workflow.
      *
-     * @param fid
-     * @throws Exception
+     * @param fid feature id
+     * @throws Exception if any
      */
     @Override
     protected void editFeature(String fid) throws Exception {
@@ -284,9 +284,8 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
     /**
      * Update any of the selected kavels to the given workflow.
      *
-     * @param terreinID
-     * @param kavelFilter
-     * @param newStatus
+     * @param kavelFilter filter definitie
+     * @param newStatus de nieuwe status
      */
     private void updateKavelWorkflowForTerrein(Filter kavelFilter, WorkflowStatus newStatus) {
         SimpleFeatureStore kavelStore = null;

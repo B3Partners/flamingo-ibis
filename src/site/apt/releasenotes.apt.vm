@@ -25,6 +25,21 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
+  * ...
+
+  []
+
+** Verbeteringen en oplossingen
+
+  * ...
+
+  []
+
+
+* Versie 2.11
+
+** Nieuw
+
   * Gebruik Flamingo versie ${project.properties.get("flamingo.version")}, zie ook:
     {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v${project.properties.get("flamingo.version")}}Flamingo release notes}}
 

@@ -213,7 +213,7 @@ public class IbisAttributeListActionBean implements ActionBean, IbisConstants {
     private static final String GEBIED_FIELDNAME = "gebied";
 
     /**
-     * name of the related feature type. {@value}.
+     * name of the related feature type. {@code null}.
      *
      * @todo assuming there is only one relate
      */
