@@ -30,8 +30,8 @@ mvn clean
 mvn release:prepare -l rel-prepare.log -DautoVersionSubmodules=true -DdevelopmentVersion=2.12-SNAPSHOT -DreleaseVersion=2.11 -Dtag=ibis-flamingo-mc-2.11 -e -T1
 mvn release:perform -l rel-perform.log -e -T1
 ```
-
-To (re-)create the maven site of this tag:
+Don't forget to update the release notes.
+To (re-)create the maven site of this tag (normally the site is deployed as part of the release procedure):
 
 ```
 git checkout ibis-flamingo-mc-2.11
