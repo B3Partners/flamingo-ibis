@@ -107,7 +107,7 @@ public class WorkflowUtil implements IbisConstants {
             SimpleFeatureCollection kavels = kavelStore.getFeatures(kavelFilter);
 
             // dissolve all kavel geometries
-            final Collection<Geometry> kavelGeoms = new ArrayList();
+            final ArrayList<Geometry> kavelGeoms = new ArrayList();
             kavels.accepts(new AbstractFeatureVisitor() {
                 @Override
                 public void visit(Feature feature) {
@@ -118,9 +118,15 @@ public class WorkflowUtil implements IbisConstants {
                 }
             }, null);
             log.debug("Kavels found: " + kavelGeoms.size());
-            GeometryFactory factory = JTSFactoryFinder.getGeometryFactory(null);
-            GeometryCollection geometryCollection = (GeometryCollection) factory.buildGeometry(kavelGeoms);
-            Geometry newTerreinGeom = geometryCollection.union();
+            Geometry newTerreinGeom;
+            if (kavelGeoms.size() == 1) {
+                // maar 1 (vlak) geom gevonden, dus geom overzetten naar terrein
+                newTerreinGeom = kavelGeoms.get(0);
+            } else {
+                GeometryFactory factory = JTSFactoryFinder.getGeometryFactory(null);
+                GeometryCollection geometryCollection = (GeometryCollection) factory.buildGeometry(kavelGeoms);
+                newTerreinGeom = geometryCollection.union();
+            }
             if (!newTerreinGeom.getGeometryType().equalsIgnoreCase("MultiPolygon")) {
                 GeometryFactory f = JTSFactoryFinder.getGeometryFactory();
                 newTerreinGeom = f.createMultiPolygon(new Polygon[]{(Polygon) newTerreinGeom});
