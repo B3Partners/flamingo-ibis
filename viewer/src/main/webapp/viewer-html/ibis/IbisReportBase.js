@@ -199,7 +199,6 @@ Ext.define("viewer.components.IbisReportBase", {
     },
     /**
      * @returns void
-     * @abstract
      */
     createForms: function () {
     },
@@ -208,7 +207,6 @@ Ext.define("viewer.components.IbisReportBase", {
      *
      * @param {Boolean} resetMapExtend true to rest the map extend to the startExtent
      * @returns void
-     * @abstract
      */
     resetStoreFilters: function (resetMapExtend) {
     },

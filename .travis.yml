@@ -3,7 +3,7 @@ language: java
 sudo: false
 
 addons:
-  postgresql: "9.3"
+  postgresql: "9.4"
 
 before_install:
   - psql --version
@@ -15,7 +15,6 @@ before_install:
   - psql -U postgres -c 'create schema "IBIS" AUTHORIZATION ibis';
   - psql -U postgres -c 'ALTER DATABASE "ibis" SET search_path = "IBIS", public;'
   - psql -U postgres -d ibis -c 'create extension postgis;'
-#  - psql -U postgres --list
   - ls -l ./src/main/ddl/
   - psql -U postgres -w -d ibis -a -f ./src/main/ddl/create_ibis_database.sql
 
@@ -27,7 +26,7 @@ before_script:
 
 script:
   # execute unit and integration tests
-  - mvn -e test verify -B -pl '!dist'
+  - mvn -e test integration-test -B -pl '!dist'
   - if [ "$TRAVIS_JDK_VERSION" == oraclejdk8 ]; then
          mvn javadoc:javadoc;
          mvn javadoc:test-javadoc;

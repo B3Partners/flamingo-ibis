@@ -172,16 +172,17 @@
                             </compilerOptions>
                             <externFiles />
                             <sourceFiles>
+                                <param>${viewerhtml.path}/ibis/IbisReportBase.js</param>
+                                <param>${viewerhtml.path}/ibis/IbisLayerIdUtil.js</param>
+                                <param>${viewerhtml.path}/ibis/WorkflowStatus.js</param>
                                 <param>${viewerhtml.path}/ibis/GridPanel.js</param>
                                 <param>${viewerhtml.path}/ibis/IbisEdit.js</param>
                                 <param>${viewerhtml.path}/ibis/IbisFactsheet.js</param>
-                                <param>${viewerhtml.path}/ibis/IbisLayerIdUtil.js</param>
                                 <param>${viewerhtml.path}/ibis/IbisLocationFinder.js</param>
-                                <param>${viewerhtml.path}/ibis/IbisMerge.js</param>
                                 <param>${viewerhtml.path}/ibis/IbisReports.js</param>
                                 <param>${viewerhtml.path}/ibis/IbisDrawing.js</param>
                                 <param>${viewerhtml.path}/ibis/IbisSplit.js</param>
-                                <param>${viewerhtml.path}/ibis/WorkflowStatus.js</param>
+                                <param>${viewerhtml.path}/ibis/IbisMerge.js</param>
                             </sourceFiles>
                             <outputFile>${minify.outputdir}/ibis-viewer-min.js</outputFile>
                         </compilation>
