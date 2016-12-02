@@ -148,6 +148,7 @@ digraph G {
 <tr><td align="left" balign="left"> + EXTRA_KEY_DOWNLOAD_URL : String </td></tr>
 <tr><td align="left" balign="left"> + EXTRA_KEY_FILTERABLE : String </td></tr>
 <tr><td align="left" balign="left"> + EXTRA_IMAGE_EXTENSION : String </td></tr>
+<tr><td align="left" balign="left"> + EXTRA_KEY_ATTRIBUTION : String </td></tr>
 <tr><td align="left" balign="left"> + DETAIL_WMS_STYLES : String </td></tr>
 <tr><td align="left" balign="left"> + DETAIL_ALL_CHILDREN : String </td></tr>
 <tr><td align="left" balign="left"> + DETAIL_ALTERNATE_LEGEND_IMAGE_URL : String </td></tr>
