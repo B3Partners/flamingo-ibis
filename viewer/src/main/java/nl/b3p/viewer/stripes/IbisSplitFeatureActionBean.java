@@ -105,6 +105,12 @@ public class IbisSplitFeatureActionBean extends SplitFeatureActionBean implement
             }
         }
         features = resolveSlivers(features);
+
+        if (features.size() < 2) {
+            // sliver resolution has "cleaned" away all split features and we only have the original left.
+            throw new IllegalArgumentException("Splits mislukt, de oppervlakte van afgesplitste deel is kleiner dan de drempel ("
+                    + this.sliverMaxArea + ") of de omtrek/oppervlakte ratio is te klein.");
+        }
         return features;
     }
 

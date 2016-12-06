@@ -34,6 +34,8 @@ ${project.name} ${project.version} Release Notes
 
   * verbeteringen in het samenvoeg-gereedschap ({{{https://github.com/flamingo-geocms/flamingo/issues/724}#724}})
 
+  * betere melding als afgesplitste deel van geometrie kleiner is dan drempelwaarden voor sliver (waardoor afgesplitste deel alweer is samengevoegd)
+
   []
 
 
