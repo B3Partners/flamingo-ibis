@@ -36,6 +36,8 @@ ${project.name} ${project.version} Release Notes
 
   * betere melding als afgesplitste deel van geometrie kleiner is dan drempelwaarden voor sliver (waardoor afgesplitste deel alweer is samengevoegd)
 
+  * gebruik een tomcat "LockOutRealm" om brute-force aanvallen tegen te gaan; zie {{{https://github.com/flamingo-geocms/flamingo/issues/726}#726}}
+
   []
 
 
