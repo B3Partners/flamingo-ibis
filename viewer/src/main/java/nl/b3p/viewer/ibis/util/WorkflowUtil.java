@@ -100,7 +100,7 @@ public class WorkflowUtil implements IbisConstants {
                 default:
                 // do nothing / should not happen
             }
-            log.debug("Looking for kavel with filter: " + kavelFilter);
+            log.debug("Looking for kavel(s) with filter: " + kavelFilter);
 
             kavelStore = (SimpleFeatureStore) layer.getFeatureType().openGeoToolsFeatureSource();
             kavelStore.setTransaction(kavelTransaction);
@@ -117,7 +117,8 @@ public class WorkflowUtil implements IbisConstants {
                     }
                 }
             }, null);
-            log.debug("Kavels found: " + kavelGeoms.size());
+            log.debug("Kavels found for this terrein: " + kavelGeoms.size());
+
             Geometry newTerreinGeom;
             if (kavelGeoms.size() == 1) {
                 // maar 1 (vlak) geom gevonden, dus geom overzetten naar terrein
@@ -165,23 +166,28 @@ public class WorkflowUtil implements IbisConstants {
                 default:
                 // won't do anything
             }
-            log.debug("Update terrein geom for kavels filtered by: " + terreinFilter);
 
             // update terrein with new geom
+            log.debug("Update terrein geom for kavels filtered by: " + terreinFilter);
             String geomAttrName = terreinStore.getSchema().getGeometryDescriptor().getLocalName();
             terreinStore.modifyFeatures(geomAttrName, newTerreinGeom, terreinFilter);
             terreinTransaction.commit();
+            log.debug("Done updating terrein geometry for " + terreinFilter + " with new geom: " + newTerreinGeom + " on attribute " + geomAttrName);
         } catch (Exception e) {
             log.error(String.format("Update van terrein geometrie %s is mislukt", terreinID), e);
         } finally {
             try {
-                kavelTransaction.close();
                 terreinTransaction.close();
             } catch (IOException io) {
-                // closing transaction failed
+                log.warn("Error closing terrein transaction", io);
             }
             if (terreinStore != null) {
                 terreinStore.getDataStore().dispose();
+            }
+            try {
+                kavelTransaction.close();
+            } catch (IOException io) {
+                log.warn("Error closing kavel transaction", io);
             }
             if (kavelStore != null) {
                 kavelStore.getDataStore().dispose();

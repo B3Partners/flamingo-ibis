@@ -134,7 +134,7 @@ public class IbisSplitFeatureActionBean extends SplitFeatureActionBean implement
         boolean firstFeature = true;
         int newID = (int) (new Date().getTime() / 1000);
         for (Geometry newGeom : geoms) {
-            log.debug("Creating feature with geom: " + newGeom.getLength());
+            log.debug("Creating feature with geom length: " + newGeom.getLength());
             if (firstFeature) {
                 if (localStrategy.equalsIgnoreCase("add")) {
                     // existing feature to "archief"
@@ -150,6 +150,7 @@ public class IbisSplitFeatureActionBean extends SplitFeatureActionBean implement
                     SimpleFeature newFeat = DataUtilities.createFeature(feature.getType(),
                             DataUtilities.encodeFeature(feature, false));
                     newFeat.setAttribute(geomAttribute, c.convert(newGeom, type.getBinding()));
+                    log.debug("First split feature has ibis id: " + newFeat.getAttribute(ID_FIELDNAME));
                     newFeats.add(newFeat);
                     firstFeature = false;
                     continue;
@@ -162,7 +163,7 @@ public class IbisSplitFeatureActionBean extends SplitFeatureActionBean implement
                     DataUtilities.encodeFeature(feature, false));
             newFeat.setAttribute(geomAttribute, c.convert(newGeom, type.getBinding()));
             newFeat.setAttribute(ID_FIELDNAME, newID++);
-            log.debug("created new feature with id: " + newID);
+            log.debug("Created new feature with ibis id: " + newID);
             newFeats.add(newFeat);
         }
         // update specified fields on the new features
