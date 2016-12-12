@@ -95,8 +95,13 @@ Ext.define("viewer.components.IbisMerge", {
     },
     saveSucces: function (response, me) {
         Ext.Object.eachValue(me.config.viewerController.app.appLayers, function (appLayer) {
-            if (appLayer.layerName === terreinenLayerName) {
-                me.config.viewerController.getLayer(appLayer).reload();
+            if (appLayer.checked && appLayer.editAuthorized && appLayer.layerName === terreinenLayerName) {
+                try {
+                    me.config.viewerController.getLayer(appLayer).reload();
+                } catch (ex) {
+                    // ignore
+                    FlamingoErrorLogger("Poging om terreinenlaag te verversen is mislukt");
+                }
             }
         });
         me.config.viewerController.getLayer(me.layerSelector.getValue()).reload();

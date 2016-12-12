@@ -80,22 +80,24 @@ Ext.define("viewer.components.IbisSplit", {
     },
     save: function () {
         if (this.maincontainer.getComponent(mutatiedatumFieldName).isValid()) {
-            FlamingoErrorLogger("opslaan voor splitsen");
             this.superclass.save.call(this);
         }
     },
     saveSucces: function (response, me) {
-        FlamingoErrorLogger("splitsen succesvol afgerond");
         Ext.Object.eachValue(me.config.viewerController.app.appLayers, function (appLayer) {
-            if (appLayer.layerName === terreinenLayerName) {
-                me.config.viewerController.getLayer(appLayer).reload();
+            if (appLayer.checked && appLayer.editAuthorized && appLayer.layerName === terreinenLayerName) {
+                try {
+                    me.config.viewerController.getLayer(appLayer).reload();
+                } catch (ex) {
+                    // ignore
+                    FlamingoErrorLogger("Poging om terreinenlaag te verversen is mislukt");
+                }
             }
         });
         me.config.viewerController.getLayer(me.layerSelector.getValue()).reload();
         me.cancel();
     },
     saveFailed: function (msg, me) {
-        FlamingoErrorLogger("splitsen niet succesvol afgerond");
         Ext.Msg.alert('Mislukt', msg);
         me.cancel();
     },
