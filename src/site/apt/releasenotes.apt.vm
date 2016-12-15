@@ -48,8 +48,8 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
-  * Gebruik Flamingo versie ${project.properties.get("flamingo.version")}, zie ook:
-    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v${project.properties.get("flamingo.version")}}Flamingo release notes}}
+  * Gebruik Flamingo versie 4.7.7, zie ook:
+    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.7.7}}Flamingo release notes}}
 
   * configureerbare sliver detectie voor splitsen ({{{https://github.com/B3Partners/flamingo-ibis/pull/57}PR #57}})
 
