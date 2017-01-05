@@ -25,6 +25,22 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
+  * Gebruik Flamingo versie 4.7.10-SNAPSHOT, zie ook:
+    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.7.10-SNAPSHOT}Flamingo release notes}}
+
+  []
+
+** Verbeteringen en oplossingen
+
+  * 
+
+  []
+
+
+* Versie 2.12
+
+** Nieuw
+
   * Gebruik Flamingo versie 4.7.9, zie ook:
     {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.7.9}Flamingo release notes}}
 
@@ -39,7 +55,6 @@ ${project.name} ${project.version} Release Notes
   * gebruik een tomcat "LockOutRealm" om brute-force aanvallen tegen te gaan; zie {{{https://github.com/flamingo-geocms/flamingo/issues/726}#726}}
 
   * gebruik <<<_self>>> target voor factsheet
-
 
   []
 
