@@ -64,7 +64,7 @@ import org.opengis.filter.sort.SortOrder;
  */
 public class IbisFeatureToJson {
 
-    private static final Log log = LogFactory.getLog(IbisFeatureToJson.class);
+    private static final Log LOG = LogFactory.getLog(IbisFeatureToJson.class);
 
     public static final int MAX_FEATURES = 1000;
     private boolean arrays = false;
@@ -93,7 +93,18 @@ public class IbisFeatureToJson {
      * @throws Exception if any
      */
     public JSONArray getWorkflowJSONFeatures(ApplicationLayer al, SimpleFeatureType ft, FeatureSource fs, Query q) throws IOException, JSONException, Exception {
-        log.debug("Ophalen workflow json features met: " + q);
+        LOG.debug("Ophalen workflow json features met query: " + q);
+        // query aanpassen met extra filter zodat archief/afgevoerd percelen niet meekomenvoor edit en verhogen van max met factor 2
+        Filter f = q.getFilter();
+        FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
+        f = ff.and(f, ff.or(
+                ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false),
+                ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.name()), false)
+        ));
+        q.setFilter(f);
+        q.setMaxFeatures(2 * q.getMaxFeatures());
+        LOG.debug("Ophalen workflow json features met aangepaste query: " + q);
+
         Map<String, String> attributeAliases = new HashMap<>();
         if (!edit) {
             for (AttributeDescriptor ad : ft.getAttributes()) {
@@ -132,7 +143,6 @@ public class IbisFeatureToJson {
             // workflow handling
             SimpleFeatureCollection feats = (SimpleFeatureCollection) fs.getFeatures(q);
             // get a list of unique ID_FIELDNAME
-            FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
             Function uniq = ff.function("Collection_Unique", ff.property(ID_FIELDNAME));
             Set<Object> idlist = (Set<Object>) uniq.evaluate(feats);
 
@@ -161,15 +171,15 @@ public class IbisFeatureToJson {
                                     ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.name()), false)
                             ));
                     sorted = new SortedSimpleFeatureCollection(inMem.subCollection(filter), sortBy);
-                    log.debug("aantal gevonden: " + sorted.size());
-                    if (log.isDebugEnabled()) {
+                    LOG.debug("aantal gevonden: " + sorted.size());
+                    if (LOG.isDebugEnabled()) {
                         SimpleFeatureIterator sfi = sorted.features();
                         while (sfi.hasNext()) {
-                            log.debug("gevonden feature: " + sfi.next());
+                            LOG.debug("gevonden feature: " + sfi.next());
                         }
                     }
                     actFeat = DataUtilities.first(sorted);
-                    log.debug("actuele feature: " + actFeat);
+                    LOG.debug("actuele feature: " + actFeat);
                     if (actFeat != null) {
                         actueel.add(actFeat);
                     }
@@ -211,7 +221,7 @@ public class IbisFeatureToJson {
      */
     public JSONArray getDefinitiefJSONFeatures(ApplicationLayer al, SimpleFeatureType ft, FeatureSource fs, Query q)
             throws IOException, JSONException, Exception {
-        log.debug("Ophalen definitief json features met: " + q);
+        LOG.debug("Ophalen definitief json features met: " + q);
         Map<String, String> attributeAliases = new HashMap<>();
         if (!edit) {
             for (AttributeDescriptor ad : ft.getAttributes()) {

@@ -13,6 +13,9 @@ ${project.name} ${project.version} Release Notes
 
   Dit zijn de release notes voor ${project.name} versie ${project.version}.
 
+  Releases zijn beschikbaar op: {{{https://github.com/B3Partners/flamingo-ibis/releases/}github releases}}, de laatste snapshots
+  zijn beschikbaar in de {{{http://repo.b3p.nl/nexus/#nexus-search;gav~~ibis-dist~~~}Maven repository}}.
+
 %{toc|section=1|fromDepth=2|toDepth=2}
 
 * Versie ${project.version}
@@ -20,9 +23,6 @@ ${project.name} ${project.version} Release Notes
   De complete lijst met issues voor deze release is beschikbaar in de tracker:
   {{{${project.issueManagement.url}?q=milestone%3A${project.version}+is%3Aclosed}milestone ${project.version} issues}}.
   
-  Releases zijn beschikbaar op: {{{https://github.com/B3Partners/flamingo-ibis/releases/}github releases}}, de laatste snapshots 
-  zijn beschikbaar in de {{{http://repo.b3p.nl/nexus/#nexus-search;gav~~ibis-dist~~~}Maven repository}}.
-
 ** Nieuw
 
   * Gebruik Flamingo versie 4.7.10-SNAPSHOT, zie ook:
@@ -32,7 +32,7 @@ ${project.name} ${project.version} Release Notes
 
 ** Verbeteringen en oplossingen
 
-  * 
+  * omzeilen maximum aantal bewerkingen vanwege workflow ontwerp ({{{https://github.com/B3Partners/flamingo-ibis/issues/59}}#59}})
 
   []
 
