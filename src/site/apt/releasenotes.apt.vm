@@ -32,7 +32,7 @@ ${project.name} ${project.version} Release Notes
 
 ** Verbeteringen en oplossingen
 
-  * omzeilen maximum aantal bewerkingen vanwege workflow ontwerp ({{{https://github.com/B3Partners/flamingo-ibis/issues/59}}#59}})
+  * omzeilen maximum aantal bewerkingen vanwege workflow ontwerp ({{{https://github.com/B3Partners/flamingo-ibis/issues/59}#59}})
 
   []
 
