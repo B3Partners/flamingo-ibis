@@ -23,12 +23,12 @@ ${project.name} ${project.version} Release Notes
   De complete lijst met issues voor deze release is beschikbaar in de tracker:
   {{{${project.issueManagement.url}?q=milestone%3A${project.version}+is%3Aclosed}milestone ${project.version} issues}}.
   
-** Nieuw
+~~** Nieuw
 
-  * Gebruik Flamingo versie 4.7.10-SNAPSHOT, zie ook:
-    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.7.10-SNAPSHOT}Flamingo release notes}}
+~~  * Gebruik Flamingo versie 4.7.10-SNAPSHOT, zie ook:
+~~    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.7.10-SNAPSHOT}Flamingo release notes}}
 
-  []
+~~  []
 
 ** Verbeteringen en oplossingen
 
