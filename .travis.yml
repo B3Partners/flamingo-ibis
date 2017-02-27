@@ -39,9 +39,8 @@ after_failure:
 after_script:
 
 jdk:
-  - openjdk7
-  - oraclejdk7
   - oraclejdk8
+  - openjdk8
 
 os:
   - linux
