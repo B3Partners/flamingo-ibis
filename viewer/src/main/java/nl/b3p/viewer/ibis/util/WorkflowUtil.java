@@ -22,7 +22,6 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Polygon;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
 import javax.persistence.EntityManager;
@@ -43,7 +42,7 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
 
 /**
- * Utility method that come in handy hadling workflow.
+ * Utility method that come in handy handling workflow.
  *
  * @author mprins
  */

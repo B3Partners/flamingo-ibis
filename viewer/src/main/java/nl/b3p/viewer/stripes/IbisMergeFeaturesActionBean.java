@@ -29,6 +29,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.simple.SimpleFeatureStore;
+import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.util.Converter;
 import org.geotools.util.GeometryTypeConverterFactory;
 import org.json.JSONException;
@@ -36,6 +37,7 @@ import org.json.JSONObject;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.GeometryType;
 import org.opengis.filter.Filter;
+import org.opengis.filter.FilterFactory2;
 import org.opengis.filter.identity.FeatureId;
 import org.stripesstuff.stripersist.Stripersist;
 
@@ -101,7 +103,20 @@ public class IbisMergeFeaturesActionBean extends MergeFeaturesActionBean impleme
                 null);
 
         if (this.getStrategy().equalsIgnoreCase("new")) {
-            // archive the source feature (A)
+            // als er een archief record bestaat voor vandaag deze verwijderen
+            FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
+            Filter archiefvandaagA = ff.and(
+                    ff.and(
+                            ff.equals(ff.property(ID_FIELDNAME), ff.literal(featureA.getAttribute(ID_FIELDNAME))),
+                            ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.archief.name()), false)
+                    ), ff.equals(ff.property(MUTATIEDATUM_FIELDNAME), ff.literal(featureA.getAttribute(MUTATIEDATUM_FIELDNAME)))
+            );
+            boolean archiefvandaagAExists = (localStore.getFeatures(archiefvandaagA).size() > 0);
+            if (archiefvandaagAExists) {
+                log.debug("bestaande archief kavel/terrein wordt vervangen door " + featureA.getID());
+                localStore.removeFeatures(archiefvandaagA);
+            }
+            // dan bestaande feature (A) naar "archief"
             localStore.modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, filterA);
 
             // update B with status afgevoerd, and a null terreinid
