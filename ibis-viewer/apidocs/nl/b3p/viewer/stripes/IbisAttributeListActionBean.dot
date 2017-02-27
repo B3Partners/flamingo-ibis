@@ -212,6 +212,8 @@ digraph G {
 <tr><td align="left" balign="left"> + setLegendImageUrl(arg0 : String) </td></tr>
 <tr><td align="left" balign="left"> + getBoundingBoxes() : Map&lt;CoordinateReferenceSystem, BoundingBox&gt; </td></tr>
 <tr><td align="left" balign="left"> + setBoundingBoxes(arg0 : Map&lt;CoordinateReferenceSystem, BoundingBox&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getMatrixSets() : List&lt;TileMatrixSet&gt; </td></tr>
+<tr><td align="left" balign="left"> + setMatrixSets(arg0 : List&lt;TileMatrixSet&gt;) </td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.sourceforge.stripes.action.ActionBeanContext
@@ -290,7 +292,7 @@ digraph G {
 <tr><td align="left" balign="left"> + toJSONObject(arg0 : boolean, arg1 : boolean, arg2 : EntityManager, arg3 : Application) : JSONObject </td></tr>
 <tr><td align="left" balign="left"> + addAttributesJSON(arg0 : JSONObject, arg1 : boolean, arg2 : EntityManager) </td></tr>
 <tr><td align="left" balign="left"> + getRelationsJSON(arg0 : EntityManager) : JSONArray </td></tr>
-<tr><td align="left" balign="left"> ~ processStartLayers(arg0 : Application, arg1 : ApplicationLayer) </td></tr>
+<tr><td align="left" balign="left"> ~ processStartLayers(arg0 : Application, arg1 : ApplicationLayer, arg2 : Application) </td></tr>
 <tr><td align="left" balign="left"> ~ deepCopy(arg0 : Map&lt;&gt;, arg1 : Application) : ApplicationLayer </td></tr>
 <tr><td align="left" balign="left"> + toString() : String </td></tr>
 		</table></td></tr>

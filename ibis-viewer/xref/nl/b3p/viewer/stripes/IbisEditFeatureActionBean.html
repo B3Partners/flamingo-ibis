@@ -108,7 +108,7 @@
 <a class="jxr_linenumber" name="L100" href="#L100">100</a>             <strong class="jxr_keyword">if</strong> (terreinID != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L101" href="#L101">101</a>                 WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), <strong class="jxr_keyword">this</strong>.getLayer(), WorkflowStatus.afgevoerd, <strong class="jxr_keyword">this</strong>.getApplication(), Stripersist.getEntityManager());
 <a class="jxr_linenumber" name="L102" href="#L102">102</a>             }
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>         } <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>         } <strong class="jxr_keyword">catch</strong> (IOException | NumberFormatException | NoSuchElementException e) {
 <a class="jxr_linenumber" name="L104" href="#L104">104</a>             transaction.rollback();
 <a class="jxr_linenumber" name="L105" href="#L105">105</a>             <strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L106" href="#L106">106</a>         } <strong class="jxr_keyword">finally</strong> {
@@ -194,163 +194,184 @@
 <a class="jxr_linenumber" name="L186" href="#L186">186</a>             <strong class="jxr_keyword">int</strong> aantalBewerkt = <strong class="jxr_keyword">this</strong>.getStore().getFeatures(bewerkt).size();
 <a class="jxr_linenumber" name="L187" href="#L187">187</a>             <strong class="jxr_keyword">boolean</strong> bewerktExists = (aantalBewerkt &gt; 0);
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>             <strong class="jxr_keyword">switch</strong> (incomingWorkflowStatus) {
-<a class="jxr_linenumber" name="L190" href="#L190">190</a>                 <strong class="jxr_keyword">case</strong> bewerkt:
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>                     <strong class="jxr_keyword">if</strong> (originalWorkflowStatus.equals(WorkflowStatus.definitief)) {
-<a class="jxr_linenumber" name="L192" href="#L192">192</a>                         <em class="jxr_comment">// definitief -&gt; bewerkt</em>
-<a class="jxr_linenumber" name="L193" href="#L193">193</a>                         <strong class="jxr_keyword">if</strong> (bewerktExists) {
-<a class="jxr_linenumber" name="L194" href="#L194">194</a>                             <em class="jxr_comment">// delete existing bewerkt</em>
-<a class="jxr_linenumber" name="L195" href="#L195">195</a>                             <strong class="jxr_keyword">this</strong>.getStore().removeFeatures(bewerkt);
-<a class="jxr_linenumber" name="L196" href="#L196">196</a>                         }
-<a class="jxr_linenumber" name="L197" href="#L197">197</a>                         <em class="jxr_comment">// insert new record with original id and workflowstatus "bewerkt", leave original "definitief"</em>
-<a class="jxr_linenumber" name="L198" href="#L198">198</a>                         <strong class="jxr_keyword">this</strong>.getStore().addFeatures(DataUtilities.collection(editedNewFeature));
-<a class="jxr_linenumber" name="L199" href="#L199">199</a>                     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (originalWorkflowStatus.equals(WorkflowStatus.bewerkt)) {
-<a class="jxr_linenumber" name="L200" href="#L200">200</a>                         <em class="jxr_comment">// bewerkt -&gt; bewerkt, overwrite, only one 'bewerkt' is allowed</em>
-<a class="jxr_linenumber" name="L201" href="#L201">201</a>                         <strong class="jxr_keyword">if</strong> (aantalBewerkt &gt; 1) {
-<a class="jxr_linenumber" name="L202" href="#L202">202</a>                             log.error(<span class="jxr_string">"Er is meer dan 1 bewerkt kavel/terrein voor "</span> + ID_FIELDNAME + <span class="jxr_string">"="</span> + original.getAttribute(ID_FIELDNAME));
-<a class="jxr_linenumber" name="L203" href="#L203">203</a>                             <em class="jxr_comment">// more than 1 bewerkt, move them to archief</em>
-<a class="jxr_linenumber" name="L204" href="#L204">204</a>                             <strong class="jxr_keyword">this</strong>.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, bewerkt);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>             <em class="jxr_comment">// kijk of er al een 'archief' object is met de laatste mutatie datum</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>             Filter archiefvandaag = ff.and(
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>                     ff.and(
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>                             ff.equals(ff.property(ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME))),
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>                             ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.archief.name()), false)
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>                     ), ff.equals(ff.property(MUTATIEDATUM_FIELDNAME), ff.literal(original.getAttribute(MUTATIEDATUM_FIELDNAME)))
+<a class="jxr_linenumber" name="L195" href="#L195">195</a>             );
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>             <strong class="jxr_keyword">boolean</strong> archiefvandaagExists = (<strong class="jxr_keyword">this</strong>.getStore().getFeatures(archiefvandaag).size() &gt; 0);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>             <strong class="jxr_keyword">switch</strong> (incomingWorkflowStatus) {
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>                 <strong class="jxr_keyword">case</strong> bewerkt:
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>                     <strong class="jxr_keyword">if</strong> (originalWorkflowStatus.equals(WorkflowStatus.definitief)) {
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>                         <em class="jxr_comment">// definitief -&gt; bewerkt</em>
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>                         <strong class="jxr_keyword">if</strong> (bewerktExists) {
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>                             <em class="jxr_comment">// delete existing bewerkt</em>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>                             <strong class="jxr_keyword">this</strong>.getStore().removeFeatures(bewerkt);
 <a class="jxr_linenumber" name="L205" href="#L205">205</a>                         }
-<a class="jxr_linenumber" name="L206" href="#L206">206</a>                         <strong class="jxr_keyword">this</strong>.getStore().modifyFeatures(attributes.toArray(<strong class="jxr_keyword">new</strong> String[attributes.size()]), values.toArray(), fidFilter);
-<a class="jxr_linenumber" name="L207" href="#L207">207</a>                     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L208" href="#L208">208</a>                         <em class="jxr_comment">// other behaviour not documented eg. archief -&gt; bewerkt, afgevoerd -&gt; bewerkt</em>
-<a class="jxr_linenumber" name="L209" href="#L209">209</a>                         <em class="jxr_comment">//  and not possible to occur in the application as only definitief and bewerkt can be edited</em>
-<a class="jxr_linenumber" name="L210" href="#L210">210</a>                         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(String.format(
-<a class="jxr_linenumber" name="L211" href="#L211">211</a>                                 <span class="jxr_string">"Niet ondersteunde workflow stap van %s naar %s"</span>,
-<a class="jxr_linenumber" name="L212" href="#L212">212</a>                                 originalWorkflowStatus.label(),
-<a class="jxr_linenumber" name="L213" href="#L213">213</a>                                 incomingWorkflowStatus.label()));
-<a class="jxr_linenumber" name="L214" href="#L214">214</a>                     }
-<a class="jxr_linenumber" name="L215" href="#L215">215</a>                     <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L216" href="#L216">216</a>                 <strong class="jxr_keyword">case</strong> definitief:
-<a class="jxr_linenumber" name="L217" href="#L217">217</a>                     <strong class="jxr_keyword">if</strong> (definitiefExists) {
-<a class="jxr_linenumber" name="L218" href="#L218">218</a>                         <em class="jxr_comment">// check if any "definitief" exists for this id and move that to "archief"</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a>                         <strong class="jxr_keyword">this</strong>.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, definitief);
-<a class="jxr_linenumber" name="L220" href="#L220">220</a>                     }
-<a class="jxr_linenumber" name="L221" href="#L221">221</a>                     <strong class="jxr_keyword">if</strong> (originalWorkflowStatus.equals(WorkflowStatus.definitief)) {
-<a class="jxr_linenumber" name="L222" href="#L222">222</a>                         <em class="jxr_comment">// if the original was "definitief" insert a new "definitief"</em>
-<a class="jxr_linenumber" name="L223" href="#L223">223</a>                         <strong class="jxr_keyword">this</strong>.getStore().addFeatures(DataUtilities.collection(editedNewFeature));
-<a class="jxr_linenumber" name="L224" href="#L224">224</a>                     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (originalWorkflowStatus.equals(WorkflowStatus.bewerkt)) {
-<a class="jxr_linenumber" name="L225" href="#L225">225</a>                         <em class="jxr_comment">// if original was "bewerkt" update this to "definitief" with the edits</em>
-<a class="jxr_linenumber" name="L226" href="#L226">226</a>                         <strong class="jxr_keyword">this</strong>.getStore().modifyFeatures(attributes.toArray(<strong class="jxr_keyword">new</strong> String[attributes.size()]), values.toArray(), fidFilter);
-<a class="jxr_linenumber" name="L227" href="#L227">227</a>                     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L228" href="#L228">228</a>                         <em class="jxr_comment">// other behaviour not documented eg. archief -&gt; definitief, afgevoerd -&gt; definitief</em>
-<a class="jxr_linenumber" name="L229" href="#L229">229</a>                         <em class="jxr_comment">//  and not possible to occur in the application as only definitief and bewerkt can be edited</em>
-<a class="jxr_linenumber" name="L230" href="#L230">230</a>                         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(String.format(
-<a class="jxr_linenumber" name="L231" href="#L231">231</a>                                 <span class="jxr_string">"Niet ondersteunde workflow stap van %s naar %s"</span>,
-<a class="jxr_linenumber" name="L232" href="#L232">232</a>                                 originalWorkflowStatus.label(),
-<a class="jxr_linenumber" name="L233" href="#L233">233</a>                                 incomingWorkflowStatus.label()));
-<a class="jxr_linenumber" name="L234" href="#L234">234</a>                     }
-<a class="jxr_linenumber" name="L235" href="#L235">235</a>                     <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L236" href="#L236">236</a>                 <strong class="jxr_keyword">case</strong> afgevoerd:
-<a class="jxr_linenumber" name="L237" href="#L237">237</a>                     <strong class="jxr_keyword">if</strong> (definitiefExists) {
-<a class="jxr_linenumber" name="L238" href="#L238">238</a>                         <em class="jxr_comment">// update any "definitief" for this id to "archief"</em>
-<a class="jxr_linenumber" name="L239" href="#L239">239</a>                         <strong class="jxr_keyword">this</strong>.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, definitief);
-<a class="jxr_linenumber" name="L240" href="#L240">240</a>                     }
-<a class="jxr_linenumber" name="L241" href="#L241">241</a>                     <em class="jxr_comment">// update original with the new/edited data including "afgevoerd"</em>
-<a class="jxr_linenumber" name="L242" href="#L242">242</a>                     <strong class="jxr_keyword">this</strong>.getStore().modifyFeatures(attributes.toArray(<strong class="jxr_keyword">new</strong> String[attributes.size()]), values.toArray(), fidFilter);
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 
-<a class="jxr_linenumber" name="L244" href="#L244">244</a>                     <strong class="jxr_keyword">if</strong> (terreinID == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L245" href="#L245">245</a>                         <em class="jxr_comment">// find any kavels related to this terrein and also set them to "afgevoerd"</em>
-<a class="jxr_linenumber" name="L246" href="#L246">246</a>                         Filter kavelFilter = ff.equals(ff.property(KAVEL_TERREIN_ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME)));
-<a class="jxr_linenumber" name="L247" href="#L247">247</a>                         <strong class="jxr_keyword">this</strong>.updateKavelWorkflowForTerrein(kavelFilter, WorkflowStatus.afgevoerd);
-<a class="jxr_linenumber" name="L248" href="#L248">248</a>                     }
-<a class="jxr_linenumber" name="L249" href="#L249">249</a>                     <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L250" href="#L250">250</a>                 <strong class="jxr_keyword">case</strong> archief: {
-<a class="jxr_linenumber" name="L251" href="#L251">251</a>                     <em class="jxr_comment">// not described, for now just edit the feature</em>
-<a class="jxr_linenumber" name="L252" href="#L252">252</a>                     <strong class="jxr_keyword">this</strong>.getStore().modifyFeatures(attributes.toArray(<strong class="jxr_keyword">new</strong> String[attributes.size()]), values.toArray(), fidFilter);
-<a class="jxr_linenumber" name="L253" href="#L253">253</a>                     <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L254" href="#L254">254</a>                 }
-<a class="jxr_linenumber" name="L255" href="#L255">255</a>                 <strong class="jxr_keyword">default</strong>:
-<a class="jxr_linenumber" name="L256" href="#L256">256</a>                     <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Workflow status van edit feature is null, dit wordt niet ondersteund."</span>);
-<a class="jxr_linenumber" name="L257" href="#L257">257</a>             }
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 
-<a class="jxr_linenumber" name="L259" href="#L259">259</a>             editTransaction.commit();
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>             editTransaction.close();
-<a class="jxr_linenumber" name="L261" href="#L261">261</a>             <em class="jxr_comment">// update terrein geometry</em>
-<a class="jxr_linenumber" name="L262" href="#L262">262</a>             <strong class="jxr_keyword">if</strong> (terreinID != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L263" href="#L263">263</a>                 WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), <strong class="jxr_keyword">this</strong>.getLayer(), incomingWorkflowStatus, <strong class="jxr_keyword">this</strong>.getApplication(), Stripersist.getEntityManager());
-<a class="jxr_linenumber" name="L264" href="#L264">264</a>             }
-<a class="jxr_linenumber" name="L265" href="#L265">265</a>         } <strong class="jxr_keyword">catch</strong> (IllegalArgumentException | IOException | NoSuchElementException e) {
-<a class="jxr_linenumber" name="L266" href="#L266">266</a>             editTransaction.rollback();
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>             log.error(<span class="jxr_string">"Ibis editFeature error"</span>, e);
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>             <strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>         }
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>     }
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">     * Make a copy of the original, but with a new fid.</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">     * @param copyFrom original</em>
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">     * @return copy having same attribute values as original and a new fid</em>
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L278" href="#L278">278</a>     <strong class="jxr_keyword">private</strong> SimpleFeature createCopy(SimpleFeature copyFrom) {
-<a class="jxr_linenumber" name="L279" href="#L279">279</a>         SimpleFeatureBuilder builder = <strong class="jxr_keyword">new</strong> SimpleFeatureBuilder(copyFrom.getFeatureType());
-<a class="jxr_linenumber" name="L280" href="#L280">280</a>         builder.init(copyFrom);
-<a class="jxr_linenumber" name="L281" href="#L281">281</a>         <strong class="jxr_keyword">return</strong> builder.buildFeature(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L282" href="#L282">282</a>     }
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 
-<a class="jxr_linenumber" name="L284" href="#L284">284</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">     * Update any of the selected kavels to the given workflow.</em>
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">     * @param kavelFilter filter definitie</em>
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">     * @param newStatus de nieuwe status</em>
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L290" href="#L290">290</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> updateKavelWorkflowForTerrein(Filter kavelFilter, <a href="../../../../nl/b3p/viewer/ibis/util/WorkflowStatus.html">WorkflowStatus</a> newStatus) {
-<a class="jxr_linenumber" name="L291" href="#L291">291</a>         SimpleFeatureStore kavelStore = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L292" href="#L292">292</a>         <strong class="jxr_keyword">try</strong> (Transaction kavelTransaction = <strong class="jxr_keyword">new</strong> DefaultTransaction(<span class="jxr_string">"get-related-kavel-geom"</span>)) {
-<a class="jxr_linenumber" name="L293" href="#L293">293</a>             EntityManager em = Stripersist.getEntityManager();
-<a class="jxr_linenumber" name="L294" href="#L294">294</a>             log.debug(<span class="jxr_string">"updating kavels voor terrein met filter: "</span> + kavelFilter);
-<a class="jxr_linenumber" name="L295" href="#L295">295</a>             <em class="jxr_comment">// find kavel appLayer</em>
-<a class="jxr_linenumber" name="L296" href="#L296">296</a>             ApplicationLayer kavelAppLyr = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L297" href="#L297">297</a>             List&lt;ApplicationLayer&gt; lyrs = <strong class="jxr_keyword">this</strong>.getApplication().loadTreeCache(em).getApplicationLayers();
-<a class="jxr_linenumber" name="L298" href="#L298">298</a>             <strong class="jxr_keyword">for</strong> (ListIterator&lt;ApplicationLayer&gt; it = lyrs.listIterator(); it.hasNext();) {
-<a class="jxr_linenumber" name="L299" href="#L299">299</a>                 kavelAppLyr = it.next();
-<a class="jxr_linenumber" name="L300" href="#L300">300</a>                 <strong class="jxr_keyword">if</strong> (kavelAppLyr.getLayerName().equalsIgnoreCase(KAVEL_LAYER_NAME)) {
-<a class="jxr_linenumber" name="L301" href="#L301">301</a>                     <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L302" href="#L302">302</a>                 }
-<a class="jxr_linenumber" name="L303" href="#L303">303</a>             }
-<a class="jxr_linenumber" name="L304" href="#L304">304</a>             Layer l = kavelAppLyr.getService().getLayer(KAVEL_LAYER_NAME, em);
-<a class="jxr_linenumber" name="L305" href="#L305">305</a>             kavelStore = (SimpleFeatureStore) l.getFeatureType().openGeoToolsFeatureSource();
-<a class="jxr_linenumber" name="L306" href="#L306">306</a>             kavelStore.setTransaction(kavelTransaction);
-<a class="jxr_linenumber" name="L307" href="#L307">307</a>             <em class="jxr_comment">// update kavels</em>
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>             kavelStore.modifyFeatures(WORKFLOW_FIELDNAME, newStatus, kavelFilter);
-<a class="jxr_linenumber" name="L309" href="#L309">309</a>             kavelTransaction.commit();
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>             kavelTransaction.close();
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>         } <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>             log.error(String.format(<span class="jxr_string">"Bijwerken van kavel workflow status naar %s voor terrein met %s is mislukt."</span>,
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>                     newStatus, kavelFilter), e);
-<a class="jxr_linenumber" name="L314" href="#L314">314</a>         } <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>             <strong class="jxr_keyword">if</strong> (kavelStore != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>                 kavelStore.getDataStore().dispose();
-<a class="jxr_linenumber" name="L317" href="#L317">317</a>             }
-<a class="jxr_linenumber" name="L318" href="#L318">318</a>         }
-<a class="jxr_linenumber" name="L319" href="#L319">319</a>     }
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">     * Check that if {@code disableUserEdit} flag is set on the attribute.</em>
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">     * Override superclass behaviour for the workflow field, so that it's not</em>
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">     * editable client side, but it can be set programatically in the client.</em>
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> <em class="jxr_javadoccomment">     * @param attrName attribute to check</em>
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> <em class="jxr_javadoccomment">     * @return {@code true} when the configured attribute is flagged as</em>
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">     * "readOnly" except when this is workflow status</em>
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L330" href="#L330">330</a>     @Override
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isAttributeUserEditingDisabled(String attrName) {
-<a class="jxr_linenumber" name="L332" href="#L332">332</a>         <strong class="jxr_keyword">boolean</strong> isAttributeUserEditingDisabled = <strong class="jxr_keyword">super</strong>.isAttributeUserEditingDisabled(attrName);
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 
-<a class="jxr_linenumber" name="L334" href="#L334">334</a>         <strong class="jxr_keyword">if</strong> (attrName.equalsIgnoreCase(WORKFLOW_FIELDNAME)) {
-<a class="jxr_linenumber" name="L335" href="#L335">335</a>             isAttributeUserEditingDisabled = false;
-<a class="jxr_linenumber" name="L336" href="#L336">336</a>         }
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 
-<a class="jxr_linenumber" name="L338" href="#L338">338</a>         <strong class="jxr_keyword">return</strong> isAttributeUserEditingDisabled;
-<a class="jxr_linenumber" name="L339" href="#L339">339</a>     }
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 
-<a class="jxr_linenumber" name="L341" href="#L341">341</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isSameMutatiedatum(Object datum1, Object datum2) {
-<a class="jxr_linenumber" name="L342" href="#L342">342</a>         SimpleDateFormat sdf = <strong class="jxr_keyword">new</strong> SimpleDateFormat(<span class="jxr_string">"yyyy-mm-dd"</span>);
-<a class="jxr_linenumber" name="L343" href="#L343">343</a>         <strong class="jxr_keyword">return</strong> sdf.format(datum1).equals(sdf.format(datum2));
-<a class="jxr_linenumber" name="L344" href="#L344">344</a>     }
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> }
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>                         <em class="jxr_comment">// insert new record with original id and workflowstatus "bewerkt", leave original "definitief"</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>                         <strong class="jxr_keyword">this</strong>.getStore().addFeatures(DataUtilities.collection(editedNewFeature));
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>                     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (originalWorkflowStatus.equals(WorkflowStatus.bewerkt)) {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>                         <em class="jxr_comment">// bewerkt -&gt; bewerkt, overwrite, only one 'bewerkt' is allowed</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>                         <strong class="jxr_keyword">if</strong> (aantalBewerkt &gt; 1) {
+<a class="jxr_linenumber" name="L211" href="#L211">211</a>                             log.error(<span class="jxr_string">"Er is meer dan 1 bewerkt kavel/terrein voor "</span> + ID_FIELDNAME + <span class="jxr_string">"="</span> + original.getAttribute(ID_FIELDNAME));
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>                             <strong class="jxr_keyword">if</strong> (archiefvandaagExists) {
+<a class="jxr_linenumber" name="L213" href="#L213">213</a>                                 log.debug(<span class="jxr_string">"bestaande archief kavel/terrein wordt vervangen door "</span> + original.getID());
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>                                 <strong class="jxr_keyword">this</strong>.getStore().removeFeatures(archiefvandaag);
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>                             }
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>                             <em class="jxr_comment">// more than 1 bewerkt, move them to archief</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>                             <strong class="jxr_keyword">this</strong>.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, bewerkt);
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>                         }
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>                         <strong class="jxr_keyword">this</strong>.getStore().modifyFeatures(attributes.toArray(<strong class="jxr_keyword">new</strong> String[attributes.size()]), values.toArray(), fidFilter);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>                     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>                         <em class="jxr_comment">// other behaviour not documented eg. archief -&gt; bewerkt, afgevoerd -&gt; bewerkt</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>                         <em class="jxr_comment">//  and not possible to occur in the application as only definitief and bewerkt can be edited</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a>                         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(String.format(
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>                                 <span class="jxr_string">"Niet ondersteunde workflow stap van %s naar %s"</span>,
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>                                 originalWorkflowStatus.label(),
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>                                 incomingWorkflowStatus.label()));
+<a class="jxr_linenumber" name="L227" href="#L227">227</a>                     }
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>                     <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L229" href="#L229">229</a>                 <strong class="jxr_keyword">case</strong> definitief:
+<a class="jxr_linenumber" name="L230" href="#L230">230</a>                     <strong class="jxr_keyword">if</strong> (definitiefExists) {
+<a class="jxr_linenumber" name="L231" href="#L231">231</a>                         <strong class="jxr_keyword">if</strong> (archiefvandaagExists) {
+<a class="jxr_linenumber" name="L232" href="#L232">232</a>                             log.debug(<span class="jxr_string">"bestaande archief kavel/terrein wordt vervangen door "</span> + original.getID());
+<a class="jxr_linenumber" name="L233" href="#L233">233</a>                             <strong class="jxr_keyword">this</strong>.getStore().removeFeatures(archiefvandaag);
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>                         }
+<a class="jxr_linenumber" name="L235" href="#L235">235</a>                         <em class="jxr_comment">// check if any "definitief" exists for this id and move that to "archief"</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>                         <strong class="jxr_keyword">this</strong>.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, definitief);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a>                     }
+<a class="jxr_linenumber" name="L238" href="#L238">238</a>                     <strong class="jxr_keyword">if</strong> (originalWorkflowStatus.equals(WorkflowStatus.definitief)) {
+<a class="jxr_linenumber" name="L239" href="#L239">239</a>                         <em class="jxr_comment">// if the original was "definitief" insert a new "definitief"</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>                         <strong class="jxr_keyword">this</strong>.getStore().addFeatures(DataUtilities.collection(editedNewFeature));
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>                     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (originalWorkflowStatus.equals(WorkflowStatus.bewerkt)) {
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>                         <em class="jxr_comment">// if original was "bewerkt" update this to "definitief" with the edits</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>                         <strong class="jxr_keyword">this</strong>.getStore().modifyFeatures(attributes.toArray(<strong class="jxr_keyword">new</strong> String[attributes.size()]), values.toArray(), fidFilter);
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>                     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>                         <em class="jxr_comment">// other behaviour not documented eg. archief -&gt; definitief, afgevoerd -&gt; definitief</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>                         <em class="jxr_comment">//  and not possible to occur in the application as only definitief and bewerkt can be edited</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>                         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(String.format(
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>                                 <span class="jxr_string">"Niet ondersteunde workflow stap van %s naar %s"</span>,
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>                                 originalWorkflowStatus.label(),
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>                                 incomingWorkflowStatus.label()));
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>                     }
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>                     <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>                 <strong class="jxr_keyword">case</strong> afgevoerd:
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>                     <strong class="jxr_keyword">if</strong> (definitiefExists) {
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>                         <strong class="jxr_keyword">if</strong> (archiefvandaagExists) {
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>                             log.debug(<span class="jxr_string">"bestaande archief kavel/terrein wordt vervangen door "</span> + original.getID());
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>                             <strong class="jxr_keyword">this</strong>.getStore().removeFeatures(archiefvandaag);
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>                         }
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>                         <em class="jxr_comment">// update any "definitief" for this id to "archief"</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>                         <strong class="jxr_keyword">this</strong>.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, definitief);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>                     }
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>                     <em class="jxr_comment">// update original with the new/edited data including "afgevoerd"</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>                     <strong class="jxr_keyword">this</strong>.getStore().modifyFeatures(attributes.toArray(<strong class="jxr_keyword">new</strong> String[attributes.size()]), values.toArray(), fidFilter);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>                     <strong class="jxr_keyword">if</strong> (terreinID == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>                         <em class="jxr_comment">// find any kavels related to this terrein and also set them to "afgevoerd"</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>                         Filter kavelFilter = ff.equals(ff.property(KAVEL_TERREIN_ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME)));
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>                         <strong class="jxr_keyword">this</strong>.updateKavelWorkflowForTerrein(kavelFilter, WorkflowStatus.afgevoerd);
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>                     }
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>                     <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>                 <strong class="jxr_keyword">case</strong> archief: {
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>                     <em class="jxr_comment">// not described, for now just edit the feature</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>                     <strong class="jxr_keyword">this</strong>.getStore().modifyFeatures(attributes.toArray(<strong class="jxr_keyword">new</strong> String[attributes.size()]), values.toArray(), fidFilter);
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>                     <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>                 }
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>                 <strong class="jxr_keyword">default</strong>:
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>                     <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Workflow status van edit feature is null, dit wordt niet ondersteund."</span>);
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>             }
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>             editTransaction.commit();
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>             editTransaction.close();
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>             <em class="jxr_comment">// update terrein geometry</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>             <strong class="jxr_keyword">if</strong> (terreinID != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>                 WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), <strong class="jxr_keyword">this</strong>.getLayer(), incomingWorkflowStatus, <strong class="jxr_keyword">this</strong>.getApplication(), Stripersist.getEntityManager());
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>             }
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>         } <strong class="jxr_keyword">catch</strong> (IllegalArgumentException | IOException | NoSuchElementException e) {
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>             editTransaction.rollback();
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>             log.error(<span class="jxr_string">"Ibis editFeature error"</span>, e);
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>             <strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>         }
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>     }
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">     * Make a copy of the original, but with a new fid.</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">     * @param copyFrom original</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">     * @return copy having same attribute values as original and a new fid</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>     <strong class="jxr_keyword">private</strong> SimpleFeature createCopy(SimpleFeature copyFrom) {
+<a class="jxr_linenumber" name="L300" href="#L300">300</a>         SimpleFeatureBuilder builder = <strong class="jxr_keyword">new</strong> SimpleFeatureBuilder(copyFrom.getFeatureType());
+<a class="jxr_linenumber" name="L301" href="#L301">301</a>         builder.init(copyFrom);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>         <strong class="jxr_keyword">return</strong> builder.buildFeature(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L303" href="#L303">303</a>     }
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 
+<a class="jxr_linenumber" name="L305" href="#L305">305</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">     * Update any of the selected kavels to the given workflow.</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">     * @param kavelFilter filter definitie</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">     * @param newStatus de nieuwe status</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> updateKavelWorkflowForTerrein(Filter kavelFilter, <a href="../../../../nl/b3p/viewer/ibis/util/WorkflowStatus.html">WorkflowStatus</a> newStatus) {
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>         SimpleFeatureStore kavelStore = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>         <strong class="jxr_keyword">try</strong> (Transaction kavelTransaction = <strong class="jxr_keyword">new</strong> DefaultTransaction(<span class="jxr_string">"get-related-kavel-geom"</span>)) {
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>             EntityManager em = Stripersist.getEntityManager();
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>             log.debug(<span class="jxr_string">"updating kavels voor terrein met filter: "</span> + kavelFilter);
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>             <em class="jxr_comment">// find kavel appLayer</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>             ApplicationLayer kavelAppLyr = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>             List&lt;ApplicationLayer&gt; lyrs = <strong class="jxr_keyword">this</strong>.getApplication().loadTreeCache(em).getApplicationLayers();
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>             <strong class="jxr_keyword">for</strong> (ListIterator&lt;ApplicationLayer&gt; it = lyrs.listIterator(); it.hasNext();) {
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>                 kavelAppLyr = it.next();
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>                 <strong class="jxr_keyword">if</strong> (kavelAppLyr.getLayerName().equalsIgnoreCase(KAVEL_LAYER_NAME)) {
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>                     <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>                 }
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>             }
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>             Layer l = kavelAppLyr.getService().getLayer(KAVEL_LAYER_NAME, em);
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>             kavelStore = (SimpleFeatureStore) l.getFeatureType().openGeoToolsFeatureSource();
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>             kavelStore.setTransaction(kavelTransaction);
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>             <em class="jxr_comment">// update kavels</em>
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>             kavelStore.modifyFeatures(WORKFLOW_FIELDNAME, newStatus, kavelFilter);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>             kavelTransaction.commit();
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>             kavelTransaction.close();
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>         } <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>             log.error(String.format(<span class="jxr_string">"Bijwerken van kavel workflow status naar %s voor terrein met %s is mislukt."</span>,
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>                     newStatus, kavelFilter), e);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>         } <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>             <strong class="jxr_keyword">if</strong> (kavelStore != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>                 kavelStore.getDataStore().dispose();
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>             }
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>         }
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>     }
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 
+<a class="jxr_linenumber" name="L342" href="#L342">342</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> <em class="jxr_javadoccomment">     * Check that if {@code disableUserEdit} flag is set on the attribute.</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">     * Override superclass behaviour for the workflow field, so that it's not</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">     * editable client side, but it can be set programatically in the client.</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">     * @param attrName attribute to check</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">     * @return {@code true} when the configured attribute is flagged as</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">     * "readOnly" except when this is workflow status</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>     @Override
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isAttributeUserEditingDisabled(String attrName) {
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>         <strong class="jxr_keyword">boolean</strong> isAttributeUserEditingDisabled = <strong class="jxr_keyword">super</strong>.isAttributeUserEditingDisabled(attrName);
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>         <strong class="jxr_keyword">if</strong> (attrName.equalsIgnoreCase(WORKFLOW_FIELDNAME)) {
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>             isAttributeUserEditingDisabled = false;
+<a class="jxr_linenumber" name="L357" href="#L357">357</a>         }
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>         <strong class="jxr_keyword">return</strong> isAttributeUserEditingDisabled;
+<a class="jxr_linenumber" name="L360" href="#L360">360</a>     }
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
+<a class="jxr_linenumber" name="L362" href="#L362">362</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isSameMutatiedatum(Object datum1, Object datum2) {
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>         SimpleDateFormat sdf = <strong class="jxr_keyword">new</strong> SimpleDateFormat(<span class="jxr_string">"yyyy-mm-dd"</span>);
+<a class="jxr_linenumber" name="L364" href="#L364">364</a>         <strong class="jxr_keyword">return</strong> sdf.format(datum1).equals(sdf.format(datum2));
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>     }
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017 <a href="http://www.b3partners.nl/">B3partners</a>. All rights reserved.</div>
