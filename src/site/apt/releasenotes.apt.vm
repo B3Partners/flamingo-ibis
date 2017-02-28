@@ -25,8 +25,8 @@ ${project.name} ${project.version} Release Notes
   
 ** Nieuw
 
-  * Gebruik Flamingo versie 4.8.0-SNAPSHOT, zie ook:
-    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.8.0-SNAPSHOT}Flamingo release notes}}
+  * Gebruik Flamingo versie 4.8.0, zie ook:
+    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.8.0}Flamingo release notes}}
     NB. Java 8 runtime vereiste voor de server.
 
   []
