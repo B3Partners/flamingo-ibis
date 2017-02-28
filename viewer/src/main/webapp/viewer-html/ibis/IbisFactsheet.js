@@ -209,8 +209,11 @@ Ext.define("viewer.components.IbisFactsheet", {
             if (key.indexOf("opp_bruto") > -1 ||
                     key.indexOf("opp_netto") > -1 ||
                     key.indexOf("opp_uitgeefbaar") > -1 ||
+                    key.indexOf("o_milieuzone") > -1 ||
+                    key.indexOf("opp_niet_terstond_uitgeefbaar_gem") > -1 ||
+                    key.indexOf("opp_niet_terstond_uitgeefbaar_part") > -1 ||
+                    key.indexOf("opp_optie") > -1) {
 
-                    key.indexOf("o_milieuzone") > -1) {
                 result[key] = factsheetFeature[key];
             }
         }

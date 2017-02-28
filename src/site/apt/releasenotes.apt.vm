@@ -37,6 +37,8 @@ ${project.name} ${project.version} Release Notes
 
   * Voorkom ontstaan van meer dan 1 archiefrecord van een object per mutatiedatum ({{{https://github.com/B3Partners/flamingo-ibis/issues/60}#60}})
 
+  * factsheet uitbreidingen ({{{https://github.com/B3Partners/flamingo-ibis/issues/62}#62}})
+
   []
 
 * Versie 2.13
