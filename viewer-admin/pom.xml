@@ -6,11 +6,11 @@
     <packaging>war</packaging>
     <name>IBIS viewer-admin</name>
     <description>Flamingo viewer-admin war overlay project voor IBIS.</description>
-    <version>2.14</version>
+    <version>2.15-SNAPSHOT</version>
     <parent>
         <groupId>org.flamingo-mc</groupId>
         <artifactId>ibis-flamingo-mc</artifactId>
-        <version>2.14</version>
+        <version>2.15-SNAPSHOT</version>
     </parent>
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
