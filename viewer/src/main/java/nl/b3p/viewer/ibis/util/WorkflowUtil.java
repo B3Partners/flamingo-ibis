@@ -20,6 +20,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Polygon;
+import com.vividsolutions.jts.operation.overlay.snap.GeometrySnapper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -127,6 +128,17 @@ public class WorkflowUtil implements IbisConstants {
                 GeometryCollection geometryCollection = (GeometryCollection) factory.buildGeometry(kavelGeoms);
                 newTerreinGeom = geometryCollection.union();
             }
+            // buffer + en -0.01m (because rijksdriehoek) om interne slivers in terrein op te lossen, 
+            // zie https://github.com/B3Partners/flamingo-ibis/issues/64
+            log.debug("terrein geom : " + newTerreinGeom);
+//            newTerreinGeom = newTerreinGeom.buffer(.01, 1);
+//            log.debug("buffer+.01   : " + newTerreinGeom);
+//            newTerreinGeom = newTerreinGeom.buffer(-.01, 1);
+//            log.debug("buffer-.01   : " + newTerreinGeom);
+            // en ook nog een snap-to-self met een centimeter tolerantie
+            newTerreinGeom = GeometrySnapper.snapToSelf(newTerreinGeom, .01, true);
+            log.debug("snapped+clean: " + newTerreinGeom);
+
             if (!newTerreinGeom.getGeometryType().equalsIgnoreCase("MultiPolygon")) {
                 GeometryFactory f = JTSFactoryFinder.getGeometryFactory();
                 newTerreinGeom = f.createMultiPolygon(new Polygon[]{(Polygon) newTerreinGeom});

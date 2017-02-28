@@ -39,6 +39,8 @@ ${project.name} ${project.version} Release Notes
 
   * factsheet uitbreidingen ({{{https://github.com/B3Partners/flamingo-ibis/issues/62}#62}})
 
+  * verbetering in oplossing van pseudo-self-intersects en gaten van terreinen door splits artifacten ({{{https://github.com/B3Partners/flamingo-ibis/issues/64}#64}})
+
   []
 
 * Versie 2.13
