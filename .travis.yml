@@ -1,6 +1,6 @@
-language: java
-
+dist: trusty
 sudo: false
+language: java
 
 addons:
   postgresql: "9.4"
@@ -29,6 +29,8 @@ script:
   - mvn -e test integration-test -B -pl '!dist'
   - if [ "$TRAVIS_JDK_VERSION" == oraclejdk8 ]; then
          mvn javadoc:javadoc;
+    fi
+  - if [ "$TRAVIS_JDK_VERSION" == oraclejdk8 ]; then
          mvn javadoc:test-javadoc;
     fi
 
@@ -40,7 +42,7 @@ after_script:
 
 jdk:
   - oraclejdk8
-  #- openjdk8
+  - openjdk8
 
 os:
   - linux
