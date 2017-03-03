@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * Ibis Edit component
+ * Ibis Edit component.
  * @author mprins
  */
 Ext.define("viewer.components.IbisEdit", {
@@ -25,7 +25,8 @@ Ext.define("viewer.components.IbisEdit", {
     tabbedFormPanels: {},
     addedTabPanels: [],
     config: {
-        prefixConfig: []
+        prefixConfig: [],
+        showVorigeDefintiefVersie: false
     },
     newID: null,
     /**
@@ -53,6 +54,7 @@ Ext.define("viewer.components.IbisEdit", {
                 text: '',
                 xtype: "label"}
         ]);
+        console.debug("showVorigeDefintiefVersie is: ", this.config.showVorigeDefintiefVersie);
 
         return this;
     },
