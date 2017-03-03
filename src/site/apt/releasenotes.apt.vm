@@ -22,7 +22,23 @@ ${project.name} ${project.version} Release Notes
 
   De complete lijst met issues voor deze release is beschikbaar in de tracker:
   {{{${project.issueManagement.url}?q=milestone%3A${project.version}+is%3Aclosed}milestone ${project.version} issues}}.
-  
+
+** Nieuw
+
+  * ...
+
+  []
+
+
+** Verbeteringen en oplossingen
+
+  * ...
+
+  []
+
+
+* Versie 2.14
+
 ** Nieuw
 
   * Gebruik Flamingo versie 4.8.0, zie ook:
