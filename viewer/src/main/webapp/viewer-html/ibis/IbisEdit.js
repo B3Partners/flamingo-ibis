@@ -221,21 +221,23 @@ Ext.define("viewer.components.IbisEdit", {
                             var lbl = Ext.get(property + '_def');
                             var f = me.inputContainer.getForm().findField(property);
                             if (lbl) {
-                                if (property === me.workflow_fieldname) {
-                                    lbl.setHtml(me.workflowStore.getById(value).get("label"));
-                                } else {
-                                    if (f && f.getValue() != value) {
-                                        if (f.getXType() === "datefield") {
-                                            value = Ext.Date.format(Ext.Date.parse(value, 'd-m-Y H:i:s'), f.format);
-                                        }
-                                        // afwijkende waarde markeren met bold font
+                                if (f) {
+                                    var defVal = f.getValue();
+                                    if (property === me.workflow_fieldname) {
+                                        value = me.workflowStore.getById(value).get("label");
+                                    }
+                                    if (f.getXType() === "datefield") {
+                                        value = Ext.Date.format(Ext.Date.parse(value, 'd-m-Y H:i:s'), f.format);
+                                        defVal = Ext.Date.format(defVal, f.format);
+                                    }
+                                    if (defVal != value) {
+                                        // afwijkende waarde markeren
                                         lbl.setHtml('<span class="def_verschillend">' + value + '</span>');
                                         lbl.setBorder(1);
                                     } else {
                                         lbl.setHtml('<span class="def_identiek">' + value + '</span>');
                                     }
                                 }
-                                lbl.setHeight(null);
                             }
                         });
                         me.geomlabel.setText("De rechter kolom bevat de 'Definitieve' waarden.");
