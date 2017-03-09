@@ -32,7 +32,7 @@ ${project.name} ${project.version} Release Notes
 
 ** Verbeteringen en oplossingen
 
-  * ...
+  * Terugdraaien van de aanpassing om ontstaan van meer dan 1 archiefrecord van een object per mutatiedatum te voorkomen ({{{https://github.com/B3Partners/flamingo-ibis/issues/60}#60}}, {{{https://github.com/B3Partners/flamingo-ibis/issues/67}#67}})
 
   []
 
