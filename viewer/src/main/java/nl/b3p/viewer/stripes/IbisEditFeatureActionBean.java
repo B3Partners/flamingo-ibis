@@ -100,7 +100,7 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
             if (terreinID != null) {
                 WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), this.getLayer(), WorkflowStatus.afgevoerd, this.getApplication(), Stripersist.getEntityManager());
             }
-        } catch (IOException | NumberFormatException | NoSuchElementException e) {
+        } catch (Exception e) {
             transaction.rollback();
             throw e;
         } finally {
@@ -186,15 +186,6 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
             int aantalBewerkt = this.getStore().getFeatures(bewerkt).size();
             boolean bewerktExists = (aantalBewerkt > 0);
 
-            // kijk of er al een 'archief' object is met de laatste mutatie datum
-            Filter archiefvandaag = ff.and(
-                    ff.and(
-                            ff.equals(ff.property(ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME))),
-                            ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.archief.name()), false)
-                    ), ff.equals(ff.property(MUTATIEDATUM_FIELDNAME), ff.literal(original.getAttribute(MUTATIEDATUM_FIELDNAME)))
-            );
-            boolean archiefvandaagExists = (this.getStore().getFeatures(archiefvandaag).size() > 0);
-
             switch (incomingWorkflowStatus) {
                 case bewerkt:
                     if (originalWorkflowStatus.equals(WorkflowStatus.definitief)) {
@@ -209,10 +200,6 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
                         // bewerkt -> bewerkt, overwrite, only one 'bewerkt' is allowed
                         if (aantalBewerkt > 1) {
                             log.error("Er is meer dan 1 bewerkt kavel/terrein voor " + ID_FIELDNAME + "=" + original.getAttribute(ID_FIELDNAME));
-                            if (archiefvandaagExists) {
-                                log.debug("bestaande archief kavel/terrein wordt vervangen door " + original.getID());
-                                this.getStore().removeFeatures(archiefvandaag);
-                            }
                             // more than 1 bewerkt, move them to archief
                             this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, bewerkt);
                         }
@@ -228,10 +215,6 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
                     break;
                 case definitief:
                     if (definitiefExists) {
-                        if (archiefvandaagExists) {
-                            log.debug("bestaande archief kavel/terrein wordt vervangen door " + original.getID());
-                            this.getStore().removeFeatures(archiefvandaag);
-                        }
                         // check if any "definitief" exists for this id and move that to "archief"
                         this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, definitief);
                     }
@@ -252,10 +235,6 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
                     break;
                 case afgevoerd:
                     if (definitiefExists) {
-                        if (archiefvandaagExists) {
-                            log.debug("bestaande archief kavel/terrein wordt vervangen door " + original.getID());
-                            this.getStore().removeFeatures(archiefvandaag);
-                        }
                         // update any "definitief" for this id to "archief"
                         this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, definitief);
                     }

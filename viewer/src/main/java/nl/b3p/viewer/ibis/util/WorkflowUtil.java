@@ -23,6 +23,7 @@ import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.operation.overlay.snap.GeometrySnapper;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
 import javax.persistence.EntityManager;
@@ -43,7 +44,7 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
 
 /**
- * Utility method that come in handy handling workflow.
+ * Utility method that come in handy hadling workflow.
  *
  * @author mprins
  */

@@ -24,9 +24,7 @@ import java.util.List;
 import net.sourceforge.stripes.action.StrictBinding;
 import net.sourceforge.stripes.action.UrlBinding;
 import nl.b3p.viewer.ibis.util.IbisConstants;
-import static nl.b3p.viewer.ibis.util.IbisConstants.ID_FIELDNAME;
 import static nl.b3p.viewer.ibis.util.IbisConstants.KAVEL_TERREIN_ID_FIELDNAME;
-import static nl.b3p.viewer.ibis.util.IbisConstants.MUTATIEDATUM_FIELDNAME;
 import static nl.b3p.viewer.ibis.util.IbisConstants.WORKFLOW_FIELDNAME;
 import nl.b3p.viewer.ibis.util.WorkflowStatus;
 import nl.b3p.viewer.ibis.util.WorkflowUtil;
@@ -34,7 +32,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.simple.SimpleFeatureStore;
-import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.util.Converter;
 import org.geotools.util.GeometryTypeConverterFactory;
 import org.json.JSONException;
@@ -44,7 +41,6 @@ import org.opengis.feature.type.GeometryType;
 import org.opengis.filter.Filter;
 import org.opengis.filter.identity.FeatureId;
 import org.json.JSONObject;
-import org.opengis.filter.FilterFactory2;
 import org.stripesstuff.stripersist.Stripersist;
 
 /**
@@ -141,22 +137,8 @@ public class IbisSplitFeatureActionBean extends SplitFeatureActionBean implement
             log.debug("Creating feature with geom length: " + newGeom.getLength());
             if (firstFeature) {
                 if (localStrategy.equalsIgnoreCase("add")) {
-                    // als er een archief record bestaat voor vandaag deze verwijderen
-                    FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
-                    Filter archiefvandaagA = ff.and(
-                            ff.and(
-                                    ff.equals(ff.property(ID_FIELDNAME), ff.literal(feature.getAttribute(ID_FIELDNAME))),
-                                    ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.archief.name()), false)
-                            ), ff.equals(ff.property(MUTATIEDATUM_FIELDNAME), ff.literal(feature.getAttribute(MUTATIEDATUM_FIELDNAME)))
-                    );
-                    boolean archiefvandaagAExists = (localStore.getFeatures(archiefvandaagA).size() > 0);
-                    if (archiefvandaagAExists) {
-                        log.debug("bestaande archief kavel/terrein wordt vervangen door " + feature.getID());
-                        localStore.removeFeatures(archiefvandaagA);
-                    }
-                    // dan bestaande  feature naar "archief"
+                    // existing feature to "archief"
                     feature.setAttribute(WORKFLOW_FIELDNAME, WorkflowStatus.archief);
-
                     Object[] attributevalues = feature.getAttributes().toArray(new Object[feature.getAttributeCount()]);
                     AttributeDescriptor[] attributes = feature.getFeatureType().getAttributeDescriptors()
                             .toArray(new AttributeDescriptor[feature.getAttributeCount()]);
