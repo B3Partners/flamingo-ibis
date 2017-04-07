@@ -197,7 +197,8 @@ Ext.define("viewer.components.IbisEdit", {
             var wf = feature[this.workflow_fieldname] || 'bewerkt';
             s = this.workflowStore.getById(wf).get("label");
         }
-        if (this.config.showVorigeDefintiefVersie && feature[this.workflow_fieldname] && feature[this.workflow_fieldname] === "bewerkt") {
+        if (this.config.showVorigeDefintiefVersie && feature[this.workflow_fieldname] &&
+                (feature[this.workflow_fieldname] === "bewerkt" || feature[this.workflow_fieldname] === "definitief")) {
             // get kavel/terrein voor ibis_id/definitief
             this.getDefinitiefFeature(feature);
         }
@@ -207,7 +208,7 @@ Ext.define("viewer.components.IbisEdit", {
         var options = {
             arrays: 0,
             featureType: bewerktFeature.id,
-            filter: "ibis_id=" + bewerktFeature.ibis_id + " AND workflow_status='definitief'",
+            filter: "ibis_id=" + bewerktFeature[idFieldName] + " AND workflow_status='definitief'",
             limit: 1,
             page: 1,
             start: 0
