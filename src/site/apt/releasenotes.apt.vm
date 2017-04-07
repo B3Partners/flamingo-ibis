@@ -39,6 +39,8 @@ ${project.name} ${project.version} Release Notes
 
   * Heen-en-weer bufferen met een afstand van 0.001m tijdens maken van terrein geometrie
 
+  * kleine factsheet aanpassing voor de velden van ({{{https://github.com/B3Partners/flamingo-ibis/issues/62}issue #62}})
+
   []
 
 
