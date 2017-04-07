@@ -54,6 +54,13 @@ Ext.define("viewer.components.CustomConfiguration", {
                 labelWidth: this.labelWidth
             },
             {
+                xtype: 'checkbox',
+                fieldLabel: 'Vorige -Definitief- versie ophalen',
+                name: 'showVorigeDefintiefVersie',
+                value: this.configObject.showVorigeDefintiefVersie !== undefined ? this.configObject.showVorigeDefintiefVersie : false,
+                labelWidth: this.labelWidth
+            },
+            {
                 itemId: 'prefixLabels',
                 xtype: 'panel',
                 collapsible: true,

@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * Ibis Edit component
+ * Ibis Edit component.
  * @author mprins
  */
 Ext.define("viewer.components.IbisEdit", {
@@ -25,7 +25,8 @@ Ext.define("viewer.components.IbisEdit", {
     tabbedFormPanels: {},
     addedTabPanels: [],
     config: {
-        prefixConfig: []
+        prefixConfig: [],
+        showVorigeDefintiefVersie: false
     },
     newID: null,
     /**
@@ -53,7 +54,6 @@ Ext.define("viewer.components.IbisEdit", {
                 text: '',
                 xtype: "label"}
         ]);
-
         return this;
     },
     initAttributeInputs: function (appLayer) {
@@ -121,11 +121,11 @@ Ext.define("viewer.components.IbisEdit", {
                 }
             }
         }
-        if(this.addedTabPanels.length === 1) {
-        	var bottombar = this.tabbedFormPanels[this.addedTabPanels[0]].getDockedItems('toolbar[dock="bottom"]');
-        	if(bottombar.length === 1) {
-        		this.tabbedFormPanels[this.addedTabPanels[0]].removeDocked(bottombar[0]);
-        	}
+        if (this.addedTabPanels.length === 1) {
+            var bottombar = this.tabbedFormPanels[this.addedTabPanels[0]].getDockedItems('toolbar[dock="bottom"]');
+            if (bottombar.length === 1) {
+                this.tabbedFormPanels[this.addedTabPanels[0]].removeDocked(bottombar[0]);
+            }
         }
         this.inputContainer.getLayout().multi = false;
     },
@@ -149,12 +149,12 @@ Ext.define("viewer.components.IbisEdit", {
     },
     nextStep: function (step) {
         var nextPrefix = null;
-        for(var i = 0; i < this.addedTabPanels.length; i++) {
-            if(step === this.addedTabPanels[i]) {
+        for (var i = 0; i < this.addedTabPanels.length; i++) {
+            if (step === this.addedTabPanels[i]) {
                 nextPrefix = this.addedTabPanels[i + 1] || null;
             }
         }
-        if(nextPrefix === null) {
+        if (nextPrefix === null) {
             return;
         }
         this.tabbedFormPanels[nextPrefix].expand();
@@ -197,6 +197,119 @@ Ext.define("viewer.components.IbisEdit", {
             var wf = feature[this.workflow_fieldname] || 'bewerkt';
             s = this.workflowStore.getById(wf).get("label");
         }
+        if (this.config.showVorigeDefintiefVersie && feature[this.workflow_fieldname] &&
+                (feature[this.workflow_fieldname] === "bewerkt" || feature[this.workflow_fieldname] === "definitief")) {
+            // get kavel/terrein voor ibis_id/definitief
+            this.getDefinitiefFeature(feature);
+        }
+    },
+    getDefinitiefFeature: function (bewerktFeature) {
+        var me = this;
+        var options = {
+            arrays: 0,
+            featureType: bewerktFeature.id,
+            filter: "ibis_id=" + bewerktFeature[idFieldName] + " AND workflow_status='definitief'",
+            limit: 1,
+            page: 1,
+            start: 0
+        };
+        //  ajax for definitief feature
+        this.config.viewerController.getAppLayerFeatureService(me.appLayer).loadFeatures(
+                me.appLayer,
+                function (result) {
+                    Ext.each(result, function (ob) {
+                        Ext.Object.each(ob, function (property, value) {
+                            var lbl = Ext.get(property + '_def');
+                            var f = me.inputContainer.getForm().findField(property);
+                            if (lbl) {
+                                if (f) {
+                                    var defVal = f.getValue();
+                                    if (property === me.workflow_fieldname) {
+                                        value = me.workflowStore.getById(value).get("label");
+                                    }
+                                    if (f.getXType() === "datefield") {
+                                        value = Ext.Date.format(Ext.Date.parse(value, 'd-m-Y H:i:s'), f.format);
+                                        defVal = Ext.Date.format(defVal, f.format);
+                                    }
+                                    if (defVal != value) {
+                                        // afwijkende waarde markeren
+                                        lbl.setHtml('<span class="def_verschillend">' + value + '</span>');
+                                        lbl.setBorder(1);
+                                    } else {
+                                        lbl.setHtml('<span class="def_identiek">' + value + '</span>');
+                                    }
+                                }
+                            }
+                        });
+                        me.geomlabel.setText("De rechter kolom bevat de 'Definitieve' waarden.");
+                    });
+                },
+                function (result) {
+                    Ext.MessageBox.alert("Ajax request failed with status " + result);
+                },
+                options,
+                me);
+
+    },
+    /**
+     * override createStaticInput welke een input element teruggeeft om die dan te
+     * wrappen met een container met een extra box waarin de oude/defintieve waarde geladen kan worden.
+     * @see _wrapInput
+     */
+    createStaticInput: function (attribute, values) {
+        var inputEle = this.superclass.createStaticInput.call(this, attribute, values);
+        return this._wrapInput(inputEle, attribute.name);
+    },
+    /**
+     * override createDynamicInput welke een input element teruggeeft om die dan te wrappen
+     * met een container met een extra box waarin de oude/defintieve waarde geladen kan worden.
+     * @see _wrapInput
+     */
+    createDynamicInput: function (attribute, values) {
+        var inputEle = this.superclass.createDynamicInput.call(this, attribute, values);
+        return this._wrapInput(inputEle, attribute.name);
+    },
+    /**
+     * wrap input element.
+     *
+     * @param {Ext.form.field.Field} inputEle
+     * @returns {Ext.form.field.Field} optionally wrapped in a {Ext.container.Container}
+     * @private
+     */
+    _wrapInput: function (inputEle, attributeName) {
+        var input = inputEle;
+        if (this.config.showVorigeDefintiefVersie) {
+            inputEle.setFlex(2);
+            input = Ext.create('Ext.container.Container', {
+                layout: {
+                    type: 'hbox',
+                    align: 'stretch'
+                }, items: [
+                    inputEle,
+                    {
+                        xtype: 'box',
+                        html: '',
+                        flex: 1,
+                        id: attributeName + '_def',
+                        width: 100,
+                        cls: 'x-form-text-default def_container',
+                        border: 0,
+                        style: {
+                            borderColor: 'red',
+                            borderStyle: 'dotted'
+                        }
+                    }
+                ]
+            });
+            input.setReadOnly = function (readOnly) {
+                inputEle.setReadOnly(readOnly);
+                inputEle.addCls("x-item-disabled");
+            };
+            input.getName = function () {
+                return inputEle.getName();
+            };
+        }
+        return input;
     },
     resetForm: function () {
         this.superclass.resetForm.call(this);

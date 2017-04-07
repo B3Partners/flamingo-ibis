@@ -25,7 +25,8 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
-  * ...
+  * Gebruik Flamingo versie 4.8.1-SNAPSHOT, zie ook:
+    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.8.1}Flamingo release notes}}
 
   []
 
@@ -33,6 +34,8 @@ ${project.name} ${project.version} Release Notes
 ** Verbeteringen en oplossingen
 
   * Terugdraaien van de aanpassing om ontstaan van meer dan 1 archiefrecord van een object per mutatiedatum te voorkomen ({{{https://github.com/B3Partners/flamingo-ibis/issues/60}#60}}, {{{https://github.com/B3Partners/flamingo-ibis/issues/67}#67}})
+
+  * Weergave van "Defintief" object in geval van "Bewerkt" object dat bewerkt of geaccordeerd wordt. ({{{https://github.com/B3Partners/flamingo-ibis/issues/61}#61}})
 
   []
 
@@ -49,13 +52,13 @@ ${project.name} ${project.version} Release Notes
 
 ** Verbeteringen en oplossingen
 
-  * undo/redo/cancel voor tekenen in edit/teken/splits component ({{{https://github.com/flamingo-geocms/flamingo/pull/782}Flamingo #782}})
+  * Undo/redo/cancel voor tekenen in edit/teken/splits component ({{{https://github.com/flamingo-geocms/flamingo/pull/782}Flamingo #782}})
 
   * Voorkom ontstaan van meer dan 1 archiefrecord van een object per mutatiedatum ({{{https://github.com/B3Partners/flamingo-ibis/issues/60}#60}})
 
-  * factsheet uitbreidingen ({{{https://github.com/B3Partners/flamingo-ibis/issues/62}#62}})
+  * Factsheet uitbreidingen ({{{https://github.com/B3Partners/flamingo-ibis/issues/62}#62}})
 
-  * verbetering in oplossing van pseudo-self-intersects en gaten van terreinen door splits artifacten ({{{https://github.com/B3Partners/flamingo-ibis/issues/64}#64}})
+  * Verbetering in oplossing van pseudo-self-intersects en gaten van terreinen door splits artifacten ({{{https://github.com/B3Partners/flamingo-ibis/issues/64}#64}})
 
   []
 
