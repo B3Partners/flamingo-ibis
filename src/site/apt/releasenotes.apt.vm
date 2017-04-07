@@ -35,7 +35,7 @@ ${project.name} ${project.version} Release Notes
 
   * Terugdraaien van de aanpassing om ontstaan van meer dan 1 archiefrecord van een object per mutatiedatum te voorkomen ({{{https://github.com/B3Partners/flamingo-ibis/issues/60}#60}}, {{{https://github.com/B3Partners/flamingo-ibis/issues/67}#67}})
 
-  * Weergave van "Defintief" object in geval van "Bewerkt" object dat bewerkt of geaccordeerd wordt. ({{{https://github.com/B3Partners/flamingo-ibis/issues/61}#61}})
+  * Weergave van "Defintief" object in geval van "Bewerkt" object dat bewerkt of geaccordeerd wordt of "Definitief" object dat bewerkt wordt. ({{{https://github.com/B3Partners/flamingo-ibis/issues/61}#61}})
 
   []
 
