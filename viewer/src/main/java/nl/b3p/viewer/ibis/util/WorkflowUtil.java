@@ -23,7 +23,6 @@ import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.operation.overlay.snap.GeometrySnapper;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
 import javax.persistence.EntityManager;
@@ -129,13 +128,13 @@ public class WorkflowUtil implements IbisConstants {
                 GeometryCollection geometryCollection = (GeometryCollection) factory.buildGeometry(kavelGeoms);
                 newTerreinGeom = geometryCollection.union();
             }
-            // buffer + en -0.01m (because rijksdriehoek) om interne slivers in terrein op te lossen, 
+            // buffer + en -0.001m (because rijksdriehoek) om interne slivers in terrein op te lossen,
             // zie https://github.com/B3Partners/flamingo-ibis/issues/64
             log.debug("terrein geom : " + newTerreinGeom);
-//            newTerreinGeom = newTerreinGeom.buffer(.01, 1);
-//            log.debug("buffer+.01   : " + newTerreinGeom);
-//            newTerreinGeom = newTerreinGeom.buffer(-.01, 1);
-//            log.debug("buffer-.01   : " + newTerreinGeom);
+            newTerreinGeom = newTerreinGeom.buffer(.001, 1);
+            log.debug("buffer+.001   : " + newTerreinGeom);
+            newTerreinGeom = newTerreinGeom.buffer(-.001, 1);
+            log.debug("buffer-.001   : " + newTerreinGeom);
             // en ook nog een snap-to-self met een centimeter tolerantie
             newTerreinGeom = GeometrySnapper.snapToSelf(newTerreinGeom, .01, true);
             log.debug("snapped+clean: " + newTerreinGeom);

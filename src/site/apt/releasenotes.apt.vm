@@ -37,6 +37,8 @@ ${project.name} ${project.version} Release Notes
 
   * Weergave van "Defintief" object in geval van "Bewerkt" object dat bewerkt of geaccordeerd wordt of "Definitief" object dat bewerkt wordt. ({{{https://github.com/B3Partners/flamingo-ibis/issues/61}#61}})
 
+  * Heen-en-weer bufferen met een afstand van 0.001m tijdens maken van terrein geometrie
+
   []
 
 
