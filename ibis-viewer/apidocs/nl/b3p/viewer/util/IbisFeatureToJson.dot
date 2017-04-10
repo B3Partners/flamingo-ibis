@@ -22,6 +22,7 @@ digraph G {
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + IbisFeatureToJson(arrays : boolean, edit : boolean, graph : boolean, attributesToInclude : List&lt;Long&gt;) </td></tr>
+<tr><td align="left" balign="left"> + IbisFeatureToJson(arrays : boolean, edit : boolean, graph : boolean, aliases : boolean, attributesToInclude : List&lt;Long&gt;) </td></tr>
 <tr><td align="left" balign="left"> + getWorkflowJSONFeatures(al : ApplicationLayer, ft : SimpleFeatureType, fs : FeatureSource&lt;&gt;, q : Query) : JSONArray </td></tr>
 <tr><td align="left" balign="left"> + getDefinitiefJSONFeatures(al : ApplicationLayer, ft : SimpleFeatureType, fs : FeatureSource&lt;&gt;, q : Query) : JSONArray </td></tr>
 		</table></td></tr>
