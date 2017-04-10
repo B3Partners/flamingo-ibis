@@ -211,7 +211,8 @@ Ext.define("viewer.components.IbisEdit", {
             filter: "ibis_id=" + bewerktFeature[idFieldName] + " AND workflow_status='definitief'",
             limit: 1,
             page: 1,
-            start: 0
+            start: 0,
+            aliases: 0
         };
         //  ajax for definitief feature
         this.config.viewerController.getAppLayerFeatureService(me.appLayer).loadFeatures(

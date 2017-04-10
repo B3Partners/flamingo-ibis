@@ -70,6 +70,7 @@ public class IbisFeatureToJson {
     private boolean arrays = false;
     private boolean edit = false;
     private boolean graph = false;
+    private boolean aliases = true;
     private List<Long> attributesToInclude = new ArrayList<>();
     private static final int TIMEOUT = 5000;
 
@@ -78,6 +79,14 @@ public class IbisFeatureToJson {
         this.edit = edit;
         this.graph = graph;
         this.attributesToInclude = attributesToInclude;
+    }
+
+    public IbisFeatureToJson(boolean arrays, boolean edit, boolean graph, boolean aliases, List<Long> attributesToInclude) {
+        this.arrays = arrays;
+        this.edit = edit;
+        this.graph = graph;
+        this.attributesToInclude = attributesToInclude;
+        this.aliases = aliases;
     }
 
     /**
@@ -287,11 +296,15 @@ public class IbisFeatureToJson {
             }
         } else {
             for (String name : propertyNames) {
-                String alias = null;
-                if (attributeAliases != null) {
-                    alias = attributeAliases.get(name);
+                if (!aliases) {
+                    j.put(name, formatValue(f.getAttribute(name)));
+                } else {
+                    String alias = null;
+                    if (attributeAliases != null) {
+                        alias = attributeAliases.get(name);
+                    }
+                    j.put(alias != null ? alias : name, formatValue(f.getAttribute(name)));
                 }
-                j.put(alias != null ? alias : name, formatValue(f.getAttribute(name)));
             }
         }
         //if edit and not yet set
