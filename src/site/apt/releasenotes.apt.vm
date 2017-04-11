@@ -25,21 +25,21 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
-  * Gebruik Flamingo versie 4.8.1-SNAPSHOT, zie ook:
-    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.8.1}Flamingo release notes}}
+  * Gebruik Flamingo versie 4.8.1-rc1, zie ook:
+    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.8.1-rc1}Flamingo release notes}}
 
   []
 
 
 ** Verbeteringen en oplossingen
 
-  * Terugdraaien van de aanpassing om ontstaan van meer dan 1 archiefrecord van een object per mutatiedatum te voorkomen ({{{https://github.com/B3Partners/flamingo-ibis/issues/60}#60}}, {{{https://github.com/B3Partners/flamingo-ibis/issues/67}#67}})
-
-  * Weergave van "Defintief" object in geval van "Bewerkt" object dat bewerkt of geaccordeerd wordt of "Definitief" object dat bewerkt wordt. ({{{https://github.com/B3Partners/flamingo-ibis/issues/61}#61}})
-
   * Heen-en-weer bufferen met een afstand van 0.001m tijdens maken van terrein geometrie
 
   * Kleine factsheet aanpassing voor de velden van ({{{https://github.com/B3Partners/flamingo-ibis/issues/62}issue #62}})
+
+  * Terugdraaien van de aanpassing om ontstaan van meer dan 1 archiefrecord van een object per mutatiedatum te voorkomen ({{{https://github.com/B3Partners/flamingo-ibis/issues/60}#60}}, {{{https://github.com/B3Partners/flamingo-ibis/issues/67}#67}})
+
+  * Weergave van "Defintief" object in geval van "Bewerkt" object dat bewerkt of geaccordeerd wordt of "Definitief" object dat bewerkt wordt. ({{{https://github.com/B3Partners/flamingo-ibis/issues/61}#61}})
 
   * Fix weergave van "Definitief" als er aliases zijn toegewezen ({{{https://github.com/B3Partners/flamingo-ibis/issues/68}issue #68}}, {{{https://github.com/flamingo-geocms/flamingo/pull/810}Flamingo #810}})
 
