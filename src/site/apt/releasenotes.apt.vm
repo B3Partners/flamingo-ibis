@@ -25,6 +25,20 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
+  *
+
+  []
+
+** Verbeteringen en oplossingen
+
+  * aanpassing titel was/wordt ({{{https://github.com/B3Partners/flamingo-ibis/issues/69}issue #69}})
+
+  []
+
+* Versie 2.15
+
+** Nieuw
+
   * Gebruik Flamingo versie 4.8.1-rc1, zie ook:
     {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.8.1-rc1}Flamingo release notes}}
 

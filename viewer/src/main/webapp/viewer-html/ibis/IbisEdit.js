@@ -242,7 +242,7 @@ Ext.define("viewer.components.IbisEdit", {
                                 }
                             }
                         });
-                        me.geomlabel.setText("De rechter kolom bevat de 'Definitieve' waarden.");
+                        me.geomlabel.setText("In de linker kolom staan de voorgestelde aanpassingen");
                     });
                 },
                 function (result) {
