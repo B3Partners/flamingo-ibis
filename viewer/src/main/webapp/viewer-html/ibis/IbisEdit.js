@@ -227,6 +227,7 @@ Ext.define("viewer.components.IbisEdit", {
                                     var defVal = f.getValue();
                                     if (property === me.workflow_fieldname) {
                                         value = me.workflowStore.getById(value).get("label");
+                                        defVal = me.workflowStore.getById(defVal).get("label");
                                     }
                                     if (f.getXType() === "datefield") {
                                         value = Ext.Date.format(Ext.Date.parse(value, 'd-m-Y H:i:s'), f.format);
@@ -238,6 +239,9 @@ Ext.define("viewer.components.IbisEdit", {
                                         lbl.setBorder(1);
                                     } else {
                                         lbl.setHtml('<span class="def_identiek">' + value + '</span>');
+                                    }
+                                    if (property === mutatiedatumFieldName) {
+                                        f.setMinValue(value);
                                     }
                                 }
                             }

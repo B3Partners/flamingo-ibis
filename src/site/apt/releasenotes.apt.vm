@@ -33,6 +33,8 @@ ${project.name} ${project.version} Release Notes
 
   * aanpassing titel was/wordt ({{{https://github.com/B3Partners/flamingo-ibis/issues/69}issue #69}})
 
+  * stel minimum datum voor <<<datummutatie>>> in op vorige definitief datum ({{{https://github.com/B3Partners/flamingo-ibis/issues/70}issue #70}})
+
   []
 
 * Versie 2.15
