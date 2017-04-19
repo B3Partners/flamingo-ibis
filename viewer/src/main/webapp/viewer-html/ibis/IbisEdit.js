@@ -170,7 +170,6 @@ Ext.define("viewer.components.IbisEdit", {
         this.superclass.handleFeature.call(this, feature);
 
         if (Ext.getCmp(this.workflow_fieldname) === undefined) {
-
             // workflow field is missing, add a hidden one to __unprefixed__ accordion of the form panels
             // if added to inputContainer it will throw a layout error
             this.tabbedFormPanels.__unprefixed__.add({
@@ -201,6 +200,11 @@ Ext.define("viewer.components.IbisEdit", {
                 (feature[this.workflow_fieldname] === "bewerkt" || feature[this.workflow_fieldname] === "definitief")) {
             // get kavel/terrein voor ibis_id/definitief
             this.getDefinitiefFeature(feature);
+        }
+        // schakel verwijderen (== saveButton) knop uit als 'definitief' wordt geladen in delete mode
+        if (this.inputContainer.getForm().findField(this.workflow_fieldname).getValue() === "definitief" && this.mode === "delete") {
+            this.savebutton.setDisabled(true);
+            this.savebutton.setText("'Definitief' object mag niet verwijderd worden");
         }
     },
     getDefinitiefFeature: function (bewerktFeature) {
@@ -319,6 +323,7 @@ Ext.define("viewer.components.IbisEdit", {
     resetForm: function () {
         this.superclass.resetForm.call(this);
         this.popup.popupWin.setTitle(this.config.title);
+        this.savebutton.setDisabled(false);
     },
     createNew: function () {
         this.superclass.createNew.call(this);
