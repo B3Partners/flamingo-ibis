@@ -28,6 +28,9 @@ ${project.name} ${project.version} Release Notes
   * "Verwijderen" knop op edit scherm uitschakelen als er een 'definitief' object word geladen,
     'definitief' objecten mogen niet verwijderd worden. ({{{https://github.com/B3Partners/flamingo-ibis/issues/72}issue #72}})
 
+  * Gebruik Flamingo versie 4.8.1, zie ook:
+    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.8.1}Flamingo release notes}}
+
   []
 
 ** Verbeteringen en oplossingen
