@@ -211,7 +211,7 @@ Ext.define("viewer.components.IbisEdit", {
         var me = this;
         var options = {
             arrays: 0,
-            featureType: bewerktFeature.id,
+            featureType: me.appLayer.featureType,
             filter: "ibis_id=" + bewerktFeature[idFieldName] + " AND workflow_status='definitief'",
             limit: 1,
             page: 1,
