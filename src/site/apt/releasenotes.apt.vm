@@ -23,6 +23,22 @@ ${project.name} ${project.version} Release Notes
   De complete lijst met issues voor deze release is beschikbaar in de tracker:
   {{{${project.issueManagement.url}?q=milestone%3A${project.version}+is%3Aclosed}milestone ${project.version} issues}}.
 
+~~** Nieuw
+
+~~  *
+
+~~  []
+
+
+** Verbeteringen en oplossingen
+
+  * fix ({{{https://github.com/B3Partners/flamingo-ibis/issues/71}issue #71}})
+
+  []
+
+
+* Versie 2.16
+
 ** Nieuw
 
   * "Verwijderen" knop op edit scherm uitschakelen als er een 'definitief' object word geladen,
