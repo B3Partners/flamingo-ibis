@@ -23,16 +23,17 @@ ${project.name} ${project.version} Release Notes
   De complete lijst met issues voor deze release is beschikbaar in de tracker:
   {{{${project.issueManagement.url}?q=milestone%3A${project.version}+is%3Aclosed}milestone ${project.version} issues}}.
 
-~~** Nieuw
+** Nieuw
 
-~~  *
-
-~~  []
+  * Gebruik Flamingo versie 4.8.1.2, zie ook:
+    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.8.1.2}Flamingo release notes}}
+    
+  []
 
 
 ** Verbeteringen en oplossingen
 
-  * fix ({{{https://github.com/B3Partners/flamingo-ibis/issues/71}issue #71}})
+  * fix {{{https://github.com/B3Partners/flamingo-ibis/issues/71}issue #71}}
 
   []
 
