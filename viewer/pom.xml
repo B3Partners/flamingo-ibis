@@ -23,14 +23,12 @@
         <dependency>
             <groupId>org.flamingo-mc</groupId>
             <artifactId>viewer</artifactId>
-            <version>${flamingo.version}</version>
             <type>war</type>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.flamingo-mc</groupId>
             <artifactId>viewer</artifactId>
-            <version>${flamingo.version}</version>
             <classifier>classes</classifier>
         </dependency>
     </dependencies>

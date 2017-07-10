@@ -26,9 +26,21 @@ ${project.name} ${project.version} Release Notes
 ** Nieuw
 
   * IBIS sprite opnemen in war file ({{{https://github.com/B3Partners/flamingo-ibis/issues/73}issue #73}})
+  
+  * Gebruik Flamingo versie 4.8.1.3, zie ook:
+    {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v4.8.1.3}Flamingo release notes}}
     
   []
 
+** Verbeteringen en oplossingen
+  
+  * Verbeteringen in de factsheet ({{{https://github.com/B3Partners/flamingo-ibis/issues/74}issue #74}}, 
+    {{{https://github.com/B3Partners/flamingo-ibis/issues/76}issue #76}}, 
+    {{{https://github.com/B3Partners/flamingo-ibis/issues/77}issue #77}})
+    
+  * Aanpssing verwijderen knop in editscherm ({{{https://github.com/B3Partners/flamingo-ibis/issues/75}issue #75}})
+  
+  []
 
 * Versie 2.17
 
