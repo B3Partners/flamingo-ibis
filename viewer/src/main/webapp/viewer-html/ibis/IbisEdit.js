@@ -206,7 +206,30 @@ Ext.define("viewer.components.IbisEdit", {
             this.savebutton.setDisabled(true);
             this.savebutton.setText("'Definitief' object mag niet verwijderd worden");
         }
+        // verberg verwijderen knop als iets anders als 'bewerkt' wordt geladen
+        if (this.inputContainer.getForm().findField(this.workflow_fieldname).getValue() !== "bewerkt") {
+            // de button wordt hersteld in #showWindow
+            this.setButtonDisabled("deleteButton", true);
+            var button = this.maincontainer.down("#deleteButton");
+            if (button) {
+                button.hide();
+            }
+        }
     },
+    /**
+     * herstel de delete button, die is mogelijk verborgen door #handleFeature.
+     * @returns {undefined}
+     * @override
+     */
+    showWindow: function () {
+        this.setButtonDisabled("deleteButton", false);
+        var button = this.maincontainer.down("#deleteButton");
+        if (button) {
+            button.show();
+        }
+        this.superclass.showWindow.call(this);
+    },
+
     getDefinitiefFeature: function (bewerktFeature) {
         var me = this;
         var options = {
