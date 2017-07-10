@@ -184,10 +184,16 @@ Ext.define("viewer.components.IbisFactsheet", {
             result['kaveloppervlak'] = result['kaveloppervlak'] + ' m2';
         }
         // hernoem o_milieuwet_code
-        if (result['o_milieuwet_code']) {
-            result['maximaal_toegestane_hindercategorie'] = result['o_milieuwet_code'];
-            delete result['o_milieuwet_code'];
+        // zie: https://github.com/B3Partners/flamingo-ibis/issues/74
+        // if (result['o_milieuwet_code']) {
+        //    result['maximaal_toegestane_hindercategorie'] = result['o_milieuwet_code'];
+        delete result['o_milieuwet_code'];
+        //}
+        if (result['milieuwet_waarde']) {
+            result['maximaal_toegestane_hindercategorie'] = result['milieuwet_waarde'];
+            delete result['milieuwet_waarde'];
         }
+
 
         return result;
     },
