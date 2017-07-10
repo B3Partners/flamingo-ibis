@@ -9,24 +9,8 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// nl.b3p.viewer.ibis.util.WorkflowStatus
-	c279 [label=<<table title="nl.b3p.viewer.ibis.util.WorkflowStatus" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./WorkflowStatus.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
-<tr><td align="center" balign="center"> WorkflowStatus </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> bewerkt </td></tr>
-<tr><td align="left" balign="left"> definitief </td></tr>
-<tr><td align="left" balign="left"> archief </td></tr>
-<tr><td align="left" balign="left"> afgevoerd </td></tr>
-		</table></td></tr>
-		</table>>, URL="./WorkflowStatus.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean
-	c287 [label=<<table title="nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../stripes/IbisMergeFeaturesActionBean.html">
+	c283 [label=<<table title="nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../stripes/IbisMergeFeaturesActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisMergeFeaturesActionBean </td></tr>
 		</table></td></tr>
@@ -41,7 +25,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="../../stripes/IbisMergeFeaturesActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisSplitFeatureActionBean
-	c288 [label=<<table title="nl.b3p.viewer.stripes.IbisSplitFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../stripes/IbisSplitFeatureActionBean.html">
+	c285 [label=<<table title="nl.b3p.viewer.stripes.IbisSplitFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../stripes/IbisSplitFeatureActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisSplitFeatureActionBean </td></tr>
 		</table></td></tr>
@@ -59,9 +43,25 @@ digraph G {
 <tr><td align="left" balign="left"> + setSliverMaxArea(sliverMaxArea : double) </td></tr>
 		</table></td></tr>
 		</table>>, URL="../../stripes/IbisSplitFeatureActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// nl.b3p.viewer.ibis.util.WorkflowStatus
+	c288 [label=<<table title="nl.b3p.viewer.ibis.util.WorkflowStatus" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./WorkflowStatus.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
+<tr><td align="center" balign="center"> WorkflowStatus </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> bewerkt </td></tr>
+<tr><td align="left" balign="left"> definitief </td></tr>
+<tr><td align="left" balign="left"> archief </td></tr>
+<tr><td align="left" balign="left"> afgevoerd </td></tr>
+		</table></td></tr>
+		</table>>, URL="./WorkflowStatus.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean NAVASSOC nl.b3p.viewer.ibis.util.WorkflowStatus
-	c287:p -> c279:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c283:p -> c288:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisSplitFeatureActionBean NAVASSOC nl.b3p.viewer.ibis.util.WorkflowStatus
-	c288:p -> c279:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c285:p -> c288:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 }
 

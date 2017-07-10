@@ -9,8 +9,24 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
+	// nl.b3p.viewer.stripes.IbisEditFeatureActionBean
+	c190 [label=<<table title="nl.b3p.viewer.stripes.IbisEditFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisEditFeatureActionBean.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> IbisEditFeatureActionBean </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + IbisEditFeatureActionBean() </td></tr>
+<tr><td align="left" balign="left"> # addNewFeature() : String </td></tr>
+<tr><td align="left" balign="left"> # deleteFeature(fid : String) </td></tr>
+<tr><td align="left" balign="left"> # editFeature(fid : String) </td></tr>
+<tr><td align="left" balign="left"> # isAttributeUserEditingDisabled(attrName : String) : boolean </td></tr>
+		</table></td></tr>
+		</table>>, URL="./IbisEditFeatureActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.ibis.util.IbisConstants
-	c186 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
+	c197 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> IbisConstants </td></tr>
@@ -27,26 +43,10 @@ digraph G {
 <tr><td align="left" balign="left">  </td></tr>
 		</table></td></tr>
 		</table>>, URL="../ibis/util/IbisConstants.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// nl.b3p.viewer.stripes.IbisEditFeatureActionBean
-	c194 [label=<<table title="nl.b3p.viewer.stripes.IbisEditFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisEditFeatureActionBean.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> IbisEditFeatureActionBean </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + IbisEditFeatureActionBean() </td></tr>
-<tr><td align="left" balign="left"> # addNewFeature() : String </td></tr>
-<tr><td align="left" balign="left"> # deleteFeature(fid : String) </td></tr>
-<tr><td align="left" balign="left"> # editFeature(fid : String) </td></tr>
-<tr><td align="left" balign="left"> # isAttributeUserEditingDisabled(attrName : String) : boolean </td></tr>
-		</table></td></tr>
-		</table>>, URL="./IbisEditFeatureActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//nl.b3p.viewer.stripes.IbisEditFeatureActionBean extends nl.b3p.viewer.stripes.EditFeatureActionBean
-	c199:p -> c194:p [dir=back,arrowtail=empty];
+	c199:p -> c190:p [dir=back,arrowtail=empty];
 	//nl.b3p.viewer.stripes.IbisEditFeatureActionBean implements nl.b3p.viewer.ibis.util.IbisConstants
-	c186:p -> c194:p [dir=back,arrowtail=empty,style=dashed];
+	c197:p -> c190:p [dir=back,arrowtail=empty,style=dashed];
 	// nl.b3p.viewer.stripes.EditFeatureActionBean
 	c199 [label=<<table title="nl.b3p.viewer.stripes.EditFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
