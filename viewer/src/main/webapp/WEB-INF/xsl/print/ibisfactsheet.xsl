@@ -227,9 +227,19 @@
                                         </fo:block>
                                     </xsl:when>
                                     <xsl:otherwise>
-                                        <fo:block>
-                                            <xsl:value-of select="normalize-space(.)" />
-                                        </fo:block>
+                                        <xsl:choose>
+                                            <!-- getallen rechts uitlijnen -->
+                                            <xsl:when test="number(.) = .">
+                                                <fo:block text-align="right">
+                                                    <xsl:value-of select="normalize-space(.)" />
+                                                </fo:block>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <fo:block>
+                                                    <xsl:value-of select="normalize-space(.)" />
+                                                </fo:block>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </fo:table-cell>
