@@ -6,7 +6,7 @@ shallow_clone: false
 
 environment:
   fast_finish: true
-  MVN_VERSION: 3.3.9
+  MVN_VERSION: 3.5.2
   matrix:
   - JDK: JDK8
     JAVA_HOME: C:\Program Files\Java\jdk1.8.0
