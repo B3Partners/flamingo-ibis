@@ -1,6 +1,4 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./IbisAttributeListActionBean.html" title="nl.b3p.viewer.stripes.IbisAttributeListActionBean" alt="" coords="16,11,629,676"/>
-<area shape="rect" id="node1" href="./IbisAttributeListActionBean.html" title="&lt;TABLE&gt;" alt="" coords="5,5,640,681"/>
-<area shape="rect" id="node2_1" href="./IbisAttributeListActionBean.ReportType.html" title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.ReportType" alt="" coords="266,735,379,863"/>
-<area shape="rect" id="node2" href="./IbisAttributeListActionBean.ReportType.html" title="&lt;TABLE&gt;" alt="" coords="255,729,390,868"/>
+<area shape="rect" id="node1_0" href="./IbisAttributeListActionBean.ReportType.html" title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.ReportType" alt="" coords="16,11,120,53"/>
+<area shape="rect" id="node1" href="./IbisAttributeListActionBean.ReportType.html" title="&lt;TABLE&gt;" alt="" coords="5,5,131,59"/>
 </map>

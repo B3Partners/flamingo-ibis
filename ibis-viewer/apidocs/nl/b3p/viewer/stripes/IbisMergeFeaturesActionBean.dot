@@ -10,94 +10,26 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean
-	c235 [label=<<table title="nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisMergeFeaturesActionBean.html">
+	c200 [label=<<table title="nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisMergeFeaturesActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisMergeFeaturesActionBean </td></tr>
 		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + IbisMergeFeaturesActionBean() </td></tr>
-<tr><td align="left" balign="left"> # handleExtraData(features : List&lt;SimpleFeature&gt;) : List&lt;SimpleFeature&gt; </td></tr>
-<tr><td align="left" balign="left"> # handleStrategy(featureA : SimpleFeature, featureB : SimpleFeature, newGeom : Geometry, filterA : Filter, filterB : Filter, localStore : SimpleFeatureStore, localStrategy : String) : List&lt;FeatureId&gt; </td></tr>
-<tr><td align="left" balign="left"> # afterMerge(ids : List&lt;FeatureId&gt;) </td></tr>
-		</table></td></tr>
 		</table>>, URL="./IbisMergeFeaturesActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// nl.b3p.viewer.ibis.util.WorkflowStatus
-	c240 [label=<<table title="nl.b3p.viewer.ibis.util.WorkflowStatus" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/WorkflowStatus.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
-<tr><td align="center" balign="center"> WorkflowStatus </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> bewerkt </td></tr>
-<tr><td align="left" balign="left"> definitief </td></tr>
-<tr><td align="left" balign="left"> archief </td></tr>
-<tr><td align="left" balign="left"> afgevoerd </td></tr>
-		</table></td></tr>
-		</table>>, URL="../ibis/util/WorkflowStatus.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.ibis.util.IbisConstants
-	c241 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
+	c206 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> IbisConstants </td></tr>
 		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + KAVEL_LAYER_NAME : String </td></tr>
-<tr><td align="left" balign="left"> + TERREIN_LAYER_NAME : String </td></tr>
-<tr><td align="left" balign="left"> + KAVEL_TERREIN_ID_FIELDNAME : String </td></tr>
-<tr><td align="left" balign="left"> + ID_FIELDNAME : String </td></tr>
-<tr><td align="left" balign="left"> + WORKFLOW_FIELDNAME : String </td></tr>
-<tr><td align="left" balign="left"> + MUTATIEDATUM_FIELDNAME : String </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
-		</table></td></tr>
 		</table>>, URL="../ibis/util/IbisConstants.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean extends nl.b3p.viewer.stripes.MergeFeaturesActionBean
-	c243:p -> c235:p [dir=back,arrowtail=empty];
+	c208:p -> c200:p [dir=back,arrowtail=empty];
 	//nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean implements nl.b3p.viewer.ibis.util.IbisConstants
-	c241:p -> c235:p [dir=back,arrowtail=empty,style=dashed];
-	// nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean NAVASSOC nl.b3p.viewer.ibis.util.WorkflowStatus
-	c235:p -> c240:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c206:p -> c200:p [dir=back,arrowtail=empty,style=dashed];
 	// nl.b3p.viewer.stripes.MergeFeaturesActionBean
-	c243 [label=<<table title="nl.b3p.viewer.stripes.MergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c208 [label=<<table title="nl.b3p.viewer.stripes.MergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MergeFeaturesActionBean </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + MergeFeaturesActionBean() </td></tr>
-<tr><td align="left" balign="left"> + loadLayer() </td></tr>
-<tr><td align="left" balign="left"> + checkAuthorization() </td></tr>
-<tr><td align="left" balign="left"> + merge() : Resolution </td></tr>
-<tr><td align="left" balign="left"> # handleExtraData(arg0 : List&lt;SimpleFeature&gt;) : List&lt;SimpleFeature&gt; </td></tr>
-<tr><td align="left" balign="left"> # handleExtraData(arg0 : SimpleFeature) : SimpleFeature </td></tr>
-<tr><td align="left" balign="left"> # handleStrategy(arg0 : SimpleFeature, arg1 : SimpleFeature, arg2 : Geometry, arg3 : Filter, arg4 : Filter, arg5 : SimpleFeatureStore, arg6 : String) : List&lt;FeatureId&gt; </td></tr>
-<tr><td align="left" balign="left"> # afterMerge(arg0 : List&lt;FeatureId&gt;) </td></tr>
-<tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
-<tr><td align="left" balign="left"> + setContext(arg0 : ActionBeanContext) </td></tr>
-<tr><td align="left" balign="left"> + getApplication() : Application </td></tr>
-<tr><td align="left" balign="left"> + setApplication(arg0 : Application) </td></tr>
-<tr><td align="left" balign="left"> + getAppLayer() : ApplicationLayer </td></tr>
-<tr><td align="left" balign="left"> + setAppLayer(arg0 : ApplicationLayer) </td></tr>
-<tr><td align="left" balign="left"> + getStrategy() : String </td></tr>
-<tr><td align="left" balign="left"> + setStrategy(arg0 : String) </td></tr>
-<tr><td align="left" balign="left"> + getFidA() : String </td></tr>
-<tr><td align="left" balign="left"> + setFidA(arg0 : String) </td></tr>
-<tr><td align="left" balign="left"> + getFidB() : String </td></tr>
-<tr><td align="left" balign="left"> + setFidB(arg0 : String) </td></tr>
-<tr><td align="left" balign="left"> + getMergeGapDist() : int </td></tr>
-<tr><td align="left" balign="left"> + setMergeGapDist(arg0 : int) </td></tr>
-<tr><td align="left" balign="left"> + getExtraData() : String </td></tr>
-<tr><td align="left" balign="left"> + setExtraData(arg0 : String) </td></tr>
-<tr><td align="left" balign="left"> + getLayer() : Layer </td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }

@@ -10,21 +10,9 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// nl.b3p.viewer.util.IbisFeatureToJson
-	c224 [label=<<table title="nl.b3p.viewer.util.IbisFeatureToJson" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisFeatureToJson.html">
+	c189 [label=<<table title="nl.b3p.viewer.util.IbisFeatureToJson" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisFeatureToJson.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisFeatureToJson </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + MAX_FEATURES : int </td></tr>
-<tr><td align="left" balign="left"> ~ propertyNamesQueryCache : HashMap&lt;Long, List&lt;String&gt;&gt; </td></tr>
-<tr><td align="left" balign="left"> ~ haveInvisiblePropertiesCache : HashMap&lt;Long, Boolean&gt; </td></tr>
-<tr><td align="left" balign="left"> ~ propertyNamesReturnCache : HashMap&lt;Long, List&lt;String&gt;&gt; </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + IbisFeatureToJson(arrays : boolean, edit : boolean, graph : boolean, attributesToInclude : List&lt;Long&gt;) </td></tr>
-<tr><td align="left" balign="left"> + IbisFeatureToJson(arrays : boolean, edit : boolean, graph : boolean, aliases : boolean, attributesToInclude : List&lt;Long&gt;) </td></tr>
-<tr><td align="left" balign="left"> + getWorkflowJSONFeatures(al : ApplicationLayer, ft : SimpleFeatureType, fs : FeatureSource&lt;&gt;, q : Query) : JSONArray </td></tr>
-<tr><td align="left" balign="left"> + getDefinitiefJSONFeatures(al : ApplicationLayer, ft : SimpleFeatureType, fs : FeatureSource&lt;&gt;, q : Query) : JSONArray </td></tr>
 		</table></td></tr>
 		</table>>, URL="./IbisFeatureToJson.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
