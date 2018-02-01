@@ -23,6 +23,15 @@ ${project.name} ${project.version} Release Notes
   De complete lijst met issues voor deze release is beschikbaar in de tracker:
   {{{${project.issueManagement.url}?q=milestone%3A${project.version}+is%3Aclosed}milestone ${project.version} issues}}.
 
+
+** Verbeteringen en oplossingen
+
+  * Verbeteringen in de factsheet ({{{https://github.com/B3Partners/flamingo-ibis/issues/78}issue #78}})
+
+  []
+
+* Versie 2.18
+
 ** Nieuw
 
   * IBIS sprite opnemen in war file ({{{https://github.com/B3Partners/flamingo-ibis/issues/73}issue #73}})
