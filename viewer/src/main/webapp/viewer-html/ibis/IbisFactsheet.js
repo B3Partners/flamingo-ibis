@@ -159,6 +159,7 @@ Ext.define("viewer.components.IbisFactsheet", {
                     key.indexOf("kaveloppervlak_m2") > -1 ||
                     key.indexOf("kaveloppervlak") > -1 ||
                     key.indexOf("o_milieuwet_code") > -1 ||
+                    key.indexOf("milieuwet_waarde") > -1 ||
                     (key.lastIndexOf("status", 0) === 0) 
                 // || key.indexOf("milieuzone") > -1)
                     ) {
