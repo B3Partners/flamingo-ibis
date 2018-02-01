@@ -27,7 +27,7 @@ Use the regular maven release cycle; `mvn release:prepare` and then `mvn release
 
 ```
 mvn clean
-mvn release:prepare -l rel-prepare.log -DautoVersionSubmodules=true -DdevelopmentVersion=2.12-SNAPSHOT -DreleaseVersion=2.11 -Dtag=ibis-flamingo-mc-2.11 -e -T1
+mvn release:prepare -l rel-prepare.log -DautoVersionSubmodules=true -DdevelopmentVersion=2.21-SNAPSHOT -DreleaseVersion=2.20 -Dtag=ibis-flamingo-mc-2.20 -e -T1
 mvn release:perform -l rel-perform.log -e -T1
 ```
 Don't forget to update the release notes.
