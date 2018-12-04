@@ -3,9 +3,14 @@ sudo: true
 language: java
 
 addons:
-  postgresql: "9.5"
   hostname: travis-fla-ibis
   hosts: travis-fla-ibis
+  postgresql: 9.6
+  apt:
+    packages:
+      - postgresql-9.6-postgis-2.3
+      - gdal-bin
+      - graphviz
 
 before_install:
   # installeer een up-2-date Maven versie
@@ -13,12 +18,13 @@ before_install:
   #- unzip -qq apache-maven-3.5.0-bin.zip
   #- export M2_HOME=$PWD/apache-maven-3.5.0
   #- export PATH=$M2_HOME/bin:$PATH
-  # installeer/update postgis 2.2 op postgresql 9.5
-  - sudo service postgresql stop
-  - sudo -E apt-get -qq update &>> ~/apt-get-update.log
-  - sudo apt-get -qq install postgis-2.2 gdal-bin graphviz
-  - sudo service postgresql stop
-  - sudo service postgresql start 9.5
+  - mvn -v
+  # installeer/update postgis 2.3 op postgresql 9.6
+#  - sudo service postgresql stop
+#  - sudo -E apt-get -qq update &>> ~/apt-get-update.log
+#  - sudo apt-get -qq install postgis-2.3 gdal-bin graphviz
+#  - sudo service postgresql stop
+#  - sudo service postgresql start 9.6
   - export PAGER=cat
   - psql --version
   - psql -U postgres -c 'CREATE ROLE ibis LOGIN NOSUPERUSER INHERIT CREATEDB NOCREATEROLE NOREPLICATION;'
