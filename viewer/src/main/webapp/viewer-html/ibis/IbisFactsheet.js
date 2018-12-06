@@ -33,12 +33,13 @@ Ext.define("viewer.components.IbisFactsheet", {
      * @constructor
      */
     constructor: function (conf) {
+        this.initConfig(conf);
         viewer.components.IbisFactsheet.superclass.constructor.call(this, conf);
         factsheet__layersArrayIndexesToAppLayerIds(this.config);
         var me = this;
         var requestParams = {};
         requestParams[this.config.restriction] = true;
-        requestParams["appId"] = appId;
+        requestParams["appId"] = FlamingoAppLoader.get('appId');
         requestParams["layers"] = me.config.legendLayers;
         requestParams["hasConfiguredLayers"] = true;
         Ext.Ajax.request({
@@ -109,10 +110,10 @@ Ext.define("viewer.components.IbisFactsheet", {
     gegevensGevestigd: function (factsheetFeature) {
         var result = {}, key;
 
-        for (key in factsheetFeature) {
+        for (key in factsheetFeature.indexedAttributes) {
             if (key.indexOf("aantal_bedrijven") > -1 ||
                     key.indexOf("aantal_werkzame_personen") > -1) {
-                result[key] = factsheetFeature[key];
+                result[key] = factsheetFeature.indexedAttributes[key];
             }
         }
 
@@ -152,7 +153,7 @@ Ext.define("viewer.components.IbisFactsheet", {
     },
     gegevensKavelPand: function (factsheetFeature) {
         var result = {}, key;
-        for (key in factsheetFeature) {
+        for (key in factsheetFeature.indexedAttributes) {
             if (key.indexOf("opp_geometrie") > -1 ||
                     key.indexOf("Kaveloppervlakte") > -1 ||
                     key.indexOf("kaveloppervlak_ha") > -1 ||
@@ -163,11 +164,11 @@ Ext.define("viewer.components.IbisFactsheet", {
                     (key.lastIndexOf("status", 0) === 0) 
                 // || key.indexOf("milieuzone") > -1)
                     ) {
-                result[key] = factsheetFeature[key];
+                result[key] = factsheetFeature.indexedAttributes[key];
             }
         }
         if (Ext.Object.isEmpty(result)) {
-            result.gegevens = 'onbekend';
+            result['gegevens'] = 'onbekend';
         }
 
         if (result['Kaveloppervlakte']) {
@@ -200,19 +201,19 @@ Ext.define("viewer.components.IbisFactsheet", {
     },
     beschikbarePanden: function (factsheetFeature) {
         var result = {}, key;
-        for (key in factsheetFeature) {
+        for (key in factsheetFeature.indexedAttributes) {
             if (key.indexOf("panden") > -1) {
-                result[key] = factsheetFeature[key];
+                result[key] = factsheetFeature.indexedAttributes[key];
             }
         }
         if (Ext.Object.isEmpty(result)) {
-            result.panden = 'onbekend';
+            result['panden'] = 'onbekend';
         }
         return result;
     },
     kenmerkenTerrein: function (factsheetFeature) {
         var result = {}, key;
-        for (key in factsheetFeature) {
+        for (key in factsheetFeature.indexedAttributes) {
             if (key.indexOf("opp_bruto") > -1 ||
                     key.indexOf("opp_netto") > -1 ||
                     key.indexOf("opp_uitgeefbaar") > -1 ||
@@ -221,11 +222,11 @@ Ext.define("viewer.components.IbisFactsheet", {
                     key.indexOf("opp_niet_terstond_uitgeefbaar_part_ha") > -1 ||
                     key.indexOf("opp_optie_ha") > -1) {
 
-                result[key] = factsheetFeature[key];
+                result[key] = factsheetFeature.indexedAttributes[key];
             }
         }
         if (Ext.Object.isEmpty(result)) {
-            result.terrein_kenmerken = 'onbekend';
+            result['terrein_kenmerken'] = 'onbekend';
         }
 
         // hernoem milieuzone
@@ -239,47 +240,47 @@ Ext.define("viewer.components.IbisFactsheet", {
     /** verzamel verkoop contact gegevens van kavel. */
     gegevensVerkoopOntwikkelaar: function (factsheetFeature) {
         var result = {}, key;
-        for (key in factsheetFeature) {
+        for (key in factsheetFeature.indexedAttributes) {
             if (key.lastIndexOf("c_verkoopnaam", 0) === 0) {
-                result['a_'] = factsheetFeature[key];
+                result['a_'] = factsheetFeature.indexedAttributes[key];
             }
             if (key.lastIndexOf("c_verkooptelefoon", 0) === 0) {
-                result['b_'] = 'T: ' + factsheetFeature[key];
+                result['b_'] = 'T: ' + factsheetFeature.indexedAttributes[key];
             }
             if (key.lastIndexOf("c_verkoopemail", 0) === 0) {
-                result['c_'] = 'e: ' + factsheetFeature[key];
+                result['c_'] = 'e: ' + factsheetFeature.indexedAttributes[key];
             }
             if (key.lastIndexOf("c_verkoopwebsite", 0) === 0) {
-                result['d_'] = 'W: ' + factsheetFeature[key];
+                result['d_'] = 'W: ' + factsheetFeature.indexedAttributes[key];
             }
         }
         if (Ext.Object.isEmpty(result)) {
-            result.contact_gegevens = 'onbekend';
+            result['contact_gegevens'] = 'onbekend';
         }
         return result;
     },
     /** verzamel verkoop contact gegevens van kavel. */
     gegevensVerkoopOverheid: function (factsheetFeature) {
         var result = {}, key;
-        for (key in factsheetFeature) {
+        for (key in factsheetFeature.indexedAttributes) {
             if (key.lastIndexOf("c_onderhoudnaam", 0) === 0) {
-                result['a_'] = factsheetFeature[key];
+                result['a_'] = factsheetFeature.indexedAttributes[key];
             }
             if (key.lastIndexOf("c_organisatie", 0) === 0) {
-                result['b_'] = factsheetFeature[key];
+                result['b_'] = factsheetFeature.indexedAttributes[key];
             }
             if (key.lastIndexOf("c_onderhoudtelefoon", 0) === 0) {
-                result['c_'] = 'T: ' + factsheetFeature[key];
+                result['c_'] = 'T: ' + factsheetFeature.indexedAttributes[key];
             }
             if (key.lastIndexOf("c_onderhoudemail", 0) === 0) {
-                result['d_'] = 'e: ' + factsheetFeature[key];
+                result['d_'] = 'e: ' + factsheetFeature.indexedAttributes[key];
             }
             if (key.lastIndexOf("c_hyperlink", 0) === 0) {
-                result['e_'] = 'W: ' + factsheetFeature[key];
+                result['e_'] = 'W: ' + factsheetFeature.indexedAttributes[key];
             }
         }
         if (Ext.Object.isEmpty(result)) {
-            result.contact_gegevens = 'onbekend';
+            result['contact_gegevens'] = 'onbekend';
         }
 
         return result;
@@ -289,25 +290,25 @@ Ext.define("viewer.components.IbisFactsheet", {
      */
     ontsluitingTerrein: function (factsheetFeature) {
         var result = {}, key;
-        for (key in factsheetFeature) {
+        for (key in factsheetFeature.indexedAttributes) {
             if (key.indexOf("ontsluiting") > -1 ||
                     key.indexOf("internet") > -1 ||
                     key.indexOf("afstand") > -1 ||
                     key.indexOf("vliegveld") > -1) {
                 if (key === 'o_afstandvliegveld') {
                     //o_afstandvliegveld -> afstand vliegveld XX km
-                    result['b_afstand_vliegveld'] = factsheetFeature[key] + " km";
+                    result['b_afstand_vliegveld'] = factsheetFeature.indexedAttributes[key] + " km";
                 } else if (key === 'o_naamvliegveld') {
                     //o_naamvliegveld -> dichtstbijzijnde vliegveld
-                    result['a_dichtstbijzijnde_vliegveld'] = factsheetFeature[key];
+                    result['a_dichtstbijzijnde_vliegveld'] = factsheetFeature.indexedAttributes[key];
                 }
                 else {
-                    result[key] = factsheetFeature[key];
+                    result[key] = factsheetFeature.indexedAttributes[key];
                 }
             }
         }
         if (Ext.Object.isEmpty(result)) {
-            result.ontsluiting_gegevens = 'onbekend';
+            result['ontsluiting_gegevens'] = 'onbekend';
         }
         return result;
     },
@@ -340,8 +341,8 @@ Ext.define("viewer.components.IbisFactsheet", {
         var properties = {
             action: action,
             title: this.config.title + ' kerngegevens bedrijventerrein: ' +
-                    this.factsheetFeature.a_plannaam + ', ' +
-                    this.factsheetFeature.a_kernnaam + ' (' + Ext.Date.format(new Date(), "j M Y") + ')',
+                    this.factsheetFeature.getAttribute('a_plannaam') + ', ' +
+                    this.factsheetFeature.getAttribute('a_kernnaam') + ' (' + Ext.Date.format(new Date(), "j M Y") + ')',
             mailTo: "",
             xsltemplate: "ibisfactsheet.xsl",
             includeLegend: true,
@@ -387,10 +388,11 @@ Ext.define("viewer.components.IbisFactsheet", {
         var me = this;
         me.factsheetFeature = me.remapFeatureInfo(feature, appLayer);
 
+        var relFeatType = feature.getRelatedFeatureTypes();
         var options = {
             arrays: 1,
-            featureType: feature.related_featuretypes[0].id,
-            filter: feature.related_featuretypes[0].filter,
+            featureType: relFeatType[0].id,
+            filter: relFeatType[0].filter,
             limit: 10,
             page: 1,
             start: 0
@@ -402,7 +404,7 @@ Ext.define("viewer.components.IbisFactsheet", {
                 function (result) {
                     // get related attribute names
                     var relatedAttr = Ext.Array.filter(appLayer.attributes, function (item, index, array) {
-                        return (item.featureType === feature.related_featuretypes[0].id &&
+                        return (item.featureType === relFeatType[0].id &&
                                 item.visible);
                     });
 
@@ -497,11 +499,12 @@ Ext.define("viewer.components.IbisFactsheet", {
      * @override
      */
     submitSettings: function (mapvalues) {
-        // console.debug("submitting mapvalues: ", mapvalues);
+        console.debug("submitting mapvalues: ", mapvalues);
         Ext.getCmp(this.name + 'formParams').setValue(Ext.JSON.encode(mapvalues));
         this.printForm.submit({
-            // target: '_blank' vanwege tel. overleg met EKU 15dec2016
+            // vanwege tel.overleg met EKU 15dec2016: gebruik target: '_self'
             target: '_self'
+                    //target: '_blank'
         });
     }
 });

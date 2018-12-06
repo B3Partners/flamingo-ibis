@@ -35,13 +35,14 @@ Ext.define("viewer.components.IbisMerge", {
     /** (cached) workflow status. */
     status: null,
     constructor: function (conf) {
+        this.initConfig(conf);
         viewer.components.IbisMerge.superclass.constructor.call(this, conf);
 
         var store = Ext.data.StoreManager.lookup('IbisWorkflowStore');
         this.status = store.getById(this.config.workflowstatus);
 
         // update custom url, global var contextPath is not available until after page load
-        this.config.actionbeanUrl = contextPath + "/action/feature/ibismerge";
+        this.config.actionbeanUrl = FlamingoAppLoader.get('contextPath') + "/action/feature/ibismerge";
 
         this.maincontainer.insert(3, {
             id: this.name + "datumMutatie",

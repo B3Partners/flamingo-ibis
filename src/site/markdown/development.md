@@ -2,20 +2,19 @@
 
 ## set up Maven
 
-Install Maven 3.2.5 or newer.
+Install Maven 3.3.9 or newer.
 
 In your maven settings.xml add the following `server` element:
 
 ```xml
       <server>
           <id>gh-pages</id>
-          <!--<username>git</username>-->
-          <password>....</password>
+          <password>SSH PASSPHRASE</password>
       </server>
 ```
 
 This is required to publish the site into the gh-pages branch using the
-[wagon-git](https://github.com/trajano/wagon-git).
+maven-scm-publish-plugin.
 
 ## building
 
@@ -27,15 +26,17 @@ Use the regular maven release cycle; `mvn release:prepare` and then `mvn release
 
 ```
 mvn clean
-mvn release:prepare -l rel-prepare.log -DautoVersionSubmodules=true -DdevelopmentVersion=2.21-SNAPSHOT -DreleaseVersion=2.20 -Dtag=ibis-flamingo-mc-2.20 -e -T1
+mvn release:prepare -l rel-prepare.log -DautoVersionSubmodules=true -DdevelopmentVersion=3.1-SNAPSHOT -DreleaseVersion=3.0 -Dtag=ibis-flamingo-mc-3.0 -e -T1
 mvn release:perform -l rel-perform.log -e -T1
 ```
+
 Don't forget to update the release notes.
 To (re-)create the maven site of this tag (normally the site is deployed as part of the release procedure):
 
 ```
-git checkout ibis-flamingo-mc-2.11
-mvn site-deploy
+git checkout ibis-flamingo-mc-3.0
+mvn -T1 site site:stage
+mvn scm-publish:publish-scm
 git checkout master
 ```
 

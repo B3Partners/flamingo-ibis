@@ -17,8 +17,11 @@
 package nl.b3p.viewer.stripes;
 
 import java.io.IOException;
+import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 import net.sourceforge.stripes.action.StrictBinding;
 import net.sourceforge.stripes.action.UrlBinding;
+import nl.b3p.viewer.config.app.Application;
 import nl.b3p.viewer.config.app.ApplicationLayer;
 import nl.b3p.viewer.config.security.Authorizations;
 import nl.b3p.viewer.config.services.SimpleFeatureType;
@@ -51,7 +54,7 @@ public class IbisFeatureInfoActionBean extends FeatureInfoActionBean implements 
      * such as workflow. {@inheritDoc }
      */
     @Override
-    protected JSONArray executeQuery(ApplicationLayer al, SimpleFeatureType ft, FeatureSource fs, Query q)
+    protected JSONArray executeQuery(ApplicationLayer al, SimpleFeatureType ft, FeatureSource fs, Query q, EntityManager em, Application application, HttpServletRequest request)
             throws IOException, JSONException, Exception {
 
         JSONArray features;
@@ -78,7 +81,7 @@ public class IbisFeatureInfoActionBean extends FeatureInfoActionBean implements 
             log.debug("Executing default IBIS featureinfo for 'any' user on layer " + this.getLayer().getName());
             // default behaviour for any other layers
             FeatureToJson ftjson = new FeatureToJson(this.isArrays(), this.isEdit(), this.isGraph(), this.getAttributesToInclude());
-            features = ftjson.getJSONFeatures(al, this.getLayer().getFeatureType(), fs, q, null, null);
+            features = ftjson.getJSONFeatures(al, this.getLayer().getFeatureType(), fs, q, null, null, em, application, request);
         }
 
         return features;

@@ -43,8 +43,8 @@ Ext.define('viewer.components.IbisReports', {
      * @returns {viewer.components.IbisReports}
      */
     constructor: function (conf) {
-        viewer.components.IbisReports.superclass.constructor.call(this, conf);
         this.initConfig(conf);
+        viewer.components.IbisReports.superclass.constructor.call(this, conf);
 
         Ext.define('reportdataModel', {
             extend: 'Ext.data.Model',
@@ -53,7 +53,7 @@ Ext.define('viewer.components.IbisReports', {
 
         var me = this;
         // update custom url, global var contextPath is not available until after page load
-        me.config.reportactionbeanUrl = contextPath + '/action/ibisreports';
+        me.config.reportactionbeanUrl = FlamingoAppLoader.get('contextPath') + '/action/ibisreports';
 
         // sidebar panel
         me.container = Ext.create('Ext.container.Container', {

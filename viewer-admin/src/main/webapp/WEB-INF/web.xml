@@ -60,7 +60,7 @@
             the solr configuration and index will be located.
         </description>
         <param-name>flamingo.data.dir</param-name>
-        <param-value>/opt/flamingo_data_ibis</param-value>
+        <param-value>/opt/flamingo_data</param-value>
     </context-param>
     <context-param>
         <description>

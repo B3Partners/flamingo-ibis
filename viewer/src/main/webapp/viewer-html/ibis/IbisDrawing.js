@@ -41,14 +41,14 @@ Ext.define("viewer.components.IbisDrawing", {
      * @returns {viewer.components.IbisDrawing}
      */
     constructor: function (conf) {
+        this.initConfig(conf);
         if (!Ext.isDefined(conf.showLabels)) {
             conf.showLabels = true;
         }
-        this.initConfig(conf);
         viewer.components.IbisDrawing.superclass.constructor.call(this, this.config);
         this.shareUrls = {
             email: "mailto:[mail]?subject=[title]&body=[text]%20[url]"
-        }
+        };
     },
     /**
      * Create the GUI

@@ -32,13 +32,14 @@ Ext.define("viewer.components.IbisSplit", {
     /** (cached) workflow status. */
     status: null,
     constructor: function (conf) {
+        this.initConfig(conf);
         viewer.components.IbisSplit.superclass.constructor.call(this, conf);
 
         var store = Ext.data.StoreManager.lookup('IbisWorkflowStore');
         this.status = store.getById(this.config.workflowstatus);
 
         // update custom url, global var contextPath is not available until after page load
-        this.config.actionbeanUrl = contextPath + "/action/feature/ibissplit";
+        this.config.actionbeanUrl = FlamingoAppLoader.get('contextPath') + "/action/feature/ibissplit";
 
         this.maincontainer.insert(2, {
             id: this.name + "datumMutatie",

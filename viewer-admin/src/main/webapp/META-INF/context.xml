@@ -31,50 +31,14 @@
         ...
     </Server>
     -->
-  <!-- Tomcat resource link -->
-  <ResourceLink global="jdbc/${ibis-flamingo-ds-name}" name="jdbc/geo_viewer" type="javax.sql.DataSource"/>
-  <!-- For Tomcat: define JavaMail resource in server.xml. See:
-
-    http://tomcat.apache.org/tomcat-8.0-doc/jndi-resources-howto.html#JavaMail_Sessions
-
-    Don't forget to put mail.jar in the Tomcat lib directory.
-
-    To configure your mail server, use attributes like "mail.smtp.host" for
-    the Resource element. See Appendix A of the JavaMail spec for which
-    attributes you can use, possibly accessible at
-    http://www.oracle.com/technetwork/java/javamail/index-141777.html
-
-    <Server ...>
-        ...
-        <GlobalNamingResources>
-            <Resource name="mail/session"
-                    auth="Container"
-                    type="javax.mail.Session"
-                    mail.smtp.host="smtp.mycompany.com"
-            />
-        </GlobalNamingResources>
-        ...
-    </Server>
-    -->
-  <ResourceLink global="mail/session" name="mail/session" type="javax.mail.Session"/>
-  <!-- Security configuration -->
-  <!-- use LockoutRealm instead of CombinedRealm to prevent brute-forcing -->
-  <Realm className="org.apache.catalina.realm.LockOutRealm">
-    <Realm allRolesMode="authOnly" className="org.apache.catalina.realm.DataSourceRealm" dataSourceName="jdbc/${ibis-flamingo-ds-name}" digest="SHA-1" roleNameCol="group_" userCredCol="password" userNameCol="username" userRoleTable="user_groups" userTable="user_"/>
-    <!-- Use JNDIRealm for authenticating against a LDAP server (such as
-             Active Directory):
-             http://tomcat.apache.org/tomcat-8.0-doc/config/realm.html
-             http://tomcat.apache.org/tomcat-8.0-doc/realm-howto.html#JNDIRealm
-        -->
-    <!--Realm className="org.apache.catalina.realm.JNDIRealm"
-            allRolesMode="authOnly"
-            connectionURL="ldap://ldap:389"
-            connectionName="cn=ServiceUser,ou=Services,o=MyOrg"
-            connectionPassword=""
-            userBase="o=MyOrg"
-            userSubtree="true"
-            userSearch="cn={0}"
-            commonRole="ExtendedUser"
-        /-->
-  </Realm>
+    <!-- Tomcat resource link -->
+    <ResourceLink global="jdbc/${ibis-flamingo-ds-name}" name="jdbc/geo_viewer" type="javax.sql.DataSource"/>
+  
+    <ResourceLink global="mail/session" name="mail/session" type="javax.mail.Session"/>
+    <Realm className="org.apache.catalina.realm.LockOutRealm">
+        <Realm allRolesMode="authOnly" className="org.apache.catalina.realm.DataSourceRealm" dataSourceName="jdbc/${ibis-flamingo-ds-name}"
+               digest="SHA-1" roleNameCol="group_" userCredCol="password" userNameCol="username" userRoleTable="user_groups" userTable="user_">
+            <CredentialHandler className="org.apache.catalina.realm.MessageDigestCredentialHandler" algorithm="SHA-1" />
+        </Realm>
+    </Realm>
 </Context>
