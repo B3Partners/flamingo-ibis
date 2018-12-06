@@ -503,8 +503,8 @@ Ext.define("viewer.components.IbisFactsheet", {
         Ext.getCmp(this.name + 'formParams').setValue(Ext.JSON.encode(mapvalues));
         this.printForm.submit({
             // vanwege tel.overleg met EKU 15dec2016: gebruik target: '_self'
-            target: '_self'
-                    //target: '_blank'
+//            target: '_self'
+            target: '_blank'
         });
     }
 });

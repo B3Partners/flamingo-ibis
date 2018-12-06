@@ -27,7 +27,12 @@
 
     <xsl:param name="versionParam" select="'1.0'"/>
 
-    <!-- map variables --> 
+    <!-- laat deze waarde leeg indien geen vaste schaal -->
+    <xsl:variable name="global-scale" select="''"/>
+    <!-- omrekening van pixels naar mm -->
+    <xsl:variable name="ppm" select="'2.8'"/>
+
+    <!-- map variables -->
     <xsl:variable name="map-width-px" select="'368'"/>
     <xsl:variable name="map-height-px" select="'220'"/>
 
@@ -37,7 +42,7 @@
     <!-- See legend.xsl ('none', 'before', 'right') -->
     <xsl:variable name="legend-labels-pos" select="'before'"/>
     <xsl:variable name="legend-scale-images-same-ratio" select="true()"/>
-    
+
     <!-- formatter -->
     <xsl:decimal-format name="MyFormat" decimal-separator="." grouping-separator=","
                         infinity="INFINITY" minus-sign="-" NaN="Not a Number" percent="%" per-mille="m"
@@ -93,7 +98,7 @@
                         <!-- xsl:call-template name="static-legend-block"/ -->
                     </fo:block-container>
 
-                    <!-- tabellen -->                   
+                    <!-- tabellen -->
                     <fo:block-container width="6.5cm" height="4.0cm" top="9.6cm" left="0cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
                         <xsl:for-each select="extra/info[@classname='viewer.components.IbisFactsheet.kenmerkenTerrein']/root">
                             <fo:block xsl:use-attribute-sets="subtitle-font">Kenmerken Terrein</fo:block>
@@ -137,7 +142,7 @@
                                 <xsl:with-param name="tWidthRight" select="40" />
                             </xsl:call-template>
                         </xsl:for-each>
-                        <fo:block xsl:use-attribute-sets="default-font"> 
+                        <fo:block xsl:use-attribute-sets="default-font">
                             <!-- witregel -->
                             <fo:leader />
                         </fo:block>
@@ -157,7 +162,7 @@
                             </xsl:call-template>
                         </xsl:for-each>
                     </fo:block-container>
-                        
+
                     <fo:block-container width="9.8cm" height="3.0cm" top="25.2cm" left="9.9cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
                         <xsl:for-each select="extra/info[@classname='viewer.components.IbisFactsheet.gegevensVerkoopOverheid']/root">
                             <fo:block xsl:use-attribute-sets="subtitle-font">Contactgegevens overheid</fo:block>
@@ -168,7 +173,7 @@
                         </xsl:for-each>
                     </fo:block-container>
 
-                    
+
                     <!--
                     <fo:block-container width="5.8cm" height="24.0cm" top="15cm" left="0cm" xsl:use-attribute-sets="column-block">
                         <xsl:for-each select="extra/info[@classname='viewer.components.IbisFactsheet']/root">
