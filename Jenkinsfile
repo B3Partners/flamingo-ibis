@@ -34,7 +34,7 @@ timestamps {
             }
 
             stage('Check Test Javadocs') {
-                sh "mvn javadoc:testjavadoc"
+                sh "mvn javadoc:test-javadoc"
             }
 
             stage('OWASP Dependency Check') {
