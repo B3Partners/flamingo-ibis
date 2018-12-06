@@ -76,7 +76,7 @@ Ext.define("viewer.components.IbisReportBase", {
 
         reportbase__layersArrayIndexesToAppLayerIds(this.config);
         // update custom url, global var contextPath is not available until after page load
-        this.config.actionbeanUrl = contextPath + '/action/ibisattributes';
+        this.config.actionbeanUrl = FlamingoAppLoader.get('contextPath') + '/action/ibisattributes';
         //this.schema = new Ext.data.schema.Schema();
         this.getDataModel();
         return this;
