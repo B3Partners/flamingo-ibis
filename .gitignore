@@ -11,8 +11,12 @@ target/
 /viewer/src/main/webapp/WEB-INF/xsl/print/calc.xsl
 /viewer/src/main/webapp/WEB-INF/xsl/print/legend.xsl
 /viewer/src/main/webapp/WEB-INF/xsl/print/styles.xsl
-/viewer/src/main/webapp/WEB-INF/xsl/print/print.xml
-/viewer/src/main/webapp/WEB-INF/xsl/print/print.html
+# test bestanden
+/viewer/src/main/webapp/WEB-INF/xsl/print/print*.xml
+/viewer/src/main/webapp/WEB-INF/xsl/print/print*.html
 datasets
 *.log
 _temp/
+# intellij
+*.iml
+.idea/
