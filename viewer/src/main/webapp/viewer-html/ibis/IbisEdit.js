@@ -265,9 +265,7 @@ Ext.define("viewer.components.IbisEdit", {
                                     if (defVal != value) {
                                         // afwijkende waarde markeren
                                         lbl.setHtml('<span class="def_verschillend">' + value + '</span>');
-                                        // TODO voor fla5.2 lbl.setBorder(1);
-                                        // de border-width property moet ingesteld worden op 1
-                                        //lbl.setConfig('style', {'borderWidth': '1px !important;'});
+                                        lbl.setStyle('border-width', '1px');
                                     } else {
                                         lbl.setHtml('<span class="def_identiek">' + value + '</span>');
                                     }
