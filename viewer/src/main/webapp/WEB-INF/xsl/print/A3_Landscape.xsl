@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <xsl:stylesheet version="1.1"
-xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xlink="http://www.w3.org/1999/xlink"
-    xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
-    xmlns:svg="http://www.w3.org/2000/svg" exclude-result-prefixes="fo">
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:fo="http://www.w3.org/1999/XSL/Format"
+                xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
+                xmlns:svg="http://www.w3.org/2000/svg" exclude-result-prefixes="fo">
 
     <xsl:import href="legend.xsl"/>
 
     <xsl:output method="xml" version="1.0" omit-xml-declaration="no" indent="yes"/>
+
+    <xsl:include href="calc.xsl"/>
+    <xsl:include href="styles.xsl"/>
 
     <xsl:param name="versionParam" select="'1.0'"/>
 
@@ -26,18 +29,15 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     <!-- See legend.xsl ('none', 'before', 'right') -->
     <xsl:variable name="legend-labels-pos" select="'before'"/>
     <xsl:variable name="legend-scale-images-same-ratio" select="true()"/>
+
     <xsl:attribute-set name="legend-attributes">
         <xsl:attribute name="font-size">10pt</xsl:attribute>
     </xsl:attribute-set>
 
     <!-- formatter -->
     <xsl:decimal-format name="MyFormat" decimal-separator="." grouping-separator=","
-    infinity="INFINITY" minus-sign="-" NaN="Not a Number" percent="%" per-mille="m"
-    zero-digit="0" digit="#" pattern-separator=";" />
-
-    <!-- includes -->
-    <xsl:include href="calc.xsl"/>
-    <xsl:include href="styles.xsl"/>
+                        infinity="INFINITY" minus-sign="-" NaN="Not a Number" percent="%" per-mille="m"
+                        zero-digit="0" digit="#" pattern-separator=";" />
 
     <!-- master set -->
     <xsl:template name="layout-master-set">
@@ -117,7 +117,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     </xsl:template>
 
     <!-- blocks -->
-    <!-- blocks -->
     <xsl:template name="title-block">
         <fo:block margin-left="0.2cm" margin-top="0.1cm" xsl:use-attribute-sets="title-font" text-align="left">
             <xsl:value-of select="title"/>
@@ -158,14 +157,23 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 
     <!-- create map -->
     <xsl:template name="map-block">
+        <xsl:variable name="local-scale">
+            <xsl:call-template name="calc-local-scale">
+                <xsl:with-param name="bbox" select="bbox"/>
+                <xsl:with-param name="scale" select="scale"/>
+                <xsl:with-param name="quality" select="quality"/>
+            </xsl:call-template>
+        </xsl:variable>
         <xsl:variable name="bbox-corrected">
             <xsl:call-template name="correct-bbox">
                 <xsl:with-param name="bbox" select="bbox"/>
+                <xsl:with-param name="scale" select="$local-scale"/>
             </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="px-ratio" select="format-number($map-height-px div $map-width-px,'0.##','MyFormat')" />
+        <xsl:variable name="px-ratio" select="format-number($map-height-px div $map-width-px,'0.##','MyFormat')"/>
         <xsl:variable name="map-width-px-corrected" select="quality"/>
         <xsl:variable name="map-height-px-corrected" select="format-number(quality * $px-ratio,'0','MyFormat')"/>
+
         <xsl:variable name="map">
             <xsl:value-of select="imageUrl"/>
             <xsl:text>&amp;width=</xsl:text>
@@ -190,19 +198,25 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             <xsl:with-param name="top" select="'-3cm'"/>
         </xsl:call-template>
 
+        <xsl:if test="scale != ''">
+            <fo:block margin-left="0cm" margin-top="3cm" font-size="9pt">
+                <fo:inline font-weight="bold">
+                    <xsl:text>schaal 1: </xsl:text>
+                    <xsl:value-of select="scale"/>
+                </fo:inline>
+            </fo:block>
+        </xsl:if>
 
-        <fo:block margin-left="0cm" margin-top="3cm" font-size="9pt">
-            schaal
-        </fo:block>
-
-        <!-- create scalebar -->
         <fo:block margin-left="0cm" margin-top="0cm">
+            <xsl:variable name="local-scale">
+                <xsl:call-template name="calc-local-scale">
+                    <xsl:with-param name="bbox" select="bbox"/>
+                    <xsl:with-param name="scale" select="scale"/>
+                    <xsl:with-param name="quality" select="quality"/>
+                </xsl:call-template>
+            </xsl:variable>
             <xsl:call-template name="calc-scale">
-                <xsl:with-param name="m-width">
-                    <xsl:call-template name="calc-bbox-width-m-corrected">
-                        <xsl:with-param name="bbox" select="bbox"/>
-                    </xsl:call-template>
-                </xsl:with-param>
+                <xsl:with-param name="m-width" select="($map-width-px div $ppm) * ($local-scale div 1000)"/>
                 <xsl:with-param name="px-width" select="$map-width-px"/>
             </xsl:call-template>
         </fo:block>
