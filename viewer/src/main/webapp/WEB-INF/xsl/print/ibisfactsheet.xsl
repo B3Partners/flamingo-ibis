@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
     Document   : ibisfactsheet.xsl
     Created on : July 6, 2015, 2:39 PM
@@ -7,28 +6,21 @@
     Description:
         factsheet voor ibis  (A4_Portrait)
 -->
-
 <xsl:stylesheet version="1.1"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format" exclude-result-prefixes="fo">
 
     <xsl:import href="legend.xsl"/>
-    <xsl:include href="calc.xsl"/>
+    <xsl:include href="calc481.xsl"/>
     <xsl:include href="ibisstyles.xsl"/>
 
     <xsl:output method="xml" version="1.0" omit-xml-declaration="no" indent="yes"/>
 
-    <xsl:comment>
-        XSLT Version = <xsl:copy-of select="system-property('xsl:version')"/>
-        XSLT Vendor = <xsl:copy-of select="system-property('xsl:vendor')"/>
-        XSLT Vendor URL = <xsl:copy-of select="system-property('xsl:vendor-url')"/>
-    </xsl:comment>
-
     <xsl:param name="versionParam" select="'1.0'"/>
 
     <!-- laat deze waarde leeg indien geen vaste schaal -->
-    <xsl:variable name="global-scale" select="''"/>
+    <!--<xsl:variable name="global-scale" select="''"/>-->
     <!-- omrekening van pixels naar mm -->
     <xsl:variable name="ppm" select="'2.8'"/>
 
@@ -60,6 +52,13 @@
     <!-- root -->
     <xsl:template match="info">
         <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+            <xsl:comment>
+                XSLT Version = <xsl:copy-of select="system-property('xsl:version')"/>
+                XSLT Vendor = <xsl:copy-of select="system-property('xsl:vendor')"/>
+                XSLT Vendor URL = <xsl:copy-of select="system-property('xsl:vendor-url')"/>
+            </xsl:comment>
+
             <xsl:call-template name="layout-master-set"/>
 
             <fo:page-sequence master-reference="a4-staand">
@@ -68,14 +67,6 @@
                     <fo:block-container width="20.45cm" height="1.5cm" top="0cm" left="0cm" background-color="#FFFFFF" xsl:use-attribute-sets="column-block">
                         <xsl:call-template name="title-block"/>
                     </fo:block-container>
-
-                    <!--
-                    <fo:block-container width="6.0cm" height="0.75cm" top="1.6cm" left="0cm" background-color="#FFFFFF" xsl:use-attribute-sets="column-block">
-                        <fo:block margin-left="0.2cm" margin-top="0.2cm" xsl:use-attribute-sets="default-font">
-                            <xsl:value-of select="subtitle"/>
-                        </fo:block>
-                    </fo:block-container>
-                    -->
 
                     <fo:block-container width="13.1cm" height="7.9cm" top="1.6cm" margin-top="0cm" margin-left="0cm" left="0cm" xsl:use-attribute-sets="column-block-border">
                         <xsl:call-template name="map-block"/>
@@ -173,25 +164,6 @@
                         </xsl:for-each>
                     </fo:block-container>
 
-
-                    <!--
-                    <fo:block-container width="5.8cm" height="24.0cm" top="15cm" left="0cm" xsl:use-attribute-sets="column-block">
-                        <xsl:for-each select="extra/info[@classname='viewer.components.IbisFactsheet']/root">
-                            <xsl:call-template name="ibis-tabel"/>
-                        </xsl:for-each>
-                    </fo:block-container>
-                    -->
-
-                    <!--
-                    <fo:block-container width="12.0cm" height="2.3cm" top="26.5cm" left="0cm" xsl:use-attribute-sets="column-block">
-                        <xsl:call-template name="disclaimer-block"/>
-                    </fo:block-container>
-                    -->
-                    <!--
-                    <fo:block-container width="7.6cm" height="2.3cm" top="26.5cm" left="12.0cm" xsl:use-attribute-sets="column-block">
-                        <xsl:call-template name="logo-block"/>
-                    </fo:block-container>
-                    -->
                 </fo:flow>
             </fo:page-sequence>
         </fo:root>
@@ -326,45 +298,13 @@
     </xsl:template>
 
     <xsl:template name="info-block">
-        <!--
-        <xsl:call-template name="windrose">
-            <xsl:with-param name="angle" select="angle"/>
-            <xsl:with-param name="top" select="'0cm'"/>
-        </xsl:call-template>
-        -->
+
         <fo:block margin-left="0.2cm" margin-top="0cm" xsl:use-attribute-sets="default-font">
-            <!--
-            <fo:block margin-left="0.2cm" margin-top="0.5cm" font-size="9pt">
-                schaal
-            </fo:block>
-            -->
-            <!-- create scalebar -->
-            <!--
-            <fo:block margin-left="0.2cm" margin-top="0.2cm">
-                <xsl:call-template name="calc-scale">
-                    <xsl:with-param name="m-width">
-                        <xsl:call-template name="calc-bbox-width-m-corrected">
-                            <xsl:with-param name="bbox" select="bbox"/>
-                        </xsl:call-template>
-                    </xsl:with-param>
-                    <xsl:with-param name="px-width" select="$map-width-px"/>
-                </xsl:call-template>
-            </fo:block>
-            -->
-            <!--
-            <fo:block margin-left="0.2cm" margin-top="0.5cm" font-size="10pt">
-                <xsl:value-of select="date"/>
-            </fo:block>
-            -->
 
             <fo:block space-before="0.4cm" />
 
             <xsl:call-template name="legend" />
-            <!--
-            <fo:block margin-left="0.2cm" margin-top="0.3cm" font-size="8pt" font-style="italic">
-                <xsl:value-of select="remark" />
-            </fo:block>
-            -->
+
         </fo:block>
     </xsl:template>
 
@@ -403,7 +343,6 @@
 
     <xsl:template name="PG-logo-block">
         <fo:block>
-            <!-- fo:external-graphic src="url('PG-logo-zw-200x71-px.png')" width="3cm" scaling="uniform" content-height="scale-to-fit" content-width="scale-to-fit" /-->
             <fo:external-graphic src="url('PG-logo-zw-200x72px.jpg')" width="3cm" scaling="uniform" content-height="scale-to-fit" content-width="scale-to-fit" />
         </fo:block>
     </xsl:template>
