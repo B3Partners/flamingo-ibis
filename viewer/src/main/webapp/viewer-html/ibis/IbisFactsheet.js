@@ -161,8 +161,8 @@ Ext.define("viewer.components.IbisFactsheet", {
                     key.indexOf("kaveloppervlak") > -1 ||
                     key.indexOf("o_milieuwet_code") > -1 ||
                     key.indexOf("milieuwet_waarde") > -1 ||
-                    (key.lastIndexOf("status", 0) === 0) 
-                // || key.indexOf("milieuzone") > -1)
+                    (key.lastIndexOf("status", 0) === 0)
+                    // || key.indexOf("milieuzone") > -1)
                     ) {
                 result[key] = factsheetFeature.indexedAttributes[key];
             }
@@ -301,8 +301,7 @@ Ext.define("viewer.components.IbisFactsheet", {
                 } else if (key === 'o_naamvliegveld') {
                     //o_naamvliegveld -> dichtstbijzijnde vliegveld
                     result['a_dichtstbijzijnde_vliegveld'] = factsheetFeature.indexedAttributes[key];
-                }
-                else {
+                } else {
                     result[key] = factsheetFeature.indexedAttributes[key];
                 }
             }
@@ -428,37 +427,62 @@ Ext.define("viewer.components.IbisFactsheet", {
                         }
                     }
 
-                    var naam = me.factsheetFeature.a_plannaam;
+                    var naam = me.factsheetFeature.getAttribute('a_plannaam');
                     var mapvalues = me.getMapValues();
                     var properties = me.getAllProperties("savePDF");
 
                     // properties.subtitle = (naam) ? "Voor terrein: " + naam : "";
                     // properties.extraTekst = "Daahng dawg ipsum nizzle away ass, tellivizzle adipiscing brizzle. ";
 
-                    if (me.factsheetFeature[appLayer.geometryAttribute]) {
+                    if (me.factsheetFeature.getAttribute(appLayer.geometryAttribute)) {
                         // if we have a feature geometry use that
-                        var feat = Ext.create("viewer.viewercontroller.controller.Feature",
-                                {_wktgeom: me.factsheetFeature[appLayer.geometryAttribute], color: '0000FF', label: naam, strokeWidth: 4});
+                        var feat = new viewer.viewercontroller.controller.Feature({wktgeom: me.factsheetFeature.getAttribute(appLayer.geometryAttribute)});
                         properties.bbox = feat.getExtent().toString();
-                        mapvalues.geometries = [{_wktgeom: me.factsheetFeature[appLayer.geometryAttribute], color: '0000FF', label: naam, strokeWidth: 4}];
+                        mapvalues.geometries = [{
+                                _wktgeom: me.factsheetFeature.getAttribute(appLayer.geometryAttribute),
+                                // vanwege bug in Fla5 moet label niet op de style
+                                label: naam,
+                                style: {
+                                    label: naam,
+                                    labelOutlineColor: '#FFFFFF',
+                                    strokeColor: '#0000FF',
+                                    strokeOpacity: 1,
+                                    strokeDashstyle: 'solid',
+                                    strokeWidth: 2,
+                                    pointRadius: 2,
+                                    transparent: true,
+                                    fontSize: 32
+                                }
+                            }];
                     } else if (relatedGeom) {
                         // if we have a geometry on the related feature use that
-                        var feat = Ext.create("viewer.viewercontroller.controller.Feature",
-                                {_wktgeom: relatedGeom, color: 'FF00FF', label: naam});
+                        var feat = Ext.create("viewer.viewercontroller.controller.Feature");
                         properties.bbox = feat.getExtent().toString();
                         mapvalues.geometries = [{_wktgeom: relatedGeom, color: '0000FF', label: naam, strokeWidth: 4}];
                     } else {
                         // TODO geometrie of bbox ophalen voor feature?
                     }
                     // click-ed location
-                    mapvalues.geometries.push({_wktgeom: 'POINT(' + this.featureInfoClick.coord.x +
-                                ' ' + this.featureInfoClick.coord.y + ')',
-                        color: 'FF00FF', label: 'Geselecteerde kavel', strokeWidth: 8}
-                    );
+                    mapvalues.geometries.push({
+                        _wktgeom: 'POINT(' + this.featureInfoClick.coord.x + ' ' + this.featureInfoClick.coord.y + ')',
+                        // vanwege bug in Fla5 moet label niet op de style
+                        label: 'Geselecteerde kavel',
+                        style: {
+                            label: 'Geselecteerde kavel',
+                            labelOutlineColor: '#FFFFFF',
+                            pointRadius: 8,
+                            strokeWidth: 8,
+                            strokeColor: '#FF00FF',
+                            strokeOpacity: 1,
+                            fillColor: '#FF00FF',
+                            fillOpacity: 0.8,
+                            //transparent: false,
+                            fontSize: 28
+                        }
+                    });
 
                     Ext.merge(mapvalues, properties);
                     me.submitSettings(mapvalues);
-
 
                 }, function (result) {
             Ext.MessageBox.alert("Ajax request failed with status " + result);
@@ -499,12 +523,12 @@ Ext.define("viewer.components.IbisFactsheet", {
      * @override
      */
     submitSettings: function (mapvalues) {
-        console.debug("submitting mapvalues: ", mapvalues);
+        // console.debug("submitting mapvalues: ", Ext.JSON.encode(mapvalues));
         Ext.getCmp(this.name + 'formParams').setValue(Ext.JSON.encode(mapvalues));
         this.printForm.submit({
             // vanwege tel.overleg met EKU 15dec2016: gebruik target: '_self'
             target: '_self'
-                    //target: '_blank'
+//            target: '_blank'
         });
     }
 });
