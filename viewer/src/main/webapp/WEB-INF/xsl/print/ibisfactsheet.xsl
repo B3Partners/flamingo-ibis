@@ -12,17 +12,11 @@
                 xmlns:fo="http://www.w3.org/1999/XSL/Format" exclude-result-prefixes="fo">
 
     <xsl:import href="legend.xsl"/>
-    <xsl:include href="calc481.xsl"/>
     <xsl:include href="ibisstyles.xsl"/>
 
     <xsl:output method="xml" version="1.0" omit-xml-declaration="no" indent="yes"/>
 
     <xsl:param name="versionParam" select="'1.0'"/>
-
-    <!-- laat deze waarde leeg indien geen vaste schaal -->
-    <!--<xsl:variable name="global-scale" select="''"/>-->
-    <!-- omrekening van pixels naar mm -->
-    <xsl:variable name="ppm" select="'2.8'"/>
 
     <!-- map variables -->
     <xsl:variable name="map-width-px" select="'368'"/>
@@ -36,9 +30,12 @@
     <xsl:variable name="legend-scale-images-same-ratio" select="true()"/>
 
     <!-- formatter -->
-    <xsl:decimal-format name="MyFormat" decimal-separator="." grouping-separator=","
-                        infinity="INFINITY" minus-sign="-" NaN="Not a Number" percent="%" per-mille="m"
-                        zero-digit="0" digit="#" pattern-separator=";" />
+    <xsl:decimal-format
+        name="MyFormat" decimal-separator="." grouping-separator=","
+        infinity="INFINITY" minus-sign="-" NaN="Not a Number"
+        percent="%" per-mille="m"
+        zero-digit="0" digit="#" pattern-separator=";"
+    />
 
     <!-- master set -->
     <xsl:template name="layout-master-set">
@@ -74,8 +71,8 @@
 
                     <fo:block-container width="4.0cm" height="2.9cm" top="1.6cm" left="13.2cm" margin-left="0cm" xsl:use-attribute-sets="column-block">
                         <xsl:call-template name="overview-block">
-                            <xsl:with-param name="width" select="'112'" />
-                            <xsl:with-param name="height" select="'80'" />
+                            <xsl:with-param name="width" select="'112px'" />
+                            <xsl:with-param name="height" select="'80px'" />
                         </xsl:call-template>
                     </fo:block-container>
 
@@ -352,5 +349,98 @@
             <!--  -->
             <fo:external-graphic src="url('TODO.png')" width="231px" height="56px" scaling="uniform" content-height="scale-to-fit" content-width="scale-to-fit"/>
         </fo:block>
+    </xsl:template>
+
+    <!-- berekent de breedte van de kaart in meters na correctie vanwege verschil
+    in verhouding hoogte/breedte kaart op scherm en van kaart in template -->
+    <xsl:template name="calc-bbox-width-m-corrected">
+        <xsl:param name="bbox"/>
+
+        <xsl:variable name="xmin" select="substring-before($bbox, ',')"/>
+        <xsl:variable name="bbox1" select="substring-after($bbox, ',')"/>
+        <xsl:variable name="ymin" select="substring-before($bbox1, ',')"/>
+        <xsl:variable name="bbox2" select="substring-after($bbox1, ',')"/>
+        <xsl:variable name="xmax" select="substring-before($bbox2, ',')"/>
+        <xsl:variable name="ymax" select="substring-after($bbox2, ',')"/>
+        <xsl:variable name="bbox-width-m" select="$xmax - $xmin"/>
+        <xsl:variable name="bbox-height-m" select="$ymax - $ymin"/>
+        <xsl:variable name="bbox-ratio" select="($map-width-px * $bbox-height-m) div ($map-height-px * $bbox-width-m)"/>
+        <xsl:choose>
+            <xsl:when test="$bbox-ratio &gt; 1">
+                <xsl:value-of select="$bbox-width-m * $bbox-ratio"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$bbox-width-m"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <!-- berekent nieuwe bbox indien verhouding hoogte/breedte van kaart op scherm
+    anders is dan verhouding van kaart in template, kaart in template bevat minimaal
+    dekking van kaart op scherm, maar mogelijk meer -->
+    <xsl:template name="correct-bbox">
+        <xsl:param name="bbox"/>
+
+        <xsl:variable name="xmin" select="substring-before($bbox, ',')"/>
+        <xsl:variable name="bbox1" select="substring-after($bbox, ',')"/>
+        <xsl:variable name="ymin" select="substring-before($bbox1, ',')"/>
+        <xsl:variable name="bbox2" select="substring-after($bbox1, ',')"/>
+        <xsl:variable name="xmax" select="substring-before($bbox2, ',')"/>
+        <xsl:variable name="ymax" select="substring-after($bbox2, ',')"/>
+        <xsl:variable name="xmid" select="($xmin + $xmax) div 2"/>
+        <xsl:variable name="ymid" select="($ymin + $ymax) div 2"/>
+        <xsl:variable name="bbox-width-m" select="$xmax - $xmin"/>
+        <xsl:variable name="bbox-height-m" select="$ymax - $ymin"/>
+        <xsl:variable name="bbox-ratio" select="($map-width-px * $bbox-height-m) div ($map-height-px * $bbox-width-m)"/>
+        <xsl:choose>
+            <xsl:when test="$bbox-ratio = 1">
+                <xsl:value-of select="$bbox"/>
+            </xsl:when>
+            <xsl:when test="$bbox-ratio &gt; 1">
+                <xsl:variable name="bbox-width-m-corrected" select="$bbox-width-m * $bbox-ratio"/>
+                <xsl:value-of select="$xmid - ($bbox-width-m-corrected div 2)"/>
+                <xsl:text>,</xsl:text>
+                <xsl:value-of select="$ymin"/>
+                <xsl:text>,</xsl:text>
+                <xsl:value-of select="$xmid + ($bbox-width-m-corrected div 2)"/>
+                <xsl:text>,</xsl:text>
+                <xsl:value-of select="$ymax"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:variable name="bbox-height-m-corrected" select="$bbox-height-m div $bbox-ratio"/>
+                <xsl:value-of select="$xmin"/>
+                <xsl:text>,</xsl:text>
+                <xsl:value-of select="$ymid - ($bbox-height-m-corrected div 2)"/>
+                <xsl:text>,</xsl:text>
+                <xsl:value-of select="$xmax"/>
+                <xsl:text>,</xsl:text>
+                <xsl:value-of select="$ymid + ($bbox-height-m-corrected div 2)"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template name="overview-block">
+        <xsl:param name="width" select="'4cm'"/>
+        <xsl:param name="height" select="'4cm'"/>
+        <xsl:variable name="bbox-corrected">
+            <xsl:call-template name="correct-bbox">
+                <xsl:with-param name="bbox" select="bbox"/>
+            </xsl:call-template>
+        </xsl:variable>
+
+        <xsl:if test="overviewUrl">
+            <fo:block margin-left="0cm" margin-right="0cm">
+                <xsl:variable name="overviewSrc">
+                    <xsl:value-of select="overviewUrl"/>
+                    <xsl:text>&amp;geom=</xsl:text>
+                    <xsl:value-of select="$bbox-corrected"/>
+                    <xsl:text>&amp;width=</xsl:text>
+                    <xsl:value-of select="translate($width,'px', '')"/>
+                    <xsl:text>&amp;height=</xsl:text>
+                    <xsl:value-of select="translate($height,'px', '')"/>
+                </xsl:variable>
+                <fo:external-graphic src="url({$overviewSrc})" content-height="scale-to-fit" content-width="scale-to-fit" scaling="uniform" width="{$width}" height="{$height}"/>
+            </fo:block>
+        </xsl:if>
     </xsl:template>
 </xsl:stylesheet>
