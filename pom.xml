@@ -33,9 +33,6 @@
         <maven.project-info-reports-plugin.version>3.0.0</maven.project-info-reports-plugin.version>
         <maven.jxr-plugin.version>3.0.0</maven.jxr-plugin.version>
     </properties>
-    <prerequisites>
-        <maven>3.3.9</maven>
-    </prerequisites>
     <scm>
         <connection>scm:git:git@github.com:B3Partners/flamingo-ibis.git</connection>
         <developerConnection>scm:git:git@github.com:B3Partners/flamingo-ibis.git</developerConnection>
@@ -303,7 +300,6 @@
                     </reportSet>
                 </reportSets>
                 <configuration>
-                    <debug>${debug}</debug>
                     <stylesheet>java</stylesheet>
                     <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
                     <additionalparam>-all -hide java.* -hide javax.* -hide org.* -inferrel -inferreltype</additionalparam>
