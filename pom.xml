@@ -11,10 +11,10 @@
     <parent>
         <groupId>org.flamingo-mc</groupId>
         <artifactId>flamingo-mc</artifactId>
-        <version>5.2-SNAPSHOT</version>
+        <version>5.2.2-rc1</version>
     </parent>
     <properties>
-        <flamingo.version>5.2-SNAPSHOT</flamingo.version>
+        <flamingo.version>5.2.2-rc1</flamingo.version>
         <project.build.sourceVersion>1.8</project.build.sourceVersion>
         <project.build.targetVersion>1.8</project.build.targetVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -61,7 +61,6 @@
         <site>
             <id>gh-pages</id>
             <name>github pages site</name>
-            <!--<url>git:ssh://git@github.com/B3Partners/flamingo-ibis.git?gh-pages#</url>-->
             <url>scm:git:ssh://git@github.com/b3partners/flamingo-ibis.git</url>
         </site>
         <downloadUrl>https://github.com/B3Partners/flamingo-ibis/releases/</downloadUrl>
@@ -144,14 +143,6 @@
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>3.7.1</version>
-                    <!--                    <dependencies>
-                        <dependency>
-                            <groupId>net.trajano.wagon</groupId>
-                            <artifactId>wagon-git</artifactId>
-                             2.0.4 heeft problemen met accepteren/toevoegen van de RSA fingerprint 
-                            <version>2.0.3</version>
-                        </dependency>
-                    </dependencies>-->
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>

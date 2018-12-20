@@ -1,5 +1,7 @@
 # Development notes
 
+<!-- MACRO{toc|section=0|fromDepth=1|toDepth=2} -->
+
 ## set up Maven
 
 Install Maven 3.3.9 or newer.
