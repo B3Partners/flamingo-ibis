@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.flamingo-mc</groupId>
     <artifactId>ibis-flamingo-mc</artifactId>
-    <version>3.0</version>
+    <version>3.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>IBIS Flamingo-mc</name>
     <description>A Flamingo based project to provide for busines park development.</description>
@@ -37,7 +37,7 @@
         <connection>scm:git:git@github.com:B3Partners/flamingo-ibis.git</connection>
         <developerConnection>scm:git:git@github.com:B3Partners/flamingo-ibis.git</developerConnection>
         <url>https://github.com/B3Partners/flamingo-ibis/</url>
-        <tag>ibis-flamingo-mc-3.0</tag>
+        <tag>HEAD</tag>
     </scm>
     <ciManagement>
         <system>Travis-CI</system>
