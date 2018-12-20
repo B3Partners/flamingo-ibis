@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nl" lang="nl">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>WorkflowUtil xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
@@ -20,7 +20,7 @@
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * GNU General Public License for more details.</em>
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * You should have received a copy of the GNU General Public License</em>
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * along with this program.  If not, see &lt;<a href="http://www.gnu.org/licenses/&gt;" target="alexandria_uri">http://www.gnu.org/licenses/&gt;</a>.</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * along with this program.  If not, see &lt;<a href="http://www.gnu.org/licenses/&gt;." target="alexandria_uri">http://www.gnu.org/licenses/&gt;.</a></em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> nl.b3p.viewer.ibis.util;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
@@ -55,14 +55,14 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * @author mprins</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../nl/b3p/viewer/ibis/util/WorkflowUtil.html">WorkflowUtil</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../../nl/b3p/viewer/ibis/util/IbisConstants.html">IbisConstants</a> {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="WorkflowUtil" href="../../../../../nl/b3p/viewer/ibis/util/WorkflowUtil.html#WorkflowUtil">WorkflowUtil</a> <strong class="jxr_keyword">implements</strong> <a name="IbisConstants" href="../../../../../nl/b3p/viewer/ibis/util/IbisConstants.html#IbisConstants">IbisConstants</a> {
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Log log = LogFactory.getLog(WorkflowUtil.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">     * private constructor for utility class.</em>
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../nl/b3p/viewer/ibis/util/WorkflowUtil.html">WorkflowUtil</a>() {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">private</strong> <a name="WorkflowUtil" href="../../../../../nl/b3p/viewer/ibis/util/WorkflowUtil.html#WorkflowUtil">WorkflowUtil</a>() {
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>      }
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      <em class="jxr_javadoccomment">/**</em>
@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">     * @param application flamingo applicatie</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">     * @param em persistence manager</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> updateTerreinGeometry(Integer terreinID, Layer layer, <a href="../../../../../nl/b3p/viewer/ibis/util/WorkflowStatus.html">WorkflowStatus</a> kavelStatus, Application application, EntityManager em) {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> updateTerreinGeometry(Integer terreinID, Layer layer, <a name="WorkflowStatus" href="../../../../../nl/b3p/viewer/ibis/util/WorkflowStatus.html#WorkflowStatus">WorkflowStatus</a> kavelStatus, Application application, EntityManager em) {
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>          log.debug(<span class="jxr_string">"Updating terrein geometry for "</span> + terreinID);
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>          SimpleFeatureStore terreinStore = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          SimpleFeatureStore kavelStore = <strong class="jxr_keyword">null</strong>;

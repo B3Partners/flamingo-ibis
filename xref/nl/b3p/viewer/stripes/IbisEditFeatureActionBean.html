@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nl" lang="nl">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>IbisEditFeatureActionBean xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
@@ -20,7 +20,7 @@
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * GNU General Public License for more details.</em>
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * You should have received a copy of the GNU General Public License</em>
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * along with this program.  If not, see &lt;<a href="http://www.gnu.org/licenses/&gt;" target="alexandria_uri">http://www.gnu.org/licenses/&gt;</a>.</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * along with this program.  If not, see &lt;<a href="http://www.gnu.org/licenses/&gt;." target="alexandria_uri">http://www.gnu.org/licenses/&gt;.</a></em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> nl.b3p.viewer.stripes;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
@@ -65,7 +65,7 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  @UrlBinding(<span class="jxr_string">"/action/feature/ibisedit"</span>)
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  @StrictBinding
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../nl/b3p/viewer/stripes/IbisEditFeatureActionBean.html">IbisEditFeatureActionBean</a> <strong class="jxr_keyword">extends</strong> EditFeatureActionBean <strong class="jxr_keyword">implements</strong> <a href="../../../../nl/b3p/viewer/ibis/util/IbisConstants.html">IbisConstants</a> {
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="IbisEditFeatureActionBean" href="../../../../nl/b3p/viewer/stripes/IbisEditFeatureActionBean.html#IbisEditFeatureActionBean">IbisEditFeatureActionBean</a> <strong class="jxr_keyword">extends</strong> EditFeatureActionBean <strong class="jxr_keyword">implements</strong> <a name="IbisConstants" href="../../../../nl/b3p/viewer/ibis/util/IbisConstants.html#IbisConstants">IbisConstants</a> {
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Log log = LogFactory.getLog(IbisEditFeatureActionBean.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
@@ -74,7 +74,7 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>          String kavelID = <strong class="jxr_keyword">super</strong>.addNewFeature();
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>          <em class="jxr_comment">//update  terrein</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>          Object terreinID = <strong class="jxr_keyword">this</strong>.getJsonFeature().optString(KAVEL_TERREIN_ID_FIELDNAME, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>          <a href="../../../../nl/b3p/viewer/ibis/util/WorkflowStatus.html">WorkflowStatus</a> status = WorkflowStatus.valueOf(<strong class="jxr_keyword">this</strong>.getJsonFeature().optString(WORKFLOW_FIELDNAME, WorkflowStatus.bewerkt.name()));
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>          <a name="WorkflowStatus" href="../../../../nl/b3p/viewer/ibis/util/WorkflowStatus.html#WorkflowStatus">WorkflowStatus</a> status = WorkflowStatus.valueOf(<strong class="jxr_keyword">this</strong>.getJsonFeature().optString(WORKFLOW_FIELDNAME, WorkflowStatus.bewerkt.name()));
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>          <strong class="jxr_keyword">if</strong> (terreinID != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>              WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), <strong class="jxr_keyword">this</strong>.getLayer(), status, <strong class="jxr_keyword">this</strong>.getApplication(), Stripersist.getEntityManager());
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>          }
@@ -130,7 +130,7 @@
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 
 <a class="jxr_linenumber" name="L123" href="#L123">123</a>         List&lt;String&gt; attributes = <strong class="jxr_keyword">new</strong> ArrayList();
 <a class="jxr_linenumber" name="L124" href="#L124">124</a>         List values = <strong class="jxr_keyword">new</strong> ArrayList();
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>         <a href="../../../../nl/b3p/viewer/ibis/util/WorkflowStatus.html">WorkflowStatus</a> incomingWorkflowStatus = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>         <a name="WorkflowStatus" href="../../../../nl/b3p/viewer/ibis/util/WorkflowStatus.html#WorkflowStatus">WorkflowStatus</a> incomingWorkflowStatus = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L126" href="#L126">126</a>         <em class="jxr_comment">// parse json</em>
 <a class="jxr_linenumber" name="L127" href="#L127">127</a>         <strong class="jxr_keyword">for</strong> (Iterator&lt;String&gt; it = <strong class="jxr_keyword">this</strong>.getJsonFeature().keys(); it.hasNext();) {
 <a class="jxr_linenumber" name="L128" href="#L128">128</a>             String attribute = it.next();
@@ -173,7 +173,7 @@
 <a class="jxr_linenumber" name="L165" href="#L165">165</a>             }
 <a class="jxr_linenumber" name="L166" href="#L166">166</a>             SimpleFeature original = <strong class="jxr_keyword">this</strong>.getStore().getFeatures(fidFilter).features().next();
 <a class="jxr_linenumber" name="L167" href="#L167">167</a>             Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);
-<a class="jxr_linenumber" name="L168" href="#L168">168</a>             <a href="../../../../nl/b3p/viewer/ibis/util/WorkflowStatus.html">WorkflowStatus</a> originalWorkflowStatus = WorkflowStatus.valueOf(original.getAttribute(WORKFLOW_FIELDNAME).toString());
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>             <a name="WorkflowStatus" href="../../../../nl/b3p/viewer/ibis/util/WorkflowStatus.html#WorkflowStatus">WorkflowStatus</a> originalWorkflowStatus = WorkflowStatus.valueOf(original.getAttribute(WORKFLOW_FIELDNAME).toString());
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 
 <a class="jxr_linenumber" name="L170" href="#L170">170</a>             <em class="jxr_comment">// make a copy of the original feature and set (new) attribute values on the copy</em>
 <a class="jxr_linenumber" name="L171" href="#L171">171</a>             SimpleFeature editedNewFeature = createCopy(original);
@@ -295,7 +295,7 @@
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">     * @param kavelFilter filter definitie</em>
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">     * @param newStatus de nieuwe status</em>
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L290" href="#L290">290</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> updateKavelWorkflowForTerrein(Filter kavelFilter, <a href="../../../../nl/b3p/viewer/ibis/util/WorkflowStatus.html">WorkflowStatus</a> newStatus) {
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> updateKavelWorkflowForTerrein(Filter kavelFilter, <a name="WorkflowStatus" href="../../../../nl/b3p/viewer/ibis/util/WorkflowStatus.html#WorkflowStatus">WorkflowStatus</a> newStatus) {
 <a class="jxr_linenumber" name="L291" href="#L291">291</a>         SimpleFeatureStore kavelStore = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L292" href="#L292">292</a>         <strong class="jxr_keyword">try</strong> (Transaction kavelTransaction = <strong class="jxr_keyword">new</strong> DefaultTransaction(<span class="jxr_string">"get-related-kavel-geom"</span>)) {
 <a class="jxr_linenumber" name="L293" href="#L293">293</a>             EntityManager em = Stripersist.getEntityManager();

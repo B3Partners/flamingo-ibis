@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nl" lang="nl">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>IbisAttributeListActionBean xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
@@ -20,7 +20,7 @@
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * GNU General Public License for more details.</em>
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * You should have received a copy of the GNU General Public License</em>
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * along with this program.  If not, see &lt;<a href="http://www.gnu.org/licenses/&gt;" target="alexandria_uri">http://www.gnu.org/licenses/&gt;</a>.</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * along with this program.  If not, see &lt;<a href="http://www.gnu.org/licenses/&gt;." target="alexandria_uri">http://www.gnu.org/licenses/&gt;.</a></em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> nl.b3p.viewer.stripes;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
@@ -91,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  @UrlBinding(<span class="jxr_string">"/action/ibisattributes"</span>)
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  @StrictBinding
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../nl/b3p/viewer/stripes/IbisAttributeListActionBean.html">IbisAttributeListActionBean</a> <strong class="jxr_keyword">implements</strong> ActionBean, <a href="../../../../nl/b3p/viewer/ibis/util/IbisConstants.html">IbisConstants</a> {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="IbisAttributeListActionBean" href="../../../../nl/b3p/viewer/stripes/IbisAttributeListActionBean.html#IbisAttributeListActionBean">IbisAttributeListActionBean</a> <strong class="jxr_keyword">implements</strong> ActionBean, <a name="IbisConstants" href="../../../../nl/b3p/viewer/ibis/util/IbisConstants.html#IbisConstants">IbisConstants</a> {
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Log log = LogFactory.getLog(IbisAttributeListActionBean.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String JSON_METADATA = <span class="jxr_string">"metaData"</span>;
@@ -135,31 +135,31 @@
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">     * report reportType</em>
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>     @Validate(converter = EnumeratedTypeConverter.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L130" href="#L130">130</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../nl/b3p/viewer/stripes/IbisAttributeListActionBean.html">ReportType</a> reportType;
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>     <strong class="jxr_keyword">private</strong> ReportType reportType;
 <a class="jxr_linenumber" name="L131" href="#L131">131</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">     * report type</em>
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L134" href="#L134">134</a>     @Validate(converter = EnumeratedTypeConverter.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../nl/b3p/viewer/stripes/IbisAttributeListActionBean.html">QueryArea</a> aggregationLevel;
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>     <strong class="jxr_keyword">private</strong> QueryArea aggregationLevel;
 <a class="jxr_linenumber" name="L136" href="#L136">136</a>     @Validate(converter = EnumeratedTypeConverter.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../nl/b3p/viewer/stripes/IbisAttributeListActionBean.html">AggregationLevelDate</a> aggregationLevelDate;
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>     <strong class="jxr_keyword">private</strong> AggregationLevelDate aggregationLevelDate;
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 
 <a class="jxr_linenumber" name="L139" href="#L139">139</a>     <strong class="jxr_keyword">private</strong> Layer layer = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L140" href="#L140">140</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> unauthorized;
 <a class="jxr_linenumber" name="L141" href="#L141">141</a>     <strong class="jxr_keyword">private</strong> String gebiedsNaamQuery;
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../nl/b3p/viewer/stripes/IbisAttributeListActionBean.html">QueryArea</a> areaType;
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>     <strong class="jxr_keyword">private</strong> QueryArea areaType;
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 
-<a class="jxr_linenumber" name="L144" href="#L144">144</a>     enum <a href="../../../../nl/b3p/viewer/stripes/IbisAttributeListActionBean.html">QueryArea</a> {
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>     enum QueryArea {
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 
 <a class="jxr_linenumber" name="L146" href="#L146">146</a>         REGIO, GEMEENTE, TERREIN
 <a class="jxr_linenumber" name="L147" href="#L147">147</a>     }
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 
-<a class="jxr_linenumber" name="L149" href="#L149">149</a>     enum <a href="../../../../nl/b3p/viewer/stripes/IbisAttributeListActionBean.html">ReportType</a> {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>     enum ReportType {
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 
 <a class="jxr_linenumber" name="L151" href="#L151">151</a>         INDIVIDUAL, AGGREGATED, ISSUE;
 <a class="jxr_linenumber" name="L152" href="#L152">152</a>     }
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 
-<a class="jxr_linenumber" name="L154" href="#L154">154</a>     enum <a href="../../../../nl/b3p/viewer/stripes/IbisAttributeListActionBean.html">AggregationLevelDate</a> {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>     enum AggregationLevelDate {
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 
 <a class="jxr_linenumber" name="L156" href="#L156">156</a>         NONE, MONTH
 <a class="jxr_linenumber" name="L157" href="#L157">157</a>     }
@@ -1063,27 +1063,27 @@
 <a class="jxr_linenumber" name="L1055" href="#L1055">1055</a>         <strong class="jxr_keyword">this</strong>.terrein = terrein;
 <a class="jxr_linenumber" name="L1056" href="#L1056">1056</a>     }
 <a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 
-<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../nl/b3p/viewer/stripes/IbisAttributeListActionBean.html">ReportType</a> getReportType() {
+<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a>     <strong class="jxr_keyword">public</strong> ReportType getReportType() {
 <a class="jxr_linenumber" name="L1059" href="#L1059">1059</a>         <strong class="jxr_keyword">return</strong> reportType;
 <a class="jxr_linenumber" name="L1060" href="#L1060">1060</a>     }
 <a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 
-<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setReportType(<a href="../../../../nl/b3p/viewer/stripes/IbisAttributeListActionBean.html">ReportType</a> reportType) {
+<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setReportType(ReportType reportType) {
 <a class="jxr_linenumber" name="L1063" href="#L1063">1063</a>         <strong class="jxr_keyword">this</strong>.reportType = reportType;
 <a class="jxr_linenumber" name="L1064" href="#L1064">1064</a>     }
 <a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> 
-<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../nl/b3p/viewer/stripes/IbisAttributeListActionBean.html">QueryArea</a> getAggregationLevel() {
+<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a>     <strong class="jxr_keyword">public</strong> QueryArea getAggregationLevel() {
 <a class="jxr_linenumber" name="L1067" href="#L1067">1067</a>         <strong class="jxr_keyword">return</strong> aggregationLevel;
 <a class="jxr_linenumber" name="L1068" href="#L1068">1068</a>     }
 <a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> 
-<a class="jxr_linenumber" name="L1070" href="#L1070">1070</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setAggregationLevel(<a href="../../../../nl/b3p/viewer/stripes/IbisAttributeListActionBean.html">QueryArea</a> aggregationLevel) {
+<a class="jxr_linenumber" name="L1070" href="#L1070">1070</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setAggregationLevel(QueryArea aggregationLevel) {
 <a class="jxr_linenumber" name="L1071" href="#L1071">1071</a>         <strong class="jxr_keyword">this</strong>.aggregationLevel = aggregationLevel;
 <a class="jxr_linenumber" name="L1072" href="#L1072">1072</a>     }
 <a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 
-<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../nl/b3p/viewer/stripes/IbisAttributeListActionBean.html">AggregationLevelDate</a> getAggregationLevelDate() {
+<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a>     <strong class="jxr_keyword">public</strong> AggregationLevelDate getAggregationLevelDate() {
 <a class="jxr_linenumber" name="L1075" href="#L1075">1075</a>         <strong class="jxr_keyword">return</strong> aggregationLevelDate;
 <a class="jxr_linenumber" name="L1076" href="#L1076">1076</a>     }
 <a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> 
-<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setAggregationLevelDate(<a href="../../../../nl/b3p/viewer/stripes/IbisAttributeListActionBean.html">AggregationLevelDate</a> aggregationLevelDate) {
+<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setAggregationLevelDate(AggregationLevelDate aggregationLevelDate) {
 <a class="jxr_linenumber" name="L1079" href="#L1079">1079</a>         <strong class="jxr_keyword">this</strong>.aggregationLevelDate = aggregationLevelDate;
 <a class="jxr_linenumber" name="L1080" href="#L1080">1080</a>     }
 <a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> 

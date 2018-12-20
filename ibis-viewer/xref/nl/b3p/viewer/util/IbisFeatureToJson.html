@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nl" lang="nl">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>IbisFeatureToJson xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
@@ -20,7 +20,7 @@
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * GNU General Public License for more details.</em>
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * You should have received a copy of the GNU General Public License</em>
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * along with this program.  If not, see &lt;<a href="http://www.gnu.org/licenses/&gt;" target="alexandria_uri">http://www.gnu.org/licenses/&gt;</a>.</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * along with this program.  If not, see &lt;<a href="http://www.gnu.org/licenses/&gt;." target="alexandria_uri">http://www.gnu.org/licenses/&gt;.</a></em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> nl.b3p.viewer.util;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
@@ -70,7 +70,7 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * @author Mark Prins</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../nl/b3p/viewer/util/IbisFeatureToJson.html">IbisFeatureToJson</a> {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="IbisFeatureToJson" href="../../../../nl/b3p/viewer/util/IbisFeatureToJson.html#IbisFeatureToJson">IbisFeatureToJson</a> {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Log LOG = LogFactory.getLog(IbisFeatureToJson.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  
@@ -82,14 +82,14 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>      <strong class="jxr_keyword">private</strong> List&lt;Long&gt; attributesToInclude = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> TIMEOUT = 5000;
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../nl/b3p/viewer/util/IbisFeatureToJson.html">IbisFeatureToJson</a>(<strong class="jxr_keyword">boolean</strong> arrays, <strong class="jxr_keyword">boolean</strong> edit, <strong class="jxr_keyword">boolean</strong> graph, List&lt;Long&gt; attributesToInclude) {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <strong class="jxr_keyword">public</strong> <a name="IbisFeatureToJson" href="../../../../nl/b3p/viewer/util/IbisFeatureToJson.html#IbisFeatureToJson">IbisFeatureToJson</a>(<strong class="jxr_keyword">boolean</strong> arrays, <strong class="jxr_keyword">boolean</strong> edit, <strong class="jxr_keyword">boolean</strong> graph, List&lt;Long&gt; attributesToInclude) {
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>          <strong class="jxr_keyword">this</strong>.arrays = arrays;
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>          <strong class="jxr_keyword">this</strong>.edit = edit;
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>          <strong class="jxr_keyword">this</strong>.graph = graph;
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>          <strong class="jxr_keyword">this</strong>.attributesToInclude = attributesToInclude;
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>      }
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../nl/b3p/viewer/util/IbisFeatureToJson.html">IbisFeatureToJson</a>(<strong class="jxr_keyword">boolean</strong> arrays, <strong class="jxr_keyword">boolean</strong> edit, <strong class="jxr_keyword">boolean</strong> graph, <strong class="jxr_keyword">boolean</strong> aliases, List&lt;Long&gt; attributesToInclude) {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">public</strong> <a name="IbisFeatureToJson" href="../../../../nl/b3p/viewer/util/IbisFeatureToJson.html#IbisFeatureToJson">IbisFeatureToJson</a>(<strong class="jxr_keyword">boolean</strong> arrays, <strong class="jxr_keyword">boolean</strong> edit, <strong class="jxr_keyword">boolean</strong> graph, <strong class="jxr_keyword">boolean</strong> aliases, List&lt;Long&gt; attributesToInclude) {
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">this</strong>.arrays = arrays;
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>          <strong class="jxr_keyword">this</strong>.edit = edit;
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>          <strong class="jxr_keyword">this</strong>.graph = graph;
