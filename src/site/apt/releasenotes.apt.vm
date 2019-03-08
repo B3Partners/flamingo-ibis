@@ -25,6 +25,22 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
+  * 
+  
+  []
+  
+** Verbeteringen en oplossingen
+  
+  * 
+  
+  []
+
+
+
+* Versie 3.0
+
+** Nieuw
+
   * migratie naar Flamingo {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v5.2.2-rc1}5.2.x}}
   
   []
@@ -460,4 +476,3 @@ ${project.name} ${project.version} Release Notes
 
   De complete lijst met issues voor deze release is beschikbaar in de tracker:
   {{{${project.issueManagement.url}?q=milestone%3A2.0-RC1+is%3Aclosed}milestone 2.0-RC1 issues}}.
-

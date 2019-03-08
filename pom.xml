@@ -28,8 +28,8 @@
         <maven.changes-plugin.version>2.12.1</maven.changes-plugin.version>
         <maven.taglist-plugin.version>2.4</maven.taglist-plugin.version>
         <maven.versions-plugin.version>2.7</maven.versions-plugin.version>
-        <maven-javadoc-plugin.version>3.1.0</maven-javadoc-plugin.version>
-        <maven.surefire.version>2.22.1</maven.surefire.version>
+        <maven.javadoc-plugin.version>3.1.0</maven.javadoc-plugin.version>
+        <maven.surefire.version>3.0.0-M3</maven.surefire.version>
         <maven.project-info-reports-plugin.version>3.0.0</maven.project-info-reports-plugin.version>
         <maven.jxr-plugin.version>3.0.0</maven.jxr-plugin.version>
     </properties>
@@ -151,7 +151,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>${maven-javadoc-plugin.version}</version>
+                    <version>${maven.javadoc-plugin.version}</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -282,7 +282,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${maven-javadoc-plugin.version}</version>
+                <version>${maven.javadoc-plugin.version}</version>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -293,7 +293,14 @@
                 <configuration>
                     <stylesheet>java</stylesheet>
                     <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
-                    <additionalparam>-all -hide java.* -hide javax.* -hide org.* -inferrel -inferreltype</additionalparam>
+                    <additionalOptions>
+                        <additionalOption>-all</additionalOption>
+                        <additionalOption>-hide java.*</additionalOption>
+                        <additionalOption>-hide javax.*</additionalOption>
+                        <additionalOption>-hide org.*</additionalOption>
+                        <additionalOption>-inferrel</additionalOption>
+                        <additionalOption>-inferreltype</additionalOption>
+                    </additionalOptions>
                     <docletArtifact>
                         <groupId>org.umlgraph</groupId>
                         <artifactId>umlgraph</artifactId>
