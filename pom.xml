@@ -22,9 +22,15 @@
         <maven.compiler.target>${project.build.targetVersion}</maven.compiler.target>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>${project.build.sourceVersion}</java.version>
-        <!-- voor een deploment op ibis.b3p.nl gebruik je -Dibis-flamingo-ds-name=geo_viewer-ibis 
+        <!-- voor een deployment op ibis.b3p.nl gebruik je de optie
+        -Dibis-flamingo-ds-name=geo_viewer-ibis
         tijdens bouwen van de .war -->
         <ibis-flamingo-ds-name>geo_viewer</ibis-flamingo-ds-name>
+        <!-- voor een deployment op ibis.b3p.nl  gebruik je de optie
+        -Dibis-flamingo-solr-host=ibistest.flamingo5.nl
+        tijdens bouwen van de .war -->
+        <ibis-flamingo-solr-host>bedrijventerreinen.gelderland.nl</ibis-flamingo-solr-host>
+        <ibis-flamingo-solr-name>https://${ibis-flamingo-solr-host}/solr/</ibis-flamingo-solr-name>
         <maven.changes-plugin.version>2.12.1</maven.changes-plugin.version>
         <maven.taglist-plugin.version>2.4</maven.taglist-plugin.version>
         <maven.versions-plugin.version>2.7</maven.versions-plugin.version>

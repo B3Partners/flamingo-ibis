@@ -21,6 +21,10 @@ maven-scm-publish-plugin.
 ## building
 
 `mvn install` will generate the artifacts for viewer and viewer-admin.
+When you add the options `-Dibis-flamingo-ds-name=geo_viewer-ibis` and 
+`-Dibis-flamingo-solr-host=ibistest.flamingo5.nl` to the commandline you 
+will end up with a version that is pre-configured for the test environment, eg. 
+`mvn -Dibis-flamingo-ds-name=geo_viewer-ibis -Dibis-flamingo-solr-host=ibistest.flamingo5.nl package`  
 
 ## releasing
 
