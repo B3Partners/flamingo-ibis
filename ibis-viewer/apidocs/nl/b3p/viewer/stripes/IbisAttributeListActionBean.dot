@@ -10,27 +10,361 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean
-	c79 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisAttributeListActionBean.html">
+	c90 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisAttributeListActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisAttributeListActionBean </td></tr>
 		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + IbisAttributeListActionBean() </td></tr>
+<tr><td align="left" balign="left"> + loadLayer() </td></tr>
+<tr><td align="left" balign="left"> + checkAuthorization() </td></tr>
+<tr><td align="left" balign="left"> + download() : Resolution </td></tr>
+<tr><td align="left" balign="left"> + query() : Resolution </td></tr>
+<tr><td align="left" balign="left"> + getData() : String </td></tr>
+<tr><td align="left" balign="left"> + setData(data : String) </td></tr>
+<tr><td align="left" balign="left"> + getFilename() : String </td></tr>
+<tr><td align="left" balign="left"> + setFilename(filename : String) </td></tr>
+<tr><td align="left" balign="left"> + getMimetype() : String </td></tr>
+<tr><td align="left" balign="left"> + setMimetype(mimetype : String) </td></tr>
+<tr><td align="left" balign="left"> + setContext(context : ActionBeanContext) </td></tr>
+<tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
+<tr><td align="left" balign="left"> + getApplication() : Application </td></tr>
+<tr><td align="left" balign="left"> + setApplication(application : Application) </td></tr>
+<tr><td align="left" balign="left"> + getAppLayer() : ApplicationLayer </td></tr>
+<tr><td align="left" balign="left"> + setAppLayer(appLayer : ApplicationLayer) </td></tr>
+<tr><td align="left" balign="left"> + getRegio() : String </td></tr>
+<tr><td align="left" balign="left"> + setRegio(regio : String) </td></tr>
+<tr><td align="left" balign="left"> + getGemeente() : String </td></tr>
+<tr><td align="left" balign="left"> + setGemeente(gemeente : String) </td></tr>
+<tr><td align="left" balign="left"> + getTerrein() : String </td></tr>
+<tr><td align="left" balign="left"> + setTerrein(terrein : String) </td></tr>
+<tr><td align="left" balign="left"> + getReportType() : IbisAttributeListActionBean.ReportType </td></tr>
+<tr><td align="left" balign="left"> + setReportType(reportType : IbisAttributeListActionBean.ReportType) </td></tr>
+<tr><td align="left" balign="left"> + getAggregationLevel() : IbisAttributeListActionBean.QueryArea </td></tr>
+<tr><td align="left" balign="left"> + setAggregationLevel(aggregationLevel : IbisAttributeListActionBean.QueryArea) </td></tr>
+<tr><td align="left" balign="left"> + getAggregationLevelDate() : IbisAttributeListActionBean.AggregationLevelDate </td></tr>
+<tr><td align="left" balign="left"> + setAggregationLevelDate(aggregationLevelDate : IbisAttributeListActionBean.AggregationLevelDate) </td></tr>
+<tr><td align="left" balign="left"> + getFromDate() : Date </td></tr>
+<tr><td align="left" balign="left"> + setFromDate(fromDate : Date) </td></tr>
+<tr><td align="left" balign="left"> + getToDate() : Date </td></tr>
+<tr><td align="left" balign="left"> + setToDate(toDate : Date) </td></tr>
+<tr><td align="left" balign="left"> + getAttrNames() : List&lt;String&gt; </td></tr>
+<tr><td align="left" balign="left"> + setAttrNames(attrNames : List&lt;String&gt;) </td></tr>
+		</table></td></tr>
 		</table>>, URL="./IbisAttributeListActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea
+	c91 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.QueryArea.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
+<tr><td align="center" balign="center"> QueryArea </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> REGIO </td></tr>
+<tr><td align="left" balign="left"> GEMEENTE </td></tr>
+<tr><td align="left" balign="left"> TERREIN </td></tr>
+		</table></td></tr>
+		</table>>, URL="./IbisAttributeListActionBean.QueryArea.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// nl.b3p.viewer.stripes.IbisAttributeListActionBean.ReportType
+	c92 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.ReportType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.ReportType.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
+<tr><td align="center" balign="center"> ReportType </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> INDIVIDUAL </td></tr>
+<tr><td align="left" balign="left"> AGGREGATED </td></tr>
+<tr><td align="left" balign="left"> ISSUE </td></tr>
+		</table></td></tr>
+		</table>>, URL="./IbisAttributeListActionBean.ReportType.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// nl.b3p.viewer.stripes.IbisAttributeListActionBean.AggregationLevelDate
+	c93 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.AggregationLevelDate" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.AggregationLevelDate.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
+<tr><td align="center" balign="center"> AggregationLevelDate </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> NONE </td></tr>
+<tr><td align="left" balign="left"> MONTH </td></tr>
+		</table></td></tr>
+		</table>>, URL="./IbisAttributeListActionBean.AggregationLevelDate.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.ibis.util.IbisConstants
-	c91 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
+	c102 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> IbisConstants </td></tr>
 		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + KAVEL_LAYER_NAME : String </td></tr>
+<tr><td align="left" balign="left"> + TERREIN_LAYER_NAME : String </td></tr>
+<tr><td align="left" balign="left"> + KAVEL_TERREIN_ID_FIELDNAME : String </td></tr>
+<tr><td align="left" balign="left"> + ID_FIELDNAME : String </td></tr>
+<tr><td align="left" balign="left"> + WORKFLOW_FIELDNAME : String </td></tr>
+<tr><td align="left" balign="left"> + MUTATIEDATUM_FIELDNAME : String </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
 		</table>>, URL="../ibis/util/IbisConstants.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//nl.b3p.viewer.stripes.IbisAttributeListActionBean implements net.sourceforge.stripes.action.ActionBean
-	c93:p -> c79:p [dir=back,arrowtail=empty,style=dashed];
+	c104:p -> c90:p [dir=back,arrowtail=empty,style=dashed];
 	//nl.b3p.viewer.stripes.IbisAttributeListActionBean implements nl.b3p.viewer.ibis.util.IbisConstants
-	c91:p -> c79:p [dir=back,arrowtail=empty,style=dashed];
+	c102:p -> c90:p [dir=back,arrowtail=empty,style=dashed];
+	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC net.sourceforge.stripes.action.ActionBeanContext
+	c90:p -> c109:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.config.app.Application
+	c90:p -> c119:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.config.app.ApplicationLayer
+	c90:p -> c121:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.ReportType
+	c90:p -> c92:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea
+	c90:p -> c91:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.AggregationLevelDate
+	c90:p -> c93:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.config.services.Layer
+	c90:p -> c127:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea
+	c90:p -> c91:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// nl.b3p.viewer.config.services.Layer
+	c127 [label=<<table title="nl.b3p.viewer.config.services.Layer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> Layer </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + EXTRA_KEY_METADATA_URL : String </td></tr>
+<tr><td align="left" balign="left"> + EXTRA_KEY_METADATA_STYLESHEET_URL : String </td></tr>
+<tr><td align="left" balign="left"> + EXTRA_KEY_DOWNLOAD_URL : String </td></tr>
+<tr><td align="left" balign="left"> + EXTRA_KEY_FILTERABLE : String </td></tr>
+<tr><td align="left" balign="left"> + EXTRA_IMAGE_EXTENSION : String </td></tr>
+<tr><td align="left" balign="left"> + EXTRA_KEY_ATTRIBUTION : String </td></tr>
+<tr><td align="left" balign="left"> + DETAIL_WMS_STYLES : String </td></tr>
+<tr><td align="left" balign="left"> + DETAIL_ALL_CHILDREN : String </td></tr>
+<tr><td align="left" balign="left"> + DETAIL_ALTERNATE_LEGEND_IMAGE_URL : String </td></tr>
+<tr><td align="left" balign="left"> + writers : Set&lt;String&gt; </td></tr>
+<tr><td align="left" balign="left"> + preventGeomEditors : Set&lt;String&gt; </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + Layer() </td></tr>
+<tr><td align="left" balign="left"> + Layer(arg0 : Layer, arg1 : GeoService) </td></tr>
+<tr><td align="left" balign="left"> # update(arg0 : Layer) </td></tr>
+<tr><td align="left" balign="left"> # update(arg0 : Layer, arg1 : Set&lt;String&gt;) </td></tr>
+<tr><td align="left" balign="left"> # copyUserModifiedProperties(arg0 : Layer) </td></tr>
+<tr><td align="left" balign="left"> + pluckCopy() : Layer </td></tr>
+<tr><td align="left" balign="left"> + isBufferable() : boolean </td></tr>
+<tr><td align="left" balign="left"> + accept(arg0 : Layer.Visitor, arg1 : EntityManager) : boolean </td></tr>
+<tr><td align="left" balign="left"> + getDisplayName() : String </td></tr>
+<tr><td align="left" balign="left"> + toJSONObject() : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + getCachedChildren(arg0 : EntityManager) : List&lt;Layer&gt; </td></tr>
+<tr><td align="left" balign="left"> + getApplicationLayers(arg0 : EntityManager) : List&lt;ApplicationLayer&gt; </td></tr>
+<tr><td align="left" balign="left"> + getParent() : Layer </td></tr>
+<tr><td align="left" balign="left"> + setParent(arg0 : Layer) </td></tr>
+<tr><td align="left" balign="left"> + isVirtual() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setVirtual(arg0 : boolean) </td></tr>
+<tr><td align="left" balign="left"> + getTitle() : String </td></tr>
+<tr><td align="left" balign="left"> + setTitle(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getTitleAlias() : String </td></tr>
+<tr><td align="left" balign="left"> + setTitleAlias(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getService() : GeoService </td></tr>
+<tr><td align="left" balign="left"> + setService(arg0 : GeoService) </td></tr>
+<tr><td align="left" balign="left"> + getCrsList() : Set&lt;CoordinateReferenceSystem&gt; </td></tr>
+<tr><td align="left" balign="left"> + setCrsList(arg0 : Set&lt;CoordinateReferenceSystem&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getFeatureType() : SimpleFeatureType </td></tr>
+<tr><td align="left" balign="left"> + setFeatureType(arg0 : SimpleFeatureType) </td></tr>
+<tr><td align="left" balign="left"> + isFilterable() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setFilterable(arg0 : boolean) </td></tr>
+<tr><td align="left" balign="left"> + getId() : Long </td></tr>
+<tr><td align="left" balign="left"> + setId(arg0 : Long) </td></tr>
+<tr><td align="left" balign="left"> + getName() : String </td></tr>
+<tr><td align="left" balign="left"> + setName(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + isQueryable() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setQueryable(arg0 : boolean) </td></tr>
+<tr><td align="left" balign="left"> + getReaders() : Set&lt;String&gt; </td></tr>
+<tr><td align="left" balign="left"> + setReaders(arg0 : Set&lt;String&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getWriters() : Set&lt;String&gt; </td></tr>
+<tr><td align="left" balign="left"> + setWriters(arg0 : Set&lt;String&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getPreventGeomEditors() : Set&lt;String&gt; </td></tr>
+<tr><td align="left" balign="left"> + setPreventGeomEditors(arg0 : Set&lt;String&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getChildren() : List&lt;Layer&gt; </td></tr>
+<tr><td align="left" balign="left"> + setChildren(arg0 : List&lt;Layer&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getKeywords() : Set&lt;String&gt; </td></tr>
+<tr><td align="left" balign="left"> + setKeywords(arg0 : Set&lt;String&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getDetails() : Map&lt;String, ClobElement&gt; </td></tr>
+<tr><td align="left" balign="left"> + setDetails(arg0 : Map&lt;String, ClobElement&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getMaxScale() : Double </td></tr>
+<tr><td align="left" balign="left"> + setMaxScale(arg0 : Double) </td></tr>
+<tr><td align="left" balign="left"> + getMinScale() : Double </td></tr>
+<tr><td align="left" balign="left"> + setMinScale(arg0 : Double) </td></tr>
+<tr><td align="left" balign="left"> + getTileset() : TileSet </td></tr>
+<tr><td align="left" balign="left"> + setTileset(arg0 : TileSet) </td></tr>
+<tr><td align="left" balign="left"> + getLegendImageUrl() : String </td></tr>
+<tr><td align="left" balign="left"> + setLegendImageUrl(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getBoundingBoxes() : Map&lt;CoordinateReferenceSystem, BoundingBox&gt; </td></tr>
+<tr><td align="left" balign="left"> + setBoundingBoxes(arg0 : Map&lt;CoordinateReferenceSystem, BoundingBox&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getMatrixSets() : List&lt;TileMatrixSet&gt; </td></tr>
+<tr><td align="left" balign="left"> + setMatrixSets(arg0 : List&lt;TileMatrixSet&gt;) </td></tr>
+		</table></td></tr>
+		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.sourceforge.stripes.action.ActionBeanContext
+	c109 [label=<<table title="net.sourceforge.stripes.action.ActionBeanContext" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ActionBeanContext </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + ActionBeanContext() </td></tr>
+<tr><td align="left" balign="left"> + getRequest() : HttpServletRequest </td></tr>
+<tr><td align="left" balign="left"> + setRequest(arg0 : HttpServletRequest) </td></tr>
+<tr><td align="left" balign="left"> + getResponse() : HttpServletResponse </td></tr>
+<tr><td align="left" balign="left"> + setResponse(arg0 : HttpServletResponse) </td></tr>
+<tr><td align="left" balign="left"> + getServletContext() : ServletContext </td></tr>
+<tr><td align="left" balign="left"> + setServletContext(arg0 : ServletContext) </td></tr>
+<tr><td align="left" balign="left"> + getEventName() : String </td></tr>
+<tr><td align="left" balign="left"> + setEventName(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getValidationErrors() : ValidationErrors </td></tr>
+<tr><td align="left" balign="left"> + setValidationErrors(arg0 : ValidationErrors) </td></tr>
+<tr><td align="left" balign="left"> + getMessages() : List&lt;Message&gt; </td></tr>
+<tr><td align="left" balign="left"> + getMessages(arg0 : String) : List&lt;Message&gt; </td></tr>
+<tr><td align="left" balign="left"> + getLocale() : Locale </td></tr>
+<tr><td align="left" balign="left"> + getSourcePageResolution() : Resolution </td></tr>
+<tr><td align="left" balign="left"> + getSourcePage() : String </td></tr>
+<tr><td align="left" balign="left"> + toString() : String </td></tr>
+		</table></td></tr>
+		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.sourceforge.stripes.action.ActionBean
-	c93 [label=<<table title="net.sourceforge.stripes.action.ActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c104 [label=<<table title="net.sourceforge.stripes.action.ActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ActionBean </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"><font face="Helvetica-Oblique" point-size="10.0"> + setContext(arg0 : ActionBeanContext) </font></td></tr>
+<tr><td align="left" balign="left"><font face="Helvetica-Oblique" point-size="10.0"> + getContext() : ActionBeanContext </font></td></tr>
+		</table></td></tr>
+		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// nl.b3p.viewer.config.app.ApplicationLayer
+	c121 [label=<<table title="nl.b3p.viewer.config.app.ApplicationLayer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ApplicationLayer </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + ApplicationLayer() </td></tr>
+<tr><td align="left" balign="left"> + getAttributes() : List&lt;ConfiguredAttribute&gt; </td></tr>
+<tr><td align="left" balign="left"> + setAttributes(arg0 : List&lt;ConfiguredAttribute&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getDetails() : Map&lt;String, ClobElement&gt; </td></tr>
+<tr><td align="left" balign="left"> + setDetails(arg0 : Map&lt;String, ClobElement&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getId() : Long </td></tr>
+<tr><td align="left" balign="left"> + setId(arg0 : Long) </td></tr>
+<tr><td align="left" balign="left"> + getReaders() : Set&lt;String&gt; </td></tr>
+<tr><td align="left" balign="left"> + setReaders(arg0 : Set&lt;String&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getWriters() : Set&lt;String&gt; </td></tr>
+<tr><td align="left" balign="left"> + setWriters(arg0 : Set&lt;String&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getService() : GeoService </td></tr>
+<tr><td align="left" balign="left"> + setService(arg0 : GeoService) </td></tr>
+<tr><td align="left" balign="left"> + getLayerName() : String </td></tr>
+<tr><td align="left" balign="left"> + setLayerName(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getStartLayers() : Map&lt;Application, StartLayer&gt; </td></tr>
+<tr><td align="left" balign="left"> + setStartLayers(arg0 : Map&lt;Application, StartLayer&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getAttributes(arg0 : SimpleFeatureType) : List&lt;ConfiguredAttribute&gt; </td></tr>
+<tr><td align="left" balign="left"> + getAttributes(arg0 : SimpleFeatureType, arg1 : boolean) : List&lt;ConfiguredAttribute&gt; </td></tr>
+<tr><td align="left" balign="left"> + getAttribute(arg0 : SimpleFeatureType, arg1 : String) : ConfiguredAttribute </td></tr>
+<tr><td align="left" balign="left"> + getDisplayName(arg0 : EntityManager) : String </td></tr>
+<tr><td align="left" balign="left"> + toJSONObject(arg0 : EntityManager) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + toJSONObject(arg0 : boolean, arg1 : boolean, arg2 : EntityManager, arg3 : Application) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + addAttributesJSON(arg0 : JSONObject, arg1 : boolean, arg2 : EntityManager) </td></tr>
+<tr><td align="left" balign="left"> + getRelationsJSON(arg0 : EntityManager) : JSONArray </td></tr>
+<tr><td align="left" balign="left"> ~ processStartLayers(arg0 : Application, arg1 : ApplicationLayer, arg2 : Application) </td></tr>
+<tr><td align="left" balign="left"> ~ deepCopy(arg0 : Map&lt;&gt;, arg1 : Application, arg2 : boolean) : ApplicationLayer </td></tr>
+<tr><td align="left" balign="left"> + toString() : String </td></tr>
+		</table></td></tr>
+		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// nl.b3p.viewer.config.app.Application
+	c119 [label=<<table title="nl.b3p.viewer.config.app.Application" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> Application </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + DETAIL_IS_MASHUP : String </td></tr>
+<tr><td align="left" balign="left"> + DETAIL_GLOBAL_LAYOUT : String </td></tr>
+<tr><td align="left" balign="left"> + DETAIL_LAST_SPINUP_TIME : String </td></tr>
+<tr><td align="left" balign="left"> + preventClearDetails : Set&lt;String&gt; </td></tr>
+<tr><td align="left" balign="left"> ~ originalToCopy : Map&lt;&gt; </td></tr>
+<tr><td align="left" balign="left"> + idMap : Map&lt;String, Long&gt; </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + Application() </td></tr>
+<tr><td align="left" balign="left"> + getId() : Long </td></tr>
+<tr><td align="left" balign="left"> + setId(arg0 : Long) </td></tr>
+<tr><td align="left" balign="left"> + getName() : String </td></tr>
+<tr><td align="left" balign="left"> + setName(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getVersion() : String </td></tr>
+<tr><td align="left" balign="left"> + setVersion(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getLayout() : String </td></tr>
+<tr><td align="left" balign="left"> + setLayout(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getDetails() : Map&lt;String, ClobElement&gt; </td></tr>
+<tr><td align="left" balign="left"> + setDetails(arg0 : Map&lt;String, ClobElement&gt;) </td></tr>
+<tr><td align="left" balign="left"> + isAuthenticatedRequired() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setAuthenticatedRequired(arg0 : boolean) </td></tr>
+<tr><td align="left" balign="left"> + getComponents() : Set&lt;ConfiguredComponent&gt; </td></tr>
+<tr><td align="left" balign="left"> + setComponents(arg0 : Set&lt;ConfiguredComponent&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getMaxExtent() : BoundingBox </td></tr>
+<tr><td align="left" balign="left"> + setMaxExtent(arg0 : BoundingBox) </td></tr>
+<tr><td align="left" balign="left"> + getOwner() : User </td></tr>
+<tr><td align="left" balign="left"> + setOwner(arg0 : User) </td></tr>
+<tr><td align="left" balign="left"> + getRoot() : Level </td></tr>
+<tr><td align="left" balign="left"> + setRoot(arg0 : Level) </td></tr>
+<tr><td align="left" balign="left"> + getStartExtent() : BoundingBox </td></tr>
+<tr><td align="left" balign="left"> + setStartExtent(arg0 : BoundingBox) </td></tr>
+<tr><td align="left" balign="left"> + getAuthorizationsModified() : Date </td></tr>
+<tr><td align="left" balign="left"> + setAuthorizationsModified(arg0 : Date) </td></tr>
+<tr><td align="left" balign="left"> + getBookmarks() : List&lt;Bookmark&gt; </td></tr>
+<tr><td align="left" balign="left"> + setBookmarks(arg0 : List&lt;Bookmark&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getStartLayers() : List&lt;StartLayer&gt; </td></tr>
+<tr><td align="left" balign="left"> + setStartLayers(arg0 : List&lt;StartLayer&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getStartLevels() : List&lt;StartLevel&gt; </td></tr>
+<tr><td align="left" balign="left"> + setStartLevels(arg0 : List&lt;StartLevel&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getReaders() : Set&lt;String&gt; </td></tr>
+<tr><td align="left" balign="left"> + setReaders(arg0 : Set&lt;String&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getNameWithVersion() : String </td></tr>
+<tr><td align="left" balign="left"> + getTreeCache() : Application.TreeCache </td></tr>
+<tr><td align="left" balign="left"> + compareTo(arg0 : Application) : int </td></tr>
+<tr><td align="left" balign="left"> + setTreeCache(arg0 : Application.TreeCache) </td></tr>
+<tr><td align="left" balign="left"> + loadTreeCache(arg0 : EntityManager) : Application.TreeCache </td></tr>
+<tr><td align="left" balign="left"> + authorizationsModified() </td></tr>
+<tr><td align="left" balign="left"> + toJSON(arg0 : HttpServletRequest, arg1 : boolean, arg2 : boolean, arg3 : EntityManager) : String </td></tr>
+<tr><td align="left" balign="left"> + toJSON(arg0 : HttpServletRequest, arg1 : boolean, arg2 : boolean, arg3 : boolean, arg4 : boolean, arg5 : EntityManager) : String </td></tr>
+<tr><td align="left" balign="left"> + isMashup() : Boolean </td></tr>
+<tr><td align="left" balign="left"> + isMashup(arg0 : Session) : Boolean </td></tr>
+<tr><td align="left" balign="left"> + createMashup(arg0 : String, arg1 : EntityManager, arg2 : boolean) : Application </td></tr>
+<tr><td align="left" balign="left"> + createWorkVersion(arg0 : EntityManager, arg1 : String, arg2 : ActionBeanContext) : Application </td></tr>
+<tr><td align="left" balign="left"> + getMashups(arg0 : EntityManager) : List&lt;Application&gt; </td></tr>
+<tr><td align="left" balign="left"> + deepCopy() : Application </td></tr>
+<tr><td align="left" balign="left"> + transferMashupLevels(arg0 : Application, arg1 : EntityManager) </td></tr>
+<tr><td align="left" balign="left"> + transferMashupComponents(arg0 : Application, arg1 : EntityManager) </td></tr>
+<tr><td align="left" balign="left"> + postPersist() </td></tr>
+<tr><td align="left" balign="left"> + processBookmarks(arg0 : Application, arg1 : ActionBeanContext, arg2 : EntityManager) </td></tr>
+<tr><td align="left" balign="left"> + removeOldProperties() </td></tr>
+<tr><td align="left" balign="left"> + setGlobalLayout(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getGlobalLayout() : JSONObject </td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }

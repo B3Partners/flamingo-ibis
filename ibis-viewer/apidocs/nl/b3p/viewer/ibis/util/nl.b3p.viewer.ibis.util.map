@@ -1,10 +1,10 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./WorkflowUtil.html" title="nl.b3p.viewer.ibis.util.WorkflowUtil" alt="" coords="19,118,113,143"/>
-<area shape="rect" id="node1" href="./WorkflowUtil.html" title="&lt;TABLE&gt;" alt="" coords="8,107,124,155"/>
-<area shape="rect" id="node2_1" href="./WorkflowStatus.html" title="nl.b3p.viewer.ibis.util.WorkflowStatus" alt="" coords="162,11,274,53"/>
-<area shape="rect" id="node2" href="./WorkflowStatus.html" title="&lt;TABLE&gt;" alt="" coords="151,5,285,59"/>
-<area shape="rect" id="node3_2" href="./IbisConstants.html" title="nl.b3p.viewer.ibis.util.IbisConstants" alt="" coords="16,11,116,53"/>
-<area shape="rect" id="node3" href="./IbisConstants.html" title="&lt;TABLE&gt;" alt="" coords="5,5,127,59"/>
-<area shape="rect" id="node4_3" href="./DateUtils.html" title="nl.b3p.viewer.ibis.util.DateUtils" alt="" coords="319,19,394,45"/>
-<area shape="rect" id="node4" href="./DateUtils.html" title="&lt;TABLE&gt;" alt="" coords="309,8,405,56"/>
+<area shape="rect" id="node1_0" href="./WorkflowUtil.html" title="nl.b3p.viewer.ibis.util.WorkflowUtil" alt="" coords="16,249,824,325"/>
+<area shape="rect" id="node1" href="./WorkflowUtil.html" title="&lt;TABLE&gt;" alt="" coords="5,244,835,331"/>
+<area shape="rect" id="node2_1" href="./WorkflowStatus.html" title="nl.b3p.viewer.ibis.util.WorkflowStatus" alt="" coords="612,28,724,173"/>
+<area shape="rect" id="node2" href="./WorkflowStatus.html" title="&lt;TABLE&gt;" alt="" coords="601,23,735,179"/>
+<area shape="rect" id="node3_2" href="./IbisConstants.html" title="nl.b3p.viewer.ibis.util.IbisConstants" alt="" coords="274,11,566,191"/>
+<area shape="rect" id="node3" href="./IbisConstants.html" title="&lt;TABLE&gt;" alt="" coords="263,5,577,196"/>
+<area shape="rect" id="node4_3" href="./DateUtils.html" title="nl.b3p.viewer.ibis.util.DateUtils" alt="" coords="769,45,1231,156"/>
+<area shape="rect" id="node4" href="./DateUtils.html" title="&lt;TABLE&gt;" alt="" coords="759,40,1241,161"/>
 </map>

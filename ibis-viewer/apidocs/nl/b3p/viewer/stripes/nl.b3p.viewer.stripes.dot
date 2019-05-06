@@ -14,12 +14,60 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisAttributeListActionBean </td></tr>
 		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + IbisAttributeListActionBean() </td></tr>
+<tr><td align="left" balign="left"> + loadLayer() </td></tr>
+<tr><td align="left" balign="left"> + checkAuthorization() </td></tr>
+<tr><td align="left" balign="left"> + download() : Resolution </td></tr>
+<tr><td align="left" balign="left"> + query() : Resolution </td></tr>
+<tr><td align="left" balign="left"> + getData() : String </td></tr>
+<tr><td align="left" balign="left"> + setData(data : String) </td></tr>
+<tr><td align="left" balign="left"> + getFilename() : String </td></tr>
+<tr><td align="left" balign="left"> + setFilename(filename : String) </td></tr>
+<tr><td align="left" balign="left"> + getMimetype() : String </td></tr>
+<tr><td align="left" balign="left"> + setMimetype(mimetype : String) </td></tr>
+<tr><td align="left" balign="left"> + setContext(context : ActionBeanContext) </td></tr>
+<tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
+<tr><td align="left" balign="left"> + getApplication() : Application </td></tr>
+<tr><td align="left" balign="left"> + setApplication(application : Application) </td></tr>
+<tr><td align="left" balign="left"> + getAppLayer() : ApplicationLayer </td></tr>
+<tr><td align="left" balign="left"> + setAppLayer(appLayer : ApplicationLayer) </td></tr>
+<tr><td align="left" balign="left"> + getRegio() : String </td></tr>
+<tr><td align="left" balign="left"> + setRegio(regio : String) </td></tr>
+<tr><td align="left" balign="left"> + getGemeente() : String </td></tr>
+<tr><td align="left" balign="left"> + setGemeente(gemeente : String) </td></tr>
+<tr><td align="left" balign="left"> + getTerrein() : String </td></tr>
+<tr><td align="left" balign="left"> + setTerrein(terrein : String) </td></tr>
+<tr><td align="left" balign="left"> + getReportType() : IbisAttributeListActionBean.ReportType </td></tr>
+<tr><td align="left" balign="left"> + setReportType(reportType : IbisAttributeListActionBean.ReportType) </td></tr>
+<tr><td align="left" balign="left"> + getAggregationLevel() : IbisAttributeListActionBean.QueryArea </td></tr>
+<tr><td align="left" balign="left"> + setAggregationLevel(aggregationLevel : IbisAttributeListActionBean.QueryArea) </td></tr>
+<tr><td align="left" balign="left"> + getAggregationLevelDate() : IbisAttributeListActionBean.AggregationLevelDate </td></tr>
+<tr><td align="left" balign="left"> + setAggregationLevelDate(aggregationLevelDate : IbisAttributeListActionBean.AggregationLevelDate) </td></tr>
+<tr><td align="left" balign="left"> + getFromDate() : Date </td></tr>
+<tr><td align="left" balign="left"> + setFromDate(fromDate : Date) </td></tr>
+<tr><td align="left" balign="left"> + getToDate() : Date </td></tr>
+<tr><td align="left" balign="left"> + setToDate(toDate : Date) </td></tr>
+<tr><td align="left" balign="left"> + getAttrNames() : List&lt;String&gt; </td></tr>
+<tr><td align="left" balign="left"> + setAttrNames(attrNames : List&lt;String&gt;) </td></tr>
+		</table></td></tr>
 		</table>>, URL="./IbisAttributeListActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea
 	c1 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.QueryArea.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> QueryArea </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> REGIO </td></tr>
+<tr><td align="left" balign="left"> GEMEENTE </td></tr>
+<tr><td align="left" balign="left"> TERREIN </td></tr>
 		</table></td></tr>
 		</table>>, URL="./IbisAttributeListActionBean.QueryArea.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean.ReportType
@@ -28,6 +76,14 @@ digraph G {
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> ReportType </td></tr>
 		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> INDIVIDUAL </td></tr>
+<tr><td align="left" balign="left"> AGGREGATED </td></tr>
+<tr><td align="left" balign="left"> ISSUE </td></tr>
+		</table></td></tr>
 		</table>>, URL="./IbisAttributeListActionBean.ReportType.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean.AggregationLevelDate
 	c3 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.AggregationLevelDate" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.AggregationLevelDate.html">
@@ -35,11 +91,25 @@ digraph G {
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> AggregationLevelDate </td></tr>
 		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> NONE </td></tr>
+<tr><td align="left" balign="left"> MONTH </td></tr>
+		</table></td></tr>
 		</table>>, URL="./IbisAttributeListActionBean.AggregationLevelDate.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisFeatureInfoActionBean
 	c4 [label=<<table title="nl.b3p.viewer.stripes.IbisFeatureInfoActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisFeatureInfoActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisFeatureInfoActionBean </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + IbisFeatureInfoActionBean() </td></tr>
+<tr><td align="left" balign="left"> # executeQuery(al : ApplicationLayer, ft : SimpleFeatureType, fs : FeatureSource&lt;&gt;, q : Query, em : EntityManager, application : Application, request : HttpServletRequest) : JSONArray </td></tr>
 		</table></td></tr>
 		</table>>, URL="./IbisFeatureInfoActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisEditFeatureActionBean
@@ -47,11 +117,30 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisEditFeatureActionBean </td></tr>
 		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + IbisEditFeatureActionBean() </td></tr>
+<tr><td align="left" balign="left"> # addNewFeature() : String </td></tr>
+<tr><td align="left" balign="left"> # deleteFeature(fid : String) </td></tr>
+<tr><td align="left" balign="left"> # editFeature(fid : String) </td></tr>
+<tr><td align="left" balign="left"> # isAttributeUserEditingDisabled(attrName : String) : boolean </td></tr>
+		</table></td></tr>
 		</table>>, URL="./IbisEditFeatureActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean
 	c6 [label=<<table title="nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisMergeFeaturesActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisMergeFeaturesActionBean </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + IbisMergeFeaturesActionBean() </td></tr>
+<tr><td align="left" balign="left"> # handleExtraData(features : List&lt;SimpleFeature&gt;) : List&lt;SimpleFeature&gt; </td></tr>
+<tr><td align="left" balign="left"> # handleStrategy(featureA : SimpleFeature, featureB : SimpleFeature, newGeom : Geometry, filterA : Filter, filterB : Filter, localStore : SimpleFeatureStore, localStrategy : String) : List&lt;FeatureId&gt; </td></tr>
+<tr><td align="left" balign="left"> # afterMerge(ids : List&lt;FeatureId&gt;) </td></tr>
 		</table></td></tr>
 		</table>>, URL="./IbisMergeFeaturesActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisReportsActionBean
@@ -59,11 +148,53 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisReportsActionBean </td></tr>
 		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + IbisReportsActionBean() </td></tr>
+<tr><td align="left" balign="left"> + checkAuthorization() </td></tr>
+<tr><td align="left" balign="left"> + download() : Resolution </td></tr>
+<tr><td align="left" balign="left"> + execute() : Resolution </td></tr>
+<tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
+<tr><td align="left" balign="left"> + setContext(context : ActionBeanContext) </td></tr>
+<tr><td align="left" balign="left"> + getFromDate() : Date </td></tr>
+<tr><td align="left" balign="left"> + setFromDate(fromDate : Date) </td></tr>
+<tr><td align="left" balign="left"> + getToDate() : Date </td></tr>
+<tr><td align="left" balign="left"> + setToDate(toDate : Date) </td></tr>
+<tr><td align="left" balign="left"> + getRegio() : String </td></tr>
+<tr><td align="left" balign="left"> + setRegio(regio : String) </td></tr>
+<tr><td align="left" balign="left"> + getGemeente() : String </td></tr>
+<tr><td align="left" balign="left"> + setGemeente(gemeente : String) </td></tr>
+<tr><td align="left" balign="left"> + getType() : String </td></tr>
+<tr><td align="left" balign="left"> + setType(type : String) </td></tr>
+<tr><td align="left" balign="left"> + getReport() : String </td></tr>
+<tr><td align="left" balign="left"> + setReport(report : String) </td></tr>
+<tr><td align="left" balign="left"> + getApplication() : Application </td></tr>
+<tr><td align="left" balign="left"> + setApplication(application : Application) </td></tr>
+<tr><td align="left" balign="left"> + getAttrSource() : JDBCFeatureSource </td></tr>
+<tr><td align="left" balign="left"> + setAttrSource(attrSource : JDBCFeatureSource) </td></tr>
+<tr><td align="left" balign="left"> + getParams() : String </td></tr>
+<tr><td align="left" balign="left"> + setParams(params : String) </td></tr>
+		</table></td></tr>
 		</table>>, URL="./IbisReportsActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisSplitFeatureActionBean
 	c8 [label=<<table title="nl.b3p.viewer.stripes.IbisSplitFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisSplitFeatureActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisSplitFeatureActionBean </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + IbisSplitFeatureActionBean() </td></tr>
+<tr><td align="left" balign="left"> # handleExtraData(features : List&lt;SimpleFeature&gt;) : List&lt;SimpleFeature&gt; </td></tr>
+<tr><td align="left" balign="left"> # handleStrategy(feature : SimpleFeature, geoms : List&lt;?&gt;, filter : Filter, localStore : SimpleFeatureStore, localStrategy : String) : List&lt;FeatureId&gt; </td></tr>
+<tr><td align="left" balign="left"> # afterSplit(ids : List&lt;FeatureId&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getSliverRatio() : double </td></tr>
+<tr><td align="left" balign="left"> + setSliverRatio(sliverRatio : double) </td></tr>
+<tr><td align="left" balign="left"> + getSliverMaxArea() : double </td></tr>
+<tr><td align="left" balign="left"> + setSliverMaxArea(sliverMaxArea : double) </td></tr>
 		</table></td></tr>
 		</table>>, URL="./IbisSplitFeatureActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//nl.b3p.viewer.stripes.IbisFeatureInfoActionBean extends nl.b3p.viewer.stripes.FeatureInfoActionBean
@@ -74,10 +205,53 @@ digraph G {
 	c16:p -> c6:p [dir=back,arrowtail=empty];
 	//nl.b3p.viewer.stripes.IbisSplitFeatureActionBean extends nl.b3p.viewer.stripes.SplitFeatureActionBean
 	c17:p -> c8:p [dir=back,arrowtail=empty];
+	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.ReportType
+	c0:p -> c2:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea
+	c0:p -> c1:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.AggregationLevelDate
+	c0:p -> c3:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea
+	c0:p -> c1:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.FeatureInfoActionBean
 	c14 [label=<<table title="nl.b3p.viewer.stripes.FeatureInfoActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> FeatureInfoActionBean </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + FID : String </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + FeatureInfoActionBean() </td></tr>
+<tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
+<tr><td align="left" balign="left"> + setContext(arg0 : ActionBeanContext) </td></tr>
+<tr><td align="left" balign="left"> + getApplication() : Application </td></tr>
+<tr><td align="left" balign="left"> + setApplication(arg0 : Application) </td></tr>
+<tr><td align="left" balign="left"> + getLimit() : int </td></tr>
+<tr><td align="left" balign="left"> + setLimit(arg0 : int) </td></tr>
+<tr><td align="left" balign="left"> + getDistance() : String </td></tr>
+<tr><td align="left" balign="left"> + setDistance(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getQueryJSON() : String </td></tr>
+<tr><td align="left" balign="left"> + setQueryJSON(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getX() : String </td></tr>
+<tr><td align="left" balign="left"> + setX(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getY() : String </td></tr>
+<tr><td align="left" balign="left"> + setY(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + isEdit() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setEdit(arg0 : boolean) </td></tr>
+<tr><td align="left" balign="left"> + isArrays() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setArrays(arg0 : boolean) </td></tr>
+<tr><td align="left" balign="left"> + getRequestId() : String </td></tr>
+<tr><td align="left" balign="left"> + setRequestId(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getAttributesToInclude() : List&lt;Long&gt; </td></tr>
+<tr><td align="left" balign="left"> + setAttributesToInclude(arg0 : List&lt;Long&gt;) </td></tr>
+<tr><td align="left" balign="left"> + isGraph() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setGraph(arg0 : boolean) </td></tr>
+<tr><td align="left" balign="left"> + isOrdered() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setOrdered(arg0 : boolean) </td></tr>
+<tr><td align="left" balign="left"> + getLayer() : Layer </td></tr>
+<tr><td align="left" balign="left"> + info() : Resolution </td></tr>
+<tr><td align="left" balign="left"> # executeQuery(arg0 : ApplicationLayer, arg1 : SimpleFeatureType, arg2 : FeatureSource&lt;&gt;, arg3 : Query, arg4 : EntityManager, arg5 : Application, arg6 : HttpServletRequest) : JSONArray </td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.MergeFeaturesActionBean
@@ -85,17 +259,101 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MergeFeaturesActionBean </td></tr>
 		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + MergeFeaturesActionBean() </td></tr>
+<tr><td align="left" balign="left"> + loadLayer() </td></tr>
+<tr><td align="left" balign="left"> + checkAuthorization() </td></tr>
+<tr><td align="left" balign="left"> + merge() : Resolution </td></tr>
+<tr><td align="left" balign="left"> # handleExtraData(arg0 : List&lt;SimpleFeature&gt;) : List&lt;SimpleFeature&gt; </td></tr>
+<tr><td align="left" balign="left"> # handleExtraData(arg0 : SimpleFeature) : SimpleFeature </td></tr>
+<tr><td align="left" balign="left"> # handleStrategy(arg0 : SimpleFeature, arg1 : SimpleFeature, arg2 : Geometry, arg3 : Filter, arg4 : Filter, arg5 : SimpleFeatureStore, arg6 : String) : List&lt;FeatureId&gt; </td></tr>
+<tr><td align="left" balign="left"> # afterMerge(arg0 : List&lt;FeatureId&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
+<tr><td align="left" balign="left"> + setContext(arg0 : ActionBeanContext) </td></tr>
+<tr><td align="left" balign="left"> + getApplication() : Application </td></tr>
+<tr><td align="left" balign="left"> + setApplication(arg0 : Application) </td></tr>
+<tr><td align="left" balign="left"> + getAppLayer() : ApplicationLayer </td></tr>
+<tr><td align="left" balign="left"> + setAppLayer(arg0 : ApplicationLayer) </td></tr>
+<tr><td align="left" balign="left"> + getStrategy() : String </td></tr>
+<tr><td align="left" balign="left"> + setStrategy(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getFidA() : String </td></tr>
+<tr><td align="left" balign="left"> + setFidA(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getFidB() : String </td></tr>
+<tr><td align="left" balign="left"> + setFidB(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getMergeGapDist() : int </td></tr>
+<tr><td align="left" balign="left"> + setMergeGapDist(arg0 : int) </td></tr>
+<tr><td align="left" balign="left"> + getExtraData() : String </td></tr>
+<tr><td align="left" balign="left"> + setExtraData(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getLayer() : Layer </td></tr>
+		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.EditFeatureActionBean
 	c15 [label=<<table title="nl.b3p.viewer.stripes.EditFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> EditFeatureActionBean </td></tr>
 		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + EditFeatureActionBean() </td></tr>
+<tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
+<tr><td align="left" balign="left"> + setContext(arg0 : ActionBeanContext) </td></tr>
+<tr><td align="left" balign="left"> + getApplication() : Application </td></tr>
+<tr><td align="left" balign="left"> + setApplication(arg0 : Application) </td></tr>
+<tr><td align="left" balign="left"> + getFeature() : String </td></tr>
+<tr><td align="left" balign="left"> + setFeature(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getAppLayer() : ApplicationLayer </td></tr>
+<tr><td align="left" balign="left"> + setAppLayer(arg0 : ApplicationLayer) </td></tr>
+<tr><td align="left" balign="left"> + getStore() : SimpleFeatureStore </td></tr>
+<tr><td align="left" balign="left"> + getJsonFeature() : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + getLayer() : Layer </td></tr>
+<tr><td align="left" balign="left"> + getFID() : String </td></tr>
+<tr><td align="left" balign="left"> + edit() : Resolution </td></tr>
+<tr><td align="left" balign="left"> + delete() : Resolution </td></tr>
+<tr><td align="left" balign="left"> # addNewFeature() : String </td></tr>
+<tr><td align="left" balign="left"> # deleteFeature(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> # editFeature(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> # isAttributeUserEditingDisabled(arg0 : String) : boolean </td></tr>
+		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.SplitFeatureActionBean
 	c17 [label=<<table title="nl.b3p.viewer.stripes.SplitFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> SplitFeatureActionBean </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + SplitFeatureActionBean() </td></tr>
+<tr><td align="left" balign="left"> + loadLayer() </td></tr>
+<tr><td align="left" balign="left"> + checkAuthorization() </td></tr>
+<tr><td align="left" balign="left"> + split() : Resolution </td></tr>
+<tr><td align="left" balign="left"> # handleExtraData(arg0 : List&lt;SimpleFeature&gt;) : List&lt;SimpleFeature&gt; </td></tr>
+<tr><td align="left" balign="left"> # handleExtraData(arg0 : SimpleFeature) : SimpleFeature </td></tr>
+<tr><td align="left" balign="left"> # afterSplit(arg0 : List&lt;FeatureId&gt;) </td></tr>
+<tr><td align="left" balign="left"> # handleStrategy(arg0 : SimpleFeature, arg1 : List&lt;?&gt;, arg2 : Filter, arg3 : SimpleFeatureStore, arg4 : String) : List&lt;FeatureId&gt; </td></tr>
+<tr><td align="left" balign="left"> # splitLine(arg0 : Geometry, arg1 : Geometry) : List&lt;LineString&gt; </td></tr>
+<tr><td align="left" balign="left"> # splitPolygon(arg0 : Geometry, arg1 : Geometry) : List&lt;Polygon&gt; </td></tr>
+<tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
+<tr><td align="left" balign="left"> + setContext(arg0 : ActionBeanContext) </td></tr>
+<tr><td align="left" balign="left"> + getApplication() : Application </td></tr>
+<tr><td align="left" balign="left"> + setApplication(arg0 : Application) </td></tr>
+<tr><td align="left" balign="left"> + getAppLayer() : ApplicationLayer </td></tr>
+<tr><td align="left" balign="left"> + setAppLayer(arg0 : ApplicationLayer) </td></tr>
+<tr><td align="left" balign="left"> + getToSplitWithFeature() : String </td></tr>
+<tr><td align="left" balign="left"> + setToSplitWithFeature(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getSplitFeatureFID() : String </td></tr>
+<tr><td align="left" balign="left"> + setSplitFeatureFID(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getStrategy() : String </td></tr>
+<tr><td align="left" balign="left"> + setStrategy(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getExtraData() : String </td></tr>
+<tr><td align="left" balign="left"> + setExtraData(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getLayer() : Layer </td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }

@@ -10,26 +10,79 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// nl.b3p.viewer.stripes.IbisFeatureInfoActionBean
-	c169 [label=<<table title="nl.b3p.viewer.stripes.IbisFeatureInfoActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisFeatureInfoActionBean.html">
+	c206 [label=<<table title="nl.b3p.viewer.stripes.IbisFeatureInfoActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisFeatureInfoActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisFeatureInfoActionBean </td></tr>
 		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + IbisFeatureInfoActionBean() </td></tr>
+<tr><td align="left" balign="left"> # executeQuery(al : ApplicationLayer, ft : SimpleFeatureType, fs : FeatureSource&lt;&gt;, q : Query, em : EntityManager, application : Application, request : HttpServletRequest) : JSONArray </td></tr>
+		</table></td></tr>
 		</table>>, URL="./IbisFeatureInfoActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.ibis.util.IbisConstants
-	c177 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
+	c214 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> IbisConstants </td></tr>
 		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + KAVEL_LAYER_NAME : String </td></tr>
+<tr><td align="left" balign="left"> + TERREIN_LAYER_NAME : String </td></tr>
+<tr><td align="left" balign="left"> + KAVEL_TERREIN_ID_FIELDNAME : String </td></tr>
+<tr><td align="left" balign="left"> + ID_FIELDNAME : String </td></tr>
+<tr><td align="left" balign="left"> + WORKFLOW_FIELDNAME : String </td></tr>
+<tr><td align="left" balign="left"> + MUTATIEDATUM_FIELDNAME : String </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
 		</table>>, URL="../ibis/util/IbisConstants.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//nl.b3p.viewer.stripes.IbisFeatureInfoActionBean extends nl.b3p.viewer.stripes.FeatureInfoActionBean
-	c179:p -> c169:p [dir=back,arrowtail=empty];
+	c216:p -> c206:p [dir=back,arrowtail=empty];
 	//nl.b3p.viewer.stripes.IbisFeatureInfoActionBean implements nl.b3p.viewer.ibis.util.IbisConstants
-	c177:p -> c169:p [dir=back,arrowtail=empty,style=dashed];
+	c214:p -> c206:p [dir=back,arrowtail=empty,style=dashed];
 	// nl.b3p.viewer.stripes.FeatureInfoActionBean
-	c179 [label=<<table title="nl.b3p.viewer.stripes.FeatureInfoActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c216 [label=<<table title="nl.b3p.viewer.stripes.FeatureInfoActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> FeatureInfoActionBean </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + FID : String </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + FeatureInfoActionBean() </td></tr>
+<tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
+<tr><td align="left" balign="left"> + setContext(arg0 : ActionBeanContext) </td></tr>
+<tr><td align="left" balign="left"> + getApplication() : Application </td></tr>
+<tr><td align="left" balign="left"> + setApplication(arg0 : Application) </td></tr>
+<tr><td align="left" balign="left"> + getLimit() : int </td></tr>
+<tr><td align="left" balign="left"> + setLimit(arg0 : int) </td></tr>
+<tr><td align="left" balign="left"> + getDistance() : String </td></tr>
+<tr><td align="left" balign="left"> + setDistance(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getQueryJSON() : String </td></tr>
+<tr><td align="left" balign="left"> + setQueryJSON(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getX() : String </td></tr>
+<tr><td align="left" balign="left"> + setX(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getY() : String </td></tr>
+<tr><td align="left" balign="left"> + setY(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + isEdit() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setEdit(arg0 : boolean) </td></tr>
+<tr><td align="left" balign="left"> + isArrays() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setArrays(arg0 : boolean) </td></tr>
+<tr><td align="left" balign="left"> + getRequestId() : String </td></tr>
+<tr><td align="left" balign="left"> + setRequestId(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getAttributesToInclude() : List&lt;Long&gt; </td></tr>
+<tr><td align="left" balign="left"> + setAttributesToInclude(arg0 : List&lt;Long&gt;) </td></tr>
+<tr><td align="left" balign="left"> + isGraph() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setGraph(arg0 : boolean) </td></tr>
+<tr><td align="left" balign="left"> + isOrdered() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setOrdered(arg0 : boolean) </td></tr>
+<tr><td align="left" balign="left"> + getLayer() : Layer </td></tr>
+<tr><td align="left" balign="left"> + info() : Resolution </td></tr>
+<tr><td align="left" balign="left"> # executeQuery(arg0 : ApplicationLayer, arg1 : SimpleFeatureType, arg2 : FeatureSource&lt;&gt;, arg3 : Query, arg4 : EntityManager, arg5 : Application, arg6 : HttpServletRequest) : JSONArray </td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }

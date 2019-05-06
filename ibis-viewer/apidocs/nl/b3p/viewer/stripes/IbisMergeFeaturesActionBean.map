@@ -1,7 +1,9 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./IbisMergeFeaturesActionBean.html" title="nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean" alt="" coords="59,118,254,143"/>
-<area shape="rect" id="node1" href="./IbisMergeFeaturesActionBean.html" title="&lt;TABLE&gt;" alt="" coords="49,107,265,155"/>
-<area shape="rect" id="node2_1" href="../ibis/util/IbisConstants.html" title="nl.b3p.viewer.ibis.util.IbisConstants" alt="" coords="16,11,116,53"/>
-<area shape="rect" id="node2" href="../ibis/util/IbisConstants.html" title="&lt;TABLE&gt;" alt="" coords="5,5,127,59"/>
-<area shape="rect" id="node3" href="null" title="&lt;TABLE&gt;" alt="" coords="151,8,346,56"/>
+<area shape="rect" id="node1_0" href="./IbisMergeFeaturesActionBean.html" title="nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean" alt="" coords="16,561,1168,689"/>
+<area shape="rect" id="node1" href="./IbisMergeFeaturesActionBean.html" title="&lt;TABLE&gt;" alt="" coords="5,556,1179,695"/>
+<area shape="rect" id="node2_1" href="../ibis/util/WorkflowStatus.html" title="nl.b3p.viewer.ibis.util.WorkflowStatus" alt="" coords="536,748,648,893"/>
+<area shape="rect" id="node2" href="../ibis/util/WorkflowStatus.html" title="&lt;TABLE&gt;" alt="" coords="525,743,659,899"/>
+<area shape="rect" id="node3_2" href="../ibis/util/IbisConstants.html" title="nl.b3p.viewer.ibis.util.IbisConstants" alt="" coords="109,167,401,347"/>
+<area shape="rect" id="node3" href="../ibis/util/IbisConstants.html" title="&lt;TABLE&gt;" alt="" coords="98,161,411,352"/>
+<area shape="rect" id="node4" href="null" title="&lt;TABLE&gt;" alt="" coords="436,5,1425,508"/>
 </map>

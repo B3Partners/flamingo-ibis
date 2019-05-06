@@ -10,67 +10,192 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean
-	c136 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../stripes/IbisAttributeListActionBean.html">
+	c170 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../stripes/IbisAttributeListActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisAttributeListActionBean </td></tr>
 		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + IbisAttributeListActionBean() </td></tr>
+<tr><td align="left" balign="left"> + loadLayer() </td></tr>
+<tr><td align="left" balign="left"> + checkAuthorization() </td></tr>
+<tr><td align="left" balign="left"> + download() : Resolution </td></tr>
+<tr><td align="left" balign="left"> + query() : Resolution </td></tr>
+<tr><td align="left" balign="left"> + getData() : String </td></tr>
+<tr><td align="left" balign="left"> + setData(data : String) </td></tr>
+<tr><td align="left" balign="left"> + getFilename() : String </td></tr>
+<tr><td align="left" balign="left"> + setFilename(filename : String) </td></tr>
+<tr><td align="left" balign="left"> + getMimetype() : String </td></tr>
+<tr><td align="left" balign="left"> + setMimetype(mimetype : String) </td></tr>
+<tr><td align="left" balign="left"> + setContext(context : ActionBeanContext) </td></tr>
+<tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
+<tr><td align="left" balign="left"> + getApplication() : Application </td></tr>
+<tr><td align="left" balign="left"> + setApplication(application : Application) </td></tr>
+<tr><td align="left" balign="left"> + getAppLayer() : ApplicationLayer </td></tr>
+<tr><td align="left" balign="left"> + setAppLayer(appLayer : ApplicationLayer) </td></tr>
+<tr><td align="left" balign="left"> + getRegio() : String </td></tr>
+<tr><td align="left" balign="left"> + setRegio(regio : String) </td></tr>
+<tr><td align="left" balign="left"> + getGemeente() : String </td></tr>
+<tr><td align="left" balign="left"> + setGemeente(gemeente : String) </td></tr>
+<tr><td align="left" balign="left"> + getTerrein() : String </td></tr>
+<tr><td align="left" balign="left"> + setTerrein(terrein : String) </td></tr>
+<tr><td align="left" balign="left"> + getReportType() : IbisAttributeListActionBean.ReportType </td></tr>
+<tr><td align="left" balign="left"> + setReportType(reportType : IbisAttributeListActionBean.ReportType) </td></tr>
+<tr><td align="left" balign="left"> + getAggregationLevel() : IbisAttributeListActionBean.QueryArea </td></tr>
+<tr><td align="left" balign="left"> + setAggregationLevel(aggregationLevel : IbisAttributeListActionBean.QueryArea) </td></tr>
+<tr><td align="left" balign="left"> + getAggregationLevelDate() : IbisAttributeListActionBean.AggregationLevelDate </td></tr>
+<tr><td align="left" balign="left"> + setAggregationLevelDate(aggregationLevelDate : IbisAttributeListActionBean.AggregationLevelDate) </td></tr>
+<tr><td align="left" balign="left"> + getFromDate() : Date </td></tr>
+<tr><td align="left" balign="left"> + setFromDate(fromDate : Date) </td></tr>
+<tr><td align="left" balign="left"> + getToDate() : Date </td></tr>
+<tr><td align="left" balign="left"> + setToDate(toDate : Date) </td></tr>
+<tr><td align="left" balign="left"> + getAttrNames() : List&lt;String&gt; </td></tr>
+<tr><td align="left" balign="left"> + setAttrNames(attrNames : List&lt;String&gt;) </td></tr>
+		</table></td></tr>
 		</table>>, URL="../../stripes/IbisAttributeListActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisFeatureInfoActionBean
-	c140 [label=<<table title="nl.b3p.viewer.stripes.IbisFeatureInfoActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../stripes/IbisFeatureInfoActionBean.html">
+	c174 [label=<<table title="nl.b3p.viewer.stripes.IbisFeatureInfoActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../stripes/IbisFeatureInfoActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisFeatureInfoActionBean </td></tr>
 		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + IbisFeatureInfoActionBean() </td></tr>
+<tr><td align="left" balign="left"> # executeQuery(al : ApplicationLayer, ft : SimpleFeatureType, fs : FeatureSource&lt;&gt;, q : Query, em : EntityManager, application : Application, request : HttpServletRequest) : JSONArray </td></tr>
+		</table></td></tr>
 		</table>>, URL="../../stripes/IbisFeatureInfoActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisEditFeatureActionBean
-	c141 [label=<<table title="nl.b3p.viewer.stripes.IbisEditFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../stripes/IbisEditFeatureActionBean.html">
+	c175 [label=<<table title="nl.b3p.viewer.stripes.IbisEditFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../stripes/IbisEditFeatureActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisEditFeatureActionBean </td></tr>
 		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + IbisEditFeatureActionBean() </td></tr>
+<tr><td align="left" balign="left"> # addNewFeature() : String </td></tr>
+<tr><td align="left" balign="left"> # deleteFeature(fid : String) </td></tr>
+<tr><td align="left" balign="left"> # editFeature(fid : String) </td></tr>
+<tr><td align="left" balign="left"> # isAttributeUserEditingDisabled(attrName : String) : boolean </td></tr>
+		</table></td></tr>
 		</table>>, URL="../../stripes/IbisEditFeatureActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean
-	c142 [label=<<table title="nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../stripes/IbisMergeFeaturesActionBean.html">
+	c176 [label=<<table title="nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../stripes/IbisMergeFeaturesActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisMergeFeaturesActionBean </td></tr>
 		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + IbisMergeFeaturesActionBean() </td></tr>
+<tr><td align="left" balign="left"> # handleExtraData(features : List&lt;SimpleFeature&gt;) : List&lt;SimpleFeature&gt; </td></tr>
+<tr><td align="left" balign="left"> # handleStrategy(featureA : SimpleFeature, featureB : SimpleFeature, newGeom : Geometry, filterA : Filter, filterB : Filter, localStore : SimpleFeatureStore, localStrategy : String) : List&lt;FeatureId&gt; </td></tr>
+<tr><td align="left" balign="left"> # afterMerge(ids : List&lt;FeatureId&gt;) </td></tr>
+		</table></td></tr>
 		</table>>, URL="../../stripes/IbisMergeFeaturesActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisReportsActionBean
-	c143 [label=<<table title="nl.b3p.viewer.stripes.IbisReportsActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../stripes/IbisReportsActionBean.html">
+	c177 [label=<<table title="nl.b3p.viewer.stripes.IbisReportsActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../stripes/IbisReportsActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisReportsActionBean </td></tr>
 		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + IbisReportsActionBean() </td></tr>
+<tr><td align="left" balign="left"> + checkAuthorization() </td></tr>
+<tr><td align="left" balign="left"> + download() : Resolution </td></tr>
+<tr><td align="left" balign="left"> + execute() : Resolution </td></tr>
+<tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
+<tr><td align="left" balign="left"> + setContext(context : ActionBeanContext) </td></tr>
+<tr><td align="left" balign="left"> + getFromDate() : Date </td></tr>
+<tr><td align="left" balign="left"> + setFromDate(fromDate : Date) </td></tr>
+<tr><td align="left" balign="left"> + getToDate() : Date </td></tr>
+<tr><td align="left" balign="left"> + setToDate(toDate : Date) </td></tr>
+<tr><td align="left" balign="left"> + getRegio() : String </td></tr>
+<tr><td align="left" balign="left"> + setRegio(regio : String) </td></tr>
+<tr><td align="left" balign="left"> + getGemeente() : String </td></tr>
+<tr><td align="left" balign="left"> + setGemeente(gemeente : String) </td></tr>
+<tr><td align="left" balign="left"> + getType() : String </td></tr>
+<tr><td align="left" balign="left"> + setType(type : String) </td></tr>
+<tr><td align="left" balign="left"> + getReport() : String </td></tr>
+<tr><td align="left" balign="left"> + setReport(report : String) </td></tr>
+<tr><td align="left" balign="left"> + getApplication() : Application </td></tr>
+<tr><td align="left" balign="left"> + setApplication(application : Application) </td></tr>
+<tr><td align="left" balign="left"> + getAttrSource() : JDBCFeatureSource </td></tr>
+<tr><td align="left" balign="left"> + setAttrSource(attrSource : JDBCFeatureSource) </td></tr>
+<tr><td align="left" balign="left"> + getParams() : String </td></tr>
+<tr><td align="left" balign="left"> + setParams(params : String) </td></tr>
+		</table></td></tr>
 		</table>>, URL="../../stripes/IbisReportsActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisSplitFeatureActionBean
-	c144 [label=<<table title="nl.b3p.viewer.stripes.IbisSplitFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../stripes/IbisSplitFeatureActionBean.html">
+	c178 [label=<<table title="nl.b3p.viewer.stripes.IbisSplitFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../stripes/IbisSplitFeatureActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisSplitFeatureActionBean </td></tr>
 		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + IbisSplitFeatureActionBean() </td></tr>
+<tr><td align="left" balign="left"> # handleExtraData(features : List&lt;SimpleFeature&gt;) : List&lt;SimpleFeature&gt; </td></tr>
+<tr><td align="left" balign="left"> # handleStrategy(feature : SimpleFeature, geoms : List&lt;?&gt;, filter : Filter, localStore : SimpleFeatureStore, localStrategy : String) : List&lt;FeatureId&gt; </td></tr>
+<tr><td align="left" balign="left"> # afterSplit(ids : List&lt;FeatureId&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getSliverRatio() : double </td></tr>
+<tr><td align="left" balign="left"> + setSliverRatio(sliverRatio : double) </td></tr>
+<tr><td align="left" balign="left"> + getSliverMaxArea() : double </td></tr>
+<tr><td align="left" balign="left"> + setSliverMaxArea(sliverMaxArea : double) </td></tr>
+		</table></td></tr>
 		</table>>, URL="../../stripes/IbisSplitFeatureActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.ibis.util.WorkflowUtil
-	c146 [label=<<table title="nl.b3p.viewer.ibis.util.WorkflowUtil" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./WorkflowUtil.html">
+	c180 [label=<<table title="nl.b3p.viewer.ibis.util.WorkflowUtil" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./WorkflowUtil.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> WorkflowUtil </td></tr>
 		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + updateTerreinGeometry(terreinID : Integer, layer : Layer, kavelStatus : WorkflowStatus, application : Application, em : EntityManager) </td></tr>
+		</table></td></tr>
 		</table>>, URL="./WorkflowUtil.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.ibis.util.IbisConstants
-	c148 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisConstants.html">
+	c182 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisConstants.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> IbisConstants </td></tr>
 		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + KAVEL_LAYER_NAME : String </td></tr>
+<tr><td align="left" balign="left"> + TERREIN_LAYER_NAME : String </td></tr>
+<tr><td align="left" balign="left"> + KAVEL_TERREIN_ID_FIELDNAME : String </td></tr>
+<tr><td align="left" balign="left"> + ID_FIELDNAME : String </td></tr>
+<tr><td align="left" balign="left"> + WORKFLOW_FIELDNAME : String </td></tr>
+<tr><td align="left" balign="left"> + MUTATIEDATUM_FIELDNAME : String </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
 		</table>>, URL="./IbisConstants.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//nl.b3p.viewer.stripes.IbisAttributeListActionBean implements nl.b3p.viewer.ibis.util.IbisConstants
-	c148:p -> c136:p [dir=back,arrowtail=empty,style=dashed];
+	c182:p -> c170:p [dir=back,arrowtail=empty,style=dashed];
 	//nl.b3p.viewer.stripes.IbisFeatureInfoActionBean implements nl.b3p.viewer.ibis.util.IbisConstants
-	c148:p -> c140:p [dir=back,arrowtail=empty,style=dashed];
+	c182:p -> c174:p [dir=back,arrowtail=empty,style=dashed];
 	//nl.b3p.viewer.stripes.IbisEditFeatureActionBean implements nl.b3p.viewer.ibis.util.IbisConstants
-	c148:p -> c141:p [dir=back,arrowtail=empty,style=dashed];
+	c182:p -> c175:p [dir=back,arrowtail=empty,style=dashed];
 	//nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean implements nl.b3p.viewer.ibis.util.IbisConstants
-	c148:p -> c142:p [dir=back,arrowtail=empty,style=dashed];
+	c182:p -> c176:p [dir=back,arrowtail=empty,style=dashed];
 	//nl.b3p.viewer.stripes.IbisReportsActionBean implements nl.b3p.viewer.ibis.util.IbisConstants
-	c148:p -> c143:p [dir=back,arrowtail=empty,style=dashed];
+	c182:p -> c177:p [dir=back,arrowtail=empty,style=dashed];
 	//nl.b3p.viewer.stripes.IbisSplitFeatureActionBean implements nl.b3p.viewer.ibis.util.IbisConstants
-	c148:p -> c144:p [dir=back,arrowtail=empty,style=dashed];
+	c182:p -> c178:p [dir=back,arrowtail=empty,style=dashed];
 	//nl.b3p.viewer.ibis.util.WorkflowUtil implements nl.b3p.viewer.ibis.util.IbisConstants
-	c148:p -> c146:p [dir=back,arrowtail=empty,style=dashed];
+	c182:p -> c180:p [dir=back,arrowtail=empty,style=dashed];
 }
 
