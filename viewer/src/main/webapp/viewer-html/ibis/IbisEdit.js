@@ -487,8 +487,9 @@ Ext.define("viewer.components.IbisEdit", {
         var me = this;
         Ext.Object.eachValue(this.config.viewerController.app.appLayers, function (appLayer) {
             // alle aangevinkte lagen verversen
-            if (me.config.viewerController.getLayerChecked(appLayer)) {
-                me.config.viewerController.getLayer(appLayer).reload();
+            var layer = me.config.viewerController.getLayer(appLayer);
+            if (layer && me.config.viewerController.getLayerChecked(appLayer)) {
+                layer.reload();
             }
         });
         this.currentFID = fid;
