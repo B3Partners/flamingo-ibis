@@ -22,11 +22,11 @@
         <maven.compiler.target>${project.build.targetVersion}</maven.compiler.target>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>${project.build.sourceVersion}</java.version>
-        <!-- voor een deployment op ibis.b3p.nl gebruik je de optie
+        <!-- voor een deployment op ibistest.flamingo5.nl gebruik je de optie
         -Dibis-flamingo-ds-name=geo_viewer-ibis
         tijdens bouwen van de .war -->
         <ibis-flamingo-ds-name>geo_viewer</ibis-flamingo-ds-name>
-        <!-- voor een deployment op ibis.b3p.nl  gebruik je de optie
+        <!-- voor een deployment op ibistest.flamingo5.nl gebruik je de optie
         -Dibis-flamingo-solr-host=ibistest.flamingo5.nl
         tijdens bouwen van de .war -->
         <ibis-flamingo-solr-host>bedrijventerreinen.gelderland.nl</ibis-flamingo-solr-host>
