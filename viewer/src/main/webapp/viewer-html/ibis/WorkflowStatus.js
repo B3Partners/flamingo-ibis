@@ -136,7 +136,7 @@ function getMinMutatiedatum(date) {
         var minMutDate = Ext.Date.parse(date, 'd-m-Y H:i:s');
         minMutDate = Ext.Date.subtract(minMutDate, 1, Ext.Date.HOUR);
     } else {
-        minMutDate = new date();
+        minMutDate = new Date();
     }
     return minMutDate;
 }
