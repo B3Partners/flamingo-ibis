@@ -9,6 +9,7 @@
   <!--Parameter name="monitoring.mail.from.name" value="Geo services monitoring" override="false"/-->
   <!--Parameter name="monitoring.schedule.minutes" value="30" override="false"/-->
   <!--Parameter name="flamingo.data.dir" value="/opt/flamingo_data" override="false"/-->
+  <Parameter name="flamingo.solr.schedule" value="240" override="false" />
   <!-- For Tomcat: define datasource in server.xml, for example:
 
     <Server ...>
