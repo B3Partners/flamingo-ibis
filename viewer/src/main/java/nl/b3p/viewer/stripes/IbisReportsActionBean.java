@@ -254,6 +254,10 @@ public class IbisReportsActionBean implements ActionBean, IbisConstants {
         if (this.regio != null && sft.getAttribute("vvr_naam") != null) {
             filters.add(ff.equals(ff.property("vvr_naam"), ff.literal(regio)));
         }
+        // regio
+        if (this.regio != null && sft.getAttribute("wgr_naam") != null) {
+            filters.add(ff.equals(ff.property("wgr_naam"), ff.literal(regio)));
+        }
         if (this.gemeente != null && sft.getAttribute("gemeentenaam") != null) {
             filters.add(ff.equals(ff.property("gemeentenaam"), ff.literal(gemeente)));
         }

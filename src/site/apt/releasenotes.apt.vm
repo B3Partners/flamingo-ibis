@@ -25,6 +25,21 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
+  *
+
+  []
+
+** Verbeteringen en oplossingen
+
+  * Fix regio filter in rapporage tool ({{{https://github.com/B3Partners/flamingo-ibis/issues/101}PR #117}}, mantis-14025)
+
+  []
+
+
+* Versie 3.1
+
+** Nieuw
+
   * migratie naar Flamingo {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v5.2.2}5.2.2}}
   
   []
@@ -34,7 +49,6 @@ ${project.name} ${project.version} Release Notes
   * Fix kaartlaag herladen voor gemeente viewer ({{{https://github.com/B3Partners/flamingo-ibis/issues/101}PR #101}}, mantis-13491)
   
   []
-
 
 
 * Versie 3.0
