@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- crossContext="true" is required to enable the viewer-admin to load the
-components.json file and component config javascript sources from the viewer -->
 <Context antiJARLocking="true" crossContext="true" disableURLRewriting="true" path="/viewer-admin">
     <Parameter name="componentregistry.path" override="false" value="/viewer-html/components"/>
     <!-- Customized context parameters; see web.xml -->
     <Parameter name="viewer.url" override="false" value=""/>
-    <!--Parameter name="monitoring.mail.from.email" value="no-reply@b3partners.nl" override="false"/-->
-    <!--Parameter name="monitoring.mail.from.name" value="Geo services monitoring" override="false"/-->
-    <!--Parameter name="monitoring.schedule.minutes" value="30" override="false"/-->
-    <!--Parameter name="flamingo.data.dir" value="/opt/flamingo_data" override="false"/-->
-    <Parameter name="flamingo.solr.schedule" value="240" override="false" />
+    <Parameter name="flamingo.data.dir" value="/opt/flamingo_data" override="false"/>
+    <!-- every day at 08:00 -->
+    <Parameter name="flamingo.solr.schedule" value="0 0 8 1/1 * ? *" override="false" />
+    <Parameter name="flamingo.solr.url" override="false" value="https://bedrijventerreinen.gelderland.nl/solr/"/>
     <ResourceLink global="jdbc/${ibis-flamingo-ds-name}" name="jdbc/geo_viewer" type="javax.sql.DataSource"/>
     <ResourceLink global="mail/session" name="mail/session" type="javax.mail.Session"/>
     <Realm className="org.apache.catalina.realm.LockOutRealm">

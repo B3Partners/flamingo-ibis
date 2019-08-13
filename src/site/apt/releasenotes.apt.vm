@@ -25,13 +25,15 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
-  *
+  * ...
 
   []
 
 ** Verbeteringen en oplossingen
 
-  * Fix regio filter in rapporage tool ({{{https://github.com/B3Partners/flamingo-ibis/issues/101}PR #117}}, mantis-14025)
+  * Fix regio filter in rapportage tool ({{{https://github.com/B3Partners/flamingo-ibis/issues/117}PR #117}}, mantis-14025)
+
+  * Fix Solr indexing ({{{https://github.com/B3Partners/flamingo-ibis/issues/119}PR #119}})
 
   []
 
