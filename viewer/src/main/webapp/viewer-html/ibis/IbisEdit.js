@@ -46,16 +46,21 @@ Ext.define("viewer.components.IbisEdit", {
                 multi: true
             };
         }
-        viewer.components.IbisEdit.superclass.constructor.call(this, conf);
+        viewer.components.IbisEdit.superclass.constructor.call(this, this.config);
         this.workflow_fieldname = workflowFieldName;
         this.workflowStore = Ext.data.StoreManager.lookup('IbisWorkflowStore');
-        this.maincontainer.add([{
-                id: this.name + "workflowLabel",
-                margin: 5,
-                text: '',
-                xtype: "label"}
-        ]);
+
         return this;
+    },
+    /** @override */
+    loadWindow: function () {
+        this.superclass.loadWindow.call(this);
+        this.maincontainer.add([{
+            id: this.name + "workflowLabel",
+            margin: 5,
+            text: '',
+            xtype: "label"}
+        ]);
     },
     initAttributeInputs: function (appLayer) {
         if (this.config.prefixConfig.length !== 0) {
@@ -63,8 +68,9 @@ Ext.define("viewer.components.IbisEdit", {
         }
         this.superclass.initAttributeInputs.call(this, appLayer);
         this.groupInputsByPrefix(appLayer);
-        if (user !== null && user.roles) {
-            setNextIbisWorkflowStatus(user.roles, null, null);
+        var _user = FlamingoAppLoader.get('user');
+        if (_user !== null && _user.roles) {
+            setNextIbisWorkflowStatus(_user.roles, null, null);
         } else {
             this.cancel();
             Ext.Msg.alert('Workflow Fout', "Uitlezen van gebruikers rollen is mislukt, workflow editing niet mogelijk. <br/>Bent U aangemeld met de juiste rol?");
@@ -90,7 +96,12 @@ Ext.define("viewer.components.IbisEdit", {
             }
         };
         this.tabbedFormPanels = {
-            '__unprefixed__': Ext.create('Ext.panel.Panel', Ext.Object.merge({}, defaultConfig, {title: 'Algemeen', collapsed: false, dockedItems: this.getBottomBar('__unprefixed__')}))
+            '__unprefixed__': Ext.create('Ext.panel.Panel', Ext.Object.merge({}, defaultConfig, {
+                title: 'Algemeen',
+                items: this._getWasWordtHeader(),
+                collapsed: false,
+                dockedItems: this.getBottomBar('__unprefixed__')
+            }))
         };
         var next;
         var prefix;
@@ -100,9 +111,10 @@ Ext.define("viewer.components.IbisEdit", {
             this.tabbedFormPanels[prefix] = Ext.create('Ext.panel.Panel',
                     Ext.Object.merge({}, defaultConfig, {
                         title: this.config.prefixConfig[i].label,
+                        items: this._getWasWordtHeader(),
                         dockedItems: next !== null ? this.getBottomBar(prefix) : {}
                     })
-                    );
+            );
         }
         var me = this;
         itemList.each(function (item) {
@@ -159,6 +171,7 @@ Ext.define("viewer.components.IbisEdit", {
             return;
         }
         this.tabbedFormPanels[nextPrefix].expand();
+        this.tabbedFormPanels[step].collapse();
     },
     addFieldSet: function (fieldSet) {
         if (fieldSet.items.length === 0) {
@@ -193,7 +206,7 @@ Ext.define("viewer.components.IbisEdit", {
             setNextIbisWorkflowStatus({}, 'bewerkt', Ext.getCmp(this.workflow_fieldname));
             s = this.workflowStore.getById('bewerkt').get("label");
         } else {
-            setNextIbisWorkflowStatus(user.roles, feature[this.workflow_fieldname], Ext.getCmp(this.workflow_fieldname));
+            setNextIbisWorkflowStatus(FlamingoAppLoader.get('user').roles, feature[this.workflow_fieldname], Ext.getCmp(this.workflow_fieldname));
             var wf = feature[this.workflow_fieldname] || 'bewerkt';
             s = this.workflowStore.getById(wf).get("label");
         }
@@ -275,7 +288,7 @@ Ext.define("viewer.components.IbisEdit", {
                                 }
                             }
                         });
-                        me.geomlabel.setText("In de linker kolom staan de voorgestelde aanpassingen");
+                        me.geomlabel.setHtml("In de linker kolom staan de voorgestelde aanpassingen");
                     });
                 },
                 function (result) {
@@ -345,6 +358,41 @@ Ext.define("viewer.components.IbisEdit", {
         }
         return input;
     },
+    _getWasWordtHeader: function() {
+        var header = [];
+        if (this.config.showVorigeDefintiefVersie) {
+            header = Ext.create('Ext.container.Container', {
+                layout: {
+                    type: 'hbox',
+                    align: 'stretch'
+                },
+                items: [
+                    {
+                        itemId: "headingLabelA",
+                        margin: '0 0',
+                        flex: 1,
+                        html: '',
+                        xtype: "container"
+                    },
+                    {
+                        itemId: "headingLabelB",
+                        margin: '0 0',
+                        flex: 1,
+                        html: 'Wordt',
+                        xtype: "container"
+                    },
+                    {
+                        itemId: "headingLabelC",
+                        margin: '0 0',
+                        flex: 1,
+                        html: 'Was',
+                        xtype: "container"
+                    }
+                ]
+            });
+        }
+        return header;
+    },
     resetForm: function () {
         this.superclass.resetForm.call(this);
         this.popup.popupWin.setTitle(this.config.title);
@@ -360,7 +408,7 @@ Ext.define("viewer.components.IbisEdit", {
         // for now we'll use second precision
         this.newID = new Date() / 1000 | 0;
 
-        setNextIbisWorkflowStatus(user.roles, 'bewerkt', Ext.getCmp(this.workflow_fieldname));
+        setNextIbisWorkflowStatus(FlamingoAppLoader.get('user').roles, 'bewerkt', Ext.getCmp(this.workflow_fieldname));
         var s = this.workflowStore.getById('bewerkt').get("label");
         Ext.getCmp(this.name + "workflowLabel").setText("Huidige workflow status: " + s);
 
@@ -374,7 +422,7 @@ Ext.define("viewer.components.IbisEdit", {
     },
     deleteFeature: function () {
         this.superclass.deleteFeature.call(this);
-        setNextIbisWorkflowStatus(user.roles, 'afgevoerd', Ext.getCmp(this.workflow_fieldname));
+        setNextIbisWorkflowStatus(FlamingoAppLoader.get('user').roles, 'afgevoerd', Ext.getCmp(this.workflow_fieldname));
         var s = this.workflowStore.getById('afgevoerd').get('label');
         Ext.getCmp(this.name + "workflowLabel").setText("Huidige workflow status: " + s);
     },
