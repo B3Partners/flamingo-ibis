@@ -1,14 +1,10 @@
-sudo: true
 language: java
 
 addons:
-  hostname: travis-fla-ibis
-  hosts: travis-fla-ibis
   postgresql: 10
   apt:
     packages:
       - postgresql-10-postgis-2.4
-      - gdal-bin
       - graphviz
 
 before_install:
@@ -29,7 +25,7 @@ before_install:
   - psql -U postgres -w -d ibis -a -f ./src/main/ddl/create_ibis_database.sql
 
 install:
-  # install without testing
+  # install without any testing
   - mvn install -Dmaven.test.skip=true -B -V -fae -q -pl '!dist'
 
 before_script:
@@ -37,10 +33,11 @@ before_script:
 script:
   # execute unit and integration tests
   - mvn -e test integration-test -B -pl '!dist'
-  - if [ "$TRAVIS_JDK_VERSION" == oraclejdk8 ]; then
+  # check javadoc
+  - if [ "$TRAVIS_JDK_VERSION" == openjdk8 ]; then
          mvn javadoc:javadoc;
     fi
-  - if [ "$TRAVIS_JDK_VERSION" == oraclejdk8 ]; then
+  - if [ "$TRAVIS_JDK_VERSION" == openjdk8 ]; then
          mvn javadoc:test-javadoc;
     fi
 
