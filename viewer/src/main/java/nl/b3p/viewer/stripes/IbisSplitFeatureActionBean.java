@@ -16,7 +16,7 @@
  */
 package nl.b3p.viewer.stripes;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -33,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.simple.SimpleFeatureStore;
 import org.geotools.util.Converter;
-import org.geotools.util.GeometryTypeConverterFactory;
+import org.geotools.data.util.GeometryTypeConverterFactory;
 import org.json.JSONException;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -140,8 +140,7 @@ public class IbisSplitFeatureActionBean extends SplitFeatureActionBean implement
                     // existing feature to "archief"
                     feature.setAttribute(WORKFLOW_FIELDNAME, WorkflowStatus.archief);
                     Object[] attributevalues = feature.getAttributes().toArray(new Object[feature.getAttributeCount()]);
-                    AttributeDescriptor[] attributes = feature.getFeatureType().getAttributeDescriptors()
-                            .toArray(new AttributeDescriptor[feature.getAttributeCount()]);
+                    String[] attributes = DataUtilities.attributeNames(feature.getFeatureType());
                     localStore.modifyFeatures(attributes, attributevalues, filter);
                     // remember terreinID
                     this.terreinID = feature.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);

@@ -37,8 +37,8 @@ import org.json.JSONException;
 import org.stripesstuff.stripersist.Stripersist;
 
 /**
- * Override feature info for {@link KAVEL_LAYER_NAME} and
- * {@link TERREIN_LAYER_NAME} to make sure we only get to see the current
+ * Override feature info for {@link IbisConstants#KAVEL_LAYER_NAME} and
+ * {@link IbisConstants#TERREIN_LAYER_NAME} to make sure we only get to see the current
  * feature in the client.
  *
  * @author mprins
@@ -54,8 +54,7 @@ public class IbisFeatureInfoActionBean extends FeatureInfoActionBean implements 
      * such as workflow. {@inheritDoc }
      */
     @Override
-    protected JSONArray executeQuery(ApplicationLayer al, SimpleFeatureType ft, FeatureSource fs, Query q, EntityManager em, Application application, HttpServletRequest request)
-            throws IOException, JSONException, Exception {
+    protected JSONArray executeQuery(ApplicationLayer al, SimpleFeatureType ft, FeatureSource fs, Query q) throws Exception {
 
         JSONArray features;
         if (this.getLayer().getName().equalsIgnoreCase(KAVEL_LAYER_NAME)
@@ -81,7 +80,7 @@ public class IbisFeatureInfoActionBean extends FeatureInfoActionBean implements 
             log.debug("Executing default IBIS featureinfo for 'any' user on layer " + this.getLayer().getName());
             // default behaviour for any other layers
             FeatureToJson ftjson = new FeatureToJson(this.isArrays(), this.isEdit(), this.isGraph(), this.getAttributesToInclude());
-            features = ftjson.getJSONFeatures(al, this.getLayer().getFeatureType(), fs, q, null, null, em, application, request);
+            features = ftjson.getJSONFeatures(al, this.getLayer().getFeatureType(), fs, q, null, null, Stripersist.getEntityManager(), this.getApplication(), this.getContext().getRequest());
         }
 
         return features;

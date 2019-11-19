@@ -17,8 +17,8 @@
 package nl.b3p.viewer.stripes;
 
 import nl.b3p.viewer.ibis.util.IbisConstants;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.WKTReader;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.WKTReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

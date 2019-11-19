@@ -16,7 +16,7 @@
  */
 package nl.b3p.viewer.stripes;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.simple.SimpleFeatureStore;
 import org.geotools.util.Converter;
-import org.geotools.util.GeometryTypeConverterFactory;
+import org.geotools.data.util.GeometryTypeConverterFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opengis.feature.simple.SimpleFeature;

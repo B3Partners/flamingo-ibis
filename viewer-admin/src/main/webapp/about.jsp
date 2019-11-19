@@ -61,7 +61,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 </td>
 </tr>
 <tr>
-    <td><b>Git branch:</b></td>
+    <td><b>Git branch/tag:</b></td>
     <td>${builddetails.branch}</td>
 </tr>
 <tr>
@@ -69,11 +69,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <td>${builddetails.remote.origin.url}</td>
 </tr>
 <tr>
-    <td><b>Git commit abbrev id:</b></td>
-    <td>${builddetails.commit.id.abbrev}</td>
-</tr>
-<tr>
-    <td><b>Git commit full id:</b></td>
+    <td><b>Git commit id:</b></td>
     <td>${builddetails.commit.id}</td>
 </tr>
 <tr>

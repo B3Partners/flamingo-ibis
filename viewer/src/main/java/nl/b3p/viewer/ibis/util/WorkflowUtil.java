@@ -16,11 +16,11 @@
  */
 package nl.b3p.viewer.ibis.util;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryCollection;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Polygon;
-import com.vividsolutions.jts.operation.overlay.snap.GeometrySnapper;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.operation.overlay.snap.GeometrySnapper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
