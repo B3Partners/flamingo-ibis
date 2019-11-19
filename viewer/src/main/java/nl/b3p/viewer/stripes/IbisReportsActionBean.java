@@ -62,7 +62,7 @@ import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.factory.CommonFactoryFinder;
-import org.geotools.factory.GeoTools;
+import org.geotools.util.factory.GeoTools;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -284,11 +284,10 @@ public class IbisReportsActionBean implements ActionBean, IbisConstants {
      * @param json output/appendend to json structure
      * @param featureTypeAttributes flamingo attribute descriptors for the
      * features
-     * @param outputPropNames fieldnames to put in output
      * @throws JSONException if any
      */
     private void featuresToJson(SimpleFeatureCollection sfc, JSONObject json,
-            List<AttributeDescriptor> featureTypeAttributes /*, List<String> outputPropNames */) throws JSONException {
+            List<AttributeDescriptor> featureTypeAttributes) throws JSONException {
 
         // metadata for fData fields
         JSONArray fields = new JSONArray();
