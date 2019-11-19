@@ -9,7 +9,7 @@ timestamps {
                 numToKeepStr: '3']
             ]]);
 
-        withEnv(["JAVA_HOME=${ tool 'JDK8' }", "PATH+MAVEN=${tool 'Maven 3.6.1'}/bin:${env.JAVA_HOME}/bin"]) {
+        withEnv(["JAVA_HOME=${ tool 'JDK8' }", "PATH+MAVEN=${tool 'Maven CURRENT'}/bin:${env.JAVA_HOME}/bin"]) {
 
             stage('Prepare') {
                  checkout scm
@@ -25,8 +25,9 @@ timestamps {
                 sh "mvn -e test verify -B -pl '!dist'"
             }
 
-            stage('Publish Results'){
+            stage('Publish Test Results'){
                 junit allowEmptyResults: true, testResults: '**/target/surefire-reports/TEST-*.xml, **/target/failsafe-reports/TEST-*.xml'
+                jacoco classPattern: '**/target/classes', execPattern: '**/target/**.exec'
             }
 
             stage('Check Javadocs') {
@@ -38,6 +39,7 @@ timestamps {
             }
 
             stage('OWASP Dependency Check') {
+                echo "Uitvoeren OWASP dependency check"
                 sh "mvn org.owasp:dependency-check-maven:aggregate"
                 dependencyCheckPublisher failedNewCritical: 1, unstableNewHigh: 1, unstableNewLow: 1, unstableNewMedium: 1
             }

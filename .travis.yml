@@ -1,30 +1,14 @@
-dist: trusty
-sudo: true
 language: java
 
 addons:
-  hostname: travis-fla-ibis
-  hosts: travis-fla-ibis
-  postgresql: 9.6
+  postgresql: 10
   apt:
     packages:
-      - postgresql-9.6-postgis-2.3
-      - gdal-bin
+      - postgresql-10-postgis-2.4
       - graphviz
 
 before_install:
-  # installeer een up-2-date Maven versie
-  #- wget https://www-eu.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.zip
-  #- unzip -qq apache-maven-3.5.0-bin.zip
-  #- export M2_HOME=$PWD/apache-maven-3.5.0
-  #- export PATH=$M2_HOME/bin:$PATH
   - mvn -v
-  # installeer/update postgis 2.3 op postgresql 9.6
-#  - sudo service postgresql stop
-#  - sudo -E apt-get -qq update &>> ~/apt-get-update.log
-#  - sudo apt-get -qq install postgis-2.3 gdal-bin graphviz
-#  - sudo service postgresql stop
-#  - sudo service postgresql start 9.6
   - export PAGER=cat
   - psql --version
   - psql -U postgres -c 'CREATE ROLE ibis LOGIN NOSUPERUSER INHERIT CREATEDB NOCREATEROLE NOREPLICATION;'
@@ -34,13 +18,14 @@ before_install:
   - psql -U postgres -c 'create database ibis WITH OWNER = ibis'
   - psql -U postgres -c 'create schema "IBIS" AUTHORIZATION ibis';
   - psql -U postgres -c 'ALTER DATABASE "ibis" SET search_path = "IBIS", public;'
+  - psql -U postgres -d ibis -c 'SELECT version();'
   - psql -U postgres -d ibis -c 'create extension postgis;'
   - psql -U postgres -d ibis -c 'SELECT PostGIS_full_version();'
   - ls -l ./src/main/ddl/
   - psql -U postgres -w -d ibis -a -f ./src/main/ddl/create_ibis_database.sql
 
 install:
-  # install without testing
+  # install without any testing
   - mvn install -Dmaven.test.skip=true -B -V -fae -q -pl '!dist'
 
 before_script:
@@ -48,10 +33,11 @@ before_script:
 script:
   # execute unit and integration tests
   - mvn -e test integration-test -B -pl '!dist'
-  - if [ "$TRAVIS_JDK_VERSION" == oraclejdk8 ]; then
+  # check javadoc
+  - if [ "$TRAVIS_JDK_VERSION" == openjdk8 ]; then
          mvn javadoc:javadoc;
     fi
-  - if [ "$TRAVIS_JDK_VERSION" == oraclejdk8 ]; then
+  - if [ "$TRAVIS_JDK_VERSION" == openjdk8 ]; then
          mvn javadoc:test-javadoc;
     fi
 
@@ -62,7 +48,6 @@ after_failure:
 after_script:
 
 jdk:
-  - oraclejdk8
   - openjdk8
 
 os:
