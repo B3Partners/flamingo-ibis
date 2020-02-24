@@ -7,7 +7,8 @@
     <!-- every day at 08:00 -->
     <Parameter name="flamingo.solr.schedule" value="0 0 8 1/1 * ? *" override="false" />
     <Parameter name="flamingo.solr.url" override="false" value="https://bedrijventerreinen.gelderland.nl/solr/"/>
-    <ResourceLink global="jdbc/${ibis-flamingo-ds-name}" name="jdbc/geo_viewer" type="javax.sql.DataSource"/>
+    <!-- <ResourceLink global="jdbc/${ibis-flamingo-ds-name}" name="jdbc/geo_viewer" type="javax.sql.DataSource"/>-->
+    <ResourceLink global="jdbc/geo_viewer" name="jdbc/geo_viewer" type="javax.sql.DataSource"/>
     <ResourceLink global="mail/session" name="mail/session" type="javax.mail.Session"/>
     <Realm className="org.apache.catalina.realm.LockOutRealm">
         <Realm allRolesMode="authOnly" className="org.apache.catalina.realm.DataSourceRealm" dataSourceName="jdbc/${ibis-flamingo-ds-name}"
