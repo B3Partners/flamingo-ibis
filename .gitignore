@@ -20,3 +20,5 @@ _temp/
 # intellij
 *.iml
 .idea/
+/viewer/overlays/
+/viewer-admin/overlays/
