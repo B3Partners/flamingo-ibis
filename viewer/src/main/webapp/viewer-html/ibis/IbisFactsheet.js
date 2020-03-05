@@ -34,7 +34,7 @@ Ext.define("viewer.components.IbisFactsheet", {
      */
     constructor: function (conf) {
         this.initConfig(conf);
-        viewer.components.IbisFactsheet.superclass.constructor.call(this, conf);
+        viewer.components.IbisFactsheet.superclass.constructor.call(this, this.config);
         factsheet__layersArrayIndexesToAppLayerIds(this.config);
         var me = this;
         var requestParams = {};

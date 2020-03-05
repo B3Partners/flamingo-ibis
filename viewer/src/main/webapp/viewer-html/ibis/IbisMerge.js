@@ -36,7 +36,7 @@ Ext.define("viewer.components.IbisMerge", {
     status: null,
     constructor: function (conf) {
         this.initConfig(conf);
-        viewer.components.IbisMerge.superclass.constructor.call(this, conf);
+        viewer.components.IbisMerge.superclass.constructor.call(this, this.config);
 
         var store = Ext.data.StoreManager.lookup('IbisWorkflowStore');
         this.status = store.getById(this.config.workflowstatus);

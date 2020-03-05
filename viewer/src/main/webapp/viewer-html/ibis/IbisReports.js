@@ -44,7 +44,7 @@ Ext.define('viewer.components.IbisReports', {
      */
     constructor: function (conf) {
         this.initConfig(conf);
-        viewer.components.IbisReports.superclass.constructor.call(this, conf);
+        viewer.components.IbisReports.superclass.constructor.call(this, this.config);
 
         Ext.define('reportdataModel', {
             extend: 'Ext.data.Model',

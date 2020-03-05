@@ -33,7 +33,7 @@ Ext.define("viewer.components.IbisSplit", {
     status: null,
     constructor: function (conf) {
         this.initConfig(conf);
-        viewer.components.IbisSplit.superclass.constructor.call(this, conf);
+        viewer.components.IbisSplit.superclass.constructor.call(this, this.config);
 
         var store = Ext.data.StoreManager.lookup('IbisWorkflowStore');
         this.status = store.getById(this.config.workflowstatus);

@@ -31,7 +31,7 @@ Ext.define('viewer.components.IbisLocationFinder', {
     },
     constructor: function (conf) {
         this.initConfig(conf);
-        viewer.components.IbisLocationFinder.superclass.constructor.call(this, conf);
+        viewer.components.IbisLocationFinder.superclass.constructor.call(this, this.config);
         return this;
     },
     createForms: function () {

@@ -72,7 +72,7 @@ Ext.define("viewer.components.IbisReportBase", {
      */
     constructor: function (conf) {
         this.initConfig(conf);
-        viewer.components.IbisReportBase.superclass.constructor.call(this, conf);
+        viewer.components.IbisReportBase.superclass.constructor.call(this, this.config);
 
         reportbase__layersArrayIndexesToAppLayerIds(this.config);
         // update custom url, global var contextPath is not available until after page load
