@@ -109,7 +109,7 @@ digraph G {
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + IbisFeatureInfoActionBean() </td></tr>
-<tr><td align="left" balign="left"> # executeQuery(al : ApplicationLayer, ft : SimpleFeatureType, fs : FeatureSource&lt;&gt;, q : Query, em : EntityManager, application : Application, request : HttpServletRequest) : JSONArray </td></tr>
+<tr><td align="left" balign="left"> # executeQuery(al : ApplicationLayer, ft : SimpleFeatureType, fs : FeatureSource&lt;&gt;, q : Query) : JSONArray </td></tr>
 		</table></td></tr>
 		</table>>, URL="./IbisFeatureInfoActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisEditFeatureActionBean
@@ -250,8 +250,11 @@ digraph G {
 <tr><td align="left" balign="left"> + isOrdered() : boolean </td></tr>
 <tr><td align="left" balign="left"> + setOrdered(arg0 : boolean) </td></tr>
 <tr><td align="left" balign="left"> + getLayer() : Layer </td></tr>
+<tr><td align="left" balign="left"> + getAuditMessageObject() : AuditMessageObject </td></tr>
+<tr><td align="left" balign="left"> + initAudit() </td></tr>
 <tr><td align="left" balign="left"> + info() : Resolution </td></tr>
-<tr><td align="left" balign="left"> # executeQuery(arg0 : ApplicationLayer, arg1 : SimpleFeatureType, arg2 : FeatureSource&lt;&gt;, arg3 : Query, arg4 : EntityManager, arg5 : Application, arg6 : HttpServletRequest) : JSONArray </td></tr>
+<tr><td align="left" balign="left"> + relatedInfo() : Resolution </td></tr>
+<tr><td align="left" balign="left"> # executeQuery(arg0 : ApplicationLayer, arg1 : SimpleFeatureType, arg2 : FeatureSource&lt;&gt;, arg3 : Query) : JSONArray </td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.MergeFeaturesActionBean
@@ -288,6 +291,7 @@ digraph G {
 <tr><td align="left" balign="left"> + getExtraData() : String </td></tr>
 <tr><td align="left" balign="left"> + setExtraData(arg0 : String) </td></tr>
 <tr><td align="left" balign="left"> + getLayer() : Layer </td></tr>
+<tr><td align="left" balign="left"> + getAuditMessageObject() : AuditMessageObject </td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.EditFeatureActionBean
@@ -296,7 +300,9 @@ digraph G {
 <tr><td align="center" balign="center"> EditFeatureActionBean </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
+<tr><td align="left" balign="left"> # layer : Layer </td></tr>
+<tr><td align="left" balign="left"> # store : SimpleFeatureStore </td></tr>
+<tr><td align="left" balign="left"> # jsonFeature : JSONObject </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + EditFeatureActionBean() </td></tr>
@@ -310,10 +316,16 @@ digraph G {
 <tr><td align="left" balign="left"> + setAppLayer(arg0 : ApplicationLayer) </td></tr>
 <tr><td align="left" balign="left"> + getStore() : SimpleFeatureStore </td></tr>
 <tr><td align="left" balign="left"> + getJsonFeature() : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + setJsonFeature(arg0 : JSONObject) </td></tr>
 <tr><td align="left" balign="left"> + getLayer() : Layer </td></tr>
 <tr><td align="left" balign="left"> + getFID() : String </td></tr>
+<tr><td align="left" balign="left"> + getAuditMessageObject() : AuditMessageObject </td></tr>
+<tr><td align="left" balign="left"> + initAudit() </td></tr>
 <tr><td align="left" balign="left"> + edit() : Resolution </td></tr>
+<tr><td align="left" balign="left"> + saveRelatedFeatures() : Resolution </td></tr>
 <tr><td align="left" balign="left"> + delete() : Resolution </td></tr>
+<tr><td align="left" balign="left"> # getJsonFeature(arg0 : String) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + removeRelatedFeatures() : Resolution </td></tr>
 <tr><td align="left" balign="left"> # addNewFeature() : String </td></tr>
 <tr><td align="left" balign="left"> # deleteFeature(arg0 : String) </td></tr>
 <tr><td align="left" balign="left"> # editFeature(arg0 : String) </td></tr>
@@ -354,6 +366,7 @@ digraph G {
 <tr><td align="left" balign="left"> + getExtraData() : String </td></tr>
 <tr><td align="left" balign="left"> + setExtraData(arg0 : String) </td></tr>
 <tr><td align="left" balign="left"> + getLayer() : Layer </td></tr>
+<tr><td align="left" balign="left"> + getAuditMessageObject() : AuditMessageObject </td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }

@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// nl.b3p.viewer.stripes.IbisReportsActionBean
-	c253 [label=<<table title="nl.b3p.viewer.stripes.IbisReportsActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisReportsActionBean.html">
+	c257 [label=<<table title="nl.b3p.viewer.stripes.IbisReportsActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisReportsActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisReportsActionBean </td></tr>
 		</table></td></tr>
@@ -45,7 +45,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./IbisReportsActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.ibis.util.IbisConstants
-	c258 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
+	c262 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> IbisConstants </td></tr>
@@ -63,17 +63,17 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="../ibis/util/IbisConstants.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//nl.b3p.viewer.stripes.IbisReportsActionBean implements net.sourceforge.stripes.action.ActionBean
-	c260:p -> c253:p [dir=back,arrowtail=empty,style=dashed];
+	c264:p -> c257:p [dir=back,arrowtail=empty,style=dashed];
 	//nl.b3p.viewer.stripes.IbisReportsActionBean implements nl.b3p.viewer.ibis.util.IbisConstants
-	c258:p -> c253:p [dir=back,arrowtail=empty,style=dashed];
+	c262:p -> c257:p [dir=back,arrowtail=empty,style=dashed];
 	// nl.b3p.viewer.stripes.IbisReportsActionBean NAVASSOC net.sourceforge.stripes.action.ActionBeanContext
-	c253:p -> c261:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c257:p -> c265:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisReportsActionBean NAVASSOC nl.b3p.viewer.config.app.Application
-	c253:p -> c262:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c257:p -> c266:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisReportsActionBean NAVASSOC nl.b3p.viewer.config.services.JDBCFeatureSource
-	c253:p -> c263:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c257:p -> c267:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// net.sourceforge.stripes.action.ActionBeanContext
-	c261 [label=<<table title="net.sourceforge.stripes.action.ActionBeanContext" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c265 [label=<<table title="net.sourceforge.stripes.action.ActionBeanContext" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ActionBeanContext </td></tr>
 		</table></td></tr>
@@ -101,7 +101,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.sourceforge.stripes.action.ActionBean
-	c260 [label=<<table title="net.sourceforge.stripes.action.ActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c264 [label=<<table title="net.sourceforge.stripes.action.ActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ActionBean </td></tr>
@@ -115,7 +115,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.config.services.JDBCFeatureSource
-	c263 [label=<<table title="nl.b3p.viewer.config.services.JDBCFeatureSource" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c267 [label=<<table title="nl.b3p.viewer.config.services.JDBCFeatureSource" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> JDBCFeatureSource </td></tr>
 		</table></td></tr>
@@ -138,7 +138,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.config.app.Application
-	c262 [label=<<table title="nl.b3p.viewer.config.app.Application" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c266 [label=<<table title="nl.b3p.viewer.config.app.Application" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Application </td></tr>
 		</table></td></tr>
@@ -158,6 +158,10 @@ digraph G {
 <tr><td align="left" balign="left"> + setName(arg0 : String) </td></tr>
 <tr><td align="left" balign="left"> + getVersion() : String </td></tr>
 <tr><td align="left" balign="left"> + setVersion(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getTitle() : String </td></tr>
+<tr><td align="left" balign="left"> + setLang(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getLang() : String </td></tr>
+<tr><td align="left" balign="left"> + setTitle(arg0 : String) </td></tr>
 <tr><td align="left" balign="left"> + getLayout() : String </td></tr>
 <tr><td align="left" balign="left"> + setLayout(arg0 : String) </td></tr>
 <tr><td align="left" balign="left"> + getDetails() : Map&lt;String, ClobElement&gt; </td></tr>
@@ -184,14 +188,16 @@ digraph G {
 <tr><td align="left" balign="left"> + setStartLevels(arg0 : List&lt;StartLevel&gt;) </td></tr>
 <tr><td align="left" balign="left"> + getReaders() : Set&lt;String&gt; </td></tr>
 <tr><td align="left" balign="left"> + setReaders(arg0 : Set&lt;String&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getProjectionCode() : String </td></tr>
+<tr><td align="left" balign="left"> + setProjectionCode(arg0 : String) </td></tr>
 <tr><td align="left" balign="left"> + getNameWithVersion() : String </td></tr>
 <tr><td align="left" balign="left"> + getTreeCache() : Application.TreeCache </td></tr>
 <tr><td align="left" balign="left"> + compareTo(arg0 : Application) : int </td></tr>
 <tr><td align="left" balign="left"> + setTreeCache(arg0 : Application.TreeCache) </td></tr>
 <tr><td align="left" balign="left"> + loadTreeCache(arg0 : EntityManager) : Application.TreeCache </td></tr>
 <tr><td align="left" balign="left"> + authorizationsModified() </td></tr>
-<tr><td align="left" balign="left"> + toJSON(arg0 : HttpServletRequest, arg1 : boolean, arg2 : boolean, arg3 : EntityManager) : String </td></tr>
-<tr><td align="left" balign="left"> + toJSON(arg0 : HttpServletRequest, arg1 : boolean, arg2 : boolean, arg3 : boolean, arg4 : boolean, arg5 : EntityManager) : String </td></tr>
+<tr><td align="left" balign="left"> + toJSON(arg0 : HttpServletRequest, arg1 : boolean, arg2 : boolean, arg3 : EntityManager) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + toJSON(arg0 : HttpServletRequest, arg1 : boolean, arg2 : boolean, arg3 : boolean, arg4 : boolean, arg5 : EntityManager, arg6 : boolean) : JSONObject </td></tr>
 <tr><td align="left" balign="left"> + isMashup() : Boolean </td></tr>
 <tr><td align="left" balign="left"> + isMashup(arg0 : Session) : Boolean </td></tr>
 <tr><td align="left" balign="left"> + createMashup(arg0 : String, arg1 : EntityManager, arg2 : boolean) : Application </td></tr>

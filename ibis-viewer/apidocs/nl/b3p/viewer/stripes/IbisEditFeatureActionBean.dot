@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// nl.b3p.viewer.stripes.IbisEditFeatureActionBean
-	c192 [label=<<table title="nl.b3p.viewer.stripes.IbisEditFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisEditFeatureActionBean.html">
+	c196 [label=<<table title="nl.b3p.viewer.stripes.IbisEditFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisEditFeatureActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisEditFeatureActionBean </td></tr>
 		</table></td></tr>
@@ -26,7 +26,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./IbisEditFeatureActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.ibis.util.IbisConstants
-	c199 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
+	c203 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> IbisConstants </td></tr>
@@ -44,16 +44,18 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="../ibis/util/IbisConstants.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//nl.b3p.viewer.stripes.IbisEditFeatureActionBean extends nl.b3p.viewer.stripes.EditFeatureActionBean
-	c201:p -> c192:p [dir=back,arrowtail=empty];
+	c205:p -> c196:p [dir=back,arrowtail=empty];
 	//nl.b3p.viewer.stripes.IbisEditFeatureActionBean implements nl.b3p.viewer.ibis.util.IbisConstants
-	c199:p -> c192:p [dir=back,arrowtail=empty,style=dashed];
+	c203:p -> c196:p [dir=back,arrowtail=empty,style=dashed];
 	// nl.b3p.viewer.stripes.EditFeatureActionBean
-	c201 [label=<<table title="nl.b3p.viewer.stripes.EditFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c205 [label=<<table title="nl.b3p.viewer.stripes.EditFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> EditFeatureActionBean </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
+<tr><td align="left" balign="left"> # layer : Layer </td></tr>
+<tr><td align="left" balign="left"> # store : SimpleFeatureStore </td></tr>
+<tr><td align="left" balign="left"> # jsonFeature : JSONObject </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + EditFeatureActionBean() </td></tr>
@@ -67,10 +69,16 @@ digraph G {
 <tr><td align="left" balign="left"> + setAppLayer(arg0 : ApplicationLayer) </td></tr>
 <tr><td align="left" balign="left"> + getStore() : SimpleFeatureStore </td></tr>
 <tr><td align="left" balign="left"> + getJsonFeature() : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + setJsonFeature(arg0 : JSONObject) </td></tr>
 <tr><td align="left" balign="left"> + getLayer() : Layer </td></tr>
 <tr><td align="left" balign="left"> + getFID() : String </td></tr>
+<tr><td align="left" balign="left"> + getAuditMessageObject() : AuditMessageObject </td></tr>
+<tr><td align="left" balign="left"> + initAudit() </td></tr>
 <tr><td align="left" balign="left"> + edit() : Resolution </td></tr>
+<tr><td align="left" balign="left"> + saveRelatedFeatures() : Resolution </td></tr>
 <tr><td align="left" balign="left"> + delete() : Resolution </td></tr>
+<tr><td align="left" balign="left"> # getJsonFeature(arg0 : String) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + removeRelatedFeatures() : Resolution </td></tr>
 <tr><td align="left" balign="left"> # addNewFeature() : String </td></tr>
 <tr><td align="left" balign="left"> # deleteFeature(arg0 : String) </td></tr>
 <tr><td align="left" balign="left"> # editFeature(arg0 : String) </td></tr>

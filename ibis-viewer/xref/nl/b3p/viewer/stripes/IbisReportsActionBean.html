@@ -70,7 +70,7 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <strong class="jxr_keyword">import</strong> org.geotools.data.simple.SimpleFeatureIterator;
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <strong class="jxr_keyword">import</strong> org.geotools.data.simple.SimpleFeatureSource;
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <strong class="jxr_keyword">import</strong> org.geotools.factory.CommonFactoryFinder;
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <strong class="jxr_keyword">import</strong> org.geotools.factory.GeoTools;
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <strong class="jxr_keyword">import</strong> org.geotools.util.factory.GeoTools;
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <strong class="jxr_keyword">import</strong> org.json.JSONArray;
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <strong class="jxr_keyword">import</strong> org.json.JSONException;
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <strong class="jxr_keyword">import</strong> org.json.JSONObject;
@@ -262,213 +262,216 @@
 <a class="jxr_linenumber" name="L254" href="#L254">254</a>         <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.regio != <strong class="jxr_keyword">null</strong> &amp;&amp; sft.getAttribute(<span class="jxr_string">"vvr_naam"</span>) != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L255" href="#L255">255</a>             filters.add(ff.equals(ff.property(<span class="jxr_string">"vvr_naam"</span>), ff.literal(regio)));
 <a class="jxr_linenumber" name="L256" href="#L256">256</a>         }
-<a class="jxr_linenumber" name="L257" href="#L257">257</a>         <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.gemeente != <strong class="jxr_keyword">null</strong> &amp;&amp; sft.getAttribute(<span class="jxr_string">"gemeentenaam"</span>) != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L258" href="#L258">258</a>             filters.add(ff.equals(ff.property(<span class="jxr_string">"gemeentenaam"</span>), ff.literal(gemeente)));
-<a class="jxr_linenumber" name="L259" href="#L259">259</a>         }
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>         <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.toDate != <strong class="jxr_keyword">null</strong> &amp;&amp; sft.getAttribute(<span class="jxr_string">"datum"</span>) != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L261" href="#L261">261</a>             filters.add(ff.before(ff.property(<span class="jxr_string">"datum"</span>), ff.literal(toDate)));
-<a class="jxr_linenumber" name="L262" href="#L262">262</a>         }
-<a class="jxr_linenumber" name="L263" href="#L263">263</a>         <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.fromDate != <strong class="jxr_keyword">null</strong> &amp;&amp; sft.getAttribute(<span class="jxr_string">"datum"</span>) != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L264" href="#L264">264</a>             filters.add(ff.after(ff.property(<span class="jxr_string">"datum"</span>), ff.literal(fromDate)));
-<a class="jxr_linenumber" name="L265" href="#L265">265</a>         }
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>         <strong class="jxr_keyword">if</strong> (filters.size() &gt; 1) {
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>             <strong class="jxr_keyword">return</strong> ff.and(filters);
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (filters.size() == 1) {
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>             <strong class="jxr_keyword">return</strong> filters.get(0);
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>             <strong class="jxr_keyword">return</strong> Filter.INCLUDE;
-<a class="jxr_linenumber" name="L273" href="#L273">273</a>         }
-<a class="jxr_linenumber" name="L274" href="#L274">274</a>     }
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 
-<a class="jxr_linenumber" name="L276" href="#L276">276</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">     * Convert a SimpleFeatureCollection to JSON with metadata.</em>
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">     * @param sfc collections of features</em>
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">     * @param json output/appendend to json structure</em>
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">     * @param featureTypeAttributes flamingo attribute descriptors for the</em>
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">     * features</em>
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">     * @param outputPropNames fieldnames to put in output</em>
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">     * @throws JSONException if any</em>
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L286" href="#L286">286</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> featuresToJson(SimpleFeatureCollection sfc, JSONObject json,
-<a class="jxr_linenumber" name="L287" href="#L287">287</a>             List&lt;AttributeDescriptor&gt; featureTypeAttributes <em class="jxr_comment">/*, List&lt;String&gt; outputPropNames */</em>) <strong class="jxr_keyword">throws</strong> JSONException {
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 
-<a class="jxr_linenumber" name="L289" href="#L289">289</a>         <em class="jxr_comment">// metadata for fData fields</em>
-<a class="jxr_linenumber" name="L290" href="#L290">290</a>         JSONArray fields = <strong class="jxr_keyword">new</strong> JSONArray();
-<a class="jxr_linenumber" name="L291" href="#L291">291</a>         <em class="jxr_comment">// columns for grid</em>
-<a class="jxr_linenumber" name="L292" href="#L292">292</a>         JSONArray columns = <strong class="jxr_keyword">new</strong> JSONArray();
-<a class="jxr_linenumber" name="L293" href="#L293">293</a>         <em class="jxr_comment">// fData payload</em>
-<a class="jxr_linenumber" name="L294" href="#L294">294</a>         JSONArray datas = <strong class="jxr_keyword">new</strong> JSONArray();
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 
-<a class="jxr_linenumber" name="L296" href="#L296">296</a>         <strong class="jxr_keyword">boolean</strong> getMetadataFromFirstFeature = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L297" href="#L297">297</a>         <strong class="jxr_keyword">try</strong> (SimpleFeatureIterator sfIter = sfc.features()) {
-<a class="jxr_linenumber" name="L298" href="#L298">298</a>             <strong class="jxr_keyword">while</strong> (sfIter.hasNext()) {
-<a class="jxr_linenumber" name="L299" href="#L299">299</a>                 SimpleFeature feature = sfIter.next();
-<a class="jxr_linenumber" name="L300" href="#L300">300</a>                 JSONObject fData = <strong class="jxr_keyword">new</strong> JSONObject();
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 
-<a class="jxr_linenumber" name="L302" href="#L302">302</a>                 <strong class="jxr_keyword">for</strong> (AttributeDescriptor attr : featureTypeAttributes) {
-<a class="jxr_linenumber" name="L303" href="#L303">303</a>                     String name = attr.getName();
-<a class="jxr_linenumber" name="L304" href="#L304">304</a>                     <strong class="jxr_keyword">if</strong> (getMetadataFromFirstFeature) {
-<a class="jxr_linenumber" name="L305" href="#L305">305</a>                         <em class="jxr_comment">// only load metadata into json this for first feature</em>
-<a class="jxr_linenumber" name="L306" href="#L306">306</a>                         JSONObject field = <strong class="jxr_keyword">new</strong> JSONObject().put(<span class="jxr_string">"name"</span>, name).put(<span class="jxr_string">"type"</span>, attr.getExtJSType());
-<a class="jxr_linenumber" name="L307" href="#L307">307</a>                         <strong class="jxr_keyword">if</strong> (attr.getType().equals(AttributeDescriptor.TYPE_DATE)) {
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>                             field.put(<span class="jxr_string">"dateFormat"</span>, <span class="jxr_string">"Y-m"</span>);
-<a class="jxr_linenumber" name="L309" href="#L309">309</a>                         }
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>                         fields.put(field);
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>                         columns.put(<strong class="jxr_keyword">new</strong> JSONObject().put(<span class="jxr_string">"text"</span>, (attr.getAlias() != <strong class="jxr_keyword">null</strong> ? attr.getAlias() : name)).put(<span class="jxr_string">"dataIndex"</span>, name));
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>                     }
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>                     fData.put(attr.getName(), feature.getAttribute(attr.getName()));
-<a class="jxr_linenumber" name="L314" href="#L314">314</a>                 }
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>                 datas.put(fData);
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>                 getMetadataFromFirstFeature = false;
-<a class="jxr_linenumber" name="L317" href="#L317">317</a>             }
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 
-<a class="jxr_linenumber" name="L319" href="#L319">319</a>             json.getJSONObject(JSON_METADATA).put(<span class="jxr_string">"fields"</span>, fields);
-<a class="jxr_linenumber" name="L320" href="#L320">320</a>             json.getJSONObject(JSON_METADATA).put(<span class="jxr_string">"columns"</span>, columns);
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>             json.put(<span class="jxr_string">"data"</span>, datas);
-<a class="jxr_linenumber" name="L322" href="#L322">322</a>             json.put(<span class="jxr_string">"total"</span>, datas.length());
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>         }
-<a class="jxr_linenumber" name="L324" href="#L324">324</a>     }
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 
-<a class="jxr_linenumber" name="L326" href="#L326">326</a>     <strong class="jxr_keyword">private</strong> File convert(SimpleFeatureType ft, FeatureSource fs, Query q, List&lt;ConfiguredAttribute&gt; attributes,
-<a class="jxr_linenumber" name="L327" href="#L327">327</a>             Map&lt;String, AttributeDescriptor&gt; featureTypeAttributes) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>         <em class="jxr_comment">// regio</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>         <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.regio != <strong class="jxr_keyword">null</strong> &amp;&amp; sft.getAttribute(<span class="jxr_string">"wgr_naam"</span>) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>             filters.add(ff.equals(ff.property(<span class="jxr_string">"wgr_naam"</span>), ff.literal(regio)));
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>         }
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>         <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.gemeente != <strong class="jxr_keyword">null</strong> &amp;&amp; sft.getAttribute(<span class="jxr_string">"gemeentenaam"</span>) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>             filters.add(ff.equals(ff.property(<span class="jxr_string">"gemeentenaam"</span>), ff.literal(gemeente)));
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>         }
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>         <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.toDate != <strong class="jxr_keyword">null</strong> &amp;&amp; sft.getAttribute(<span class="jxr_string">"datum"</span>) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>             filters.add(ff.before(ff.property(<span class="jxr_string">"datum"</span>), ff.literal(toDate)));
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>         }
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>         <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.fromDate != <strong class="jxr_keyword">null</strong> &amp;&amp; sft.getAttribute(<span class="jxr_string">"datum"</span>) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>             filters.add(ff.after(ff.property(<span class="jxr_string">"datum"</span>), ff.literal(fromDate)));
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>         }
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>         <strong class="jxr_keyword">if</strong> (filters.size() &gt; 1) {
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>             <strong class="jxr_keyword">return</strong> ff.and(filters);
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (filters.size() == 1) {
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>             <strong class="jxr_keyword">return</strong> filters.get(0);
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>             <strong class="jxr_keyword">return</strong> Filter.INCLUDE;
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>         }
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>     }
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">     * Convert a SimpleFeatureCollection to JSON with metadata.</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">     * @param sfc collections of features</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">     * @param json output/appendend to json structure</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">     * @param featureTypeAttributes flamingo attribute descriptors for the</em>
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">     * features</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">     * @throws JSONException if any</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> featuresToJson(SimpleFeatureCollection sfc, JSONObject json,
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>             List&lt;AttributeDescriptor&gt; featureTypeAttributes) <strong class="jxr_keyword">throws</strong> JSONException {
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>         <em class="jxr_comment">// metadata for fData fields</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>         JSONArray fields = <strong class="jxr_keyword">new</strong> JSONArray();
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>         <em class="jxr_comment">// columns for grid</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>         JSONArray columns = <strong class="jxr_keyword">new</strong> JSONArray();
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>         <em class="jxr_comment">// fData payload</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>         JSONArray datas = <strong class="jxr_keyword">new</strong> JSONArray();
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>         <strong class="jxr_keyword">boolean</strong> getMetadataFromFirstFeature = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L300" href="#L300">300</a>         <strong class="jxr_keyword">try</strong> (SimpleFeatureIterator sfIter = sfc.features()) {
+<a class="jxr_linenumber" name="L301" href="#L301">301</a>             <strong class="jxr_keyword">while</strong> (sfIter.hasNext()) {
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>                 SimpleFeature feature = sfIter.next();
+<a class="jxr_linenumber" name="L303" href="#L303">303</a>                 JSONObject fData = <strong class="jxr_keyword">new</strong> JSONObject();
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 
+<a class="jxr_linenumber" name="L305" href="#L305">305</a>                 <strong class="jxr_keyword">for</strong> (AttributeDescriptor attr : featureTypeAttributes) {
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>                     String name = attr.getName();
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>                     <strong class="jxr_keyword">if</strong> (getMetadataFromFirstFeature) {
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>                         <em class="jxr_comment">// only load metadata into json this for first feature</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>                         JSONObject field = <strong class="jxr_keyword">new</strong> JSONObject().put(<span class="jxr_string">"name"</span>, name).put(<span class="jxr_string">"type"</span>, attr.getExtJSType());
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>                         <strong class="jxr_keyword">if</strong> (attr.getType().equals(AttributeDescriptor.TYPE_DATE)) {
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>                             field.put(<span class="jxr_string">"dateFormat"</span>, <span class="jxr_string">"Y-m"</span>);
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>                         }
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>                         fields.put(field);
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>                         columns.put(<strong class="jxr_keyword">new</strong> JSONObject().put(<span class="jxr_string">"text"</span>, (attr.getAlias() != <strong class="jxr_keyword">null</strong> ? attr.getAlias() : name)).put(<span class="jxr_string">"dataIndex"</span>, name));
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>                     }
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>                     fData.put(attr.getName(), feature.getAttribute(attr.getName()));
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>                 }
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>                 datas.put(fData);
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>                 getMetadataFromFirstFeature = false;
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>             }
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>             json.getJSONObject(JSON_METADATA).put(<span class="jxr_string">"fields"</span>, fields);
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>             json.getJSONObject(JSON_METADATA).put(<span class="jxr_string">"columns"</span>, columns);
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>             json.put(<span class="jxr_string">"data"</span>, datas);
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>             json.put(<span class="jxr_string">"total"</span>, datas.length());
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>         }
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>     }
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 
-<a class="jxr_linenumber" name="L329" href="#L329">329</a>         Map&lt;String, String&gt; attributeAliases = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L330" href="#L330">330</a>         <strong class="jxr_keyword">for</strong> (AttributeDescriptor ad : ft.getAttributes()) {
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>             <strong class="jxr_keyword">if</strong> (ad.getAlias() != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L332" href="#L332">332</a>                 attributeAliases.put(ad.getName(), ad.getAlias());
-<a class="jxr_linenumber" name="L333" href="#L333">333</a>             } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L334" href="#L334">334</a>                 attributeAliases.put(ad.getName(), ad.getName());
-<a class="jxr_linenumber" name="L335" href="#L335">335</a>             }
-<a class="jxr_linenumber" name="L336" href="#L336">336</a>         }
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 
-<a class="jxr_linenumber" name="L338" href="#L338">338</a>         SimpleFeatureCollection fc = (SimpleFeatureCollection) fs.getFeatures(q);
-<a class="jxr_linenumber" name="L339" href="#L339">339</a>         File f = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L340" href="#L340">340</a>         <em class="jxr_comment">// alle kolommen autosizen op inhoud</em>
-<a class="jxr_linenumber" name="L341" href="#L341">341</a>         StringBuilder autosizeAttr = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">",autoSize="</span>);
-<a class="jxr_linenumber" name="L342" href="#L342">342</a>         <strong class="jxr_keyword">for</strong> (ConfiguredAttribute configuredAttribute : attributes) {
-<a class="jxr_linenumber" name="L343" href="#L343">343</a>             autosizeAttr.append(configuredAttribute.getAttributeName()).append(<span class="jxr_string">"|"</span>);
-<a class="jxr_linenumber" name="L344" href="#L344">344</a>         }
-<a class="jxr_linenumber" name="L345" href="#L345">345</a>         params = params + autosizeAttr;
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
-<a class="jxr_linenumber" name="L347" href="#L347">347</a>         FeatureDownloader downloader = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L348" href="#L348">348</a>         <strong class="jxr_keyword">if</strong> (type.equalsIgnoreCase(<span class="jxr_string">"SHP"</span>)) {
-<a class="jxr_linenumber" name="L349" href="#L349">349</a>             downloader = <strong class="jxr_keyword">new</strong> ShapeDownloader(attributes, (SimpleFeatureSource) fs, featureTypeAttributes, attributeAliases, params);
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (type.equalsIgnoreCase(<span class="jxr_string">"XLS"</span>)) {
-<a class="jxr_linenumber" name="L351" href="#L351">351</a>             downloader = <strong class="jxr_keyword">new</strong> ExcelDownloader(attributes, (SimpleFeatureSource) fs, featureTypeAttributes, attributeAliases, params);
-<a class="jxr_linenumber" name="L352" href="#L352">352</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (type.equals(<span class="jxr_string">"CSV"</span>)) {
-<a class="jxr_linenumber" name="L353" href="#L353">353</a>             downloader = <strong class="jxr_keyword">new</strong> CSVDownloader(attributes, (SimpleFeatureSource) fs, featureTypeAttributes, attributeAliases, params);
-<a class="jxr_linenumber" name="L354" href="#L354">354</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L355" href="#L355">355</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"No suitable type given: "</span> + type);
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>         }
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
-<a class="jxr_linenumber" name="L358" href="#L358">358</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L359" href="#L359">359</a>             downloader.init();
-<a class="jxr_linenumber" name="L360" href="#L360">360</a>             <strong class="jxr_keyword">try</strong> (SimpleFeatureIterator it = fc.features()) {
-<a class="jxr_linenumber" name="L361" href="#L361">361</a>                 <strong class="jxr_keyword">while</strong> (it.hasNext()) {
-<a class="jxr_linenumber" name="L362" href="#L362">362</a>                     SimpleFeature feature = it.next();
-<a class="jxr_linenumber" name="L363" href="#L363">363</a>                     downloader.processFeature(feature);
-<a class="jxr_linenumber" name="L364" href="#L364">364</a>                 }
-<a class="jxr_linenumber" name="L365" href="#L365">365</a>             }
-<a class="jxr_linenumber" name="L366" href="#L366">366</a>             f = downloader.write();
-<a class="jxr_linenumber" name="L367" href="#L367">367</a>         } <strong class="jxr_keyword">catch</strong> (IOException ex) {
-<a class="jxr_linenumber" name="L368" href="#L368">368</a>             log.error(<span class="jxr_string">"Cannot create outputfile: "</span>, ex);
-<a class="jxr_linenumber" name="L369" href="#L369">369</a>             <strong class="jxr_keyword">throw</strong> ex;
-<a class="jxr_linenumber" name="L370" href="#L370">370</a>         } <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L371" href="#L371">371</a>             fs.getDataStore().dispose();
-<a class="jxr_linenumber" name="L372" href="#L372">372</a>         }
-<a class="jxr_linenumber" name="L373" href="#L373">373</a>         log.debug(<span class="jxr_string">"returning file "</span> + f);
-<a class="jxr_linenumber" name="L374" href="#L374">374</a>         <strong class="jxr_keyword">return</strong> f;
-<a class="jxr_linenumber" name="L375" href="#L375">375</a>     }
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
-<a class="jxr_linenumber" name="L377" href="#L377">377</a>     <em class="jxr_comment">//&lt;editor-fold defaultstate="collapsed" desc="getters en setters"&gt;</em>
-<a class="jxr_linenumber" name="L378" href="#L378">378</a>     @Override
-<a class="jxr_linenumber" name="L379" href="#L379">379</a>     <strong class="jxr_keyword">public</strong> ActionBeanContext getContext() {
-<a class="jxr_linenumber" name="L380" href="#L380">380</a>         <strong class="jxr_keyword">return</strong> context;
-<a class="jxr_linenumber" name="L381" href="#L381">381</a>     }
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 
-<a class="jxr_linenumber" name="L383" href="#L383">383</a>     @Override
-<a class="jxr_linenumber" name="L384" href="#L384">384</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setContext(ActionBeanContext context) {
-<a class="jxr_linenumber" name="L385" href="#L385">385</a>         <strong class="jxr_keyword">this</strong>.context = context;
-<a class="jxr_linenumber" name="L386" href="#L386">386</a>     }
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 
-<a class="jxr_linenumber" name="L388" href="#L388">388</a>     <strong class="jxr_keyword">public</strong> Date getFromDate() {
-<a class="jxr_linenumber" name="L389" href="#L389">389</a>         <strong class="jxr_keyword">return</strong> fromDate;
-<a class="jxr_linenumber" name="L390" href="#L390">390</a>     }
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
-<a class="jxr_linenumber" name="L392" href="#L392">392</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setFromDate(Date fromDate) {
-<a class="jxr_linenumber" name="L393" href="#L393">393</a>         <strong class="jxr_keyword">this</strong>.fromDate = fromDate;
-<a class="jxr_linenumber" name="L394" href="#L394">394</a>     }
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>     <strong class="jxr_keyword">public</strong> Date getToDate() {
-<a class="jxr_linenumber" name="L397" href="#L397">397</a>         <strong class="jxr_keyword">return</strong> toDate;
-<a class="jxr_linenumber" name="L398" href="#L398">398</a>     }
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 
-<a class="jxr_linenumber" name="L400" href="#L400">400</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setToDate(Date toDate) {
-<a class="jxr_linenumber" name="L401" href="#L401">401</a>         <strong class="jxr_keyword">this</strong>.toDate = toDate;
-<a class="jxr_linenumber" name="L402" href="#L402">402</a>     }
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 
-<a class="jxr_linenumber" name="L404" href="#L404">404</a>     <strong class="jxr_keyword">public</strong> String getRegio() {
-<a class="jxr_linenumber" name="L405" href="#L405">405</a>         <strong class="jxr_keyword">return</strong> regio;
-<a class="jxr_linenumber" name="L406" href="#L406">406</a>     }
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 
-<a class="jxr_linenumber" name="L408" href="#L408">408</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setRegio(String regio) {
-<a class="jxr_linenumber" name="L409" href="#L409">409</a>         <strong class="jxr_keyword">this</strong>.regio = regio;
-<a class="jxr_linenumber" name="L410" href="#L410">410</a>     }
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 
-<a class="jxr_linenumber" name="L412" href="#L412">412</a>     <strong class="jxr_keyword">public</strong> String getGemeente() {
-<a class="jxr_linenumber" name="L413" href="#L413">413</a>         <strong class="jxr_keyword">return</strong> gemeente;
-<a class="jxr_linenumber" name="L414" href="#L414">414</a>     }
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
-<a class="jxr_linenumber" name="L416" href="#L416">416</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setGemeente(String gemeente) {
-<a class="jxr_linenumber" name="L417" href="#L417">417</a>         <strong class="jxr_keyword">this</strong>.gemeente = gemeente;
-<a class="jxr_linenumber" name="L418" href="#L418">418</a>     }
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 
-<a class="jxr_linenumber" name="L420" href="#L420">420</a>     <strong class="jxr_keyword">public</strong> String getType() {
-<a class="jxr_linenumber" name="L421" href="#L421">421</a>         <strong class="jxr_keyword">return</strong> type;
-<a class="jxr_linenumber" name="L422" href="#L422">422</a>     }
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 
-<a class="jxr_linenumber" name="L424" href="#L424">424</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setType(String type) {
-<a class="jxr_linenumber" name="L425" href="#L425">425</a>         <strong class="jxr_keyword">this</strong>.type = type;
-<a class="jxr_linenumber" name="L426" href="#L426">426</a>     }
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 
-<a class="jxr_linenumber" name="L428" href="#L428">428</a>     <strong class="jxr_keyword">public</strong> String getReport() {
-<a class="jxr_linenumber" name="L429" href="#L429">429</a>         <strong class="jxr_keyword">return</strong> report;
-<a class="jxr_linenumber" name="L430" href="#L430">430</a>     }
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 
-<a class="jxr_linenumber" name="L432" href="#L432">432</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setReport(String report) {
-<a class="jxr_linenumber" name="L433" href="#L433">433</a>         <strong class="jxr_keyword">this</strong>.report = report;
-<a class="jxr_linenumber" name="L434" href="#L434">434</a>     }
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 
-<a class="jxr_linenumber" name="L436" href="#L436">436</a>     <strong class="jxr_keyword">public</strong> Application getApplication() {
-<a class="jxr_linenumber" name="L437" href="#L437">437</a>         <strong class="jxr_keyword">return</strong> application;
-<a class="jxr_linenumber" name="L438" href="#L438">438</a>     }
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 
-<a class="jxr_linenumber" name="L440" href="#L440">440</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setApplication(Application application) {
-<a class="jxr_linenumber" name="L441" href="#L441">441</a>         <strong class="jxr_keyword">this</strong>.application = application;
-<a class="jxr_linenumber" name="L442" href="#L442">442</a>     }
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 
-<a class="jxr_linenumber" name="L444" href="#L444">444</a>     <strong class="jxr_keyword">public</strong> JDBCFeatureSource getAttrSource() {
-<a class="jxr_linenumber" name="L445" href="#L445">445</a>         <strong class="jxr_keyword">return</strong> attrSource;
-<a class="jxr_linenumber" name="L446" href="#L446">446</a>     }
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 
-<a class="jxr_linenumber" name="L448" href="#L448">448</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setAttrSource(JDBCFeatureSource attrSource) {
-<a class="jxr_linenumber" name="L449" href="#L449">449</a>         <strong class="jxr_keyword">this</strong>.attrSource = attrSource;
-<a class="jxr_linenumber" name="L450" href="#L450">450</a>     }
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 
-<a class="jxr_linenumber" name="L452" href="#L452">452</a>     
-<a class="jxr_linenumber" name="L453" href="#L453">453</a>     <strong class="jxr_keyword">public</strong> String getParams() {
-<a class="jxr_linenumber" name="L454" href="#L454">454</a>         <strong class="jxr_keyword">return</strong> params;
-<a class="jxr_linenumber" name="L455" href="#L455">455</a>     }
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 
-<a class="jxr_linenumber" name="L457" href="#L457">457</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setParams(String params) {
-<a class="jxr_linenumber" name="L458" href="#L458">458</a>         <strong class="jxr_keyword">this</strong>.params = params;
-<a class="jxr_linenumber" name="L459" href="#L459">459</a>     }
-<a class="jxr_linenumber" name="L460" href="#L460">460</a>     <em class="jxr_comment">//&lt;/editor-fold&gt;</em>
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> }
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>     <strong class="jxr_keyword">private</strong> File convert(SimpleFeatureType ft, FeatureSource fs, Query q, List&lt;ConfiguredAttribute&gt; attributes,
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>             Map&lt;String, AttributeDescriptor&gt; featureTypeAttributes) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>         Map&lt;String, String&gt; attributeAliases = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>         <strong class="jxr_keyword">for</strong> (AttributeDescriptor ad : ft.getAttributes()) {
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>             <strong class="jxr_keyword">if</strong> (ad.getAlias() != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>                 attributeAliases.put(ad.getName(), ad.getAlias());
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>             } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>                 attributeAliases.put(ad.getName(), ad.getName());
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>             }
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>         }
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>         SimpleFeatureCollection fc = (SimpleFeatureCollection) fs.getFeatures(q);
+<a class="jxr_linenumber" name="L342" href="#L342">342</a>         File f = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>         <em class="jxr_comment">// alle kolommen autosizen op inhoud</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>         StringBuilder autosizeAttr = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">",autoSize="</span>);
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>         <strong class="jxr_keyword">for</strong> (ConfiguredAttribute configuredAttribute : attributes) {
+<a class="jxr_linenumber" name="L346" href="#L346">346</a>             autosizeAttr.append(configuredAttribute.getAttributeName()).append(<span class="jxr_string">"|"</span>);
+<a class="jxr_linenumber" name="L347" href="#L347">347</a>         }
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>         params = params + autosizeAttr;
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>         FeatureDownloader downloader = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>         <strong class="jxr_keyword">if</strong> (type.equalsIgnoreCase(<span class="jxr_string">"SHP"</span>)) {
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>             downloader = <strong class="jxr_keyword">new</strong> ShapeDownloader(attributes, (SimpleFeatureSource) fs, featureTypeAttributes, attributeAliases, params);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (type.equalsIgnoreCase(<span class="jxr_string">"XLS"</span>)) {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>             downloader = <strong class="jxr_keyword">new</strong> ExcelDownloader(attributes, (SimpleFeatureSource) fs, featureTypeAttributes, attributeAliases, params);
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (type.equals(<span class="jxr_string">"CSV"</span>)) {
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>             downloader = <strong class="jxr_keyword">new</strong> CSVDownloader(attributes, (SimpleFeatureSource) fs, featureTypeAttributes, attributeAliases, params);
+<a class="jxr_linenumber" name="L357" href="#L357">357</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"No suitable type given: "</span> + type);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>         }
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
+<a class="jxr_linenumber" name="L361" href="#L361">361</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L362" href="#L362">362</a>             downloader.init();
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>             <strong class="jxr_keyword">try</strong> (SimpleFeatureIterator it = fc.features()) {
+<a class="jxr_linenumber" name="L364" href="#L364">364</a>                 <strong class="jxr_keyword">while</strong> (it.hasNext()) {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>                     SimpleFeature feature = it.next();
+<a class="jxr_linenumber" name="L366" href="#L366">366</a>                     downloader.processFeature(feature);
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>                 }
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>             }
+<a class="jxr_linenumber" name="L369" href="#L369">369</a>             f = downloader.write();
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>         } <strong class="jxr_keyword">catch</strong> (IOException ex) {
+<a class="jxr_linenumber" name="L371" href="#L371">371</a>             log.error(<span class="jxr_string">"Cannot create outputfile: "</span>, ex);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a>             <strong class="jxr_keyword">throw</strong> ex;
+<a class="jxr_linenumber" name="L373" href="#L373">373</a>         } <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L374" href="#L374">374</a>             fs.getDataStore().dispose();
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>         }
+<a class="jxr_linenumber" name="L376" href="#L376">376</a>         log.debug(<span class="jxr_string">"returning file "</span> + f);
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>         <strong class="jxr_keyword">return</strong> f;
+<a class="jxr_linenumber" name="L378" href="#L378">378</a>     }
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 
+<a class="jxr_linenumber" name="L380" href="#L380">380</a>     <em class="jxr_comment">//&lt;editor-fold defaultstate="collapsed" desc="getters en setters"&gt;</em>
+<a class="jxr_linenumber" name="L381" href="#L381">381</a>     @Override
+<a class="jxr_linenumber" name="L382" href="#L382">382</a>     <strong class="jxr_keyword">public</strong> ActionBeanContext getContext() {
+<a class="jxr_linenumber" name="L383" href="#L383">383</a>         <strong class="jxr_keyword">return</strong> context;
+<a class="jxr_linenumber" name="L384" href="#L384">384</a>     }
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
+<a class="jxr_linenumber" name="L386" href="#L386">386</a>     @Override
+<a class="jxr_linenumber" name="L387" href="#L387">387</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setContext(ActionBeanContext context) {
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>         <strong class="jxr_keyword">this</strong>.context = context;
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>     }
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>     <strong class="jxr_keyword">public</strong> Date getFromDate() {
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>         <strong class="jxr_keyword">return</strong> fromDate;
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>     }
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
+<a class="jxr_linenumber" name="L395" href="#L395">395</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setFromDate(Date fromDate) {
+<a class="jxr_linenumber" name="L396" href="#L396">396</a>         <strong class="jxr_keyword">this</strong>.fromDate = fromDate;
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>     }
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>     <strong class="jxr_keyword">public</strong> Date getToDate() {
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>         <strong class="jxr_keyword">return</strong> toDate;
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>     }
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setToDate(Date toDate) {
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>         <strong class="jxr_keyword">this</strong>.toDate = toDate;
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>     }
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 
+<a class="jxr_linenumber" name="L407" href="#L407">407</a>     <strong class="jxr_keyword">public</strong> String getRegio() {
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>         <strong class="jxr_keyword">return</strong> regio;
+<a class="jxr_linenumber" name="L409" href="#L409">409</a>     }
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 
+<a class="jxr_linenumber" name="L411" href="#L411">411</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setRegio(String regio) {
+<a class="jxr_linenumber" name="L412" href="#L412">412</a>         <strong class="jxr_keyword">this</strong>.regio = regio;
+<a class="jxr_linenumber" name="L413" href="#L413">413</a>     }
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>     <strong class="jxr_keyword">public</strong> String getGemeente() {
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>         <strong class="jxr_keyword">return</strong> gemeente;
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>     }
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 
+<a class="jxr_linenumber" name="L419" href="#L419">419</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setGemeente(String gemeente) {
+<a class="jxr_linenumber" name="L420" href="#L420">420</a>         <strong class="jxr_keyword">this</strong>.gemeente = gemeente;
+<a class="jxr_linenumber" name="L421" href="#L421">421</a>     }
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 
+<a class="jxr_linenumber" name="L423" href="#L423">423</a>     <strong class="jxr_keyword">public</strong> String getType() {
+<a class="jxr_linenumber" name="L424" href="#L424">424</a>         <strong class="jxr_keyword">return</strong> type;
+<a class="jxr_linenumber" name="L425" href="#L425">425</a>     }
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
+<a class="jxr_linenumber" name="L427" href="#L427">427</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setType(String type) {
+<a class="jxr_linenumber" name="L428" href="#L428">428</a>         <strong class="jxr_keyword">this</strong>.type = type;
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>     }
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 
+<a class="jxr_linenumber" name="L431" href="#L431">431</a>     <strong class="jxr_keyword">public</strong> String getReport() {
+<a class="jxr_linenumber" name="L432" href="#L432">432</a>         <strong class="jxr_keyword">return</strong> report;
+<a class="jxr_linenumber" name="L433" href="#L433">433</a>     }
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setReport(String report) {
+<a class="jxr_linenumber" name="L436" href="#L436">436</a>         <strong class="jxr_keyword">this</strong>.report = report;
+<a class="jxr_linenumber" name="L437" href="#L437">437</a>     }
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 
+<a class="jxr_linenumber" name="L439" href="#L439">439</a>     <strong class="jxr_keyword">public</strong> Application getApplication() {
+<a class="jxr_linenumber" name="L440" href="#L440">440</a>         <strong class="jxr_keyword">return</strong> application;
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>     }
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 
+<a class="jxr_linenumber" name="L443" href="#L443">443</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setApplication(Application application) {
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>         <strong class="jxr_keyword">this</strong>.application = application;
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>     }
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 
+<a class="jxr_linenumber" name="L447" href="#L447">447</a>     <strong class="jxr_keyword">public</strong> JDBCFeatureSource getAttrSource() {
+<a class="jxr_linenumber" name="L448" href="#L448">448</a>         <strong class="jxr_keyword">return</strong> attrSource;
+<a class="jxr_linenumber" name="L449" href="#L449">449</a>     }
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 
+<a class="jxr_linenumber" name="L451" href="#L451">451</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setAttrSource(JDBCFeatureSource attrSource) {
+<a class="jxr_linenumber" name="L452" href="#L452">452</a>         <strong class="jxr_keyword">this</strong>.attrSource = attrSource;
+<a class="jxr_linenumber" name="L453" href="#L453">453</a>     }
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 
+<a class="jxr_linenumber" name="L455" href="#L455">455</a>     
+<a class="jxr_linenumber" name="L456" href="#L456">456</a>     <strong class="jxr_keyword">public</strong> String getParams() {
+<a class="jxr_linenumber" name="L457" href="#L457">457</a>         <strong class="jxr_keyword">return</strong> params;
+<a class="jxr_linenumber" name="L458" href="#L458">458</a>     }
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 
+<a class="jxr_linenumber" name="L460" href="#L460">460</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setParams(String params) {
+<a class="jxr_linenumber" name="L461" href="#L461">461</a>         <strong class="jxr_keyword">this</strong>.params = params;
+<a class="jxr_linenumber" name="L462" href="#L462">462</a>     }
+<a class="jxr_linenumber" name="L463" href="#L463">463</a>     <em class="jxr_comment">//&lt;/editor-fold&gt;</em>
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2019 <a href="http://www.b3partners.nl/">B3partners</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2020 <a href="http://www.b3partners.nl/">B3partners</a>. All rights reserved.</div>
 </body>
 </html>

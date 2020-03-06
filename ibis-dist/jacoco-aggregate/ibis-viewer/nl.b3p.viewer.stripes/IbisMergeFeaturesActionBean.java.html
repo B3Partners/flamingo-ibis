@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="nl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>IbisMergeFeaturesActionBean.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">IBIS distributie</a> &gt; <a href="../index.html" class="el_bundle">ibis-viewer</a> &gt; <a href="index.source.html" class="el_package">nl.b3p.viewer.stripes</a> &gt; <span class="el_source">IbisMergeFeaturesActionBean.java</span></div><h1>IbisMergeFeaturesActionBean.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 B3Partners B.V.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package nl.b3p.viewer.stripes;
+
+import org.locationtech.jts.geom.Geometry;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import net.sourceforge.stripes.action.StrictBinding;
+import net.sourceforge.stripes.action.UrlBinding;
+import nl.b3p.viewer.ibis.util.IbisConstants;
+import nl.b3p.viewer.ibis.util.WorkflowStatus;
+import nl.b3p.viewer.ibis.util.WorkflowUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.geotools.data.DataUtilities;
+import org.geotools.data.simple.SimpleFeatureStore;
+import org.geotools.util.Converter;
+import org.geotools.data.util.GeometryTypeConverterFactory;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.type.GeometryType;
+import org.opengis.filter.Filter;
+import org.opengis.filter.identity.FeatureId;
+import org.stripesstuff.stripersist.Stripersist;
+
+/**
+ * A workflow-supporting merge action bean for ibis.
+ *
+ * @author mprins
+ */
+@UrlBinding(&quot;/action/feature/ibismerge&quot;)
+@StrictBinding
+<span class="nc" id="L49">public class IbisMergeFeaturesActionBean extends MergeFeaturesActionBean implements IbisConstants {</span>
+
+<span class="nc" id="L51">    private static final Log log = LogFactory.getLog(IbisMergeFeaturesActionBean.class);</span>
+<span class="nc" id="L52">    private Object terreinID = null;</span>
+<span class="nc" id="L53">    private WorkflowStatus newWorkflowStatus = WorkflowStatus.definitief;</span>
+
+    /**
+     * Force the workflow status attribute on the feature. This will handle the
+     * case where the {@code extraData} attribute is a piecs of json with the
+     * workflow, eg
+     * {@code {workflow_status:'afgevoerd',datum_mutatie:'2015-12-01Z00:00'}}.
+     *
+     * @param features A list of features to be modified
+     * @return the list of modified features that are about to be committed to
+     * the datastore
+     *
+     * @throws JSONException if json parsing failed
+     */
+    @Override
+    protected List&lt;SimpleFeature&gt; handleExtraData(List&lt;SimpleFeature&gt; features) throws JSONException {
+<span class="nc" id="L69">        JSONObject json = new JSONObject(this.getExtraData());</span>
+<span class="nc" id="L70">        Iterator items = json.keys();</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        while (items.hasNext()) {</span>
+<span class="nc" id="L72">            String key = (String) items.next();</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">            for (SimpleFeature f : features) {</span>
+<span class="nc" id="L74">                log.debug(String.format(&quot;Setting value: %s for attribute: %s on feature %s&quot;, json.get(key), key, f.getID()));</span>
+<span class="nc" id="L75">                f.setAttribute(key, json.get(key));</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">                if (key.equalsIgnoreCase(WORKFLOW_FIELDNAME)) {</span>
+<span class="nc" id="L77">                    newWorkflowStatus = WorkflowStatus.valueOf(json.getString(key));</span>
+                }
+<span class="nc" id="L79">            }</span>
+<span class="nc" id="L80">        }</span>
+<span class="nc" id="L81">        return features;</span>
+    }
+
+    /**
+     * Overrides deleting features by archiving them instead. {@inheritDoc}
+     */
+    @Override
+    protected List&lt;FeatureId&gt; handleStrategy(SimpleFeature featureA, SimpleFeature featureB,
+            Geometry newGeom, Filter filterA, Filter filterB, SimpleFeatureStore localStore, String localStrategy) throws Exception {
+<span class="nc" id="L90">        List&lt;FeatureId&gt; ids = new ArrayList();</span>
+
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        if (!this.getLayer().getName().equalsIgnoreCase(KAVEL_LAYER_NAME)) {</span>
+<span class="nc" id="L93">            throw new IllegalArgumentException(&quot;Aborting as merge layer is not &quot; + KAVEL_LAYER_NAME);</span>
+        }
+
+<span class="nc" id="L96">        String geomAttrName = localStore.getSchema().getGeometryDescriptor().getLocalName();</span>
+<span class="nc" id="L97">        GeometryType type = localStore.getSchema().getGeometryDescriptor().getType();</span>
+<span class="nc" id="L98">        GeometryTypeConverterFactory cf = new GeometryTypeConverterFactory();</span>
+<span class="nc" id="L99">        Converter c = cf.createConverter(Geometry.class,</span>
+<span class="nc" id="L100">                localStore.getSchema().getGeometryDescriptor().getType().getBinding(),</span>
+                null);
+
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        if (this.getStrategy().equalsIgnoreCase(&quot;new&quot;)) {</span>
+            // archive the source feature (A)
+<span class="nc" id="L105">            localStore.modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, filterA);</span>
+
+            // update B with status afgevoerd, and a null terreinid
+<span class="nc" id="L108">            String[] fields = new String[]{WORKFLOW_FIELDNAME, KAVEL_TERREIN_ID_FIELDNAME};</span>
+<span class="nc" id="L109">            Object[] values = new Object[]{WorkflowStatus.afgevoerd, null};</span>
+<span class="nc" id="L110">            localStore.modifyFeatures(fields, values, filterB);</span>
+
+            // create a new feature with the attributes of A but a new geom
+<span class="nc" id="L113">            SimpleFeature newAfeat = DataUtilities.createFeature(featureA.getType(),</span>
+<span class="nc" id="L114">                    DataUtilities.encodeFeature(featureA, false));</span>
+<span class="nc" id="L115">            newAfeat.setAttribute(geomAttrName, c.convert(newGeom, type.getBinding()));</span>
+
+            // remember terreinID
+<span class="nc" id="L118">            this.terreinID = newAfeat.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);</span>
+
+<span class="nc" id="L120">            List&lt;SimpleFeature&gt; newFeats = new ArrayList();</span>
+<span class="nc" id="L121">            newFeats.add(newAfeat);</span>
+            // update new feature set mut. date, workflow status etc.
+<span class="nc" id="L123">            newFeats = this.handleExtraData(newFeats);</span>
+<span class="nc" id="L124">            ids = localStore.addFeatures(DataUtilities.collection(newFeats));</span>
+<span class="nc" id="L125">        } else {</span>
+<span class="nc" id="L126">            throw new IllegalArgumentException(&quot;Unknown merge strategy '&quot; + this.getStrategy() + &quot;', cannot merge.&quot;);</span>
+        }
+<span class="nc" id="L128">        return ids;</span>
+    }
+
+    @Override
+    protected void afterMerge(List&lt;FeatureId&gt; ids) {
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        if (this.terreinID != null) {</span>
+<span class="nc" id="L134">            WorkflowUtil.updateTerreinGeometry(Integer.parseInt(this.terreinID.toString()), this.getLayer(),</span>
+<span class="nc" id="L135">                    this.newWorkflowStatus, this.getApplication(), Stripersist.getEntityManager());</span>
+        }
+<span class="nc" id="L137">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

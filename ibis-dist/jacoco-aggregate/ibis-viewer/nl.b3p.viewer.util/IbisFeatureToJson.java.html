@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="nl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>IbisFeatureToJson.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">IBIS distributie</a> &gt; <a href="../index.html" class="el_bundle">ibis-viewer</a> &gt; <a href="index.source.html" class="el_package">nl.b3p.viewer.util</a> &gt; <span class="el_source">IbisFeatureToJson.java</span></div><h1>IbisFeatureToJson.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 B3Partners B.V.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package nl.b3p.viewer.util;
+
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import nl.b3p.viewer.config.app.ApplicationLayer;
+import nl.b3p.viewer.config.app.ConfiguredAttribute;
+import nl.b3p.viewer.config.services.AttributeDescriptor;
+import nl.b3p.viewer.config.services.FeatureTypeRelation;
+import nl.b3p.viewer.config.services.FeatureTypeRelationKey;
+import nl.b3p.viewer.config.services.SimpleFeatureType;
+import static nl.b3p.viewer.ibis.util.IbisConstants.ID_FIELDNAME;
+import static nl.b3p.viewer.ibis.util.IbisConstants.MUTATIEDATUM_FIELDNAME;
+import static nl.b3p.viewer.ibis.util.IbisConstants.WORKFLOW_FIELDNAME;
+import nl.b3p.viewer.ibis.util.WorkflowStatus;
+import static nl.b3p.viewer.stripes.FeatureInfoActionBean.FID;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.geotools.data.DataUtilities;
+import org.geotools.data.FeatureSource;
+import org.geotools.data.Query;
+import org.geotools.data.simple.SimpleFeatureCollection;
+import org.geotools.data.simple.SimpleFeatureIterator;
+import org.geotools.factory.CommonFactoryFinder;
+import org.geotools.feature.FeatureIterator;
+import org.geotools.feature.collection.SortedSimpleFeatureCollection;
+import org.geotools.filter.text.cql2.CQL;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.filter.Filter;
+import org.opengis.filter.FilterFactory2;
+import org.opengis.filter.expression.Function;
+import org.opengis.filter.sort.SortBy;
+import org.opengis.filter.sort.SortOrder;
+
+/**
+ * This is a custom version of {@link FeatureToJson}.
+ *
+ * @author Mark Prins
+ */
+public class IbisFeatureToJson {
+
+<span class="nc" id="L67">    private static final Log LOG = LogFactory.getLog(IbisFeatureToJson.class);</span>
+
+    public static final int MAX_FEATURES = 1000;
+<span class="nc" id="L70">    private boolean arrays = false;</span>
+<span class="nc" id="L71">    private boolean edit = false;</span>
+<span class="nc" id="L72">    private boolean graph = false;</span>
+<span class="nc" id="L73">    private boolean aliases = true;</span>
+<span class="nc" id="L74">    private List&lt;Long&gt; attributesToInclude = new ArrayList&lt;&gt;();</span>
+    private static final int TIMEOUT = 5000;
+
+<span class="nc" id="L77">    public IbisFeatureToJson(boolean arrays, boolean edit, boolean graph, List&lt;Long&gt; attributesToInclude) {</span>
+<span class="nc" id="L78">        this.arrays = arrays;</span>
+<span class="nc" id="L79">        this.edit = edit;</span>
+<span class="nc" id="L80">        this.graph = graph;</span>
+<span class="nc" id="L81">        this.attributesToInclude = attributesToInclude;</span>
+<span class="nc" id="L82">    }</span>
+
+<span class="nc" id="L84">    public IbisFeatureToJson(boolean arrays, boolean edit, boolean graph, boolean aliases, List&lt;Long&gt; attributesToInclude) {</span>
+<span class="nc" id="L85">        this.arrays = arrays;</span>
+<span class="nc" id="L86">        this.edit = edit;</span>
+<span class="nc" id="L87">        this.graph = graph;</span>
+<span class="nc" id="L88">        this.attributesToInclude = attributesToInclude;</span>
+<span class="nc" id="L89">        this.aliases = aliases;</span>
+<span class="nc" id="L90">    }</span>
+
+    /**
+     * Get the features as JSONArray with the given params.
+     *
+     * @param al The application layer(if there is a application layer)
+     * @param ft The featuretype that must be used to get the features
+     * @param fs The featureSource
+     * @param q The query
+     * @return JSONArray with features.
+     * @throws IOException if any
+     * @throws JSONException if any
+     * @throws Exception if any
+     */
+    public JSONArray getWorkflowJSONFeatures(ApplicationLayer al, SimpleFeatureType ft, FeatureSource fs, Query q) throws IOException, JSONException, Exception {
+<span class="nc" id="L105">        LOG.debug(&quot;Ophalen workflow json features met query: &quot; + q);</span>
+        // query aanpassen met extra filter zodat archief/afgevoerd percelen niet meekomenvoor edit en verhogen van max met factor 2
+<span class="nc" id="L107">        Filter f = q.getFilter();</span>
+<span class="nc" id="L108">        FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();</span>
+<span class="nc" id="L109">        f = ff.and(f, ff.or(</span>
+<span class="nc" id="L110">                ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false),</span>
+<span class="nc" id="L111">                ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.name()), false)</span>
+        ));
+<span class="nc" id="L113">        q.setFilter(f);</span>
+<span class="nc" id="L114">        q.setMaxFeatures(2 * q.getMaxFeatures());</span>
+<span class="nc" id="L115">        LOG.debug(&quot;Ophalen workflow json features met aangepaste query: &quot; + q);</span>
+
+<span class="nc" id="L117">        Map&lt;String, String&gt; attributeAliases = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">        if (!edit) {</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">            for (AttributeDescriptor ad : ft.getAttributes()) {</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">                if (ad.getAlias() != null) {</span>
+<span class="nc" id="L121">                    attributeAliases.put(ad.getName(), ad.getAlias());</span>
+                }
+<span class="nc" id="L123">            }</span>
+        }
+        List&lt;String&gt; propertyNames;
+<span class="nc bnc" id="L126" title="All 2 branches missed.">        if (al != null) {</span>
+<span class="nc" id="L127">            propertyNames = this.setPropertyNames(al, q, ft, edit);</span>
+        } else {
+<span class="nc" id="L129">            propertyNames = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">            for (AttributeDescriptor ad : ft.getAttributes()) {</span>
+<span class="nc" id="L131">                propertyNames.add(ad.getName());</span>
+<span class="nc" id="L132">            }</span>
+        }
+<span class="nc" id="L134">        boolean shouldRemoveID_FIELDbeforeJSONify = false;</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">        if (!propertyNames.contains(ID_FIELDNAME)) {</span>
+<span class="nc" id="L136">            shouldRemoveID_FIELDbeforeJSONify = propertyNames.add(ID_FIELDNAME);</span>
+        }
+<span class="nc" id="L138">        q.setPropertyNames(propertyNames);</span>
+
+<span class="nc" id="L140">        Integer start = q.getStartIndex();</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">        if (start == null) {</span>
+<span class="nc" id="L142">            start = 0;</span>
+        }
+<span class="nc" id="L144">        boolean offsetSupported = fs.getQueryCapabilities().isOffsetSupported();</span>
+        //if offSet is not supported, get more features (start + the wanted features)
+<span class="nc bnc" id="L146" title="All 4 branches missed.">        if (!offsetSupported &amp;&amp; q.getMaxFeatures() &lt; MAX_FEATURES) {</span>
+<span class="nc" id="L147">            q.setMaxFeatures(q.getMaxFeatures() + start);</span>
+        }
+
+<span class="nc" id="L150">        JSONArray features = new JSONArray();</span>
+        try {
+            // workflow handling
+<span class="nc" id="L153">            SimpleFeatureCollection feats = (SimpleFeatureCollection) fs.getFeatures(q);</span>
+            // get a list of unique ID_FIELDNAME
+<span class="nc" id="L155">            Function uniq = ff.function(&quot;Collection_Unique&quot;, ff.property(ID_FIELDNAME));</span>
+<span class="nc" id="L156">            Set&lt;Object&gt; idlist = (Set&lt;Object&gt;) uniq.evaluate(feats);</span>
+
+<span class="nc" id="L158">            SimpleFeatureCollection inMem = DataUtilities.collection(feats);</span>
+<span class="nc" id="L159">            List&lt;SimpleFeature&gt; actueel = new ArrayList&lt;&gt;();</span>
+
+            // this works as follows:
+            //  - filter out all definitief and bewerkt for a certain id
+            //  - sort that set ascending by WORKFLOW_FIELDNAME
+            //  - sort that set descending by MUTATIEDATUM_FIELDNAME
+            //  - get the first feature from the collection
+            // which should be the youngest bewerkt or definitief
+            SimpleFeature actFeat;
+            SortedSimpleFeatureCollection sorted;
+            Filter filter;
+<span class="nc" id="L170">            SortBy[] sortBy = new SortBy[]{</span>
+<span class="nc" id="L171">                ff.sort(WORKFLOW_FIELDNAME, SortOrder.ASCENDING),</span>
+<span class="nc" id="L172">                ff.sort(MUTATIEDATUM_FIELDNAME, SortOrder.DESCENDING)</span>
+            };
+<span class="nc bnc" id="L174" title="All 4 branches missed.">            if (idlist != null &amp;&amp; idlist.size() &gt; 0) {</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">                for (Object id : idlist) {</span>
+<span class="nc" id="L176">                    filter = ff.and(</span>
+<span class="nc" id="L177">                            ff.equals(ff.property(ID_FIELDNAME), ff.literal(id)),</span>
+<span class="nc" id="L178">                            ff.or(</span>
+<span class="nc" id="L179">                                    ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false),</span>
+<span class="nc" id="L180">                                    ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.name()), false)</span>
+                            ));
+<span class="nc" id="L182">                    sorted = new SortedSimpleFeatureCollection(inMem.subCollection(filter), sortBy);</span>
+<span class="nc" id="L183">                    LOG.debug(&quot;aantal gevonden: &quot; + sorted.size());</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L185">                        SimpleFeatureIterator sfi = sorted.features();</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">                        while (sfi.hasNext()) {</span>
+<span class="nc" id="L187">                            LOG.debug(&quot;gevonden feature: &quot; + sfi.next());</span>
+                        }
+                    }
+<span class="nc" id="L190">                    actFeat = DataUtilities.first(sorted);</span>
+<span class="nc" id="L191">                    LOG.debug(&quot;actuele feature: &quot; + actFeat);</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">                    if (actFeat != null) {</span>
+<span class="nc" id="L193">                        actueel.add(actFeat);</span>
+                    }
+<span class="nc" id="L195">                }</span>
+
+<span class="nc" id="L197">                int featureIndex = 0;</span>
+
+<span class="nc bnc" id="L199" title="All 2 branches missed.">                if (shouldRemoveID_FIELDbeforeJSONify) {</span>
+<span class="nc" id="L200">                    propertyNames.remove(ID_FIELDNAME);</span>
+                }
+
+<span class="nc bnc" id="L203" title="All 2 branches missed.">                for (SimpleFeature feature : actueel) {</span>
+                    /* if offset not supported and there are more features returned then
+                     * only get the features after index &gt;= start*/
+<span class="nc bnc" id="L206" title="All 4 branches missed.">                    if (offsetSupported || featureIndex &gt;= start) {</span>
+<span class="nc" id="L207">                        JSONObject j = this.toJSONFeature(new JSONObject(), feature, ft, al, propertyNames, attributeAliases, 0);</span>
+<span class="nc" id="L208">                        features.put(j);</span>
+                    }
+<span class="nc" id="L210">                    featureIndex++;</span>
+<span class="nc" id="L211">                }</span>
+            }
+        } finally {
+<span class="nc" id="L214">            fs.getDataStore().dispose();</span>
+        }
+<span class="nc" id="L216">        return features;</span>
+    }
+
+    /**
+     * Get the features as JSONArray with the given params
+     *
+     * @param al The application layer(if there is a application layer)
+     * @param ft The featuretype that must be used to get the features
+     * @param fs The featureSource
+     * @param q The query
+     * @return JSONArray with features.
+     * @throws IOException if any
+     * @throws JSONException if any
+     * @throws Exception if any
+     */
+    public JSONArray getDefinitiefJSONFeatures(ApplicationLayer al, SimpleFeatureType ft, FeatureSource fs, Query q)
+            throws IOException, JSONException, Exception {
+<span class="nc" id="L233">        LOG.debug(&quot;Ophalen definitief json features met: &quot; + q);</span>
+<span class="nc" id="L234">        Map&lt;String, String&gt; attributeAliases = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L235" title="All 2 branches missed.">        if (!edit) {</span>
+<span class="nc bnc" id="L236" title="All 2 branches missed.">            for (AttributeDescriptor ad : ft.getAttributes()) {</span>
+<span class="nc bnc" id="L237" title="All 2 branches missed.">                if (ad.getAlias() != null) {</span>
+<span class="nc" id="L238">                    attributeAliases.put(ad.getName(), ad.getAlias());</span>
+                }
+<span class="nc" id="L240">            }</span>
+        }
+        List&lt;String&gt; propertyNames;
+<span class="nc bnc" id="L243" title="All 2 branches missed.">        if (al != null) {</span>
+<span class="nc" id="L244">            propertyNames = this.setPropertyNames(al, q, ft, edit);</span>
+        } else {
+<span class="nc" id="L246">            propertyNames = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">            for (AttributeDescriptor ad : ft.getAttributes()) {</span>
+<span class="nc" id="L248">                propertyNames.add(ad.getName());</span>
+<span class="nc" id="L249">            }</span>
+        }
+
+<span class="nc" id="L252">        Integer start = q.getStartIndex();</span>
+<span class="nc bnc" id="L253" title="All 2 branches missed.">        if (start == null) {</span>
+<span class="nc" id="L254">            start = 0;</span>
+        }
+<span class="nc" id="L256">        boolean offsetSupported = fs.getQueryCapabilities().isOffsetSupported();</span>
+        //if offSet is not supported, get more features (start + the wanted features)
+<span class="nc bnc" id="L258" title="All 4 branches missed.">        if (!offsetSupported &amp;&amp; q.getMaxFeatures() &lt; MAX_FEATURES) {</span>
+<span class="nc" id="L259">            q.setMaxFeatures(q.getMaxFeatures() + start);</span>
+        }
+
+<span class="nc" id="L262">        JSONArray features = new JSONArray();</span>
+        try {
+            // only get 'definitief'
+<span class="nc" id="L265">            SimpleFeatureCollection feats = (SimpleFeatureCollection) fs.getFeatures(q);</span>
+<span class="nc" id="L266">            FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();</span>
+<span class="nc" id="L267">            Filter definitief = ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false);</span>
+<span class="nc" id="L268">            SimpleFeatureCollection defSFC = DataUtilities.collection(feats.subCollection(definitief));</span>
+
+<span class="nc" id="L270">            int featureIndex = 0;</span>
+            SimpleFeature feature;
+<span class="nc" id="L272">            try (SimpleFeatureIterator defs = defSFC.features()) {</span>
+<span class="nc bnc" id="L273" title="All 2 branches missed.">                while (defs.hasNext()) {</span>
+<span class="nc" id="L274">                    feature = defs.next();</span>
+                    /* if offset not supported and there are more features returned then
+                     * only get the features after index &gt;= start*/
+<span class="nc bnc" id="L277" title="All 4 branches missed.">                    if (offsetSupported || featureIndex &gt;= start) {</span>
+<span class="nc" id="L278">                        JSONObject j = this.toJSONFeature(new JSONObject(), feature, ft, al, propertyNames, attributeAliases, 0);</span>
+<span class="nc" id="L279">                        features.put(j);</span>
+                    }
+<span class="nc" id="L281">                    featureIndex++;</span>
+                }
+            }
+        } finally {
+<span class="nc" id="L285">            fs.getDataStore().dispose();</span>
+        }
+<span class="nc" id="L287">        return features;</span>
+    }
+
+    private JSONObject toJSONFeature(JSONObject j, SimpleFeature f, SimpleFeatureType ft, ApplicationLayer al, List&lt;String&gt; propertyNames, Map&lt;String, String&gt; attributeAliases, int index)
+            throws JSONException, Exception {
+<span class="nc bnc" id="L292" title="All 2 branches missed.">        if (arrays) {</span>
+<span class="nc bnc" id="L293" title="All 2 branches missed.">            for (String name : propertyNames) {</span>
+<span class="nc" id="L294">                Object value = f.getAttribute(name);</span>
+<span class="nc" id="L295">                j.put(&quot;c&quot; + index++, formatValue(value));</span>
+<span class="nc" id="L296">            }</span>
+        } else {
+<span class="nc bnc" id="L298" title="All 2 branches missed.">            for (String name : propertyNames) {</span>
+<span class="nc bnc" id="L299" title="All 2 branches missed.">                if (!aliases) {</span>
+<span class="nc" id="L300">                    j.put(name, formatValue(f.getAttribute(name)));</span>
+                } else {
+<span class="nc" id="L302">                    String alias = null;</span>
+<span class="nc bnc" id="L303" title="All 2 branches missed.">                    if (attributeAliases != null) {</span>
+<span class="nc" id="L304">                        alias = attributeAliases.get(name);</span>
+                    }
+<span class="nc bnc" id="L306" title="All 2 branches missed.">                    j.put(alias != null ? alias : name, formatValue(f.getAttribute(name)));</span>
+                }
+<span class="nc" id="L308">            }</span>
+        }
+        //if edit and not yet set
+        // removed check for edit variable here because we need to compare features in edit component and feature info attributes
+        // was if(edit &amp;&amp; j.optString(FID,null)==null) {
+<span class="nc bnc" id="L313" title="All 2 branches missed.">        if (j.optString(FID, null) == null) {</span>
+<span class="nc" id="L314">            String id = f.getID();</span>
+<span class="nc" id="L315">            j.put(FID, id);</span>
+        }
+<span class="nc bnc" id="L317" title="All 2 branches missed.">        if (ft.hasRelations()) {</span>
+<span class="nc" id="L318">            j = populateWithRelatedFeatures(j, f, ft, al, index);</span>
+        }
+<span class="nc" id="L320">        return j;</span>
+    }
+
+    /**
+     * Populate the json object with related featues
+     */
+    private JSONObject populateWithRelatedFeatures(JSONObject j, SimpleFeature feature, SimpleFeatureType ft, ApplicationLayer al, int index) throws Exception {
+<span class="nc bnc" id="L327" title="All 2 branches missed.">        if (ft.hasRelations()) {</span>
+<span class="nc" id="L328">            JSONArray related_featuretypes = new JSONArray();</span>
+<span class="nc bnc" id="L329" title="All 2 branches missed.">            for (FeatureTypeRelation rel : ft.getRelations()) {</span>
+<span class="nc" id="L330">                boolean isJoin = rel.getType().equals(FeatureTypeRelation.JOIN);</span>
+<span class="nc bnc" id="L331" title="All 2 branches missed.">                if (isJoin) {</span>
+<span class="nc" id="L332">                    FeatureSource foreignFs = rel.getForeignFeatureType().openGeoToolsFeatureSource(TIMEOUT);</span>
+<span class="nc" id="L333">                    FeatureIterator&lt;SimpleFeature&gt; foreignIt = null;</span>
+                    try {
+<span class="nc" id="L335">                        Query foreignQ = new Query(foreignFs.getName().toString());</span>
+                        //create filter
+<span class="nc" id="L337">                        Filter filter = createFilter(feature, rel);</span>
+<span class="nc bnc" id="L338" title="All 2 branches missed.">                        if (filter == null) {</span>
+                            continue;
+                        }
+                        //if join only get 1 feature
+<span class="nc" id="L342">                        foreignQ.setMaxFeatures(1);</span>
+<span class="nc" id="L343">                        foreignQ.setFilter(filter);</span>
+                        //set propertynames
+                        List&lt;String&gt; propertyNames;
+<span class="nc bnc" id="L346" title="All 2 branches missed.">                        if (al != null) {</span>
+<span class="nc" id="L347">                            propertyNames = setPropertyNames(al, foreignQ, rel.getForeignFeatureType(), edit);</span>
+                        } else {
+<span class="nc" id="L349">                            propertyNames = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L350" title="All 2 branches missed.">                            for (AttributeDescriptor ad : rel.getForeignFeatureType().getAttributes()) {</span>
+<span class="nc" id="L351">                                propertyNames.add(ad.getName());</span>
+<span class="nc" id="L352">                            }</span>
+                        }
+<span class="nc bnc" id="L354" title="All 2 branches missed.">                        if (propertyNames.isEmpty()) {</span>
+                            // if there are no properties to retrieve just get out
+                            continue;
+                        }
+                        //get aliases
+<span class="nc" id="L359">                        Map&lt;String, String&gt; attributeAliases = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L360" title="All 2 branches missed.">                        if (!edit) {</span>
+<span class="nc bnc" id="L361" title="All 2 branches missed.">                            for (AttributeDescriptor ad : rel.getForeignFeatureType().getAttributes()) {</span>
+<span class="nc bnc" id="L362" title="All 2 branches missed.">                                if (ad.getAlias() != null) {</span>
+<span class="nc" id="L363">                                    attributeAliases.put(ad.getName(), ad.getAlias());</span>
+                                }
+<span class="nc" id="L365">                            }</span>
+                        }
+                        //Get Feature and populate JSON object with the values.
+<span class="nc" id="L368">                        foreignIt = foreignFs.getFeatures(foreignQ).features();</span>
+<span class="nc bnc" id="L369" title="All 2 branches missed.">                        while (foreignIt.hasNext()) {</span>
+<span class="nc" id="L370">                            SimpleFeature foreignFeature = foreignIt.next();</span>
+                            //join it in the same json
+<span class="nc" id="L372">                            j = toJSONFeature(j, foreignFeature, rel.getForeignFeatureType(), al, propertyNames, attributeAliases, index);</span>
+<span class="nc" id="L373">                        }</span>
+                    } finally {
+<span class="nc bnc" id="L375" title="All 2 branches missed.">                        if (foreignIt != null) {</span>
+<span class="nc" id="L376">                            foreignIt.close();</span>
+                        }
+<span class="nc" id="L378">                        foreignFs.getDataStore().dispose();</span>
+                    }
+<span class="nc" id="L380">                } else {</span>
+<span class="nc" id="L381">                    Filter filter = createFilter(feature, rel);</span>
+<span class="nc bnc" id="L382" title="All 2 branches missed.">                    if (filter == null) {</span>
+<span class="nc" id="L383">                        continue;</span>
+                    }
+<span class="nc" id="L385">                    JSONObject related_ft = new JSONObject();</span>
+<span class="nc" id="L386">                    related_ft.put(&quot;filter&quot;, CQL.toCQL(filter));</span>
+<span class="nc" id="L387">                    related_ft.put(&quot;id&quot;, rel.getForeignFeatureType().getId());</span>
+<span class="nc" id="L388">                    related_featuretypes.put(related_ft);</span>
+                }
+<span class="nc" id="L390">            }</span>
+<span class="nc bnc" id="L391" title="All 2 branches missed.">            if (related_featuretypes.length() &gt; 0) {</span>
+<span class="nc" id="L392">                j.put(&quot;related_featuretypes&quot;, related_featuretypes);</span>
+            }
+        }
+<span class="nc" id="L395">        return j;</span>
+    }
+
+<span class="nc" id="L398">    HashMap&lt;Long, List&lt;String&gt;&gt; propertyNamesQueryCache = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L399">    HashMap&lt;Long, Boolean&gt; haveInvisiblePropertiesCache = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L400">    HashMap&lt;Long, List&lt;String&gt;&gt; propertyNamesReturnCache = new HashMap&lt;&gt;();</span>
+
+    /**
+     * Get the propertynames and add the needed propertynames to the query.
+     */
+    private List&lt;String&gt; setPropertyNames(ApplicationLayer appLayer, Query q, SimpleFeatureType sft, boolean edit) {
+<span class="nc" id="L406">        List&lt;String&gt; propertyNames = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L407">        boolean haveInvisibleProperties = false;</span>
+<span class="nc bnc" id="L408" title="All 2 branches missed.">        if (propertyNamesQueryCache.containsKey(sft.getId())) {</span>
+<span class="nc" id="L409">            haveInvisibleProperties = haveInvisiblePropertiesCache.get(sft.getId());</span>
+<span class="nc bnc" id="L410" title="All 2 branches missed.">            if (haveInvisibleProperties) {</span>
+<span class="nc" id="L411">                q.setPropertyNames(propertyNamesQueryCache.get(sft.getId()));</span>
+            }
+<span class="nc" id="L413">            return propertyNamesReturnCache.get(sft.getId());</span>
+        } else {
+<span class="nc bnc" id="L415" title="All 2 branches missed.">            for (ConfiguredAttribute ca : appLayer.getAttributes(sft)) {</span>
+<span class="nc bnc" id="L416" title="All 14 branches missed.">                if ((!edit &amp;&amp; !graph &amp;&amp; ca.isVisible()) || (edit &amp;&amp; ca.isEditable()) || (graph &amp;&amp; attributesToInclude.contains(ca.getId()))) {</span>
+<span class="nc" id="L417">                    propertyNames.add(ca.getAttributeName());</span>
+                } else {
+<span class="nc" id="L419">                    haveInvisibleProperties = true;</span>
+                }
+<span class="nc" id="L421">            }</span>
+<span class="nc" id="L422">            haveInvisiblePropertiesCache.put(sft.getId(), haveInvisibleProperties);</span>
+<span class="nc" id="L423">            propertyNamesReturnCache.put(sft.getId(), propertyNames);</span>
+<span class="nc" id="L424">            propertyNamesQueryCache.put(sft.getId(), propertyNames);</span>
+<span class="nc bnc" id="L425" title="All 2 branches missed.">            if (haveInvisibleProperties) {</span>
+                // By default Query retrieves Query.ALL_NAMES
+                // Query.NO_NAMES is an empty String array
+<span class="nc" id="L428">                q.setPropertyNames(propertyNames);</span>
+                // If any related featuretypes are set, add the leftside names in the query
+                // don't add them to propertynames, maybe they are not visible
+<span class="nc bnc" id="L431" title="All 2 branches missed.">                if (sft.getRelations() != null) {</span>
+<span class="nc" id="L432">                    List&lt;String&gt; withRelations = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L433">                    withRelations.addAll(propertyNames);</span>
+<span class="nc bnc" id="L434" title="All 2 branches missed.">                    for (FeatureTypeRelation ftr : sft.getRelations()) {</span>
+<span class="nc bnc" id="L435" title="All 2 branches missed.">                        if (ftr.getRelationKeys() != null) {</span>
+<span class="nc bnc" id="L436" title="All 2 branches missed.">                            for (FeatureTypeRelationKey key : ftr.getRelationKeys()) {</span>
+<span class="nc bnc" id="L437" title="All 2 branches missed.">                                if (!withRelations.contains(key.getLeftSide().getName())) {</span>
+<span class="nc" id="L438">                                    withRelations.add(key.getLeftSide().getName());</span>
+                                }
+<span class="nc" id="L440">                            }</span>
+                        }
+<span class="nc" id="L442">                    }</span>
+<span class="nc" id="L443">                    propertyNamesQueryCache.put(sft.getId(), withRelations);</span>
+<span class="nc" id="L444">                    q.setPropertyNames(withRelations);</span>
+                }
+            }
+<span class="nc" id="L447">            propertyNamesReturnCache.put(sft.getId(), propertyNames);</span>
+<span class="nc" id="L448">            return propertyNames;</span>
+        }
+    }
+
+<span class="nc" id="L452">    private final DateFormat dateFormat = new SimpleDateFormat(&quot;dd-MM-yyyy HH:mm:ss&quot;);</span>
+
+    private Object formatValue(Object value) {
+<span class="nc bnc" id="L455" title="All 2 branches missed.">        if (value instanceof Date) {</span>
+            // JSON has no date type so format the date as it is used for
+            // display, not calculation
+<span class="nc" id="L458">            return dateFormat.format((Date) value);</span>
+        } else {
+<span class="nc" id="L460">            return value;</span>
+        }
+    }
+
+    private Filter createFilter(SimpleFeature feature, FeatureTypeRelation rel) {
+<span class="nc" id="L465">        FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();</span>
+<span class="nc" id="L466">        List&lt;Filter&gt; filters = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L467" title="All 2 branches missed.">        for (FeatureTypeRelationKey key : rel.getRelationKeys()) {</span>
+<span class="nc" id="L468">            AttributeDescriptor rightSide = key.getRightSide();</span>
+<span class="nc" id="L469">            AttributeDescriptor leftSide = key.getLeftSide();</span>
+<span class="nc" id="L470">            Object value = feature.getAttribute(leftSide.getName());</span>
+<span class="nc bnc" id="L471" title="All 2 branches missed.">            if (value == null) {</span>
+<span class="nc" id="L472">                continue;</span>
+            }
+<span class="nc bnc" id="L474" title="All 2 branches missed.">            if (AttributeDescriptor.GEOMETRY_TYPES.contains(rightSide.getType())</span>
+<span class="nc bnc" id="L475" title="All 2 branches missed.">                    &amp;&amp; AttributeDescriptor.GEOMETRY_TYPES.contains(leftSide.getType())) {</span>
+<span class="nc" id="L476">                filters.add(ff.not(ff.isNull(ff.property(rightSide.getName()))));</span>
+<span class="nc" id="L477">                filters.add(ff.intersects(ff.property(rightSide.getName()), ff.literal(value)));</span>
+            } else {
+<span class="nc" id="L479">                filters.add(ff.equals(ff.property(rightSide.getName()), ff.literal(value)));</span>
+            }
+<span class="nc" id="L481">        }</span>
+<span class="nc bnc" id="L482" title="All 2 branches missed.">        if (filters.size() &gt; 1) {</span>
+<span class="nc" id="L483">            return ff.and(filters);</span>
+<span class="nc bnc" id="L484" title="All 2 branches missed.">        } else if (filters.size() == 1) {</span>
+<span class="nc" id="L485">            return filters.get(0);</span>
+        } else {
+<span class="nc" id="L487">            return null;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

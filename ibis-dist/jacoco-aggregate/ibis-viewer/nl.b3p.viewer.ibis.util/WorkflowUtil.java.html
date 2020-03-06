@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="nl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>WorkflowUtil.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">IBIS distributie</a> &gt; <a href="../index.html" class="el_bundle">ibis-viewer</a> &gt; <a href="index.source.html" class="el_package">nl.b3p.viewer.ibis.util</a> &gt; <span class="el_source">WorkflowUtil.java</span></div><h1>WorkflowUtil.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 B3Partners B.V.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package nl.b3p.viewer.ibis.util;
+
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.operation.overlay.snap.GeometrySnapper;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+import javax.persistence.EntityManager;
+import nl.b3p.viewer.config.app.Application;
+import nl.b3p.viewer.config.app.ApplicationLayer;
+import nl.b3p.viewer.config.services.Layer;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.geotools.data.DefaultTransaction;
+import org.geotools.data.Transaction;
+import org.geotools.data.simple.SimpleFeatureCollection;
+import org.geotools.data.simple.SimpleFeatureStore;
+import org.geotools.factory.CommonFactoryFinder;
+import org.geotools.feature.collection.AbstractFeatureVisitor;
+import org.geotools.geometry.jts.JTSFactoryFinder;
+import org.opengis.feature.Feature;
+import org.opengis.filter.Filter;
+import org.opengis.filter.FilterFactory2;
+
+/**
+ * Utility method that come in handy hadling workflow.
+ *
+ * @author mprins
+ */
+public class WorkflowUtil implements IbisConstants {
+
+<span class="nc" id="L52">    private static final Log log = LogFactory.getLog(WorkflowUtil.class);</span>
+
+    /**
+     * private constructor for utility class.
+     */
+    private WorkflowUtil() {
+    }
+
+    /**
+     * Update the geometry of the TERREIN. Must be called after the kavels
+     * transaction. voor definitief terrein definitief kavels gebruiken, voor
+     * bewerkt terrein definitef en bewerkt kavel gebruiken
+     *
+     * @param terreinID feature id van het terrein
+     * @param layer kavels layer
+     * @param kavelStatus workflow status van te gebruiken kavels
+     * @param application flamingo applicatie
+     * @param em persistence manager
+     */
+    public static void updateTerreinGeometry(Integer terreinID, Layer layer, WorkflowStatus kavelStatus, Application application, EntityManager em) {
+<span class="nc" id="L72">        log.debug(&quot;Updating terrein geometry for &quot; + terreinID);</span>
+<span class="nc" id="L73">        SimpleFeatureStore terreinStore = null;</span>
+<span class="nc" id="L74">        SimpleFeatureStore kavelStore = null;</span>
+<span class="nc" id="L75">        FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();</span>
+<span class="nc" id="L76">        Transaction terreinTransaction = new DefaultTransaction(&quot;edit-terrein-geom&quot;);</span>
+<span class="nc" id="L77">        Transaction kavelTransaction = new DefaultTransaction(&quot;get-kavel-geom&quot;);</span>
+        try {
+            // determine whichs kavels to use for calcutating new geometry
+<span class="nc" id="L80">            Filter kavelFilter = Filter.EXCLUDE;</span>
+<span class="nc bnc" id="L81" title="All 3 branches missed.">            switch (kavelStatus) {</span>
+                case bewerkt:
+                    // find all &quot;definitief&quot; and &quot;bewerkt&quot; kavel for terreinID
+<span class="nc" id="L84">                    kavelFilter = ff.and(</span>
+<span class="nc" id="L85">                            ff.equals(ff.property(KAVEL_TERREIN_ID_FIELDNAME), ff.literal(terreinID)),</span>
+<span class="nc" id="L86">                            ff.or(</span>
+<span class="nc" id="L87">                                    ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.toString()), false),</span>
+<span class="nc" id="L88">                                    ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.toString()), false)</span>
+                            ));
+<span class="nc" id="L90">                    break;</span>
+                case archief:
+                case afgevoerd:
+                case definitief:
+                    // find all &quot;definitief&quot; kavel for terreinID
+<span class="nc" id="L95">                    kavelFilter = ff.and(</span>
+<span class="nc" id="L96">                            ff.equals(ff.property(KAVEL_TERREIN_ID_FIELDNAME), ff.literal(terreinID)),</span>
+<span class="nc" id="L97">                            ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.toString()), false)</span>
+                    );
+<span class="nc" id="L99">                    break;</span>
+                default:
+                // do nothing / should not happen
+            }
+<span class="nc" id="L103">            log.debug(&quot;Looking for kavel(s) with filter: &quot; + kavelFilter);</span>
+
+<span class="nc" id="L105">            kavelStore = (SimpleFeatureStore) layer.getFeatureType().openGeoToolsFeatureSource();</span>
+<span class="nc" id="L106">            kavelStore.setTransaction(kavelTransaction);</span>
+<span class="nc" id="L107">            SimpleFeatureCollection kavels = kavelStore.getFeatures(kavelFilter);</span>
+
+            // dissolve all kavel geometries
+<span class="nc" id="L110">            final ArrayList&lt;Geometry&gt; kavelGeoms = new ArrayList();</span>
+<span class="nc" id="L111">            kavels.accepts(new AbstractFeatureVisitor() {</span>
+                @Override
+                public void visit(Feature feature) {
+<span class="nc" id="L114">                    Geometry geom = (Geometry) feature.getDefaultGeometryProperty().getValue();</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">                    if (geom != null) {</span>
+<span class="nc" id="L116">                        kavelGeoms.add(geom);</span>
+                    }
+<span class="nc" id="L118">                }</span>
+            }, null);
+<span class="nc" id="L120">            log.debug(&quot;Kavels found for this terrein: &quot; + kavelGeoms.size());</span>
+
+            Geometry newTerreinGeom;
+<span class="nc bnc" id="L123" title="All 2 branches missed.">            if (kavelGeoms.size() == 1) {</span>
+                // maar 1 (vlak) geom gevonden, dus geom overzetten naar terrein
+<span class="nc" id="L125">                newTerreinGeom = kavelGeoms.get(0);</span>
+            } else {
+<span class="nc" id="L127">                GeometryFactory factory = JTSFactoryFinder.getGeometryFactory(null);</span>
+<span class="nc" id="L128">                GeometryCollection geometryCollection = (GeometryCollection) factory.buildGeometry(kavelGeoms);</span>
+<span class="nc" id="L129">                newTerreinGeom = geometryCollection.union();</span>
+            }
+            // buffer + en -0.001m (because rijksdriehoek) om interne slivers in terrein op te lossen,
+            // zie https://github.com/B3Partners/flamingo-ibis/issues/64
+<span class="nc" id="L133">            log.debug(&quot;terrein geom : &quot; + newTerreinGeom);</span>
+<span class="nc" id="L134">            newTerreinGeom = newTerreinGeom.buffer(.001, 1);</span>
+<span class="nc" id="L135">            log.debug(&quot;buffer+.001   : &quot; + newTerreinGeom);</span>
+<span class="nc" id="L136">            newTerreinGeom = newTerreinGeom.buffer(-.001, 1);</span>
+<span class="nc" id="L137">            log.debug(&quot;buffer-.001   : &quot; + newTerreinGeom);</span>
+            // en ook nog een snap-to-self met een centimeter tolerantie
+<span class="nc" id="L139">            newTerreinGeom = GeometrySnapper.snapToSelf(newTerreinGeom, .01, true);</span>
+<span class="nc" id="L140">            log.debug(&quot;snapped+clean: &quot; + newTerreinGeom);</span>
+
+<span class="nc bnc" id="L142" title="All 2 branches missed.">            if (!newTerreinGeom.getGeometryType().equalsIgnoreCase(&quot;MultiPolygon&quot;)) {</span>
+<span class="nc" id="L143">                GeometryFactory f = JTSFactoryFinder.getGeometryFactory();</span>
+<span class="nc" id="L144">                newTerreinGeom = f.createMultiPolygon(new Polygon[]{(Polygon) newTerreinGeom});</span>
+            }
+
+            // find terrein appLayer
+<span class="nc" id="L148">            ApplicationLayer terreinAppLyr = null;</span>
+<span class="nc" id="L149">            List&lt;ApplicationLayer&gt; lyrs = application.loadTreeCache(em).getApplicationLayers();</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">            for (ListIterator&lt;ApplicationLayer&gt; it = lyrs.listIterator(); it.hasNext();) {</span>
+<span class="nc" id="L151">                terreinAppLyr = it.next();</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">                if (terreinAppLyr.getLayerName().equalsIgnoreCase(TERREIN_LAYER_NAME)) {</span>
+<span class="nc" id="L153">                    break;</span>
+                }
+            }
+<span class="nc" id="L156">            Layer l = terreinAppLyr.getService().getLayer(TERREIN_LAYER_NAME, em);</span>
+<span class="nc" id="L157">            terreinStore = (SimpleFeatureStore) l.getFeatureType().openGeoToolsFeatureSource();</span>
+<span class="nc" id="L158">            terreinStore.setTransaction(terreinTransaction);</span>
+
+            // determine which terrein to update
+<span class="nc" id="L161">            Filter terreinFilter = Filter.EXCLUDE;</span>
+<span class="nc bnc" id="L162" title="All 3 branches missed.">            switch (kavelStatus) {</span>
+                case bewerkt:
+<span class="nc" id="L164">                    terreinFilter = ff.and(</span>
+<span class="nc" id="L165">                            ff.equals(ff.property(ID_FIELDNAME), ff.literal(terreinID)),</span>
+<span class="nc" id="L166">                            ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.name()), false)</span>
+                    );
+<span class="nc" id="L168">                    break;</span>
+                case archief:
+                case afgevoerd:
+                case definitief:
+<span class="nc" id="L172">                    terreinFilter = ff.and(</span>
+<span class="nc" id="L173">                            ff.equals(ff.property(ID_FIELDNAME), ff.literal(terreinID)),</span>
+<span class="nc" id="L174">                            ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false)</span>
+                    );
+<span class="nc" id="L176">                    break;</span>
+                default:
+                // won't do anything
+            }
+
+            // update terrein with new geom
+<span class="nc" id="L182">            log.debug(&quot;Update terrein geom for kavels filtered by: &quot; + terreinFilter);</span>
+<span class="nc" id="L183">            String geomAttrName = terreinStore.getSchema().getGeometryDescriptor().getLocalName();</span>
+<span class="nc" id="L184">            terreinStore.modifyFeatures(geomAttrName, newTerreinGeom, terreinFilter);</span>
+<span class="nc" id="L185">            terreinTransaction.commit();</span>
+<span class="nc" id="L186">            log.debug(&quot;Done updating terrein geometry for &quot; + terreinFilter + &quot; with new geom: &quot; + newTerreinGeom + &quot; on attribute &quot; + geomAttrName);</span>
+<span class="nc" id="L187">        } catch (Exception e) {</span>
+<span class="nc" id="L188">            log.error(String.format(&quot;Update van terrein geometrie %s is mislukt&quot;, terreinID), e);</span>
+        } finally {
+            try {
+<span class="nc" id="L191">                terreinTransaction.close();</span>
+<span class="nc" id="L192">            } catch (IOException io) {</span>
+<span class="nc" id="L193">                log.warn(&quot;Error closing terrein transaction&quot;, io);</span>
+<span class="nc" id="L194">            }</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">            if (terreinStore != null) {</span>
+<span class="nc" id="L196">                terreinStore.getDataStore().dispose();</span>
+            }
+            try {
+<span class="nc" id="L199">                kavelTransaction.close();</span>
+<span class="nc" id="L200">            } catch (IOException io) {</span>
+<span class="nc" id="L201">                log.warn(&quot;Error closing kavel transaction&quot;, io);</span>
+<span class="nc" id="L202">            }</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">            if (kavelStore != null) {</span>
+<span class="nc" id="L204">                kavelStore.getDataStore().dispose();</span>
+            }
+        }
+<span class="nc" id="L207">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -318,6 +318,10 @@ digraph G {
 <tr><td align="left" balign="left"> + setName(arg0 : String) </td></tr>
 <tr><td align="left" balign="left"> + getVersion() : String </td></tr>
 <tr><td align="left" balign="left"> + setVersion(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getTitle() : String </td></tr>
+<tr><td align="left" balign="left"> + setLang(arg0 : String) </td></tr>
+<tr><td align="left" balign="left"> + getLang() : String </td></tr>
+<tr><td align="left" balign="left"> + setTitle(arg0 : String) </td></tr>
 <tr><td align="left" balign="left"> + getLayout() : String </td></tr>
 <tr><td align="left" balign="left"> + setLayout(arg0 : String) </td></tr>
 <tr><td align="left" balign="left"> + getDetails() : Map&lt;String, ClobElement&gt; </td></tr>
@@ -344,14 +348,16 @@ digraph G {
 <tr><td align="left" balign="left"> + setStartLevels(arg0 : List&lt;StartLevel&gt;) </td></tr>
 <tr><td align="left" balign="left"> + getReaders() : Set&lt;String&gt; </td></tr>
 <tr><td align="left" balign="left"> + setReaders(arg0 : Set&lt;String&gt;) </td></tr>
+<tr><td align="left" balign="left"> + getProjectionCode() : String </td></tr>
+<tr><td align="left" balign="left"> + setProjectionCode(arg0 : String) </td></tr>
 <tr><td align="left" balign="left"> + getNameWithVersion() : String </td></tr>
 <tr><td align="left" balign="left"> + getTreeCache() : Application.TreeCache </td></tr>
 <tr><td align="left" balign="left"> + compareTo(arg0 : Application) : int </td></tr>
 <tr><td align="left" balign="left"> + setTreeCache(arg0 : Application.TreeCache) </td></tr>
 <tr><td align="left" balign="left"> + loadTreeCache(arg0 : EntityManager) : Application.TreeCache </td></tr>
 <tr><td align="left" balign="left"> + authorizationsModified() </td></tr>
-<tr><td align="left" balign="left"> + toJSON(arg0 : HttpServletRequest, arg1 : boolean, arg2 : boolean, arg3 : EntityManager) : String </td></tr>
-<tr><td align="left" balign="left"> + toJSON(arg0 : HttpServletRequest, arg1 : boolean, arg2 : boolean, arg3 : boolean, arg4 : boolean, arg5 : EntityManager) : String </td></tr>
+<tr><td align="left" balign="left"> + toJSON(arg0 : HttpServletRequest, arg1 : boolean, arg2 : boolean, arg3 : EntityManager) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + toJSON(arg0 : HttpServletRequest, arg1 : boolean, arg2 : boolean, arg3 : boolean, arg4 : boolean, arg5 : EntityManager, arg6 : boolean) : JSONObject </td></tr>
 <tr><td align="left" balign="left"> + isMashup() : Boolean </td></tr>
 <tr><td align="left" balign="left"> + isMashup(arg0 : Session) : Boolean </td></tr>
 <tr><td align="left" balign="left"> + createMashup(arg0 : String, arg1 : EntityManager, arg2 : boolean) : Application </td></tr>

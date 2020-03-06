@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="nl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IbisSplitFeatureActionBean.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">IBIS viewer</a> &gt; <a href="index.source.html" class="el_package">nl.b3p.viewer.stripes</a> &gt; <span class="el_source">IbisSplitFeatureActionBean.java</span></div><h1>IbisSplitFeatureActionBean.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 B3Partners B.V.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package nl.b3p.viewer.stripes;
+
+import org.locationtech.jts.geom.Geometry;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import net.sourceforge.stripes.action.StrictBinding;
+import net.sourceforge.stripes.action.UrlBinding;
+import nl.b3p.viewer.ibis.util.IbisConstants;
+import static nl.b3p.viewer.ibis.util.IbisConstants.KAVEL_TERREIN_ID_FIELDNAME;
+import static nl.b3p.viewer.ibis.util.IbisConstants.WORKFLOW_FIELDNAME;
+import nl.b3p.viewer.ibis.util.WorkflowStatus;
+import nl.b3p.viewer.ibis.util.WorkflowUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.geotools.data.DataUtilities;
+import org.geotools.data.simple.SimpleFeatureStore;
+import org.geotools.util.Converter;
+import org.geotools.data.util.GeometryTypeConverterFactory;
+import org.json.JSONException;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.feature.type.GeometryType;
+import org.opengis.filter.Filter;
+import org.opengis.filter.identity.FeatureId;
+import org.json.JSONObject;
+import org.stripesstuff.stripersist.Stripersist;
+
+/**
+ * A workflow-supporting split action bean for ibis.
+ *
+ * @author mprins
+ */
+@UrlBinding(&quot;/action/feature/ibissplit&quot;)
+@StrictBinding
+<span class="nc" id="L53">public class IbisSplitFeatureActionBean extends SplitFeatureActionBean implements IbisConstants {</span>
+
+<span class="nc" id="L55">    private static final Log log = LogFactory.getLog(IbisSplitFeatureActionBean.class);</span>
+
+<span class="nc" id="L57">    private Object terreinID = null;</span>
+<span class="nc" id="L58">    private WorkflowStatus newWorkflowStatus = WorkflowStatus.definitief;</span>
+
+    /**
+     * Thinness ratio of polygon; basically ratio of area/circumference of a
+     * polygon to detect slivers.
+     * &lt;a href=&quot;http://gis.stackexchange.com/questions/151939/explanation-of-the-thinness-ratio-formula&quot;&gt;Explanation
+     * of the Thinness ratio formula?&lt;/a&gt; and
+     * &lt;a href=&quot;https://books.google.se/books?hl=sv&amp;id=uGWmR0f_350C&amp;q=thinness#v=onepage&amp;q=thinness&amp;f=false&quot;&gt;Microscope
+     * Image Processing&lt;/a&gt;
+     */
+    private double sliverRatio;
+
+    /**
+     * max. area of a sliver.
+     */
+    private double sliverMaxArea;
+
+    /**
+     * force the workflow status attribute on the feature. This will handle the
+     * case where the {@code extraData} attribute is a piece of json with the
+     * workflow, eg
+     * {@code {workflow_status:'afgevoerd',datum_mutatie:'2015-12-01Z00:00'}}.
+     *
+     * @param features A list of features to be modified
+     * @return the list of modified features that are about to be committed to
+     * the datastore
+     *
+     * @throws JSONException if json parsing failed
+     */
+    @Override
+    protected List&lt;SimpleFeature&gt; handleExtraData(List&lt;SimpleFeature&gt; features) throws JSONException {
+<span class="nc" id="L89">        JSONObject json = new JSONObject(this.getExtraData());</span>
+        // ideally thses would be passed as regular request params, but that requires an upgrade in de base flamingo component
+<span class="nc" id="L91">        this.sliverMaxArea = json.getDouble(&quot;sliverMaxArea&quot;);</span>
+<span class="nc" id="L92">        json.remove(&quot;sliverMaxArea&quot;);</span>
+<span class="nc" id="L93">        this.sliverRatio = json.getDouble(&quot;sliverRatio&quot;);</span>
+<span class="nc" id="L94">        json.remove(&quot;sliverRatio&quot;);</span>
+
+<span class="nc" id="L96">        Iterator items = json.keys();</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        while (items.hasNext()) {</span>
+<span class="nc" id="L98">            String key = (String) items.next();</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            for (SimpleFeature f : features) {</span>
+<span class="nc" id="L100">                log.debug(String.format(&quot;Setting value: %s for attribute: %s on feature %s&quot;, json.get(key), key, f.getID()));</span>
+<span class="nc" id="L101">                f.setAttribute(key, json.get(key));</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">                if (key.equalsIgnoreCase(WORKFLOW_FIELDNAME)) {</span>
+<span class="nc" id="L103">                    newWorkflowStatus = WorkflowStatus.valueOf(json.getString(key));</span>
+                }
+<span class="nc" id="L105">            }</span>
+<span class="nc" id="L106">        }</span>
+<span class="nc" id="L107">        features = resolveSlivers(features);</span>
+
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        if (features.size() &lt; 2) {</span>
+            // sliver resolution has &quot;cleaned&quot; away all split features and we only have the original left.
+<span class="nc" id="L111">            throw new IllegalArgumentException(&quot;Splits mislukt, de oppervlakte van afgesplitste deel is kleiner dan de drempel (&quot;</span>
+                    + this.sliverMaxArea + &quot;) of de omtrek/oppervlakte ratio is te klein.&quot;);
+        }
+<span class="nc" id="L114">        return features;</span>
+    }
+
+    /**
+     * {@inheritDoc} Overrides deleting features by archiving them instead.
+     */
+    @Override
+    protected List&lt;FeatureId&gt; handleStrategy(SimpleFeature feature, List&lt;? extends Geometry&gt; geoms,
+            Filter filter, SimpleFeatureStore localStore, String localStrategy) throws Exception {
+
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        if (!this.getLayer().getName().equalsIgnoreCase(KAVEL_LAYER_NAME)) {</span>
+<span class="nc" id="L125">            throw new IllegalArgumentException(&quot;Aborting as split layer is not &quot; + KAVEL_LAYER_NAME);</span>
+        }
+
+<span class="nc" id="L128">        List&lt;SimpleFeature&gt; newFeats = new ArrayList();</span>
+<span class="nc" id="L129">        GeometryTypeConverterFactory cf = new GeometryTypeConverterFactory();</span>
+<span class="nc" id="L130">        Converter c = cf.createConverter(Geometry.class, localStore.getSchema().getGeometryDescriptor().getType().getBinding(), null);</span>
+<span class="nc" id="L131">        GeometryType type = localStore.getSchema().getGeometryDescriptor().getType();</span>
+<span class="nc" id="L132">        String geomAttribute = localStore.getSchema().getGeometryDescriptor().getLocalName();</span>
+
+<span class="nc" id="L134">        boolean firstFeature = true;</span>
+<span class="nc" id="L135">        int newID = (int) (new Date().getTime() / 1000);</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        for (Geometry newGeom : geoms) {</span>
+<span class="nc" id="L137">            log.debug(&quot;Creating feature with geom length: &quot; + newGeom.getLength());</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">            if (firstFeature) {</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">                if (localStrategy.equalsIgnoreCase(&quot;add&quot;)) {</span>
+                    // existing feature to &quot;archief&quot;
+<span class="nc" id="L141">                    feature.setAttribute(WORKFLOW_FIELDNAME, WorkflowStatus.archief);</span>
+<span class="nc" id="L142">                    Object[] attributevalues = feature.getAttributes().toArray(new Object[feature.getAttributeCount()]);</span>
+<span class="nc" id="L143">                    String[] attributes = DataUtilities.attributeNames(feature.getFeatureType());</span>
+<span class="nc" id="L144">                    localStore.modifyFeatures(attributes, attributevalues, filter);</span>
+                    // remember terreinID
+<span class="nc" id="L146">                    this.terreinID = feature.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);</span>
+
+                    // create the first new feature
+<span class="nc" id="L149">                    SimpleFeature newFeat = DataUtilities.createFeature(feature.getType(),</span>
+<span class="nc" id="L150">                            DataUtilities.encodeFeature(feature, false));</span>
+<span class="nc" id="L151">                    newFeat.setAttribute(geomAttribute, c.convert(newGeom, type.getBinding()));</span>
+<span class="nc" id="L152">                    log.debug(&quot;First split feature has ibis id: &quot; + newFeat.getAttribute(ID_FIELDNAME));</span>
+<span class="nc" id="L153">                    newFeats.add(newFeat);</span>
+<span class="nc" id="L154">                    firstFeature = false;</span>
+<span class="nc" id="L155">                    continue;</span>
+                } else {
+<span class="nc" id="L157">                    throw new IllegalArgumentException(&quot;Unknown or unsupported strategy '&quot; + localStrategy + &quot;', cannot split.&quot;);</span>
+                }
+            }
+            // create + add new features using the rest of the geometries
+<span class="nc" id="L161">            SimpleFeature newFeat = DataUtilities.createFeature(feature.getType(),</span>
+<span class="nc" id="L162">                    DataUtilities.encodeFeature(feature, false));</span>
+<span class="nc" id="L163">            newFeat.setAttribute(geomAttribute, c.convert(newGeom, type.getBinding()));</span>
+<span class="nc" id="L164">            newFeat.setAttribute(ID_FIELDNAME, newID++);</span>
+<span class="nc" id="L165">            log.debug(&quot;Created new feature with ibis id: &quot; + newID);</span>
+<span class="nc" id="L166">            newFeats.add(newFeat);</span>
+<span class="nc" id="L167">        }</span>
+        // update specified fields on the new features
+<span class="nc" id="L169">        newFeats = this.handleExtraData(newFeats);</span>
+<span class="nc" id="L170">        return localStore.addFeatures(DataUtilities.collection(newFeats));</span>
+    }
+
+    /**
+     * Called after the split is completed and commit was performed. update
+     * terrein geometry
+     */
+    @Override
+    protected void afterSplit(List&lt;FeatureId&gt; ids) {
+<span class="nc bnc" id="L179" title="All 2 branches missed.">        if (this.terreinID != null) {</span>
+<span class="nc" id="L180">            WorkflowUtil.updateTerreinGeometry(Integer.parseInt(this.terreinID.toString()), this.getLayer(),</span>
+<span class="nc" id="L181">                    this.newWorkflowStatus, this.getApplication(), Stripersist.getEntityManager());</span>
+        }
+<span class="nc" id="L183">    }</span>
+
+    private List&lt;SimpleFeature&gt; resolveSlivers(List&lt;SimpleFeature&gt; features) {
+<span class="nc" id="L186">        List&lt;SimpleFeature&gt; nonSlivers = features;</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">        if (this.sliverRatio &gt; 0) {</span>
+<span class="nc" id="L188">            ArrayList&lt;SimpleFeature&gt; slivers = new ArrayList();</span>
+<span class="nc" id="L189">            nonSlivers = new ArrayList();</span>
+            // determine slivers and 'real' polygons
+<span class="nc bnc" id="L191" title="All 2 branches missed.">            for (SimpleFeature f : features) {</span>
+<span class="nc" id="L192">                Geometry g = (Geometry) f.getDefaultGeometry();</span>
+                // use minimum area and thinness ratio formula: 4 * pi * area/(length*length)
+<span class="nc bnc" id="L194" title="All 4 branches missed.">                if (g.getArea() &lt;= sliverMaxArea &amp;&amp; 4 * Math.PI * (g.getArea() / (g.getLength() * g.getLength())) &lt; sliverRatio) {</span>
+<span class="nc" id="L195">                    log.debug(&quot;Sliver gevonden: &quot; + f);</span>
+<span class="nc" id="L196">                    slivers.add(f);</span>
+                } else {
+<span class="nc" id="L198">                    nonSlivers.add(f);</span>
+                }
+<span class="nc" id="L200">            }</span>
+
+            // merge slivers to non-slivers..
+<span class="nc bnc" id="L203" title="All 2 branches missed.">            for (SimpleFeature f : nonSlivers) {</span>
+<span class="nc" id="L204">                Geometry g = (Geometry) f.getDefaultGeometry();</span>
+<span class="nc" id="L205">                ArrayList&lt;SimpleFeature&gt; sliversToRemove = new ArrayList();</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">                for (SimpleFeature s : slivers) {</span>
+<span class="nc" id="L207">                    Geometry sg = (Geometry) s.getDefaultGeometry();</span>
+<span class="nc bnc" id="L208" title="All 2 branches missed.">                    if (sg.touches(g)) {</span>
+<span class="nc" id="L209">                        log.debug(&quot;Samenvoegen van sliver: &quot; + s + &quot; met: &quot; + g);</span>
+<span class="nc" id="L210">                        g = sg.union(g);</span>
+<span class="nc" id="L211">                        sliversToRemove.add(s);</span>
+                    }
+<span class="nc" id="L213">                }</span>
+<span class="nc" id="L214">                f.setDefaultGeometry(g);</span>
+<span class="nc" id="L215">                slivers.removeAll(sliversToRemove);</span>
+<span class="nc" id="L216">            }</span>
+            // slivers should be empty
+<span class="nc bnc" id="L218" title="All 2 branches missed.">            if (!slivers.isEmpty()) {</span>
+<span class="nc" id="L219">                log.warn(&quot;Niet alle slivers zijn opgelost. Overblijvers:&quot;);</span>
+<span class="nc bnc" id="L220" title="All 2 branches missed.">                for (SimpleFeature s : slivers) {</span>
+<span class="nc" id="L221">                    log.warn(&quot;  overblijvende sliver: &quot; + s);</span>
+<span class="nc" id="L222">                }</span>
+            }
+        }
+<span class="nc" id="L225">        return nonSlivers;</span>
+    }
+
+    //&lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;getters en setters&quot;&gt;
+    public double getSliverRatio() {
+<span class="nc" id="L230">        return sliverRatio;</span>
+    }
+
+    public void setSliverRatio(double sliverRatio) {
+<span class="nc" id="L234">        this.sliverRatio = sliverRatio;</span>
+<span class="nc" id="L235">    }</span>
+    
+    public double getSliverMaxArea() {
+<span class="nc" id="L238">        return sliverMaxArea;</span>
+    }
+
+    public void setSliverMaxArea(double sliverMaxArea) {
+<span class="nc" id="L242">        this.sliverMaxArea = sliverMaxArea;</span>
+<span class="nc" id="L243">    }</span>
+    //&lt;/editor-fold&gt;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

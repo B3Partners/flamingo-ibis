@@ -1,0 +1,19 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+IBIS distributie/ibis-viewer,nl.b3p.viewer.ibis.util,WorkflowUtil.new AbstractFeatureVisitor() {...},19,0,2,0,5,0,3,0,2,0
+IBIS distributie/ibis-viewer,nl.b3p.viewer.ibis.util,WorkflowUtil,398,0,18,0,80,0,12,0,2,0
+IBIS distributie/ibis-viewer,nl.b3p.viewer.ibis.util,WorkflowStatus,59,0,0,0,9,0,3,0,3,0
+IBIS distributie/ibis-viewer,nl.b3p.viewer.ibis.util,DateUtils,4,64,4,4,2,14,4,3,0,3
+IBIS distributie/ibis-viewer,nl.b3p.viewer.util,IbisFeatureToJson,1224,0,150,0,243,0,85,0,10,0
+IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisAttributeListActionBean.AggregationLevelDate,24,0,0,0,2,0,1,0,1,0
+IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisReportsActionBean,912,0,70,0,195,0,63,0,28,0
+IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisAttributeListActionBean.new Comparator() {...},10,0,0,0,2,0,2,0,2,0
+IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisAttributeListActionBean.new Comparator() {...},10,0,0,0,2,0,2,0,2,0
+IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisAttributeListActionBean.new Comparator() {...},10,0,0,0,2,0,2,0,2,0
+IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisFeatureInfoActionBean,127,0,6,0,20,0,6,0,3,0
+IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisAttributeListActionBean.ReportType,34,0,0,0,2,0,1,0,1,0
+IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisAttributeListActionBean.QueryArea,34,0,0,0,2,0,1,0,1,0
+IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisEditFeatureActionBean,740,0,59,0,145,0,40,0,9,0
+IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisReportsActionBean.new StreamingResolution() {...},22,0,0,0,5,0,2,0,2,0
+IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisMergeFeaturesActionBean,231,0,12,0,44,0,11,0,5,0
+IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisAttributeListActionBean,2138,0,152,0,474,0,125,0,44,0
+IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisSplitFeatureActionBean,514,0,36,0,98,0,28,0,10,0

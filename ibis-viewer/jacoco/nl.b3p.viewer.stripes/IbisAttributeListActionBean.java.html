@@ -1,0 +1,1108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="nl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IbisAttributeListActionBean.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">IBIS viewer</a> &gt; <a href="index.source.html" class="el_package">nl.b3p.viewer.stripes</a> &gt; <span class="el_source">IbisAttributeListActionBean.java</span></div><h1>IbisAttributeListActionBean.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 B3Partners B.V.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package nl.b3p.viewer.stripes;
+
+import static nl.b3p.viewer.ibis.util.DateUtils.addMonth;
+import static nl.b3p.viewer.ibis.util.DateUtils.differenceInMonths;
+
+import java.io.StringReader;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TimeZone;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import javax.persistence.EntityManager;
+import net.sourceforge.stripes.action.ActionBean;
+import net.sourceforge.stripes.action.ActionBeanContext;
+import net.sourceforge.stripes.action.After;
+import net.sourceforge.stripes.action.Before;
+import net.sourceforge.stripes.action.DefaultHandler;
+import net.sourceforge.stripes.action.Resolution;
+import net.sourceforge.stripes.action.StreamingResolution;
+import net.sourceforge.stripes.action.StrictBinding;
+import net.sourceforge.stripes.action.UrlBinding;
+import net.sourceforge.stripes.controller.LifecycleStage;
+import net.sourceforge.stripes.validation.DateTypeConverter;
+import net.sourceforge.stripes.validation.EnumeratedTypeConverter;
+import net.sourceforge.stripes.validation.Validate;
+import nl.b3p.viewer.config.app.Application;
+import nl.b3p.viewer.config.app.ApplicationLayer;
+import nl.b3p.viewer.config.security.Authorizations;
+import nl.b3p.viewer.config.services.AttributeDescriptor;
+import nl.b3p.viewer.config.services.FeatureTypeRelation;
+import nl.b3p.viewer.config.services.Layer;
+import nl.b3p.viewer.config.services.SimpleFeatureType;
+import nl.b3p.viewer.ibis.util.IbisConstants;
+import nl.b3p.viewer.util.FeatureToJson;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.geotools.data.DataUtilities;
+import org.geotools.data.Query;
+import org.geotools.data.simple.SimpleFeatureCollection;
+import org.geotools.data.simple.SimpleFeatureIterator;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.data.simple.SimpleFeatureSource;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.filter.text.ecql.ECQL;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.opengis.feature.Property;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.filter.Filter;
+import org.stripesstuff.stripersist.Stripersist;
+
+/**
+ * Attribute list backend for voor IBIS component IbisReport.
+ *
+ * @author Mark Prins
+ */
+@UrlBinding(&quot;/action/ibisattributes&quot;)
+@StrictBinding
+<span class="nc" id="L86">public class IbisAttributeListActionBean implements ActionBean, IbisConstants {</span>
+
+<span class="nc" id="L88">    private static final Log log = LogFactory.getLog(IbisAttributeListActionBean.class);</span>
+    private static final String JSON_METADATA = &quot;metaData&quot;;
+    private ActionBeanContext context;
+
+    /**
+     * Base64 form fData to echo back.
+     */
+    @Validate
+    private String data;
+    /**
+     * filename to echo back.
+     */
+    @Validate
+    private String filename;
+    /**
+     * mimetype to echo back.
+     */
+    @Validate
+    private String mimetype;
+
+    @Validate
+    private Application application;
+
+    @Validate
+    private ApplicationLayer appLayer;
+
+    @Validate(converter = DateTypeConverter.class)
+    private Date fromDate;
+    @Validate(converter = DateTypeConverter.class)
+    private Date toDate;
+    @Validate
+    private String regio;
+    @Validate
+    private String gemeente;
+    @Validate
+    private String terrein;
+    @Validate
+    private List&lt;String&gt; attrNames;
+    /**
+     * report reportType
+     */
+    @Validate(converter = EnumeratedTypeConverter.class)
+    private ReportType reportType;
+    /**
+     * report type
+     */
+    @Validate(converter = EnumeratedTypeConverter.class)
+    private QueryArea aggregationLevel;
+    @Validate(converter = EnumeratedTypeConverter.class)
+    private AggregationLevelDate aggregationLevelDate;
+
+<span class="nc" id="L139">    private Layer layer = null;</span>
+    private boolean unauthorized;
+    private String gebiedsNaamQuery;
+    private QueryArea areaType;
+
+<span class="nc" id="L144">    enum QueryArea {</span>
+
+<span class="nc" id="L146">        REGIO, GEMEENTE, TERREIN</span>
+    }
+
+<span class="nc" id="L149">    enum ReportType {</span>
+
+<span class="nc" id="L151">        INDIVIDUAL, AGGREGATED, ISSUE;</span>
+    }
+
+<span class="nc" id="L154">    enum AggregationLevelDate {</span>
+
+<span class="nc" id="L156">        NONE, MONTH</span>
+    }
+
+    /**
+     * Field in the datamodel (base uitgifte view). {@value }
+     */
+    private static final String TERREINID_FIELDNAME = &quot;id&quot;;
+    /**
+     * Field in the datamodel (base uitgifte view). {@value }
+     */
+    private static final String GEMEENTE_FIELDNAME = &quot;naam&quot;;
+    /**
+     * Field in the datamodel (base uitgifte view). {@value }
+     */
+    private static final String REGIO_FIELDNAME = &quot;vvr_naam&quot;;
+    /**
+     * Field in the datamodel (base uitgifte view). {@value }
+     */
+    private static final String TERREIN_FIELDNAME = &quot;a_plannaam&quot;;
+    /**
+     * Field in the datamodel. {@value }
+     */
+    private static final String STATUS_FIELDNAME = &quot;status&quot;;
+    /**
+     * Field in the datamodel (related view). {@value }
+     */
+    private static final String KAVELID_RELATED_FIELDNAME = &quot;kavelid&quot;;
+    /**
+     * Field in the datamodel (related view). {@value }
+     */
+    private static final String GEMEENTE_RELATED_FIELDNAME = &quot;gemeentenaam&quot;;
+    /**
+     * Field in the datamodel (related view). {@value }
+     */
+    private static final String REGIO_RELATED_FIELDNAME = &quot;regionaam&quot;;
+    /**
+     * Field in the datamodel (related view). {@value }
+     */
+    private static final String TERREIN_RELATED_FIELDNAME = &quot;terreinnaam&quot;;
+
+    /**
+     * Field in the datamodel (related view). {@value }
+     */
+    private static final String TERREINID_RELATED_FIELDNAME = &quot;terreinid&quot;;
+
+    /**
+     * Field in the datamodel (related view). {@value }
+     */
+    private static final String UITGIFTEDATUM_RELATED_FIELDNAME = &quot;datumuitgifte&quot;;
+    /**
+     * Field in the datamodel (related view). {@value }
+     */
+    private static final String OPPERVLAKTE_GEOM_RELATED_FIELDNAME = &quot;opp_geometrie&quot;;
+
+    /**
+     * aggregate locality field name. {@value}
+     */
+    private static final String GEBIED_FIELDNAME = &quot;gebied&quot;;
+
+    /**
+     * name of the related feature type. {@code null}.
+     *
+     * @todo assuming there is only one relate
+     */
+<span class="nc" id="L220">    private static final String RELATED_FT_NAME = null;</span>
+
+    @After(stages = LifecycleStage.BindingAndValidation)
+    public void loadLayer() {
+<span class="nc" id="L224">        this.layer = appLayer.getService().getSingleLayer(appLayer.getLayerName(), Stripersist.getEntityManager());</span>
+<span class="nc" id="L225">    }</span>
+
+    @Before(stages = LifecycleStage.EventHandling)
+    public void checkAuthorization() {
+<span class="nc" id="L229">        EntityManager em = Stripersist.getEntityManager();</span>
+<span class="nc bnc" id="L230" title="All 4 branches missed.">        if (application == null</span>
+                || appLayer == null
+<span class="nc bnc" id="L232" title="All 2 branches missed.">                || !Authorizations.isAppLayerReadAuthorized(application, appLayer, context.getRequest(), em)) {</span>
+<span class="nc" id="L233">            unauthorized = true;</span>
+        }
+<span class="nc" id="L235">    }</span>
+
+    /**
+     * Echo back the received base64 encoded form data. A fallback for IE and
+     * browsers that don't support client side downloads.
+     *
+     * @return excel download of the posted fData (posted data is not validated
+     * for 'excel-ness')
+     * @throws Exception if data is null or something goes wrong during IO
+     */
+    public Resolution download() throws Exception {
+<span class="nc bnc" id="L246" title="All 2 branches missed.">        if (data == null) {</span>
+<span class="nc" id="L247">            throw new IllegalArgumentException(&quot;Data cannot be null.&quot;);</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">        } else if (unauthorized) {</span>
+<span class="nc" id="L249">            throw new IllegalStateException(&quot;Not authorized.&quot;);</span>
+        }
+<span class="nc bnc" id="L251" title="All 2 branches missed.">        if (mimetype == null) {</span>
+<span class="nc" id="L252">            mimetype = &quot;application/vnd.ms-excel&quot;;</span>
+        }
+<span class="nc bnc" id="L254" title="All 2 branches missed.">        if (filename == null) {</span>
+<span class="nc" id="L255">            filename = &quot;ibisrapportage.xls&quot;;</span>
+        }
+<span class="nc" id="L257">        log.debug(&quot;returning excel:&quot; + data);</span>
+<span class="nc" id="L258">        return new StreamingResolution(mimetype, new StringReader(data)).setFilename(filename).setAttachment(false);</span>
+    }
+
+    @DefaultHandler
+    public Resolution query() throws Exception {
+<span class="nc" id="L263">        JSONObject json = new JSONObject();</span>
+<span class="nc" id="L264">        json.put(&quot;success&quot;, Boolean.FALSE);</span>
+        // initial metadata
+<span class="nc" id="L266">        JSONObject metadata = new JSONObject()</span>
+<span class="nc" id="L267">                .put(&quot;root&quot;, &quot;data&quot;).put(&quot;totalProperty&quot;, &quot;total&quot;)</span>
+<span class="nc" id="L268">                .put(&quot;successProperty&quot;, &quot;success&quot;)</span>
+<span class="nc" id="L269">                .put(&quot;messageProperty&quot;, &quot;message&quot;)</span>
+<span class="nc" id="L270">                .put(&quot;idProperty&quot;, &quot;rownum&quot;);</span>
+<span class="nc" id="L271">        json.put(JSON_METADATA, metadata);</span>
+
+<span class="nc" id="L273">        String error = null;</span>
+<span class="nc bnc" id="L274" title="All 2 branches missed.">        if (appLayer == null) {</span>
+<span class="nc" id="L275">            error = &quot;Invalid parameters.&quot;;</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">        } else if (unauthorized) {</span>
+<span class="nc" id="L277">            error = &quot;Not authorized.&quot;;</span>
+<span class="nc bnc" id="L278" title="All 2 branches missed.">        } else if (reportType == null) {</span>
+<span class="nc" id="L279">            error = &quot;Report type is required.&quot;;</span>
+        } else {
+            try {
+                // test either regio / gemeente / terrein must not be null
+<span class="nc bnc" id="L283" title="All 2 branches missed.">                if (terrein != null) {</span>
+<span class="nc" id="L284">                    areaType = QueryArea.TERREIN;</span>
+<span class="nc" id="L285">                    gebiedsNaamQuery = TERREIN_FIELDNAME + &quot;='&quot; + terrein + &quot;'&quot;;;</span>
+<span class="nc bnc" id="L286" title="All 2 branches missed.">                } else if (gemeente != null) {</span>
+<span class="nc" id="L287">                    areaType = QueryArea.GEMEENTE;</span>
+<span class="nc" id="L288">                    gebiedsNaamQuery = GEMEENTE_FIELDNAME + &quot;='&quot; + gemeente + &quot;'&quot;;</span>
+<span class="nc bnc" id="L289" title="All 2 branches missed.">                } else if (regio != null) {</span>
+<span class="nc" id="L290">                    areaType = QueryArea.REGIO;</span>
+<span class="nc" id="L291">                    gebiedsNaamQuery = REGIO_FIELDNAME + &quot;='&quot; + regio + &quot;'&quot;;</span>
+                } else {
+<span class="nc" id="L293">                    throw new IllegalArgumentException(&quot;Geen gebied opgegeven voor rapport.&quot;);</span>
+                }
+
+<span class="nc bnc" id="L296" title="All 4 branches missed.">                switch (reportType) {</span>
+                    case ISSUE:
+<span class="nc" id="L298">                        reportIssued(json);</span>
+<span class="nc" id="L299">                        break;</span>
+                    case INDIVIDUAL:
+<span class="nc" id="L301">                        reportIndividualData(json);</span>
+<span class="nc" id="L302">                        break;</span>
+                    case AGGREGATED:
+<span class="nc" id="L304">                        reportAggregateData(json);</span>
+                        break;
+                }
+
+<span class="nc" id="L308">                json.put(&quot;message&quot;, &quot;OK&quot;);</span>
+<span class="nc" id="L309">                json.put(&quot;success&quot;, Boolean.TRUE);</span>
+
+<span class="nc" id="L311">            } catch (Exception e) {</span>
+<span class="nc" id="L312">                log.error(&quot;Error generating report data.&quot;, e);</span>
+<span class="nc" id="L313">                error = e.getLocalizedMessage();</span>
+<span class="nc" id="L314">            }</span>
+        }
+
+<span class="nc bnc" id="L317" title="All 2 branches missed.">        if (error != null) {</span>
+<span class="nc" id="L318">            json.put(&quot;success&quot;, Boolean.FALSE);</span>
+<span class="nc" id="L319">            json.put(&quot;message&quot;, error);</span>
+        }
+
+<span class="nc" id="L322">        log.debug(&quot;returning json:&quot; + json);</span>
+<span class="nc" id="L323">        return new StreamingResolution(&quot;application/json&quot;, new StringReader(json.toString()));</span>
+    }
+
+    /**
+     * Uitgifte report.
+     *
+     * @param json that get the data added
+     * @throws Exception if any
+     */
+    private void reportIssued(JSONObject json) throws Exception {
+<span class="nc bnc" id="L333" title="All 4 branches missed.">        if (fromDate == null || toDate == null) {</span>
+<span class="nc" id="L334">            throw new IllegalArgumentException(&quot;Datum vanaf en datum tot zijn verplicht voor uitgifte.&quot;);</span>
+        }
+<span class="nc" id="L336">        SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd'T'HH:mm:ssZ&quot;);</span>
+<span class="nc" id="L337">        sdf.setTimeZone(TimeZone.getDefault());</span>
+
+<span class="nc" id="L339">        SimpleFeatureType ft = layer.getFeatureType();</span>
+<span class="nc" id="L340">        SimpleFeatureType relFt = this.getRelatedSFT(ft, RELATED_FT_NAME);</span>
+<span class="nc" id="L341">        SimpleFeatureSource fs = (SimpleFeatureSource) ft.openGeoToolsFeatureSource();</span>
+<span class="nc" id="L342">        SimpleFeatureSource foreignFs = (SimpleFeatureSource) relFt.openGeoToolsFeatureSource();</span>
+
+<span class="nc" id="L344">        Filter filter = ECQL.toFilter(this.gebiedsNaamQuery);</span>
+<span class="nc" id="L345">        List&lt;String&gt; tPropnames = Arrays.asList(</span>
+                TERREINID_FIELDNAME,
+                TERREIN_FIELDNAME,
+                GEMEENTE_FIELDNAME,
+                REGIO_FIELDNAME);
+<span class="nc" id="L350">        Query q = new Query(fs.getName().toString());</span>
+<span class="nc" id="L351">        q.setPropertyNames(tPropnames);</span>
+<span class="nc" id="L352">        q.setFilter(filter);</span>
+<span class="nc" id="L353">        q.setHandle(&quot;uitgifte-rapport&quot;);</span>
+<span class="nc" id="L354">        q.setMaxFeatures(FeatureToJson.MAX_FEATURES);</span>
+
+        try {
+            // store terreinen in mem and get a list of the id's
+<span class="nc" id="L358">            SimpleFeatureCollection inMem = DataUtilities.collection(fs.getFeatures(q).features());</span>
+<span class="nc" id="L359">            StringBuilder in = new StringBuilder();</span>
+<span class="nc" id="L360">            SimpleFeatureIterator inMemFeats = inMem.features();</span>
+<span class="nc" id="L361">            Set&lt;String&gt; terreinNames = new TreeSet&lt;&gt;(</span>
+<span class="nc" id="L362">                    new Comparator&lt;String&gt;() {</span>
+                        @Override
+                        public int compare(String a, String b) {
+<span class="nc" id="L365">                            return a.compareTo(b);</span>
+                        }
+                    }
+            );
+<span class="nc" id="L369">            Set&lt;String&gt; regioNames = new TreeSet&lt;&gt;(new Comparator&lt;String&gt;() {</span>
+                @Override
+                public int compare(String a, String b) {
+<span class="nc" id="L372">                    return a.compareTo(b);</span>
+                }
+            });
+<span class="nc" id="L375">            Set&lt;String&gt; gemeenteNames = new TreeSet&lt;&gt;(new Comparator&lt;String&gt;() {</span>
+                @Override
+                public int compare(String a, String b) {
+<span class="nc" id="L378">                    return a.compareTo(b);</span>
+                }
+            });
+
+<span class="nc bnc" id="L382" title="All 2 branches missed.">            while (inMemFeats.hasNext()) {</span>
+<span class="nc" id="L383">                SimpleFeature f = inMemFeats.next();</span>
+<span class="nc" id="L384">                in.append(f.getAttribute(TERREINID_FIELDNAME)).append(&quot;,&quot;);</span>
+<span class="nc" id="L385">                terreinNames.add((String) f.getAttribute(TERREIN_FIELDNAME));</span>
+<span class="nc" id="L386">                regioNames.add((String) f.getAttribute(REGIO_FIELDNAME));</span>
+<span class="nc" id="L387">                gemeenteNames.add((String) f.getAttribute(GEMEENTE_FIELDNAME));</span>
+<span class="nc" id="L388">            }</span>
+<span class="nc" id="L389">            inMemFeats.close();</span>
+
+            // get related features (terreinen)
+<span class="nc" id="L392">            Query foreignQ = new Query(foreignFs.getName().toString());</span>
+<span class="nc" id="L393">            foreignQ.setHandle(&quot;uitgifte-rapport-related&quot;);</span>
+<span class="nc" id="L394">            List&lt;String&gt; propnames = Arrays.asList(</span>
+                    KAVELID_RELATED_FIELDNAME,
+                    OPPERVLAKTE_GEOM_RELATED_FIELDNAME,
+                    UITGIFTEDATUM_RELATED_FIELDNAME,
+                    TERREIN_RELATED_FIELDNAME,
+                    REGIO_RELATED_FIELDNAME,
+                    GEMEENTE_RELATED_FIELDNAME);
+<span class="nc" id="L401">            foreignQ.setPropertyNames(propnames);</span>
+<span class="nc" id="L402">            String query = STATUS_FIELDNAME + &quot;= 'uitgegeven' AND &quot;</span>
+<span class="nc" id="L403">                    + TERREINID_RELATED_FIELDNAME + &quot; IN (&quot; + in.substring(0, in.length() - 1) + &quot;) AND &quot;</span>
+<span class="nc" id="L404">                    + UITGIFTEDATUM_RELATED_FIELDNAME + &quot; DURING &quot; + sdf.format(fromDate) + &quot;/&quot; + sdf.format(toDate);</span>
+<span class="nc" id="L405">            log.debug(&quot;uitgifte query: &quot; + query);</span>
+<span class="nc" id="L406">            foreignQ.setFilter(ECQL.toFilter(query));</span>
+
+            // kavels for selected terrein id's
+<span class="nc" id="L409">            SimpleFeatureCollection sfc = DataUtilities.collection(foreignFs.getFeatures(foreignQ).features());</span>
+
+            // create new aggregate featuretype
+<span class="nc" id="L412">            org.opengis.feature.simple.SimpleFeatureType type = DataUtilities.createType(</span>
+                    &quot;AGGREGATE&quot;,
+                    &quot;id:String,*geom:MultiPolygon:28992,maand:String,oppervlakte:Double,gebied:String&quot;);
+
+            // create flamingo attribute descriptors for AGGREGATE
+<span class="nc" id="L417">            List&lt;AttributeDescriptor&gt; relFeatureTypeAttributes = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L418">            AttributeDescriptor maand = new AttributeDescriptor();</span>
+<span class="nc" id="L419">            maand.setName(&quot;maand&quot;);</span>
+<span class="nc" id="L420">            maand.setAlias(&quot;maand&quot;);</span>
+<span class="nc" id="L421">            maand.setType(AttributeDescriptor.TYPE_DATE);</span>
+<span class="nc" id="L422">            maand.setId(1L);</span>
+<span class="nc" id="L423">            relFeatureTypeAttributes.add(maand);</span>
+
+<span class="nc" id="L425">            AttributeDescriptor opp = new AttributeDescriptor();</span>
+<span class="nc" id="L426">            opp.setName(&quot;oppervlakte&quot;);</span>
+<span class="nc" id="L427">            opp.setAlias(&quot;oppervlakte&quot;);</span>
+<span class="nc" id="L428">            opp.setType(AttributeDescriptor.TYPE_DOUBLE);</span>
+<span class="nc" id="L429">            opp.setId(2L);</span>
+<span class="nc" id="L430">            relFeatureTypeAttributes.add(opp);</span>
+
+<span class="nc" id="L432">            AttributeDescriptor plan = new AttributeDescriptor();</span>
+<span class="nc" id="L433">            plan.setName(GEBIED_FIELDNAME);</span>
+<span class="nc" id="L434">            plan.setAlias(&quot;gebiedsnaam&quot;);</span>
+<span class="nc" id="L435">            plan.setType(AttributeDescriptor.TYPE_STRING);</span>
+<span class="nc" id="L436">            plan.setId(3L);</span>
+<span class="nc" id="L437">            relFeatureTypeAttributes.add(plan);</span>
+
+<span class="nc bnc" id="L439" title="All 4 branches missed.">            switch (aggregationLevel) {</span>
+                case REGIO:
+<span class="nc bnc" id="L441" title="All 3 branches missed.">                    switch (aggregationLevelDate) {</span>
+                        case MONTH:
+<span class="nc" id="L443">                            sfc = aggregateUitgifteByMonthAndArea(sfc, type, &quot;oppervlakte&quot;,</span>
+                                    regioNames, REGIO_RELATED_FIELDNAME);
+<span class="nc" id="L445">                            break;</span>
+                        case NONE:
+<span class="nc" id="L447">                            sfc = aggregateUitgifteByArea(sfc, type, &quot;oppervlakte&quot;,</span>
+                                    regioNames, REGIO_RELATED_FIELDNAME);
+                            break;
+                    }
+<span class="nc" id="L451">                    break;</span>
+                case GEMEENTE:
+<span class="nc bnc" id="L453" title="All 3 branches missed.">                    switch (aggregationLevelDate) {</span>
+                        case MONTH:
+<span class="nc" id="L455">                            sfc = aggregateUitgifteByMonthAndArea(sfc, type, &quot;oppervlakte&quot;,</span>
+                                    gemeenteNames, GEMEENTE_RELATED_FIELDNAME);
+<span class="nc" id="L457">                            break;</span>
+                        case NONE:
+<span class="nc" id="L459">                            sfc = aggregateUitgifteByArea(sfc, type, &quot;oppervlakte&quot;,</span>
+                                    gemeenteNames, GEMEENTE_RELATED_FIELDNAME);
+                            break;
+                    }
+<span class="nc" id="L463">                    break;</span>
+                case TERREIN:
+<span class="nc bnc" id="L465" title="All 3 branches missed.">                    switch (aggregationLevelDate) {</span>
+                        case MONTH:
+<span class="nc" id="L467">                            sfc = aggregateUitgifteByMonthAndArea(sfc, type, &quot;oppervlakte&quot;,</span>
+                                    terreinNames, TERREIN_RELATED_FIELDNAME);
+<span class="nc" id="L469">                            break;</span>
+                        case NONE:
+<span class="nc" id="L471">                            sfc = aggregateUitgifteByArea(sfc, type, &quot;oppervlakte&quot;,</span>
+                                    terreinNames, TERREIN_RELATED_FIELDNAME);
+                            break;
+                    }
+                    break;
+            }
+<span class="nc bnc" id="L477" title="All 3 branches missed.">            switch (aggregationLevelDate) {</span>
+                case MONTH:
+<span class="nc" id="L479">                    propnames = Arrays.asList(&quot;maand&quot;, &quot;oppervlakte&quot;, GEBIED_FIELDNAME);</span>
+<span class="nc" id="L480">                    break;</span>
+                case NONE:
+<span class="nc" id="L482">                    propnames = Arrays.asList(&quot;oppervlakte&quot;, GEBIED_FIELDNAME);</span>
+            }
+<span class="nc" id="L484">            featuresToJson(sfc, json, relFeatureTypeAttributes, propnames);</span>
+        } finally {
+<span class="nc" id="L486">            foreignFs.getDataStore().dispose();</span>
+<span class="nc" id="L487">            fs.getDataStore().dispose();</span>
+        }
+<span class="nc" id="L489">    }</span>
+
+    /**
+     * aggregate features by date and area into new collection with named
+     * features.
+     *
+     * @param sfc source of simple features to aggregate
+     * @param type aggregate feature type
+     * @param featNames names of the new features
+     * @param gebiedFieldName field name of the aggregation bucket (eg. gemeente
+     * or regio)
+     * @return aggregated features
+     */
+    private SimpleFeatureCollection aggregateUitgifteByMonthAndArea(SimpleFeatureCollection sfc,
+            org.opengis.feature.simple.SimpleFeatureType type, final String sfTypeAreaName,
+            Set&lt;String&gt; featNames, final String gebiedFieldName) {
+
+<span class="nc" id="L506">        final int months = differenceInMonths(fromDate, toDate);</span>
+<span class="nc" id="L507">        final SimpleDateFormat YYYYMM = new SimpleDateFormat(&quot;YYYY.MM&quot;);</span>
+<span class="nc" id="L508">        Map&lt;String, SimpleFeature&gt; newfeats = new TreeMap&lt;&gt;();</span>
+
+        // create a feature for each month for each 'gebiedFieldName' with 0 area and null geom
+<span class="nc bnc" id="L511" title="All 2 branches missed.">        for (String fName : featNames) {</span>
+<span class="nc" id="L512">            Date newDate = fromDate;</span>
+<span class="nc bnc" id="L513" title="All 2 branches missed.">            for (int m = 0; m &lt; months; m++) {</span>
+<span class="nc" id="L514">                String key = fName + YYYYMM.format(newDate);</span>
+<span class="nc" id="L515">                SimpleFeature month = DataUtilities.</span>
+<span class="nc" id="L516">                        createFeature(type, key + &quot;|null|&quot; + YYYYMM.format(newDate) + &quot;|0d|&quot; + fName);</span>
+<span class="nc" id="L517">                newfeats.put(key, month);</span>
+<span class="nc" id="L518">                newDate = addMonth(newDate);</span>
+            }
+<span class="nc" id="L520">        }</span>
+
+        // for each month add up opp_geometrie
+<span class="nc" id="L523">        SimpleFeatureIterator items = sfc.features();</span>
+<span class="nc bnc" id="L524" title="All 2 branches missed.">        while (items.hasNext()) {</span>
+<span class="nc" id="L525">            SimpleFeature f = items.next();</span>
+<span class="nc" id="L526">            Date d = (Date) f.getAttribute(UITGIFTEDATUM_RELATED_FIELDNAME);</span>
+<span class="nc" id="L527">            SimpleFeature newFeat = newfeats.get(f.getAttribute(gebiedFieldName) + YYYYMM.format(d));</span>
+<span class="nc" id="L528">            newFeat.setAttribute(sfTypeAreaName,</span>
+<span class="nc" id="L529">                    ((Double) newFeat.getAttribute(sfTypeAreaName))</span>
+<span class="nc" id="L530">                    + ((BigDecimal) f.getAttribute(OPPERVLAKTE_GEOM_RELATED_FIELDNAME)).doubleValue());</span>
+
+<span class="nc" id="L532">        }</span>
+<span class="nc" id="L533">        items.close();</span>
+
+<span class="nc" id="L535">        ArrayList&lt;SimpleFeature&gt; feats = new ArrayList&lt;&gt;(newfeats.values());</span>
+<span class="nc" id="L536">        return DataUtilities.collection(feats);</span>
+    }
+
+    /**
+     * aggregate features area into new collection with named features.
+     *
+     * @param sfc source of simple features to aggregate
+     * @param type aggregate featuretype
+     * @param featNames names of the new features
+     * @param gebiedFieldName field name of the aggregation bucket (eg. gemeente
+     * or regio)
+     * @return aggregated features
+     */
+    private SimpleFeatureCollection aggregateUitgifteByArea(SimpleFeatureCollection sfc,
+            org.opengis.feature.simple.SimpleFeatureType type, String sfTypeAreaName,
+            Set&lt;String&gt; featNames, final String gebiedFieldName) {
+
+        // create a feature for each 'gebiedFieldName' with 0 area and null date and null geom
+<span class="nc" id="L554">        Map&lt;String, SimpleFeature&gt; newfeats = new TreeMap&lt;&gt;();</span>
+<span class="nc bnc" id="L555" title="All 2 branches missed.">        for (String fName : featNames) {</span>
+<span class="nc" id="L556">            SimpleFeature newfeat = DataUtilities.</span>
+<span class="nc" id="L557">                    createFeature(type, fName + &quot;|null|null|0d|&quot; + fName);</span>
+<span class="nc" id="L558">            newfeats.put(fName, newfeat);</span>
+<span class="nc" id="L559">        }</span>
+
+        // for each regio add up opp_geometrie
+<span class="nc" id="L562">        SimpleFeatureIterator items = sfc.features();</span>
+<span class="nc bnc" id="L563" title="All 2 branches missed.">        while (items.hasNext()) {</span>
+<span class="nc" id="L564">            SimpleFeature f = items.next();</span>
+<span class="nc" id="L565">            SimpleFeature newFeat = newfeats.get((String) f.getAttribute(gebiedFieldName));</span>
+<span class="nc" id="L566">            newFeat.setAttribute(sfTypeAreaName,</span>
+<span class="nc" id="L567">                    ((Double) newFeat.getAttribute(sfTypeAreaName))</span>
+<span class="nc" id="L568">                    + ((BigDecimal) f.getAttribute(OPPERVLAKTE_GEOM_RELATED_FIELDNAME)).doubleValue());</span>
+
+<span class="nc" id="L570">        }</span>
+<span class="nc" id="L571">        items.close();</span>
+<span class="nc" id="L572">        ArrayList&lt;SimpleFeature&gt; feats = new ArrayList&lt;SimpleFeature&gt;(newfeats.values());</span>
+<span class="nc" id="L573">        Collections.reverse(feats);</span>
+<span class="nc" id="L574">        return DataUtilities.collection(feats);</span>
+    }
+
+    /**
+     * Convert a SimpleFeatureCollection to JSON with metadata.
+     *
+     * @param sfc collections of features
+     * @param json output/appendend to json structure
+     * @param featureTypeAttributes flamingo attribute descriptors for the
+     * features
+     * @param outputPropNames fieldnames to put in output
+     * @throws JSONException is any
+     */
+    private void featuresToJson(SimpleFeatureCollection sfc, JSONObject json,
+            List&lt;AttributeDescriptor&gt; featureTypeAttributes, List&lt;String&gt; outputPropNames) throws JSONException {
+
+        // metadata for fData fields
+<span class="nc" id="L591">        JSONArray fields = new JSONArray();</span>
+        // columns for grid
+<span class="nc" id="L593">        JSONArray columns = new JSONArray();</span>
+        // fData payload
+<span class="nc" id="L595">        JSONArray datas = new JSONArray();</span>
+
+<span class="nc" id="L597">        SimpleFeatureIterator sfIter = sfc.features();</span>
+
+<span class="nc" id="L599">        boolean getMetadataFromFirstFeature = true;</span>
+<span class="nc bnc" id="L600" title="All 2 branches missed.">        while (sfIter.hasNext()) {</span>
+<span class="nc" id="L601">            SimpleFeature feature = sfIter.next();</span>
+<span class="nc" id="L602">            JSONObject fData = new JSONObject();</span>
+
+<span class="nc bnc" id="L604" title="All 2 branches missed.">            for (AttributeDescriptor attr : featureTypeAttributes) {</span>
+<span class="nc" id="L605">                String name = attr.getName();</span>
+<span class="nc bnc" id="L606" title="All 2 branches missed.">                if (getMetadataFromFirstFeature) {</span>
+<span class="nc bnc" id="L607" title="All 2 branches missed.">                    if (outputPropNames.contains(name)) {</span>
+                        // only load metadata into json this for first feature
+<span class="nc" id="L609">                        JSONObject field = new JSONObject().put(&quot;name&quot;, name).put(&quot;type&quot;, attr.getExtJSType());</span>
+<span class="nc bnc" id="L610" title="All 4 branches missed.">                        if (reportType == ReportType.ISSUE &amp;&amp; attr.getType().equals(AttributeDescriptor.TYPE_DATE)) {</span>
+<span class="nc" id="L611">                            field.put(&quot;dateFormat&quot;, &quot;Y-m&quot;);</span>
+                        }
+<span class="nc" id="L613">                        fields.put(field);</span>
+<span class="nc bnc" id="L614" title="All 2 branches missed.">                        columns.put(new JSONObject().put(&quot;text&quot;, (attr.getAlias() != null ? attr.getAlias() : name)).put(&quot;dataIndex&quot;, name));</span>
+                    }
+                }
+<span class="nc" id="L617">                fData.put(attr.getName(), feature.getAttribute(attr.getName()));</span>
+<span class="nc" id="L618">            }</span>
+<span class="nc" id="L619">            datas.put(fData);</span>
+<span class="nc" id="L620">            getMetadataFromFirstFeature = false;</span>
+<span class="nc" id="L621">        }</span>
+
+<span class="nc" id="L623">        json.getJSONObject(JSON_METADATA).put(&quot;fields&quot;, fields);</span>
+<span class="nc" id="L624">        json.getJSONObject(JSON_METADATA).put(&quot;columns&quot;, columns);</span>
+<span class="nc" id="L625">        json.put(&quot;data&quot;, datas);</span>
+<span class="nc" id="L626">        json.put(&quot;total&quot;, datas.length());</span>
+
+<span class="nc" id="L628">        sfIter.close();</span>
+<span class="nc" id="L629">    }</span>
+
+    /**
+     * look up the named related featuretype.
+     *
+     * @param ft main/parent feature type
+     * @param typeNameToGet the name of the related feature type or null
+     * @return the named feature type or the first feature type in case
+     * {@code typeNameToGet} is {
+     * @null} or {
+     * @null} when the/a related feature type does not exist
+     */
+    private SimpleFeatureType getRelatedSFT(SimpleFeatureType ft, String typeNameToGet) {
+<span class="nc" id="L642">        SimpleFeatureType relFt = null;</span>
+
+<span class="nc bnc" id="L644" title="All 2 branches missed.">        for (FeatureTypeRelation rel : ft.getRelations()) {</span>
+<span class="nc bnc" id="L645" title="All 2 branches missed.">            if (rel.getType().equals(FeatureTypeRelation.RELATE)) {</span>
+<span class="nc" id="L646">                relFt = rel.getForeignFeatureType();</span>
+<span class="nc bnc" id="L647" title="All 4 branches missed.">                if (relFt.getTypeName().equals(typeNameToGet) || typeNameToGet == null) {</span>
+<span class="nc" id="L648">                    break;</span>
+                }
+            }
+<span class="nc" id="L651">        }</span>
+<span class="nc" id="L652">        return relFt;</span>
+    }
+
+    private void reportIndividualData(JSONObject json) throws Exception {
+<span class="nc" id="L656">        List&lt;String&gt; tPropnames = new ArrayList(attrNames);</span>
+
+<span class="nc" id="L658">        SimpleFeatureType ft = layer.getFeatureType();</span>
+<span class="nc" id="L659">        List&lt;AttributeDescriptor&gt; featureTypeAttributes = ft.getAttributes();</span>
+<span class="nc" id="L660">        SimpleFeatureSource fs = (SimpleFeatureSource) ft.openGeoToolsFeatureSource();</span>
+
+<span class="nc" id="L662">        List&lt;String&gt; foreignAttrNames = new ArrayList&lt;String&gt;();</span>
+        // find out which attribute names -if any- are from related features
+<span class="nc bnc" id="L664" title="All 2 branches missed.">        for (String a : attrNames) {</span>
+<span class="nc bnc" id="L665" title="All 2 branches missed.">            if (fs.getSchema().getDescriptor(a) == null) {</span>
+                // if not from fs it must be foreign
+<span class="nc" id="L667">                foreignAttrNames.add(a);</span>
+<span class="nc" id="L668">                tPropnames.remove(a);</span>
+            }
+<span class="nc" id="L670">        }</span>
+<span class="nc" id="L671">        foreignAttrNames.add(TERREINID_RELATED_FIELDNAME);</span>
+<span class="nc" id="L672">        tPropnames.add(TERREINID_FIELDNAME);</span>
+<span class="nc" id="L673">        Filter filter = ECQL.toFilter(this.gebiedsNaamQuery);</span>
+<span class="nc" id="L674">        Query q = new Query(fs.getName().toString());</span>
+<span class="nc" id="L675">        q.setPropertyNames(tPropnames);</span>
+<span class="nc" id="L676">        q.setFilter(filter);</span>
+<span class="nc" id="L677">        q.setHandle(&quot;individueel-rapport&quot;);</span>
+<span class="nc" id="L678">        q.setMaxFeatures(FeatureToJson.MAX_FEATURES);</span>
+
+        SimpleFeatureCollection mainFSinMem;
+        try {
+<span class="nc" id="L682">            mainFSinMem = DataUtilities.collection(fs.getFeatures(q).features());</span>
+        } finally {
+<span class="nc" id="L684">            fs.getDataStore().dispose();</span>
+        }
+<span class="nc bnc" id="L686" title="All 2 branches missed.">        if (!foreignAttrNames.isEmpty()) {</span>
+<span class="nc" id="L687">            SimpleFeatureType relFt = this.getRelatedSFT(ft, RELATED_FT_NAME);</span>
+<span class="nc" id="L688">            SimpleFeatureSource foreignFs = (SimpleFeatureSource) relFt.openGeoToolsFeatureSource();</span>
+            // compose IN query criteria and store parent features in a map so we can easily get them later
+<span class="nc" id="L690">            StringBuilder in = new StringBuilder();</span>
+<span class="nc" id="L691">            HashMap&lt;Integer, SimpleFeature&gt; parentFeatures = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L692">            SimpleFeatureIterator inMemFeats = mainFSinMem.features();</span>
+<span class="nc bnc" id="L693" title="All 2 branches missed.">            while (inMemFeats.hasNext()) {</span>
+<span class="nc" id="L694">                SimpleFeature f = inMemFeats.next();</span>
+<span class="nc" id="L695">                in.append(f.getAttribute(TERREINID_FIELDNAME)).append(&quot;,&quot;);</span>
+<span class="nc" id="L696">                parentFeatures.put((Integer) f.getAttribute(TERREINID_FIELDNAME), f);</span>
+<span class="nc" id="L697">            }</span>
+<span class="nc" id="L698">            inMemFeats.close();</span>
+
+            // get related features (children)
+<span class="nc" id="L701">            Query foreignQ = new Query(foreignFs.getName().toString());</span>
+<span class="nc" id="L702">            foreignQ.setHandle(&quot;individueel-rapport-related&quot;);</span>
+<span class="nc" id="L703">            foreignQ.setPropertyNames(foreignAttrNames);</span>
+<span class="nc" id="L704">            String query = TERREINID_RELATED_FIELDNAME + &quot; IN (&quot; + in.substring(0, in.length() - 1) + &quot;)&quot;;</span>
+<span class="nc" id="L705">            log.debug(&quot;individueel-rapport-related: &quot; + query);</span>
+<span class="nc" id="L706">            foreignQ.setFilter(ECQL.toFilter(query));</span>
+            try {
+                // kavels/children for selected terrein id's
+<span class="nc" id="L709">                SimpleFeatureCollection relatedFC = foreignFs.getFeatures(foreignQ);</span>
+                // create a new aggregate feature type 'COMPOSITE' that has attributes of both parent and child types
+<span class="nc" id="L711">                SimpleFeatureTypeBuilder tb = new SimpleFeatureTypeBuilder();</span>
+<span class="nc" id="L712">                tb.setName(&quot;COMPOSITE&quot;);</span>
+<span class="nc bnc" id="L713" title="All 2 branches missed.">                for (String prop : attrNames) {</span>
+<span class="nc" id="L714">                    org.opengis.feature.type.AttributeDescriptor attrDescName = fs.getSchema().getDescriptor(prop);</span>
+<span class="nc bnc" id="L715" title="All 2 branches missed.">                    if (attrDescName == null) {</span>
+                        // if not from the parent it must be from the child
+<span class="nc" id="L717">                        attrDescName = foreignFs.getSchema().getDescriptor(prop);</span>
+                    }
+<span class="nc" id="L719">                    tb.add(attrDescName);</span>
+<span class="nc" id="L720">                }</span>
+<span class="nc" id="L721">                tb.add(TERREINID_RELATED_FIELDNAME, Integer.class);</span>
+<span class="nc" id="L722">                org.opengis.feature.simple.SimpleFeatureType type = tb.buildFeatureType();</span>
+                //  merge main &amp; related child flamingo attribute descriptors for COMPOSITE,
+<span class="nc" id="L724">                featureTypeAttributes.addAll(relFt.getAttributes());</span>
+
+<span class="nc" id="L726">                SimpleFeatureBuilder sfBuilder = new SimpleFeatureBuilder(type);</span>
+<span class="nc" id="L727">                SimpleFeatureIterator sfcIter = relatedFC.features();</span>
+<span class="nc" id="L728">                ArrayList&lt;SimpleFeature&gt; newfeats = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L729" title="All 2 branches missed.">                while (sfcIter.hasNext()) {</span>
+                    // create as many new features as children
+<span class="nc" id="L731">                    SimpleFeature f = sfcIter.next();</span>
+<span class="nc" id="L732">                    SimpleFeature n = SimpleFeatureBuilder.retype(f, sfBuilder);</span>
+                    // copy main data to related children(n)
+<span class="nc" id="L734">                    SimpleFeature p = parentFeatures.get((Integer) f.getAttribute(TERREINID_RELATED_FIELDNAME));</span>
+<span class="nc bnc" id="L735" title="All 2 branches missed.">                    for (Property a : p.getProperties()) {</span>
+<span class="nc bnc" id="L736" title="All 2 branches missed.">                        if (attrNames.contains(a.getName().toString())) {</span>
+<span class="nc" id="L737">                            n.setAttribute(a.getName(), a.getValue());</span>
+                        }
+<span class="nc" id="L739">                    }</span>
+<span class="nc" id="L740">                    newfeats.add(n);</span>
+<span class="nc" id="L741">                }</span>
+<span class="nc" id="L742">                sfcIter.close();</span>
+<span class="nc" id="L743">                mainFSinMem = DataUtilities.collection(newfeats);</span>
+            } finally {
+<span class="nc" id="L745">                foreignFs.getDataStore().dispose();</span>
+            }
+        }
+<span class="nc" id="L748">        featuresToJson(mainFSinMem, json, featureTypeAttributes, attrNames);</span>
+<span class="nc" id="L749">    }</span>
+
+    private void reportAggregateData(JSONObject json) throws Exception {
+<span class="nc" id="L752">        SimpleFeatureType ft = layer.getFeatureType();</span>
+<span class="nc" id="L753">        List&lt;AttributeDescriptor&gt; featureTypeAttributes = ft.getAttributes();</span>
+<span class="nc" id="L754">        SimpleFeatureSource fs = (SimpleFeatureSource) ft.openGeoToolsFeatureSource();</span>
+
+<span class="nc" id="L756">        List&lt;String&gt; tPropnames = new ArrayList(attrNames);</span>
+<span class="nc" id="L757">        List&lt;String&gt; foreignAttrNames = new ArrayList&lt;&gt;();</span>
+        // find out which attribute names -if any- are from related features
+<span class="nc bnc" id="L759" title="All 2 branches missed.">        for (String a : attrNames) {</span>
+<span class="nc bnc" id="L760" title="All 2 branches missed.">            if (fs.getSchema().getDescriptor(a) == null) {</span>
+                // if not from fs it must be foreign
+<span class="nc" id="L762">                foreignAttrNames.add(a);</span>
+<span class="nc" id="L763">                tPropnames.remove(a);</span>
+            }
+<span class="nc" id="L765">        }</span>
+<span class="nc" id="L766">        foreignAttrNames.add(TERREINID_RELATED_FIELDNAME);</span>
+<span class="nc" id="L767">        tPropnames.add(TERREINID_FIELDNAME);</span>
+<span class="nc" id="L768">        tPropnames.add(GEMEENTE_FIELDNAME);</span>
+<span class="nc" id="L769">        tPropnames.add(REGIO_FIELDNAME);</span>
+<span class="nc" id="L770">        tPropnames.add(TERREIN_FIELDNAME);</span>
+
+<span class="nc" id="L772">        Filter filter = ECQL.toFilter(this.gebiedsNaamQuery);</span>
+<span class="nc" id="L773">        Query q = new Query(fs.getName().toString());</span>
+<span class="nc" id="L774">        q.setPropertyNames(tPropnames);</span>
+<span class="nc" id="L775">        q.setFilter(filter);</span>
+<span class="nc" id="L776">        q.setHandle(&quot;aggregatie-rapport&quot;);</span>
+<span class="nc" id="L777">        q.setMaxFeatures(FeatureToJson.MAX_FEATURES);</span>
+<span class="nc" id="L778">        log.debug(&quot;aggregatie query:&quot; + q);</span>
+
+        try {
+            // create the new aggregate featuretype
+            org.opengis.feature.simple.SimpleFeatureType type;
+<span class="nc" id="L783">            SimpleFeatureTypeBuilder tb = new SimpleFeatureTypeBuilder();</span>
+<span class="nc" id="L784">            tb.setName(&quot;AGGREGATE&quot;);</span>
+<span class="nc bnc" id="L785" title="All 2 branches missed.">            for (String prop : tPropnames) {</span>
+<span class="nc" id="L786">                org.opengis.feature.type.AttributeDescriptor attrDescName = fs.getSchema().getDescriptor(prop);</span>
+<span class="nc bnc" id="L787" title="All 2 branches missed.">                if (attrDescName != null) {</span>
+<span class="nc" id="L788">                    tb.add(attrDescName);</span>
+                }
+<span class="nc" id="L790">            }</span>
+<span class="nc" id="L791">            tb.add(GEBIED_FIELDNAME, String.class);</span>
+            // update flamingo attribute descriptors for AGGREGATE
+<span class="nc" id="L793">            AttributeDescriptor g = new AttributeDescriptor();</span>
+<span class="nc" id="L794">            g.setName(GEBIED_FIELDNAME);</span>
+<span class="nc" id="L795">            g.setAlias(&quot;gebiedsnaam&quot;);</span>
+<span class="nc" id="L796">            g.setType(AttributeDescriptor.TYPE_STRING);</span>
+<span class="nc" id="L797">            featureTypeAttributes.add(0, g);</span>
+            // get parent features
+<span class="nc" id="L799">            SimpleFeatureCollection sfc = DataUtilities.collection(fs.getFeatures(q).features());</span>
+
+<span class="nc bnc" id="L801" title="All 2 branches missed.">            if (!foreignAttrNames.isEmpty()) {</span>
+<span class="nc" id="L802">                SimpleFeatureType relFt = this.getRelatedSFT(ft, RELATED_FT_NAME);</span>
+<span class="nc" id="L803">                SimpleFeatureSource foreignFs = (SimpleFeatureSource) relFt.openGeoToolsFeatureSource();</span>
+
+                // add related attributes to type
+<span class="nc bnc" id="L806" title="All 2 branches missed.">                for (String prop : foreignAttrNames) {</span>
+<span class="nc" id="L807">                    org.opengis.feature.type.AttributeDescriptor attrDescName = foreignFs.getSchema().getDescriptor(prop);</span>
+<span class="nc bnc" id="L808" title="All 2 branches missed.">                    if (attrDescName != null) {</span>
+<span class="nc" id="L809">                        tb.add(attrDescName);</span>
+                    }
+<span class="nc" id="L811">                }</span>
+<span class="nc" id="L812">                tb.add(TERREINID_RELATED_FIELDNAME, Integer.class);</span>
+<span class="nc" id="L813">                type = tb.buildFeatureType();</span>
+
+                //  merge main &amp; related child flamingo attribute descriptors for AGGREGATE,
+<span class="nc" id="L816">                featureTypeAttributes.addAll(relFt.getAttributes());</span>
+
+                // compose IN query criteria and store parent features in a map so we can easily get them later
+<span class="nc" id="L819">                StringBuilder in = new StringBuilder();</span>
+<span class="nc" id="L820">                HashMap&lt;Integer, SimpleFeature&gt; parentFeatures = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L821">                SimpleFeatureIterator inMemFeats = sfc.features();</span>
+<span class="nc bnc" id="L822" title="All 2 branches missed.">                while (inMemFeats.hasNext()) {</span>
+<span class="nc" id="L823">                    SimpleFeature f = inMemFeats.next();</span>
+<span class="nc" id="L824">                    in.append(f.getAttribute(TERREINID_FIELDNAME)).append(&quot;,&quot;);</span>
+<span class="nc" id="L825">                    parentFeatures.put((Integer) f.getAttribute(TERREINID_FIELDNAME), f);</span>
+<span class="nc" id="L826">                }</span>
+<span class="nc" id="L827">                inMemFeats.close();</span>
+
+                // get related features (children)
+<span class="nc" id="L830">                Query foreignQ = new Query(foreignFs.getName().toString());</span>
+<span class="nc" id="L831">                foreignQ.setHandle(&quot;aggregatie-rapport-related&quot;);</span>
+<span class="nc" id="L832">                foreignQ.setPropertyNames(foreignAttrNames);</span>
+<span class="nc" id="L833">                String query = TERREINID_RELATED_FIELDNAME + &quot; IN (&quot; + in.substring(0, in.length() - 1) + &quot;)&quot;;</span>
+<span class="nc" id="L834">                log.debug(&quot;aggregatie-rapport-related: &quot; + query);</span>
+<span class="nc" id="L835">                foreignQ.setFilter(ECQL.toFilter(query));</span>
+
+                try {
+                    // kavels/children for selected terrein id's
+<span class="nc" id="L839">                    SimpleFeatureCollection relatedFC = foreignFs.getFeatures(foreignQ);</span>
+<span class="nc" id="L840">                    SimpleFeatureBuilder sfBuilder = new SimpleFeatureBuilder(type);</span>
+<span class="nc" id="L841">                    SimpleFeatureIterator sfcIter = relatedFC.features();</span>
+<span class="nc" id="L842">                    ArrayList&lt;SimpleFeature&gt; newfeats = new ArrayList&lt;&gt;();</span>
+
+<span class="nc" id="L844">                    boolean firsttimeForP = true;</span>
+<span class="nc" id="L845">                    Set&lt;SimpleFeature&gt; firsttimeForPSet = new HashSet&lt;&gt;();</span>
+<span class="nc bnc" id="L846" title="All 2 branches missed.">                    while (sfcIter.hasNext()) {</span>
+                        // create as many new features as related/children
+<span class="nc" id="L848">                        SimpleFeature f = sfcIter.next();</span>
+<span class="nc" id="L849">                        SimpleFeature n = SimpleFeatureBuilder.retype(f, sfBuilder);</span>
+
+                        // copy main data to related children
+                        //   but payload field only once to prevent aggregating those values later
+<span class="nc" id="L853">                        SimpleFeature p = parentFeatures.get((Integer) f.getAttribute(TERREINID_RELATED_FIELDNAME));</span>
+<span class="nc bnc" id="L854" title="All 2 branches missed.">                        for (Property a : p.getProperties()) {</span>
+<span class="nc bnc" id="L855" title="All 2 branches missed.">                            if (firsttimeForPSet.contains(p)) {</span>
+<span class="nc bnc" id="L856" title="All 2 branches missed.">                                if (!attrNames.contains(a.getName().toString())) {</span>
+<span class="nc" id="L857">                                    n.setAttribute(a.getName(), a.getValue());</span>
+                                }
+                            } else {
+<span class="nc bnc" id="L860" title="All 2 branches missed.">                                if (tPropnames.contains(a.getName().toString())) {</span>
+<span class="nc" id="L861">                                    n.setAttribute(a.getName(), a.getValue());</span>
+                                }
+                            }
+<span class="nc" id="L864">                        }</span>
+<span class="nc" id="L865">                        newfeats.add(n);</span>
+<span class="nc" id="L866">                        firsttimeForPSet.add(p);</span>
+<span class="nc" id="L867">                    }</span>
+<span class="nc" id="L868">                    sfcIter.close();</span>
+<span class="nc" id="L869">                    sfc = DataUtilities.collection(newfeats);</span>
+                } finally {
+<span class="nc" id="L871">                    foreignFs.getDataStore().dispose();</span>
+                }
+<span class="nc" id="L873">            } else {</span>
+<span class="nc" id="L874">                type = tb.buildFeatureType();</span>
+            }
+
+            // aggregation
+<span class="nc" id="L878">            Set&lt;String&gt; regions = new HashSet&lt;&gt;();</span>
+<span class="nc bnc" id="L879" title="All 4 branches missed.">            switch (aggregationLevel) {</span>
+                case REGIO:
+                    // max number for regio is 1
+<span class="nc" id="L882">                    regions.add(regio);</span>
+<span class="nc" id="L883">                    sfc = aggregateFields(sfc, type, regions, attrNames, REGIO_FIELDNAME);</span>
+<span class="nc" id="L884">                    break;</span>
+                case GEMEENTE:
+<span class="nc bnc" id="L886" title="All 2 branches missed.">                    if (this.areaType == QueryArea.TERREIN) {</span>
+<span class="nc" id="L887">                        regions.add(gemeente);</span>
+                    } else {
+                        // create set of all gemeente from query result
+<span class="nc" id="L890">                        SimpleFeatureIterator iter = sfc.features();</span>
+                        try {
+<span class="nc bnc" id="L892" title="All 2 branches missed.">                            while (iter.hasNext()) {</span>
+<span class="nc" id="L893">                                SimpleFeature f = iter.next();</span>
+<span class="nc" id="L894">                                regions.add((String) f.getAttribute(GEMEENTE_FIELDNAME));</span>
+<span class="nc" id="L895">                            }</span>
+                        } finally {
+<span class="nc" id="L897">                            iter.close();</span>
+                        }
+                    }
+<span class="nc" id="L900">                    sfc = aggregateFields(sfc, type, regions, attrNames, GEMEENTE_FIELDNAME);</span>
+<span class="nc" id="L901">                    break;</span>
+                case TERREIN:
+<span class="nc bnc" id="L903" title="All 2 branches missed.">                    if (this.areaType == QueryArea.TERREIN) {</span>
+<span class="nc" id="L904">                        regions.add(terrein);</span>
+                    } else {
+                        // create set of all terrein from query result
+<span class="nc" id="L907">                        SimpleFeatureIterator iter = sfc.features();</span>
+                        try {
+<span class="nc bnc" id="L909" title="All 2 branches missed.">                            while (iter.hasNext()) {</span>
+<span class="nc" id="L910">                                SimpleFeature f = iter.next();</span>
+<span class="nc" id="L911">                                regions.add((String) f.getAttribute(TERREIN_FIELDNAME));</span>
+<span class="nc" id="L912">                            }</span>
+                        } finally {
+<span class="nc" id="L914">                            iter.close();</span>
+                        }
+                    }
+<span class="nc" id="L917">                    sfc = aggregateFields(sfc, type, regions, attrNames, TERREIN_FIELDNAME);</span>
+                    break;
+            }
+
+<span class="nc" id="L921">            attrNames.add(GEBIED_FIELDNAME);</span>
+<span class="nc" id="L922">            featuresToJson(sfc, json, featureTypeAttributes, attrNames);</span>
+        } finally {
+<span class="nc" id="L924">            fs.getDataStore().dispose();</span>
+        }
+
+<span class="nc" id="L927">    }</span>
+
+    /**
+     * Aggregate the values of the given feature collection into new features of
+     * {@code type} that are named.
+     *
+     * @param sfc source of simple features to aggregate
+     * @param type aggregate feature type
+     * @param featNames names of the new features
+     * @param gebiedFieldName field name of the aggregation bucket (eg. gemeente
+     * or regio)
+     * @param aggregateFieldNames
+     * @param gebiedFieldName
+     * @return aggregated features
+     *
+     */
+    private SimpleFeatureCollection aggregateFields(
+            SimpleFeatureCollection sfc,
+            org.opengis.feature.simple.SimpleFeatureType type,
+            Set&lt;String&gt; featNames,
+            List&lt;String&gt; aggregateFieldNames,
+            String gebiedFieldName) {
+
+        // create a feature for each (regio|gemeente|terrein) name with 0 value
+<span class="nc" id="L951">        Map&lt;String, SimpleFeature&gt; newfeats = new TreeMap&lt;&gt;();</span>
+<span class="nc bnc" id="L952" title="All 2 branches missed.">        for (String fName : featNames) {</span>
+<span class="nc" id="L953">            SimpleFeature newfeat = DataUtilities.template(type);</span>
+<span class="nc bnc" id="L954" title="All 2 branches missed.">            for (String aggrName : aggregateFieldNames) {</span>
+<span class="nc" id="L955">                newfeat.setAttribute(aggrName, 0);</span>
+<span class="nc" id="L956">            }</span>
+<span class="nc" id="L957">            newfeat.setAttribute(GEBIED_FIELDNAME, fName);</span>
+<span class="nc" id="L958">            newfeats.put(fName, newfeat);</span>
+<span class="nc" id="L959">        }</span>
+
+        // for each (regio|gemeente|terrein) name in relatedFC get the attribute to aggregate
+        //  and add up in new named feature
+<span class="nc" id="L963">        SimpleFeatureIterator items = sfc.features();</span>
+<span class="nc bnc" id="L964" title="All 2 branches missed.">        while (items.hasNext()) {</span>
+<span class="nc" id="L965">            SimpleFeature f = items.next();</span>
+<span class="nc" id="L966">            SimpleFeature newFeat = newfeats.get((String) f.getAttribute(gebiedFieldName));</span>
+
+<span class="nc bnc" id="L968" title="All 2 branches missed.">            for (String aggrFieldName : aggregateFieldNames) {</span>
+<span class="nc bnc" id="L969" title="All 2 branches missed.">                if (f.getAttribute(aggrFieldName) != null) {</span>
+                    // add up if not null
+<span class="nc" id="L971">                    newFeat.setAttribute(aggrFieldName,</span>
+<span class="nc" id="L972">                            ((Number) newFeat.getAttribute(aggrFieldName)).doubleValue()</span>
+<span class="nc" id="L973">                            + ((Number) f.getAttribute(aggrFieldName)).doubleValue()</span>
+                    );
+                }
+<span class="nc" id="L976">            }</span>
+<span class="nc" id="L977">        }</span>
+<span class="nc" id="L978">        items.close();</span>
+<span class="nc" id="L979">        ArrayList&lt;SimpleFeature&gt; feats = new ArrayList&lt;&gt;(newfeats.values());</span>
+<span class="nc" id="L980">        return DataUtilities.collection(feats);</span>
+    }
+
+    //&lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;getters en setters&quot;&gt;
+    public String getData() {
+<span class="nc" id="L985">        return data;</span>
+    }
+
+    public void setData(String data) {
+<span class="nc" id="L989">        this.data = data;</span>
+<span class="nc" id="L990">    }</span>
+
+    public String getFilename() {
+<span class="nc" id="L993">        return filename;</span>
+    }
+
+    public void setFilename(String filename) {
+<span class="nc" id="L997">        this.filename = filename;</span>
+<span class="nc" id="L998">    }</span>
+
+    public String getMimetype() {
+<span class="nc" id="L1001">        return mimetype;</span>
+    }
+
+    public void setMimetype(String mimetype) {
+<span class="nc" id="L1005">        this.mimetype = mimetype;</span>
+<span class="nc" id="L1006">    }</span>
+
+    @Override
+    public void setContext(ActionBeanContext context) {
+<span class="nc" id="L1010">        this.context = context;</span>
+<span class="nc" id="L1011">    }</span>
+
+    @Override
+    public ActionBeanContext getContext() {
+<span class="nc" id="L1015">        return context;</span>
+    }
+
+    public Application getApplication() {
+<span class="nc" id="L1019">        return application;</span>
+    }
+
+    public void setApplication(Application application) {
+<span class="nc" id="L1023">        this.application = application;</span>
+<span class="nc" id="L1024">    }</span>
+
+    public ApplicationLayer getAppLayer() {
+<span class="nc" id="L1027">        return appLayer;</span>
+    }
+
+    public void setAppLayer(ApplicationLayer appLayer) {
+<span class="nc" id="L1031">        this.appLayer = appLayer;</span>
+<span class="nc" id="L1032">    }</span>
+
+    public String getRegio() {
+<span class="nc" id="L1035">        return regio;</span>
+    }
+
+    public void setRegio(String regio) {
+<span class="nc" id="L1039">        this.regio = regio;</span>
+<span class="nc" id="L1040">    }</span>
+
+    public String getGemeente() {
+<span class="nc" id="L1043">        return gemeente;</span>
+    }
+
+    public void setGemeente(String gemeente) {
+<span class="nc" id="L1047">        this.gemeente = gemeente;</span>
+<span class="nc" id="L1048">    }</span>
+
+    public String getTerrein() {
+<span class="nc" id="L1051">        return terrein;</span>
+    }
+
+    public void setTerrein(String terrein) {
+<span class="nc" id="L1055">        this.terrein = terrein;</span>
+<span class="nc" id="L1056">    }</span>
+
+    public ReportType getReportType() {
+<span class="nc" id="L1059">        return reportType;</span>
+    }
+
+    public void setReportType(ReportType reportType) {
+<span class="nc" id="L1063">        this.reportType = reportType;</span>
+<span class="nc" id="L1064">    }</span>
+
+    public QueryArea getAggregationLevel() {
+<span class="nc" id="L1067">        return aggregationLevel;</span>
+    }
+
+    public void setAggregationLevel(QueryArea aggregationLevel) {
+<span class="nc" id="L1071">        this.aggregationLevel = aggregationLevel;</span>
+<span class="nc" id="L1072">    }</span>
+
+    public AggregationLevelDate getAggregationLevelDate() {
+<span class="nc" id="L1075">        return aggregationLevelDate;</span>
+    }
+
+    public void setAggregationLevelDate(AggregationLevelDate aggregationLevelDate) {
+<span class="nc" id="L1079">        this.aggregationLevelDate = aggregationLevelDate;</span>
+<span class="nc" id="L1080">    }</span>
+
+    public Date getFromDate() {
+<span class="nc" id="L1083">        return fromDate;</span>
+    }
+
+    public void setFromDate(Date fromDate) {
+<span class="nc" id="L1087">        this.fromDate = fromDate;</span>
+<span class="nc" id="L1088">    }</span>
+
+    public Date getToDate() {
+<span class="nc" id="L1091">        return toDate;</span>
+    }
+
+    public void setToDate(Date toDate) {
+<span class="nc" id="L1095">        this.toDate = toDate;</span>
+<span class="nc" id="L1096">    }</span>
+
+    public List&lt;String&gt; getAttrNames() {
+<span class="nc" id="L1099">        return attrNames;</span>
+    }
+
+    public void setAttrNames(List&lt;String&gt; attrNames) {
+<span class="nc" id="L1103">        this.attrNames = attrNames;</span>
+<span class="nc" id="L1104">    }</span>
+
+    //&lt;/editor-fold&gt;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

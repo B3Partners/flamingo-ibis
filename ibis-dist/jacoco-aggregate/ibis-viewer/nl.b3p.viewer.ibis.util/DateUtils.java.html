@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="nl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DateUtils.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">IBIS distributie</a> &gt; <a href="../index.html" class="el_bundle">ibis-viewer</a> &gt; <a href="index.source.html" class="el_package">nl.b3p.viewer.ibis.util</a> &gt; <span class="el_source">DateUtils.java</span></div><h1>DateUtils.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 B3Partners B.V.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package nl.b3p.viewer.ibis.util;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+/**
+ * Utility class with various date manipulation methods.
+ *
+ * @author mprins
+ */
+public class DateUtils {
+    /**
+     * calculate difference in months between the arguments.
+     *
+     * @param beginningDate begin datum
+     * @param endingDate eind datum
+     * @return number of months
+     *
+     * @see #differenceInMonths(java.util.Calendar, java.util.Calendar)
+     */
+    public static int differenceInMonths(Date beginningDate, Date endingDate) {
+<span class="pc bpc" id="L39" title="2 of 4 branches missed.">        if (beginningDate == null || endingDate == null) {</span>
+<span class="nc" id="L40">            return 0;</span>
+        }
+<span class="fc" id="L42">        Calendar cal1 = new GregorianCalendar();</span>
+<span class="fc" id="L43">        cal1.setTime(beginningDate);</span>
+<span class="fc" id="L44">        Calendar cal2 = new GregorianCalendar();</span>
+<span class="fc" id="L45">        cal2.setTime(endingDate);</span>
+<span class="fc" id="L46">        return differenceInMonths(cal1, cal2);</span>
+    }
+
+    /**
+     * calculate difference in months between the arguments.
+     *
+     * @param beginningDate begin datum
+     * @param endingDate eind datum
+     * @return number of months
+     */
+    public static int differenceInMonths(Calendar beginningDate, Calendar endingDate) {
+<span class="pc bpc" id="L57" title="2 of 4 branches missed.">        if (beginningDate == null || endingDate == null) {</span>
+<span class="nc" id="L58">            return 0;</span>
+        }
+<span class="fc" id="L60">        int m1 = beginningDate.get(Calendar.YEAR) * 12 + beginningDate.get(Calendar.MONTH);</span>
+<span class="fc" id="L61">        int m2 = endingDate.get(Calendar.YEAR) * 12 + endingDate.get(Calendar.MONTH);</span>
+<span class="fc" id="L62">        return m2 - m1;</span>
+    }
+
+    /**
+     * add a month to the date.
+     *
+     * @param addTo begin datum
+     * @return een maand later dan begin datum
+     */
+    public static Date addMonth(Date addTo) {
+<span class="fc" id="L72">        Calendar cal = new GregorianCalendar();</span>
+<span class="fc" id="L73">        cal.setTime(addTo);</span>
+<span class="fc" id="L74">        cal.add(Calendar.MONTH, 1);</span>
+<span class="fc" id="L75">        return cal.getTime();</span>
+    }
+
+    /**
+     * private constructor.
+     */
+    private DateUtils() {
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
