@@ -14,7 +14,7 @@ ${project.name} ${project.version} Release Notes
   Dit zijn de release notes voor ${project.name} versie ${project.version}.
 
   Releases zijn beschikbaar op: {{{https://github.com/B3Partners/flamingo-ibis/releases/}github releases}}, de laatste snapshots
-  zijn beschikbaar in de {{{http://repo.b3p.nl/nexus/#nexus-search;gav~~ibis-dist~~~}Maven repository}}.
+  zijn beschikbaar in de {{{http://repo.b3p.nl/nexus/#nexus-search;gav~~ibis-dist~~~} Maven repository}}.
 
 %{toc|section=1|fromDepth=2|toDepth=2}
 
@@ -29,11 +29,16 @@ ${project.name} ${project.version} Release Notes
 
   []
 
+
 ** Verbeteringen en oplossingen
 
   * Fix regio filter in rapportage tool ({{{https://github.com/B3Partners/flamingo-ibis/issues/117}PR #117}}, mantis-14025)
 
-  * Fix Solr indexing ({{{https://github.com/B3Partners/flamingo-ibis/issues/119}PR #119}})
+  * IBPV-200: Fix Solr indexing ({{{https://github.com/B3Partners/flamingo-ibis/issues/119}PR #119}})
+
+  * IBPV-085: Woorden 'wordt' en 'was' boven de kolommen zetten in was/wordt scherm ({{{https://github.com/B3Partners/flamingo-ibis/issues/109}#109}})
+
+  * IBPV-038: Datummutatie niet op vandaag zetten voor bewerkte records ({{{https://github.com/B3Partners/flamingo-ibis/issues/105}#105}})
 
   []
 
