@@ -183,7 +183,7 @@ Ext.define("viewer.components.IbisEdit", {
     handleFeature: function (feature) {
         this.superclass.handleFeature.call(this, feature);
 
-        if (Ext.getCmp(this.workflow_fieldname) === undefined) {
+        if (this.inputContainer.getForm().findField(this.workflow_fieldname) === undefined) {
             // workflow field is missing, add a hidden one to __unprefixed__ accordion of the form panels
             // if added to inputContainer it will throw a layout error
             this.tabbedFormPanels.__unprefixed__.add({
@@ -198,9 +198,16 @@ Ext.define("viewer.components.IbisEdit", {
             });
         }
 
-        this.inputContainer.getForm().findField(mutatiedatumFieldName).setMinValue(
-                getMinMutatiedatum(feature[mutatiedatumFieldName]));
-        this.inputContainer.getForm().findField(mutatiedatumFieldName).setValue(new Date());
+        if (feature[workflowFieldName] === 'bewerkt'){
+            // hou bestaande "bewerkt" datum
+            var defDate = Ext.Date.parse(feature[mutatiedatumFieldName], 'd-m-Y H:i:s');
+            this.inputContainer.getForm().findField(mutatiedatumFieldName).setMinValue(defDate);
+            this.inputContainer.getForm().findField(mutatiedatumFieldName).setValue(defDate);
+        } else {
+            // stel in op vandaag
+            this.inputContainer.getForm().findField(mutatiedatumFieldName).setMinValue(getMinMutatiedatum(feature[mutatiedatumFieldName]));
+            this.inputContainer.getForm().findField(mutatiedatumFieldName).setValue(new Date());
+        }
         var s = "";
         if (this.mode === "copy") {
             setNextIbisWorkflowStatus({}, 'bewerkt', Ext.getCmp(this.workflow_fieldname));
