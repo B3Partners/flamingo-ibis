@@ -134,7 +134,7 @@ function getMinMutatiedatum(date) {
     // the format is fixed in Flamingo, see Edit.js and FeatureToJson#formatValue
     if (date) {
         var minMutDate = Ext.Date.parse(date, 'd-m-Y H:i:s');
-        minMutDate = Ext.Date.subtract(minMutDate, 1, Ext.Date.HOUR);
+        minMutDate = Ext.Date.subtract(minMutDate, Ext.Date.HOUR, 1);
     } else {
         minMutDate = new Date();
     }
