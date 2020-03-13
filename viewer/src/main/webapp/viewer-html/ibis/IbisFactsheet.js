@@ -159,6 +159,8 @@ Ext.define("viewer.components.IbisFactsheet", {
                     key.indexOf("kaveloppervlak_ha") > -1 ||
                     key.indexOf("kaveloppervlak_m2") > -1 ||
                     key.indexOf("kaveloppervlak") > -1 ||
+                    key.indexOf("o_minverkoop") > -1 ||
+                    key.indexOf("o_maxverkoop") > -1 ||
                     key.indexOf("o_milieuwet_code") > -1 ||
                     key.indexOf("milieuwet_waarde") > -1 ||
                     (key.lastIndexOf("status", 0) === 0)
@@ -196,6 +198,18 @@ Ext.define("viewer.components.IbisFactsheet", {
             delete result['milieuwet_waarde'];
         }
 
+        var minPrijs = 'Onbekend';
+        var maxPrijs = 'Onbekend';
+        if (result['o_minverkoop']) {
+            minPrijs = result['o_minverkoop'];
+            delete result['o_minverkoop'];
+        }
+        if (result['o_maxverkoop']) {
+            maxPrijs = result['o_maxverkoop'] /*+ ' €/m2'*/;
+            delete result['o_maxverkoop'];
+        }
+       result['Indicatie_kavelprijs_euro-m2'] = minPrijs + ' - ' + maxPrijs;
+        // result['Indicatie_kavelprijs'] = minPrijs + ' - ' + maxPrijs;
 
         return result;
     },

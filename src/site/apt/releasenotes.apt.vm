@@ -40,6 +40,8 @@ ${project.name} ${project.version} Release Notes
 
   * IBPV-038: Datummutatie niet op vandaag zetten voor bewerkte records ({{{https://github.com/B3Partners/flamingo-ibis/issues/105}#105}})
 
+  * IBPV-206: Factsheet: toevoegen hindercategorie, prijs max, min ({{{https://github.com/B3Partners/flamingo-ibis/issues/147}#147}})
+
   []
 
 
