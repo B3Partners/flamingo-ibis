@@ -104,6 +104,30 @@
         "showHelp": true
     },
     {
+        "className": "viewer.components.IbisEditHistorisch",
+        "name": "Edit Historisch",
+        "shortName": "EdHis",
+        "group": "Ibis",
+        "sources": [
+            "WorkflowStatus.js",
+            "Edit.js",
+            "IbisEdit.js",
+            "IbisEditHistorisch.js"
+        ],
+        "configSource": [
+            "WorkflowStatus.js",
+            "ConfigObject.js",
+            "SelectionWindowConfig.js",
+            "IbisEditHistorisch-config.js"
+        ],
+        "restrictions": [
+            "left_menu"
+        ],
+        "type": "popup",
+        "singleton": true,
+        "showHelp": true
+    },
+    {
         "className": "viewer.components.IbisSplit",
         "name": "Splitsen",
         "shortName": "Sp",

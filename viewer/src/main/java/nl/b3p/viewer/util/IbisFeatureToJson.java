@@ -287,6 +287,81 @@ public class IbisFeatureToJson {
         return features;
     }
 
+    /**
+     * Get the features as JSONArray with the given params
+     *
+     * @param al The application layer(if there is a application layer)
+     * @param ft The featuretype that must be used to get the features
+     * @param fs The featureSource
+     * @param q The query
+     * @return JSONArray with features.
+     * @throws IOException if any
+     * @throws JSONException if any
+     * @throws Exception if any
+     */
+    public JSONArray getHistorischeJSONFeatures(ApplicationLayer al, SimpleFeatureType ft, FeatureSource fs, Query q)
+            throws IOException, JSONException, Exception {
+
+        LOG.debug("Ophalen archief json features met: " + q);
+        Map<String, String> attributeAliases = new HashMap<>();
+        if (!edit) {
+            for (AttributeDescriptor ad : ft.getAttributes()) {
+                if (ad.getAlias() != null) {
+                    attributeAliases.put(ad.getName(), ad.getAlias());
+                }
+            }
+        }
+        List<String> propertyNames;
+        if (al != null) {
+            propertyNames = this.setPropertyNames(al, q, ft, edit);
+        } else {
+            propertyNames = new ArrayList<>();
+            for (AttributeDescriptor ad : ft.getAttributes()) {
+                propertyNames.add(ad.getName());
+            }
+        }
+
+        Integer start = q.getStartIndex();
+        if (start == null) {
+            start = 0;
+        }
+        boolean offsetSupported = fs.getQueryCapabilities().isOffsetSupported();
+        //if offSet is not supported, get more features (start + the wanted features)
+        if (!offsetSupported && q.getMaxFeatures() < MAX_FEATURES) {
+            q.setMaxFeatures(q.getMaxFeatures() + start);
+        }
+
+        JSONArray features = new JSONArray();
+        try {
+            // only get 'archief'
+            SimpleFeatureCollection feats = (SimpleFeatureCollection) fs.getFeatures(q);
+            FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
+            Filter archief = ff.or(
+                    ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.archief.name()), false),
+                    ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.afgevoerd.name()), false)
+            );
+            SimpleFeatureCollection defSFC = DataUtilities.collection(feats.subCollection(archief));
+
+            int featureIndex = 0;
+            SimpleFeature feature;
+            try (SimpleFeatureIterator defs = defSFC.features()) {
+                while (defs.hasNext()) {
+                    feature = defs.next();
+                    /* if offset not supported and there are more features returned then
+                     * only get the features after index >= start*/
+                    if (offsetSupported || featureIndex >= start) {
+                        JSONObject j = this.toJSONFeature(new JSONObject(), feature, ft, al, propertyNames, attributeAliases, 0);
+                        features.put(j);
+                    }
+                    featureIndex++;
+                }
+            }
+        } finally {
+            fs.getDataStore().dispose();
+        }
+        return features;
+    }
+
     private JSONObject toJSONFeature(JSONObject j, SimpleFeature f, SimpleFeatureType ft, ApplicationLayer al, List<String> propertyNames, Map<String, String> attributeAliases, int index)
             throws JSONException, Exception {
         if (arrays) {
