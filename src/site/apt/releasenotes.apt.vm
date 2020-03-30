@@ -26,7 +26,7 @@ ${project.name} ${project.version} Release Notes
 ** Nieuw
 
   *  migratie naar Flamingo {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v5.7.3}5.7.3}} en verwijderen
-     van Flash componenten ({{{https://mantis.b3p.nl/view.php?id=14455}}mantis-14455})
+     van Flash componenten ({{{https://mantis.b3p.nl/view.php?id=14455}mantis-14455}})
 
   []
 
