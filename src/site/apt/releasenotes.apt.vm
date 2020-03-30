@@ -25,14 +25,17 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
-  * ...
+  *  migratie naar Flamingo {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v5.7.3}5.7.3}} en verwijderen
+     van Flash componenten ({{{https://mantis.b3p.nl/view.php?id=14455}}mantis-14455})
 
   []
 
 
 ** Verbeteringen en oplossingen
 
-  * Fix regio filter in rapportage tool ({{{https://github.com/B3Partners/flamingo-ibis/issues/117}PR #117}}, mantis-14025)
+  * Fix regio filter in rapportage tool ({{{https://github.com/B3Partners/flamingo-ibis/issues/117}PR #117}}, {{{https://mantis.b3p.nl/view.php?id=14025}mantis-14025}})
+
+  * bij het opstarten van de publieksviewer krijg je steeds in beeld Error while getting SLD..." ({{{https://mantis.b3p.nl/view.php?id=14365}mantis-14365}})
 
   * IBPV-200: Fix Solr indexing ({{{https://github.com/B3Partners/flamingo-ibis/issues/119}PR #119}})
 
