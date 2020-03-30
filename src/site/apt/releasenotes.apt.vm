@@ -58,7 +58,7 @@ ${project.name} ${project.version} Release Notes
   
 ** Verbeteringen en oplossingen
   
-  * Fix kaartlaag herladen voor gemeente viewer ({{{https://github.com/B3Partners/flamingo-ibis/issues/101}PR #101}}, mantis-13491)
+  * Fix kaartlaag herladen voor gemeente viewer ({{{https://github.com/B3Partners/flamingo-ibis/issues/101}PR #101}}, {{{https://mantis.b3p.nl/view.php?id=13491}mantis-13491}})
   
   []
 
