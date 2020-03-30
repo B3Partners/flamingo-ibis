@@ -37,6 +37,8 @@ ${project.name} ${project.version} Release Notes
 
   * bij het opstarten van de publieksviewer krijg je steeds in beeld Error while getting SLD..." ({{{https://mantis.b3p.nl/view.php?id=14365}mantis-14365}})
 
+  * Gebruik maken van cyclomedia streetsmart ipv google streetview ({{{https://mantis.b3p.nl/view.php?id=14832}mantis-14832}})
+
   * IBPV-200: Fix Solr indexing ({{{https://github.com/B3Partners/flamingo-ibis/issues/119}PR #119}})
 
   * IBPV-085: Woorden 'wordt' en 'was' boven de kolommen zetten in was/wordt scherm ({{{https://github.com/B3Partners/flamingo-ibis/issues/109}#109}})
