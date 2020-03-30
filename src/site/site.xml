@@ -20,8 +20,8 @@
         <href>${project.url}</href>
     </bannerRight>
     <poweredBy>
-        <logo href="https://travis-ci.org/B3Partners/flamingo-ibis"
-              img="https://travis-ci.org/B3Partners/flamingo-ibis.svg?branch=master"
+        <logo href="https://travis-ci.com/B3Partners/flamingo-ibis"
+              img="https://travis-ci.com/B3Partners/flamingo-ibis.svg?branch=master"
               name="Travis-CI Build status (master branch)" />
         <logo href="http://192.168.1.57:8080/job/B3Partners/job/flamingo-ibis/job/master/"
               img="http://192.168.1.57:8080/buildStatus/icon?job=B3Partners%2Fflamingo-ibis%2Fmaster&amp;style=plastic"
