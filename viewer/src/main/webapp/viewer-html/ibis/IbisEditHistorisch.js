@@ -20,6 +20,7 @@
  */
 Ext.define("viewer.components.IbisEditHistorisch", {
     extend: "viewer.components.IbisEdit",
+    geometryEditable: false,
     config: {
         showVorigeDefintiefVersie: false,
         allowNew : false,
@@ -39,6 +40,12 @@ Ext.define("viewer.components.IbisEditHistorisch", {
         return this;
     },
 
+    initAttributeInputs: function (appLayer) {
+        this.callParent(arguments);
+
+        // blokkeer edit van geometrie
+        this.geometryEditable = false;
+    },
     getFeaturesForCoords: function (coords) {
         var layer = this.layerSelector.getValue();
         var featureInfo = Ext.create("viewer.FeatureInfo", {
