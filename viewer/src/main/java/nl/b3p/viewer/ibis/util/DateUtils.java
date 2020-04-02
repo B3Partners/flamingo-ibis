@@ -16,9 +16,7 @@
  */
 package nl.b3p.viewer.ibis.util;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 /**
  * Utility class with various date manipulation methods.
@@ -76,9 +74,51 @@ public class DateUtils {
     }
 
     /**
+     * get next date after reference date.
+     *
+     * @param dateList list of dates
+     * @param refDate  reference date, must be part of {@code dateList}
+     * @return next date after {@code refDate} from {@code dateList} or reference date if there are no later dates
+     */
+    public static Date getAfterDate(List<Date> dateList, Date refDate) {
+        // System.out.println("datum after " + refDate + " from: " + dateList);
+        final List<Date> afterDates = dateList.subList(dateList.indexOf(refDate), dateList.size());
+        // System.out.println(afterDates);
+        if (afterDates.size() > 0) {
+            for (Date date : afterDates) {
+                if (date.after(refDate)) {
+                    return date;
+                }
+            }
+        }
+        return refDate;
+    }
+
+    /**
+     * get previous date before reference date.
+     *
+     * @param dateList list of dates
+     * @param refDate  reference date, must be part of {@code dateList}
+     * @return previous date before {@code refDate} from {@code dateList} or reference date if there are no earlier dates
+     */
+    public static Date getBeforeDate(List<Date> dateList, Date refDate) {
+        // System.out.println("datum before " + refDate + " from: " + dateList);
+        final List<Date> beforeDates = dateList.subList(0, dateList.indexOf(refDate));
+        Collections.reverse(beforeDates);
+        // System.out.println(beforeDates);
+        if (beforeDates.size() > 0) {
+            for (Date date : beforeDates) {
+                if (date.before(refDate)) {
+                    return date;
+                }
+            }
+        }
+        return refDate;
+    }
+
+    /**
      * private constructor.
      */
     private DateUtils() {
     }
-
 }

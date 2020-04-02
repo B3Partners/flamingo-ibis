@@ -333,13 +333,15 @@ public class IbisFeatureToJson {
 
         JSONArray features = new JSONArray();
         try {
-            // only get 'archief'
-            SimpleFeatureCollection feats = (SimpleFeatureCollection) fs.getFeatures(q);
+
             FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
+            // only get 'archief', sort by date
+            q.setSortBy(new SortBy[]{ff.sort(MUTATIEDATUM_FIELDNAME,SortOrder.ASCENDING)});
             Filter archief = ff.or(
                     ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.archief.name()), false),
                     ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.afgevoerd.name()), false)
             );
+            SimpleFeatureCollection feats = (SimpleFeatureCollection) fs.getFeatures(q);
             SimpleFeatureCollection defSFC = DataUtilities.collection(feats.subCollection(archief));
 
             int featureIndex = 0;
@@ -524,7 +526,7 @@ public class IbisFeatureToJson {
         }
     }
 
-    private final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    public static final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
     private Object formatValue(Object value) {
         if (value instanceof Date) {
