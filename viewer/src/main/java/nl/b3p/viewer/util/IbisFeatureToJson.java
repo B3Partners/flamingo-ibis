@@ -301,7 +301,6 @@ public class IbisFeatureToJson {
      */
     public JSONArray getHistorischeJSONFeatures(ApplicationLayer al, SimpleFeatureType ft, FeatureSource fs, Query q)
             throws IOException, JSONException, Exception {
-
         LOG.debug("Ophalen archief json features met: " + q);
         Map<String, String> attributeAliases = new HashMap<>();
         if (!edit) {
@@ -333,9 +332,8 @@ public class IbisFeatureToJson {
 
         JSONArray features = new JSONArray();
         try {
-
             FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
-            // only get 'archief', sort by date
+            // 'archief' + afgevoerd, sort by date
             q.setSortBy(new SortBy[]{ff.sort(MUTATIEDATUM_FIELDNAME,SortOrder.ASCENDING)});
             Filter archief = ff.or(
                     ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.archief.name()), false),

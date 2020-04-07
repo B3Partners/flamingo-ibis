@@ -156,103 +156,47 @@ Ext.define("viewer.components.IbisEditHistorisch", {
         //         this.savebutton.setDisabled(true);
         //         this.savebutton.setText("'Definitief' object mag niet verwijderd worden");
         //     }
-        //     // verberg verwijderen knop als iets anders als 'bewerkt' wordt geladen
-        //     if (this.inputContainer.getForm().findField(this.workflow_fieldname).getValue() !== "bewerkt") {
-        //         // de button wordt hersteld in #showWindow
-        //         this.setButtonDisabled("deleteButton", true);
-        //         var button = this.maincontainer.down("#deleteButton");
-        //         if (button) {
-        //             button.hide();
-        //         }
-        //     }
+
+        // herstel delete button (wordt weggehaald in super class
+        if (this.config.allowDelete) {
+            this.setButtonDisabled("deleteButton", false);
+            var button = this.maincontainer.down("#deleteButton");
+            if (button) {
+                button.show();
+            }
+        }
     },
-    // /**
-    //  * wrap input element.
-    //  *
-    //  * @param {Ext.form.field.Field} inputEle
-    //  * @returns {Ext.form.field.Field} optionally wrapped in a {Ext.container.Container}
-    //  * @private
-    //  */
-    // _wrapInput: function (inputEle, attributeName) {
-    //     var input = inputEle;
-    //     if (this.config.showVorigeDefintiefVersie) {
-    //         inputEle.setFlex(2);
-    //         input = Ext.create('Ext.container.Container', {
-    //             layout: {
-    //                 type: 'hbox',
-    //                 align: 'stretch'
-    //             }, items: [
-    //                 inputEle,
-    //                 {
-    //                     xtype: 'box',
-    //                     html: '',
-    //                     flex: 1,
-    //                     id: attributeName + '_def',
-    //                     width: 100,
-    //                     cls: 'x-form-text-default def_container',
-    //                     border: 0,
-    //                     style: {
-    //                         borderColor: 'red',
-    //                         borderStyle: 'dotted'
-    //                     }
-    //                 }
-    //             ]
-    //         });
-    //         input.setReadOnly = function (readOnly) {
-    //             inputEle.setReadOnly(readOnly);
-    //             inputEle.addCls("x-item-disabled");
-    //         };
-    //         input.getName = function () {
-    //             return inputEle.getName();
-    //         };
-    //     }
-    //     return input;
-    // },
-    // _getWasWordtHeader: function() {
-    //     var header = [];
-    //     if (this.config.showVorigeDefintiefVersie) {
-    //         header = Ext.create('Ext.container.Container', {
-    //             layout: {
-    //                 type: 'hbox',
-    //                 align: 'stretch'
-    //             },
-    //             items: [
-    //                 {
-    //                     itemId: "headingLabelA",
-    //                     margin: '0 0',
-    //                     flex: 1,
-    //                     html: '',
-    //                     xtype: "container"
-    //                 },
-    //                 {
-    //                     itemId: "headingLabelB",
-    //                     margin: '0 0',
-    //                     flex: 1,
-    //                     html: 'Wordt',
-    //                     xtype: "container"
-    //                 },
-    //                 {
-    //                     itemId: "headingLabelC",
-    //                     margin: '0 0',
-    //                     flex: 1,
-    //                     html: 'Was',
-    //                     xtype: "container"
-    //                 }
-    //             ]
-    //         });
-    //     }
-    //     return header;
-    // },
 
     createNew: function () {
         // kan/mag niet
     },
+    /** @override */
     deleteFeature: function () {
-        // TODO: kan/mag niet???
-        // this.callParent();
-        // setNextIbisWorkflowStatus(FlamingoAppLoader.get('user').roles, 'afgevoerd', Ext.getCmp(this.workflow_fieldname));
-        // var s = this.workflowStore.getById('afgevoerd').get('label');
-        // Ext.getCmp(this.name + "workflowLabel").setText("Huidige workflow status: " + s);
+        // werkt niet, roept toch IbisEdit#deleteFeature aan
+        // this.callSuper();
+        this.superclass.superclass.deleteFeature.call(this);
+        //viewer.components.Edit.deleteFeature.apply(this,arguments);
+    },
+    /** @override */
+    remove: function () {
+        var feature = this.inputContainer.getValues();
+        feature.__fid = this.currentFID;
+        var me = this;
+        me.editingLayer = this.config.viewerController.getLayer(this.layerSelector.getValue());
+        Ext.create("viewer.EditFeature", {
+            viewerController: this.config.viewerController,
+            actionbeanUrl: contextPath + '/action/feature/ibisedit'+"?delete"
+        }).remove(
+            me.editingLayer,
+            feature,
+            function (fid) {
+                me.deleteSucces();
+            }, function (error) {
+                me.failed(error);
+            }, {
+                historisch: true
+            }
+        );
     },
     /**
      * copied from superclass Edit to override the actionbeanUrl.
@@ -263,19 +207,19 @@ Ext.define("viewer.components.IbisEditHistorisch", {
         if (!this.inputContainer.getForm().findField(mutatiedatumFieldName).isValid()) {
             return;
         }
-        // if (this.mode === "delete") {
-        //     this.remove();
-        //     return;
-        // }
+        if (this.mode === "delete") {
+            this.remove();
+            return;
+        }
 
         var feature = this.inputContainer.getValues();
 
-        if (this.geometryEditable) {
-            if (this.vectorLayer.getActiveFeature()) {
-                var wkt = this.vectorLayer.getActiveFeature().config.wktgeom;
-                feature[this.appLayer.geometryAttribute] = wkt;
-            }
-        }
+        // if (this.geometryEditable) {
+        //     if (this.vectorLayer.getActiveFeature()) {
+        //         var wkt = this.vectorLayer.getActiveFeature().config.wktgeom;
+        //         feature[this.appLayer.geometryAttribute] = wkt;
+        //     }
+        // }
         if (this.mode === "edit") {
             feature.__fid = this.currentFID;
         }
@@ -291,12 +235,12 @@ Ext.define("viewer.components.IbisEditHistorisch", {
         // }
 
         var me = this;
-        try {
-            feature = this.changeFeatureBeforeSave(feature);
-        } catch (e) {
-            me.failed(e);
-            return;
-        }
+        // try {
+        //     feature = this.changeFeatureBeforeSave(feature);
+        // } catch (e) {
+        //     me.failed(e);
+        //     return;
+        // }
 
         me.editingLayer = this.config.viewerController.getLayer(this.layerSelector.getValue());
         Ext.create("viewer.EditFeature", {

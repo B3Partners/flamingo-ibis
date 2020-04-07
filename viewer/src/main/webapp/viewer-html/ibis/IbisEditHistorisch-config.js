@@ -33,38 +33,38 @@ Ext.define("viewer.components.CustomConfiguration", {
                 value: this.configObject.allowDelete !== undefined ? this.configObject.allowDelete : false,
                 labelWidth: this.labelWidth
             },
-            {
-                xtype: 'checkbox',
-                fieldLabel: 'Kopiëren toestaan',
-                name: 'allowCopy',
-                value: false,
-                labelWidth: this.labelWidth,
-                hidden: true
-            },
-            {
-                xtype: 'checkbox',
-                fieldLabel: 'Nieuw toestaan',
-                name: 'allowNew',
-                value: false,
-                labelWidth: this.labelWidth,
-                hidden: true
-            },
-            {
-                xtype: 'checkbox',
-                fieldLabel: 'Link toevoegen in Feature Info',
-                name: 'showEditLinkInFeatureInfo',
-                value: false,
-                labelWidth: this.labelWidth,
-                hidden: true
-            },
-            {
-                xtype: 'checkbox',
-                fieldLabel: 'Vorige -Definitief- versie ophalen',
-                name: 'showVorigeDefintiefVersie',
-                value: false,
-                labelWidth: this.labelWidth,
-                hidden: true
-            },
+            // {
+            //     xtype: 'checkbox',
+            //     fieldLabel: 'Kopiëren toestaan',
+            //     name: 'allowCopy',
+            //     value: false,
+            //     labelWidth: this.labelWidth,
+            //     hidden: true
+            // },
+            // {
+            //     xtype: 'checkbox',
+            //     fieldLabel: 'Nieuw toestaan',
+            //     name: 'allowNew',
+            //     value: false,
+            //     labelWidth: this.labelWidth,
+            //     hidden: true
+            // },
+            // {
+            //     xtype: 'checkbox',
+            //     fieldLabel: 'Link toevoegen in Feature Info',
+            //     name: 'showEditLinkInFeatureInfo',
+            //     value: false,
+            //     labelWidth: this.labelWidth,
+            //     hidden: true
+            // },
+            // {
+            //     xtype: 'checkbox',
+            //     fieldLabel: 'Vorige -Definitief- versie ophalen',
+            //     name: 'showVorigeDefintiefVersie',
+            //     value: false,
+            //     labelWidth: this.labelWidth,
+            //     hidden: true
+            // },
             {
                 itemId: 'prefixLabels',
                 xtype: 'panel',
