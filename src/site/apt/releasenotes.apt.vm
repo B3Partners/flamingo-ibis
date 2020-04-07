@@ -47,6 +47,8 @@ ${project.name} ${project.version} Release Notes
 
   * IBPV-206: Factsheet: toevoegen hindercategorie, prijs max, min ({{{https://github.com/B3Partners/flamingo-ibis/issues/147}#147}})
 
+  * IBPV-042: Historische records van kavels aanpassen ({{{https://github.com/B3Partners/flamingo-ibis/issues/137}#137}})
+
   []
 
 

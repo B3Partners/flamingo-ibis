@@ -21,6 +21,7 @@ import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import net.sourceforge.stripes.action.StrictBinding;
 import net.sourceforge.stripes.action.UrlBinding;
+import net.sourceforge.stripes.validation.Validate;
 import nl.b3p.viewer.config.app.Application;
 import nl.b3p.viewer.config.app.ApplicationLayer;
 import nl.b3p.viewer.config.security.Authorizations;
@@ -49,6 +50,9 @@ public class IbisFeatureInfoActionBean extends FeatureInfoActionBean implements 
 
     private static final Log log = LogFactory.getLog(IbisFeatureInfoActionBean.class);
 
+    @Validate
+    private boolean historisch;
+
     /**
      * execute the query, can be overridden in subclasses to modify behaviour
      * such as workflow. {@inheritDoc }
@@ -69,8 +73,13 @@ public class IbisFeatureInfoActionBean extends FeatureInfoActionBean implements 
             if (Authorizations.isAppLayerWriteAuthorized(this.getApplication(), al,
                     this.getContext().getRequest(), Stripersist.getEntityManager())) {
                 // workflow/edit behaviour
-                log.debug("Executing custom IBIS featureinfo for write-authorized user on layer " + this.getLayer().getName());
-                features = ftjson.getWorkflowJSONFeatures(al, this.getLayer().getFeatureType(), fs, q);
+                if (this.historisch) {
+                    log.debug("Executing custom 'historisch' IBIS featureinfo for write-authorized user on layer " + this.getLayer().getName());
+                    features = ftjson.getHistorischeJSONFeatures(al, this.getLayer().getFeatureType(), fs, q);
+                } else {
+                    log.debug("Executing custom IBIS featureinfo for write-authorized user on layer " + this.getLayer().getName());
+                    features = ftjson.getWorkflowJSONFeatures(al, this.getLayer().getFeatureType(), fs, q);
+                }
             } else {
                 log.debug("Executing custom IBIS featureinfo for non-write-authorized user on layer " + this.getLayer().getName());
                 features = ftjson.getDefinitiefJSONFeatures(al, this.getLayer().getFeatureType(), fs, q);
@@ -86,4 +95,11 @@ public class IbisFeatureInfoActionBean extends FeatureInfoActionBean implements 
         return features;
     }
 
+    public boolean isHistorisch() {
+        return historisch;
+    }
+
+    public void setHistorisch(boolean historisch) {
+        this.historisch = historisch;
+    }
 }

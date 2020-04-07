@@ -16,7 +16,9 @@
  */
 package nl.b3p.viewer.stripes;
 
+import net.sourceforge.stripes.validation.Validate;
 import nl.b3p.viewer.ibis.util.IbisConstants;
+import org.geotools.data.simple.SimpleFeatureCollection;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.WKTReader;
 import java.io.IOException;
@@ -48,6 +50,7 @@ import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.GeometryType;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
+import org.opengis.filter.sort.SortOrder;
 import org.stripesstuff.stripersist.Stripersist;
 
 /**
@@ -60,6 +63,9 @@ import org.stripesstuff.stripersist.Stripersist;
 public class IbisEditFeatureActionBean extends EditFeatureActionBean implements IbisConstants {
 
     private static final Log log = LogFactory.getLog(IbisEditFeatureActionBean.class);
+
+    @Validate
+    private boolean historisch;
 
     @Override
     protected String addNewFeature() throws Exception {
@@ -84,19 +90,93 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
      */
     @Override
     protected void deleteFeature(String fid) throws IOException, Exception {
-        log.debug("ibis deleteFeature: " + fid);
+        if(this.isHistorisch()){
+            this.deleteFeatureHistorisch(fid);
+        } else {
+            log.debug("ibis deleteFeature: " + fid);
 
-        Transaction transaction = new DefaultTransaction("ibis_delete");
+            Transaction transaction = new DefaultTransaction("ibis_delete");
+            this.getStore().setTransaction(transaction);
+
+            FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
+            Filter filter = ff.id(new FeatureIdImpl(fid));
+
+            try {
+                this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd, filter);
+                SimpleFeature original = this.getStore().getFeatures(filter).features().next();
+                transaction.commit();
+                Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);
+                if (terreinID != null) {
+                    WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), this.getLayer(), WorkflowStatus.afgevoerd, this.getApplication(), Stripersist.getEntityManager());
+                }
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            } finally {
+                transaction.close();
+            }
+        }
+    }
+
+    /**
+     * verwijder historische record.
+     * Als het een "archief" record is dan gewoon verwijderen,
+     * als het een "afgevoerd" record is dan verwijderen en jongste "archief" record "afgevoerd" maken.
+     * als er geen "archief" te vinden is dan laten.
+     *
+     * @param fid feature to remove
+     * @throws IOException if any
+     * @throws Exception if any
+     */
+    private void deleteFeatureHistorisch(String fid) throws IOException, Exception {
+        log.debug("ibis deleteFeatureHistorisch: " + fid);
+
+        Transaction transaction = new DefaultTransaction("ibis_delete_historisch");
         this.getStore().setTransaction(transaction);
 
         FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
-        Filter filter = ff.id(new FeatureIdImpl(fid));
+        Filter fidFilter = ff.id(new FeatureIdImpl(fid));
+
+        Filter hist = ff.or(
+                ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.archief.name()), false),
+                ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.afgevoerd.name()), false)
+        );
 
         try {
-            this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd, filter);
-            SimpleFeature original = this.getStore().getFeatures(filter).features().next();
-            transaction.commit();
+            SimpleFeature original = this.getStore().getFeatures(fidFilter).features().next();
+            Number ibisId = (Number) original.getAttribute(ID_FIELDNAME);
             Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);
+
+            log.debug(String.format("Delete from feature source #%d fid=%s",
+                    this.getLayer().getFeatureType().getId(), fid));
+
+            switch (WorkflowStatus.valueOf( original.getAttribute(WORKFLOW_FIELDNAME).toString()) ) {
+                case archief:
+                    // archief record gewoon verwijderen
+                    this.getStore().removeFeatures(fidFilter);
+                    break;
+                case afgevoerd:
+                    // zoek alle historische kavels voor dit kavel nummer
+                    SimpleFeatureCollection histRecords = this.getStore().getFeatures(
+                            ff.and(
+                                    hist,
+                                    ff.equals(ff.property(ID_FIELDNAME), ff.literal(ibisId))
+                            ));
+                    if (histRecords.size() > 1) {
+                        // als er naast deze afgevoerd nog andere zijn
+                        histRecords.sort(ff.sort(MUTATIEDATUM_FIELDNAME, SortOrder.DESCENDING));
+                        // dan de jongste daarvan (eerste uit de lijst) op afgevoerd zetten
+                        String updateFid = histRecords.features().next().getID();
+                        this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd, ff.id(new FeatureIdImpl(updateFid)));
+                        // en gevraagde verwijderen uit database
+                        this.getStore().removeFeatures(fidFilter);
+                    }
+                    break;
+                default:
+                    throw new UnsupportedOperationException("Historische record met status anders dan 'archief' of 'afgevoerd' kan niet worden verwijderd.");
+            }
+            transaction.commit();
+            // update terrein van kavel
             if (terreinID != null) {
                 WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), this.getLayer(), WorkflowStatus.afgevoerd, this.getApplication(), Stripersist.getEntityManager());
             }
@@ -106,6 +186,7 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
         } finally {
             transaction.close();
         }
+
     }
 
     /**
@@ -341,5 +422,13 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
     private boolean isSameMutatiedatum(Object datum1, Object datum2) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
         return sdf.format(datum1).equals(sdf.format(datum2));
+    }
+
+    public boolean isHistorisch() {
+        return historisch;
+    }
+
+    public void setHistorisch(boolean historisch) {
+        this.historisch = historisch;
     }
 }

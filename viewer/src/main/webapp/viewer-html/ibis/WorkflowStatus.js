@@ -140,3 +140,31 @@ function getMinMutatiedatum(date) {
     }
     return minMutDate;
 }
+
+/**
+ * return a date one hour after feature date.
+ * @param {String} date
+ * @returns {Date} maximum mutatie datum
+ */
+function getMaxMutatiedatum(date) {
+    // the format is fixed in Flamingo, see Edit.js and FeatureToJson#formatValue
+    if (date) {
+        var maxMutDate = Ext.Date.parse(date, 'd-m-Y H:i:s');
+        maxMutDate = Ext.Date.add(maxMutDate, Ext.Date.HOUR, 1);
+    } else {
+        maxMutDate = new Date();
+    }
+    return maxMutDate;
+}
+
+/* return a date.
+* @param {String} date
+* @returns {Date} datum
+ */
+function parseDate(date) {
+    if (date) {
+        return Ext.Date.parse(date, 'd-m-Y H:i:s');
+    } else {
+        return new Date()
+    }
+}

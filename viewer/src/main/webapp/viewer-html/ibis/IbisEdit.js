@@ -54,7 +54,8 @@ Ext.define("viewer.components.IbisEdit", {
     },
     /** @override */
     loadWindow: function () {
-        this.superclass.loadWindow.call(this);
+        //this.superclass.loadWindow.call(this);
+        this.callParent();
         this.maincontainer.add([{
             id: this.name + "workflowLabel",
             margin: 5,
@@ -66,7 +67,8 @@ Ext.define("viewer.components.IbisEdit", {
         if (this.config.prefixConfig.length !== 0) {
             this.inputContainer.getLayout().multi = true;
         }
-        this.superclass.initAttributeInputs.call(this, appLayer);
+        //this.superclass.initAttributeInputs.call(this, appLayer);
+        this.callParent(arguments);
         this.groupInputsByPrefix(appLayer);
         var _user = FlamingoAppLoader.get('user');
         if (_user !== null && _user.roles) {
@@ -181,7 +183,8 @@ Ext.define("viewer.components.IbisEdit", {
         return true;
     },
     handleFeature: function (feature) {
-        this.superclass.handleFeature.call(this, feature);
+        //this.superclass.handleFeature.call(this, feature);
+        this.callParent(arguments);
 
         if (this.inputContainer.getForm().findField(this.workflow_fieldname) === undefined) {
             // workflow field is missing, add a hidden one to __unprefixed__ accordion of the form panels
@@ -210,10 +213,10 @@ Ext.define("viewer.components.IbisEdit", {
         }
         var s = "";
         if (this.mode === "copy") {
-            setNextIbisWorkflowStatus({}, 'bewerkt', Ext.getCmp(this.workflow_fieldname));
+            setNextIbisWorkflowStatus({}, 'bewerkt', this.inputContainer.getForm().findField(this.workflow_fieldname));
             s = this.workflowStore.getById('bewerkt').get("label");
         } else {
-            setNextIbisWorkflowStatus(FlamingoAppLoader.get('user').roles, feature[this.workflow_fieldname], Ext.getCmp(this.workflow_fieldname));
+            setNextIbisWorkflowStatus(FlamingoAppLoader.get('user').roles, feature[this.workflow_fieldname], this.inputContainer.getForm().findField(this.workflow_fieldname));
             var wf = feature[this.workflow_fieldname] || 'bewerkt';
             s = this.workflowStore.getById(wf).get("label");
         }
@@ -248,7 +251,8 @@ Ext.define("viewer.components.IbisEdit", {
         if (button) {
             button.show();
         }
-        this.superclass.showWindow.call(this);
+        //this.superclass.showWindow.call(this);
+        this.callParent();
     },
 
     getDefinitiefFeature: function (bewerktFeature) {
@@ -311,7 +315,8 @@ Ext.define("viewer.components.IbisEdit", {
      * @see _wrapInput
      */
     createStaticInput: function (attribute, values) {
-        var inputEle = this.superclass.createStaticInput.call(this, attribute, values);
+        //var inputEle = this.superclass.createStaticInput.call(this, attribute, values);
+        var inputEle = this.callParent(arguments);
         return this._wrapInput(inputEle, attribute.name);
     },
     /**
@@ -320,7 +325,8 @@ Ext.define("viewer.components.IbisEdit", {
      * @see _wrapInput
      */
     createDynamicInput: function (attribute, values) {
-        var inputEle = this.superclass.createDynamicInput.call(this, attribute, values);
+        //var inputEle = this.superclass.createDynamicInput.call(this, attribute, values);
+        var inputEle = this.callParent(arguments);
         return this._wrapInput(inputEle, attribute.name);
     },
     /**
@@ -401,12 +407,14 @@ Ext.define("viewer.components.IbisEdit", {
         return header;
     },
     resetForm: function () {
-        this.superclass.resetForm.call(this);
+        //this.superclass.resetForm.call(this);
+        this.callParent();
         this.popup.popupWin.setTitle(this.config.title);
         this.savebutton.setDisabled(false);
     },
     createNew: function () {
-        this.superclass.createNew.call(this);
+        //this.superclass.createNew.call(this);
+        this.callParent();
         // generate a new, pseudo-unique id for this feature
         // millisecond precision requires database schema update to swith id from integer to bigint
         // alter table bedrijventerrein alter id type bigint;
@@ -415,7 +423,7 @@ Ext.define("viewer.components.IbisEdit", {
         // for now we'll use second precision
         this.newID = new Date() / 1000 | 0;
 
-        setNextIbisWorkflowStatus(FlamingoAppLoader.get('user').roles, 'bewerkt', Ext.getCmp(this.workflow_fieldname));
+        setNextIbisWorkflowStatus(FlamingoAppLoader.get('user').roles, 'bewerkt', this.inputContainer.getForm().findField(this.workflow_fieldname));
         var s = this.workflowStore.getById('bewerkt').get("label");
         Ext.getCmp(this.name + "workflowLabel").setText("Huidige workflow status: " + s);
 
@@ -428,8 +436,9 @@ Ext.define("viewer.components.IbisEdit", {
         }
     },
     deleteFeature: function () {
-        this.superclass.deleteFeature.call(this);
-        setNextIbisWorkflowStatus(FlamingoAppLoader.get('user').roles, 'afgevoerd', Ext.getCmp(this.workflow_fieldname));
+        //this.superclass.deleteFeature.call(this);
+        this.callParent();
+        setNextIbisWorkflowStatus(FlamingoAppLoader.get('user').roles, 'afgevoerd', this.inputContainer.getForm().findField(this.workflow_fieldname));
         var s = this.workflowStore.getById('afgevoerd').get('label');
         Ext.getCmp(this.name + "workflowLabel").setText("Huidige workflow status: " + s);
     },
