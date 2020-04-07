@@ -124,9 +124,9 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
      * als het een "afgevoerd" record is dan verwijderen en jongste "archief" record "afgevoerd" maken.
      * als er geen "archief" te vinden is dan laten.
      *
-     * @param fid
-     * @throws IOException
-     * @throws Exception
+     * @param fid feature to remove
+     * @throws IOException if any
+     * @throws Exception if any
      */
     private void deleteFeatureHistorisch(String fid) throws IOException, Exception {
         log.debug("ibis deleteFeatureHistorisch: " + fid);
@@ -141,7 +141,6 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
                 ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.archief.name()), false),
                 ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.afgevoerd.name()), false)
         );
-
 
         try {
             SimpleFeature original = this.getStore().getFeatures(fidFilter).features().next();

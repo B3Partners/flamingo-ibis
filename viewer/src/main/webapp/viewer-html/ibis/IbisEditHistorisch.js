@@ -22,7 +22,6 @@ Ext.define("viewer.components.IbisEditHistorisch", {
     extend: "viewer.components.IbisEdit",
     geometryEditable: false,
     config: {
-        showVorigeDefintiefVersie: false,
         allowNew: false,
         allowCopy: false,
         showEditLinkInFeatureInfo: false,
@@ -106,56 +105,10 @@ Ext.define("viewer.components.IbisEditHistorisch", {
 
     handleFeature: function (feature) {
         this.callParent(arguments);
-        //
-        //     if (this.inputContainer.getForm().findField(this.workflow_fieldname) === undefined) {
-        //         // workflow field is missing, add a hidden one to __unprefixed__ accordion of the form panels
-        //         // if added to inputContainer it will throw a layout error
-        //         this.tabbedFormPanels.__unprefixed__.add({
-        //             xtype: 'combo',
-        //             hidden: true,
-        //             name: this.workflow_fieldname,
-        //             id: this.workflow_fieldname,
-        //             valueField: 'id',
-        //             displayField: 'label',
-        //             value: this.workflowStore.getById('bewerkt'),
-        //             store: 'IbisWorkflowStore'
-        //         });
-        //     }
-        //         if (feature[workflowFieldName] === 'archief'){
         // hou bestaande datum
         var defDate = Ext.Date.parse(feature[mutatiedatumFieldName], 'd-m-Y H:i:s');
         this.inputContainer.getForm().findField(mutatiedatumFieldName).setValue(defDate);
         this.updateMinMaxDate(this.inputContainer.getForm().findField(mutatiedatumFieldName), feature.__fid, feature[idFieldName]);
-        // }
-        //     if (feature[workflowFieldName] === 'bewerkt'){
-        //         // hou bestaande "bewerkt" datum
-        //         var defDate = Ext.Date.parse(feature[mutatiedatumFieldName], 'd-m-Y H:i:s');
-        //         this.inputContainer.getForm().findField(mutatiedatumFieldName).setMinValue(defDate);
-        //         this.inputContainer.getForm().findField(mutatiedatumFieldName).setValue(defDate);
-        //     } else {
-        //         // stel in op vandaag
-        //         this.inputContainer.getForm().findField(mutatiedatumFieldName).setMinValue(getMinMutatiedatum(feature[mutatiedatumFieldName]));
-        //         this.inputContainer.getForm().findField(mutatiedatumFieldName).setValue(new Date());
-        //     }
-        //     var s = "";
-        //     if (this.mode === "copy") {
-        //         setNextIbisWorkflowStatus({}, 'bewerkt', Ext.getCmp(this.workflow_fieldname));
-        //         s = this.workflowStore.getById('bewerkt').get("label");
-        //     } else {
-        //         setNextIbisWorkflowStatus(FlamingoAppLoader.get('user').roles, feature[this.workflow_fieldname], Ext.getCmp(this.workflow_fieldname));
-        //         var wf = feature[this.workflow_fieldname] || 'bewerkt';
-        //         s = this.workflowStore.getById(wf).get("label");
-        //     }
-        //     if (this.config.showVorigeDefintiefVersie && feature[this.workflow_fieldname] &&
-        //             (feature[this.workflow_fieldname] === "bewerkt" || feature[this.workflow_fieldname] === "definitief")) {
-        //         // get kavel/terrein voor ibis_id/definitief
-        //         this.getDefinitiefFeature(feature);
-        //     }
-        //     // schakel verwijderen (== saveButton) knop uit als 'definitief' wordt geladen in delete mode
-        //     if (this.inputContainer.getForm().findField(this.workflow_fieldname).getValue() === "definitief" && this.mode === "delete") {
-        //         this.savebutton.setDisabled(true);
-        //         this.savebutton.setText("'Definitief' object mag niet verwijderd worden");
-        //     }
 
         // herstel delete button (wordt weggehaald in super class
         if (this.config.allowDelete) {
@@ -166,7 +119,6 @@ Ext.define("viewer.components.IbisEditHistorisch", {
             }
         }
     },
-
     createNew: function () {
         // kan/mag niet
     },
@@ -174,8 +126,8 @@ Ext.define("viewer.components.IbisEditHistorisch", {
     deleteFeature: function () {
         // werkt niet, roept toch IbisEdit#deleteFeature aan
         // this.callSuper();
+        // dan maar zo
         this.superclass.superclass.deleteFeature.call(this);
-        //viewer.components.Edit.deleteFeature.apply(this,arguments);
     },
     /** @override */
     remove: function () {
@@ -185,7 +137,7 @@ Ext.define("viewer.components.IbisEditHistorisch", {
         me.editingLayer = this.config.viewerController.getLayer(this.layerSelector.getValue());
         Ext.create("viewer.EditFeature", {
             viewerController: this.config.viewerController,
-            actionbeanUrl: contextPath + '/action/feature/ibisedit'+"?delete"
+            actionbeanUrl: contextPath + '/action/feature/ibisedit' + "?delete"
         }).remove(
             me.editingLayer,
             feature,
@@ -213,35 +165,10 @@ Ext.define("viewer.components.IbisEditHistorisch", {
         }
 
         var feature = this.inputContainer.getValues();
-
-        // if (this.geometryEditable) {
-        //     if (this.vectorLayer.getActiveFeature()) {
-        //         var wkt = this.vectorLayer.getActiveFeature().config.wktgeom;
-        //         feature[this.appLayer.geometryAttribute] = wkt;
-        //     }
-        // }
         if (this.mode === "edit") {
             feature.__fid = this.currentFID;
         }
-
-        // geen nieuwe features maken
-        // if (this.mode === "copy") {
-        //     feature.__fid = null;
-        // }
-        // if ((this.mode === "new")) {
-        //     if (!feature[idFieldName]) {
-        //         feature[idFieldName] = this.newID;
-        //     }
-        // }
-
         var me = this;
-        // try {
-        //     feature = this.changeFeatureBeforeSave(feature);
-        // } catch (e) {
-        //     me.failed(e);
-        //     return;
-        // }
-
         me.editingLayer = this.config.viewerController.getLayer(this.layerSelector.getValue());
         Ext.create("viewer.EditFeature", {
             viewerController: this.config.viewerController,
@@ -253,9 +180,11 @@ Ext.define("viewer.components.IbisEditHistorisch", {
                 me.saveSucces(fid);
             }, function (error) {
                 me.failed(error);
-            });
+            }, {
+                historisch: true
+            }
+        );
     },
-
     /**
      * Return the name of the superclass to inherit the css property.
      * @returns {String} base class name

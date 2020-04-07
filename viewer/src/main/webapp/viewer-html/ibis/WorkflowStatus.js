@@ -166,5 +166,5 @@ function parseDate(date) {
         return Ext.Date.parse(date, 'd-m-Y H:i:s');
     } else {
         return new Date()
-    };
+    }
 }
