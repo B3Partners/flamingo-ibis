@@ -21,6 +21,7 @@ import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import net.sourceforge.stripes.action.StrictBinding;
 import net.sourceforge.stripes.action.UrlBinding;
+import net.sourceforge.stripes.validation.Validate;
 import nl.b3p.viewer.config.app.Application;
 import nl.b3p.viewer.config.app.ApplicationLayer;
 import nl.b3p.viewer.config.security.Authorizations;
@@ -45,9 +46,12 @@ import org.stripesstuff.stripersist.Stripersist;
  */
 @UrlBinding(&quot;/action/ibisfeatureinfo&quot;)
 @StrictBinding
-<span class="nc" id="L48">public class IbisFeatureInfoActionBean extends FeatureInfoActionBean implements IbisConstants {</span>
+<span class="nc" id="L49">public class IbisFeatureInfoActionBean extends FeatureInfoActionBean implements IbisConstants {</span>
 
-<span class="nc" id="L50">    private static final Log log = LogFactory.getLog(IbisFeatureInfoActionBean.class);</span>
+<span class="nc" id="L51">    private static final Log log = LogFactory.getLog(IbisFeatureInfoActionBean.class);</span>
+
+    @Validate
+    private boolean historisch;
 
     /**
      * execute the query, can be overridden in subclasses to modify behaviour
@@ -57,34 +61,46 @@ import org.stripesstuff.stripersist.Stripersist;
     protected JSONArray executeQuery(ApplicationLayer al, SimpleFeatureType ft, FeatureSource fs, Query q) throws Exception {
 
         JSONArray features;
-<span class="nc bnc" id="L60" title="All 2 branches missed.">        if (this.getLayer().getName().equalsIgnoreCase(KAVEL_LAYER_NAME)</span>
-<span class="nc bnc" id="L61" title="All 2 branches missed.">                || this.getLayer().getName().equalsIgnoreCase(TERREIN_LAYER_NAME)) {</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (this.getLayer().getName().equalsIgnoreCase(KAVEL_LAYER_NAME)</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">                || this.getLayer().getName().equalsIgnoreCase(TERREIN_LAYER_NAME)) {</span>
 
-<span class="nc" id="L63">            IbisFeatureToJson ftjson = new IbisFeatureToJson(</span>
-<span class="nc" id="L64">                    this.isArrays(),</span>
-<span class="nc" id="L65">                    this.isEdit(),</span>
-<span class="nc" id="L66">                    this.isGraph(),</span>
-<span class="nc" id="L67">                    this.getAttributesToInclude());</span>
+<span class="nc" id="L67">            IbisFeatureToJson ftjson = new IbisFeatureToJson(</span>
+<span class="nc" id="L68">                    this.isArrays(),</span>
+<span class="nc" id="L69">                    this.isEdit(),</span>
+<span class="nc" id="L70">                    this.isGraph(),</span>
+<span class="nc" id="L71">                    this.getAttributesToInclude());</span>
 
-<span class="nc bnc" id="L69" title="All 2 branches missed.">            if (Authorizations.isAppLayerWriteAuthorized(this.getApplication(), al,</span>
-<span class="nc" id="L70">                    this.getContext().getRequest(), Stripersist.getEntityManager())) {</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">            if (Authorizations.isAppLayerWriteAuthorized(this.getApplication(), al,</span>
+<span class="nc" id="L74">                    this.getContext().getRequest(), Stripersist.getEntityManager())) {</span>
                 // workflow/edit behaviour
-<span class="nc" id="L72">                log.debug(&quot;Executing custom IBIS featureinfo for write-authorized user on layer &quot; + this.getLayer().getName());</span>
-<span class="nc" id="L73">                features = ftjson.getWorkflowJSONFeatures(al, this.getLayer().getFeatureType(), fs, q);</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">                if (this.historisch) {</span>
+<span class="nc" id="L77">                    log.debug(&quot;Executing custom 'historisch' IBIS featureinfo for write-authorized user on layer &quot; + this.getLayer().getName());</span>
+<span class="nc" id="L78">                    features = ftjson.getHistorischeJSONFeatures(al, this.getLayer().getFeatureType(), fs, q);</span>
+                } else {
+<span class="nc" id="L80">                    log.debug(&quot;Executing custom IBIS featureinfo for write-authorized user on layer &quot; + this.getLayer().getName());</span>
+<span class="nc" id="L81">                    features = ftjson.getWorkflowJSONFeatures(al, this.getLayer().getFeatureType(), fs, q);</span>
+                }
             } else {
-<span class="nc" id="L75">                log.debug(&quot;Executing custom IBIS featureinfo for non-write-authorized user on layer &quot; + this.getLayer().getName());</span>
-<span class="nc" id="L76">                features = ftjson.getDefinitiefJSONFeatures(al, this.getLayer().getFeatureType(), fs, q);</span>
+<span class="nc" id="L84">                log.debug(&quot;Executing custom IBIS featureinfo for non-write-authorized user on layer &quot; + this.getLayer().getName());</span>
+<span class="nc" id="L85">                features = ftjson.getDefinitiefJSONFeatures(al, this.getLayer().getFeatureType(), fs, q);</span>
             }
 
-<span class="nc" id="L79">        } else /* not a special layer in this application */ {</span>
-<span class="nc" id="L80">            log.debug(&quot;Executing default IBIS featureinfo for 'any' user on layer &quot; + this.getLayer().getName());</span>
+<span class="nc" id="L88">        } else /* not a special layer in this application */ {</span>
+<span class="nc" id="L89">            log.debug(&quot;Executing default IBIS featureinfo for 'any' user on layer &quot; + this.getLayer().getName());</span>
             // default behaviour for any other layers
-<span class="nc" id="L82">            FeatureToJson ftjson = new FeatureToJson(this.isArrays(), this.isEdit(), this.isGraph(), this.getAttributesToInclude());</span>
-<span class="nc" id="L83">            features = ftjson.getJSONFeatures(al, this.getLayer().getFeatureType(), fs, q, null, null, Stripersist.getEntityManager(), this.getApplication(), this.getContext().getRequest());</span>
+<span class="nc" id="L91">            FeatureToJson ftjson = new FeatureToJson(this.isArrays(), this.isEdit(), this.isGraph(), this.getAttributesToInclude());</span>
+<span class="nc" id="L92">            features = ftjson.getJSONFeatures(al, this.getLayer().getFeatureType(), fs, q, null, null, Stripersist.getEntityManager(), this.getApplication(), this.getContext().getRequest());</span>
         }
 
-<span class="nc" id="L86">        return features;</span>
+<span class="nc" id="L95">        return features;</span>
     }
 
+    public boolean isHistorisch() {
+<span class="nc" id="L99">        return historisch;</span>
+    }
+
+    public void setHistorisch(boolean historisch) {
+<span class="nc" id="L103">        this.historisch = historisch;</span>
+<span class="nc" id="L104">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

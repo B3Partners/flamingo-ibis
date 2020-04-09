@@ -110,10 +110,37 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + IbisFeatureInfoActionBean() </td></tr>
 <tr><td align="left" balign="left"> # executeQuery(al : ApplicationLayer, ft : SimpleFeatureType, fs : FeatureSource&lt;&gt;, q : Query) : JSONArray </td></tr>
+<tr><td align="left" balign="left"> + isHistorisch() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setHistorisch(historisch : boolean) </td></tr>
 		</table></td></tr>
 		</table>>, URL="./IbisFeatureInfoActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean
+	c5 [label=<<table title="nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisFeatureInfoUtilsActionBean.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> IbisFeatureInfoUtilsActionBean </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + IbisFeatureInfoUtilsActionBean() </td></tr>
+<tr><td align="left" balign="left"> + loadLayer() </td></tr>
+<tr><td align="left" balign="left"> + checkAuthorization() </td></tr>
+<tr><td align="left" balign="left"> + minmaxDate() : Resolution </td></tr>
+<tr><td align="left" balign="left"> + getApplication() : Application </td></tr>
+<tr><td align="left" balign="left"> + setApplication(application : Application) </td></tr>
+<tr><td align="left" balign="left"> + setContext(context : ActionBeanContext) </td></tr>
+<tr><td align="left" balign="left"> + getContext() : ActionBeanContext </td></tr>
+<tr><td align="left" balign="left"> + getAppLayer() : ApplicationLayer </td></tr>
+<tr><td align="left" balign="left"> + setAppLayer(appLayer : ApplicationLayer) </td></tr>
+<tr><td align="left" balign="left"> + getFid() : String </td></tr>
+<tr><td align="left" balign="left"> + setFid(fid : String) </td></tr>
+<tr><td align="left" balign="left"> + getIbisId() : String </td></tr>
+<tr><td align="left" balign="left"> + setIbisId(ibisId : String) </td></tr>
+		</table></td></tr>
+		</table>>, URL="./IbisFeatureInfoUtilsActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisEditFeatureActionBean
-	c5 [label=<<table title="nl.b3p.viewer.stripes.IbisEditFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisEditFeatureActionBean.html">
+	c6 [label=<<table title="nl.b3p.viewer.stripes.IbisEditFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisEditFeatureActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisEditFeatureActionBean </td></tr>
 		</table></td></tr>
@@ -126,10 +153,12 @@ digraph G {
 <tr><td align="left" balign="left"> # deleteFeature(fid : String) </td></tr>
 <tr><td align="left" balign="left"> # editFeature(fid : String) </td></tr>
 <tr><td align="left" balign="left"> # isAttributeUserEditingDisabled(attrName : String) : boolean </td></tr>
+<tr><td align="left" balign="left"> + isHistorisch() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setHistorisch(historisch : boolean) </td></tr>
 		</table></td></tr>
 		</table>>, URL="./IbisEditFeatureActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean
-	c6 [label=<<table title="nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisMergeFeaturesActionBean.html">
+	c7 [label=<<table title="nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisMergeFeaturesActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisMergeFeaturesActionBean </td></tr>
 		</table></td></tr>
@@ -144,7 +173,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./IbisMergeFeaturesActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisReportsActionBean
-	c7 [label=<<table title="nl.b3p.viewer.stripes.IbisReportsActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisReportsActionBean.html">
+	c8 [label=<<table title="nl.b3p.viewer.stripes.IbisReportsActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisReportsActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisReportsActionBean </td></tr>
 		</table></td></tr>
@@ -179,7 +208,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./IbisReportsActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisSplitFeatureActionBean
-	c8 [label=<<table title="nl.b3p.viewer.stripes.IbisSplitFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisSplitFeatureActionBean.html">
+	c9 [label=<<table title="nl.b3p.viewer.stripes.IbisSplitFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisSplitFeatureActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisSplitFeatureActionBean </td></tr>
 		</table></td></tr>
@@ -198,13 +227,15 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./IbisSplitFeatureActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//nl.b3p.viewer.stripes.IbisFeatureInfoActionBean extends nl.b3p.viewer.stripes.FeatureInfoActionBean
-	c14:p -> c4:p [dir=back,arrowtail=empty];
+	c15:p -> c4:p [dir=back,arrowtail=empty];
+	//nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean extends nl.b3p.viewer.stripes.LocalizableApplicationActionBean
+	c16:p -> c5:p [dir=back,arrowtail=empty];
 	//nl.b3p.viewer.stripes.IbisEditFeatureActionBean extends nl.b3p.viewer.stripes.EditFeatureActionBean
-	c15:p -> c5:p [dir=back,arrowtail=empty];
+	c17:p -> c6:p [dir=back,arrowtail=empty];
 	//nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean extends nl.b3p.viewer.stripes.MergeFeaturesActionBean
-	c16:p -> c6:p [dir=back,arrowtail=empty];
+	c18:p -> c7:p [dir=back,arrowtail=empty];
 	//nl.b3p.viewer.stripes.IbisSplitFeatureActionBean extends nl.b3p.viewer.stripes.SplitFeatureActionBean
-	c17:p -> c8:p [dir=back,arrowtail=empty];
+	c19:p -> c9:p [dir=back,arrowtail=empty];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.ReportType
 	c0:p -> c2:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea
@@ -214,7 +245,7 @@ digraph G {
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.QueryArea
 	c0:p -> c1:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.FeatureInfoActionBean
-	c14 [label=<<table title="nl.b3p.viewer.stripes.FeatureInfoActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c15 [label=<<table title="nl.b3p.viewer.stripes.FeatureInfoActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> FeatureInfoActionBean </td></tr>
 		</table></td></tr>
@@ -258,7 +289,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.MergeFeaturesActionBean
-	c16 [label=<<table title="nl.b3p.viewer.stripes.MergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c18 [label=<<table title="nl.b3p.viewer.stripes.MergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MergeFeaturesActionBean </td></tr>
 		</table></td></tr>
@@ -295,7 +326,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.EditFeatureActionBean
-	c15 [label=<<table title="nl.b3p.viewer.stripes.EditFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c17 [label=<<table title="nl.b3p.viewer.stripes.EditFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> EditFeatureActionBean </td></tr>
 		</table></td></tr>
@@ -333,7 +364,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.SplitFeatureActionBean
-	c17 [label=<<table title="nl.b3p.viewer.stripes.SplitFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c19 [label=<<table title="nl.b3p.viewer.stripes.SplitFeatureActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> SplitFeatureActionBean </td></tr>
 		</table></td></tr>
@@ -367,6 +398,21 @@ digraph G {
 <tr><td align="left" balign="left"> + setExtraData(arg0 : String) </td></tr>
 <tr><td align="left" balign="left"> + getLayer() : Layer </td></tr>
 <tr><td align="left" balign="left"> + getAuditMessageObject() : AuditMessageObject </td></tr>
+		</table></td></tr>
+		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// nl.b3p.viewer.stripes.LocalizableApplicationActionBean
+	c16 [label=<<table title="nl.b3p.viewer.stripes.LocalizableApplicationActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> LocalizableApplicationActionBean </font></td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> ~ LocalizableApplicationActionBean() </td></tr>
+<tr><td align="left" balign="left"> + initBundle() </td></tr>
+<tr><td align="left" balign="left"> + determineLocaleForBundle(arg0 : ActionBeanContext, arg1 : Application) : Locale </td></tr>
+<tr><td align="left" balign="left"><font face="Helvetica-Oblique" point-size="10.0"> + getApplication() : Application </font></td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }

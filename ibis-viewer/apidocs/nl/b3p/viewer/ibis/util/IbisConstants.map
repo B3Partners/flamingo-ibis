@@ -1,18 +1,20 @@
 <map id="G" name="G">
 <area shape="rect" id="node1_0" href="../../stripes/IbisAttributeListActionBean.html" title="nl.b3p.viewer.stripes.IbisAttributeListActionBean" alt="" coords="16,249,629,915"/>
 <area shape="rect" id="node1" href="../../stripes/IbisAttributeListActionBean.html" title="&lt;TABLE&gt;" alt="" coords="5,244,640,920"/>
-<area shape="rect" id="node2_1" href="../../stripes/IbisFeatureInfoActionBean.html" title="nl.b3p.viewer.stripes.IbisFeatureInfoActionBean" alt="" coords="675,535,1327,629"/>
-<area shape="rect" id="node2" href="../../stripes/IbisFeatureInfoActionBean.html" title="&lt;TABLE&gt;" alt="" coords="665,530,1338,634"/>
-<area shape="rect" id="node3_2" href="../../stripes/IbisEditFeatureActionBean.html" title="nl.b3p.viewer.stripes.IbisEditFeatureActionBean" alt="" coords="1373,509,1747,655"/>
-<area shape="rect" id="node3" href="../../stripes/IbisEditFeatureActionBean.html" title="&lt;TABLE&gt;" alt="" coords="1363,504,1757,660"/>
-<area shape="rect" id="node4_3" href="../../stripes/IbisMergeFeaturesActionBean.html" title="nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean" alt="" coords="1792,518,2944,646"/>
-<area shape="rect" id="node4" href="../../stripes/IbisMergeFeaturesActionBean.html" title="&lt;TABLE&gt;" alt="" coords="1781,513,2955,651"/>
-<area shape="rect" id="node5_4" href="../../stripes/IbisReportsActionBean.html" title="nl.b3p.viewer.stripes.IbisReportsActionBean" alt="" coords="2989,345,3301,819"/>
-<area shape="rect" id="node5" href="../../stripes/IbisReportsActionBean.html" title="&lt;TABLE&gt;" alt="" coords="2979,339,3312,825"/>
-<area shape="rect" id="node6_5" href="../../stripes/IbisSplitFeatureActionBean.html" title="nl.b3p.viewer.stripes.IbisSplitFeatureActionBean" alt="" coords="3347,483,4213,681"/>
-<area shape="rect" id="node6" href="../../stripes/IbisSplitFeatureActionBean.html" title="&lt;TABLE&gt;" alt="" coords="3337,478,4223,686"/>
-<area shape="rect" id="node7_6" href="./WorkflowUtil.html" title="nl.b3p.viewer.ibis.util.WorkflowUtil" alt="" coords="4259,544,5067,620"/>
-<area shape="rect" id="node7" href="./WorkflowUtil.html" title="&lt;TABLE&gt;" alt="" coords="4248,539,5077,625"/>
-<area shape="rect" id="node8_7" href="./IbisConstants.html" title="nl.b3p.viewer.ibis.util.IbisConstants" alt="" coords="2222,11,2514,191"/>
-<area shape="rect" id="node8" href="./IbisConstants.html" title="&lt;TABLE&gt;" alt="" coords="2211,5,2525,196"/>
+<area shape="rect" id="node2_1" href="../../stripes/IbisFeatureInfoActionBean.html" title="nl.b3p.viewer.stripes.IbisFeatureInfoActionBean" alt="" coords="675,518,1327,646"/>
+<area shape="rect" id="node2" href="../../stripes/IbisFeatureInfoActionBean.html" title="&lt;TABLE&gt;" alt="" coords="665,513,1338,651"/>
+<area shape="rect" id="node3_2" href="../../stripes/IbisFeatureInfoUtilsActionBean.html" title="nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean" alt="" coords="1373,431,1646,733"/>
+<area shape="rect" id="node3" href="../../stripes/IbisFeatureInfoUtilsActionBean.html" title="&lt;TABLE&gt;" alt="" coords="1362,426,1657,738"/>
+<area shape="rect" id="node4_3" href="../../stripes/IbisEditFeatureActionBean.html" title="nl.b3p.viewer.stripes.IbisEditFeatureActionBean" alt="" coords="1692,492,2065,672"/>
+<area shape="rect" id="node4" href="../../stripes/IbisEditFeatureActionBean.html" title="&lt;TABLE&gt;" alt="" coords="1681,487,2076,677"/>
+<area shape="rect" id="node5_4" href="../../stripes/IbisMergeFeaturesActionBean.html" title="nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean" alt="" coords="2111,518,3263,646"/>
+<area shape="rect" id="node5" href="../../stripes/IbisMergeFeaturesActionBean.html" title="&lt;TABLE&gt;" alt="" coords="2100,513,3273,651"/>
+<area shape="rect" id="node6_5" href="../../stripes/IbisReportsActionBean.html" title="nl.b3p.viewer.stripes.IbisReportsActionBean" alt="" coords="3308,345,3620,819"/>
+<area shape="rect" id="node6" href="../../stripes/IbisReportsActionBean.html" title="&lt;TABLE&gt;" alt="" coords="3297,339,3631,825"/>
+<area shape="rect" id="node7_6" href="../../stripes/IbisSplitFeatureActionBean.html" title="nl.b3p.viewer.stripes.IbisSplitFeatureActionBean" alt="" coords="3666,483,4531,681"/>
+<area shape="rect" id="node7" href="../../stripes/IbisSplitFeatureActionBean.html" title="&lt;TABLE&gt;" alt="" coords="3655,478,4542,686"/>
+<area shape="rect" id="node8_7" href="./WorkflowUtil.html" title="nl.b3p.viewer.ibis.util.WorkflowUtil" alt="" coords="4577,544,5385,620"/>
+<area shape="rect" id="node8" href="./WorkflowUtil.html" title="&lt;TABLE&gt;" alt="" coords="4567,539,5396,625"/>
+<area shape="rect" id="node9_8" href="./IbisConstants.html" title="nl.b3p.viewer.ibis.util.IbisConstants" alt="" coords="2137,11,2429,191"/>
+<area shape="rect" id="node9" href="./IbisConstants.html" title="&lt;TABLE&gt;" alt="" coords="2126,5,2439,196"/>
 </map>
