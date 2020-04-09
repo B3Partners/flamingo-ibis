@@ -927,3 +927,62 @@ AS SELECT bedrijventerrein.ibis_id AS terreinid,
      LEFT JOIN v_gemeente_en_regio_envelopes ON bedrijventerrein.gemeente_naam::text = v_gemeente_en_regio_envelopes.naam::text
      LEFT JOIN v_vest_banen_per_terrein ON bedrijventerrein.rin_nr = v_vest_banen_per_terrein.rin_nr
   WHERE bedrijventerrein.workflow_status::text = 'definitief'::text AND v_terrein_oppervlakte.workflow_status::text = 'definitief'::text;
+
+GRANT SELECT ON v_actuele_terreinen TO geolees;
+GRANT SELECT ON v_terrein_oppervlakte TO geolees;
+GRANT SELECT ON v_publieke_terreinen TO geolees;
+GRANT SELECT ON v_report2_voorraad_pub_terreinen TO geolees;
+GRANT SELECT ON v_report2_voorraad_pub_onher_terreinen TO geolees;
+GRANT SELECT ON v_report2_voorraad_pub_terreinen_group_wgr TO geolees;
+GRANT SELECT ON v_report2_voorraad_pub_terreinen_group_gem TO geolees;
+GRANT SELECT ON v_report2_voorraad_all_terreinen TO geolees;
+GRANT SELECT ON v_report2_voorraad_all_terreinen_group_wgr TO geolees;
+GRANT SELECT ON v_report2_voorraad_all_terreinen_group_gem TO geolees;
+GRANT SELECT ON v_vest_banen_per_terrein TO geolees;
+GRANT SELECT ON v_grootste_10_bedrijven_op_terrein TO geolees;
+GRANT SELECT ON v_publieke_kavels TO geolees;
+GRANT SELECT ON v_report_voorraad_pub_kavels TO geolees;
+GRANT SELECT ON v_report_uitgifte_terreinen_opb_kaveluitgiftes TO geolees;
+GRANT SELECT ON v_component_ibis_report TO geolees;
+GRANT SELECT ON v_factsheet_terrein_info TO geolees;
+GRANT SELECT ON v_uitg_kavels_met_bedrijf TO geolees;
+GRANT SELECT ON v_report_brk_kaveluitgiftes_per_terrein TO geolees;
+GRANT SELECT ON v_report2_uitgifte_terreinen TO geolees;
+GRANT SELECT ON v_report2_uitgifte_terreinen_group_gem TO geolees;
+GRANT SELECT ON v_bedrijven_groter_50p_niet_op_terrein TO geolees;
+GRANT SELECT ON v_report2_uitgifte_terreinen_group_wgr TO geolees;
+GRANT SELECT ON v_actuele_kavels TO geolees;
+GRANT SELECT ON v_bedrijvenkavels_duiven TO geolees;
+GRANT SELECT ON v_gemeente_en_regio_envelopes TO geolees;
+GRANT SELECT ON v_kavels_langer_jaar_in_optie TO geolees;
+GRANT SELECT ON v_report_uitgifte_kavels TO geolees;
+
+GRANT ALL ON v_actuele_terreinen TO geoedit;
+GRANT ALL ON v_terrein_oppervlakte TO geoedit;
+GRANT ALL ON v_publieke_terreinen TO geoedit;
+GRANT ALL ON v_report2_voorraad_pub_terreinen TO geoedit;
+GRANT ALL ON v_report2_voorraad_pub_onher_terreinen TO geoedit;
+GRANT ALL ON v_report2_voorraad_pub_terreinen_group_wgr TO geoedit;
+GRANT ALL ON v_report2_voorraad_pub_terreinen_group_gem TO geoedit;
+GRANT ALL ON v_report2_voorraad_all_terreinen TO geoedit;
+GRANT ALL ON v_report2_voorraad_all_terreinen_group_wgr TO geoedit;
+GRANT ALL ON v_report2_voorraad_all_terreinen_group_gem TO geoedit;
+GRANT ALL ON v_vest_banen_per_terrein TO geoedit;
+GRANT ALL ON v_grootste_10_bedrijven_op_terrein TO geoedit;
+GRANT ALL ON v_publieke_kavels TO geoedit;
+GRANT ALL ON v_report_voorraad_pub_kavels TO geoedit;
+GRANT ALL ON v_report_uitgifte_terreinen_opb_kaveluitgiftes TO geoedit;
+GRANT ALL ON v_component_ibis_report TO geoedit;
+GRANT ALL ON v_factsheet_terrein_info TO geoedit;
+GRANT ALL ON v_uitg_kavels_met_bedrijf TO geoedit;
+GRANT ALL ON v_report_brk_kaveluitgiftes_per_terrein TO geoedit;
+GRANT ALL ON v_report2_uitgifte_terreinen TO geoedit;
+GRANT ALL ON v_report2_uitgifte_terreinen_group_gem TO geoedit;
+GRANT ALL ON v_bedrijven_groter_50p_niet_op_terrein TO geoedit;
+GRANT ALL ON v_report2_uitgifte_terreinen_group_wgr TO geoedit;
+GRANT ALL ON v_actuele_kavels TO geoedit;
+GRANT ALL ON v_bedrijvenkavels_duiven TO geoedit;
+GRANT ALL ON v_gemeente_en_regio_envelopes TO geoedit;
+GRANT ALL ON v_kavels_langer_jaar_in_optie TO geoedit;
+GRANT ALL ON v_report_uitgifte_kavels TO geoedit;
+
