@@ -51,6 +51,8 @@ ${project.name} ${project.version} Release Notes
 
   * IBPV-073: Bij bedrijventerreinen de Internet faciliteiten updaten ({{{https://github.com/B3Partners/flamingo-ibis/issues/143}#143}})
 
+  * IBPV-205: Aanvullende gegevens toevoegen aan bedrijventerrein ({{{https://github.com/B3Partners/flamingo-ibis/issues/146}#146}})
+
   []
 
 
