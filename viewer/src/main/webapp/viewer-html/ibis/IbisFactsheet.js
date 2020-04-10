@@ -334,6 +334,9 @@ Ext.define("viewer.components.IbisFactsheet", {
                 result[key] = factsheetFeature.indexedAttributes[key];
             }
         }
+        if (Ext.Object.isEmpty(result)) {
+            result['faciliteiten'] = 'onbekend';
+        }
         return result;
     },
     /**
