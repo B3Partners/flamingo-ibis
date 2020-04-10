@@ -49,6 +49,8 @@ ${project.name} ${project.version} Release Notes
 
   * IBPV-042: Historische records van kavels aanpassen ({{{https://github.com/B3Partners/flamingo-ibis/issues/137}#137}})
 
+  * IBPV-201: mutatie van een gemeente weggooien zonder deze te bewerken  ({{{https://github.com/B3Partners/flamingo-ibis/issues/144}#144}})
+
   []
 
 
