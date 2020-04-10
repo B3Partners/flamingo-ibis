@@ -24,6 +24,7 @@ Ext.define("viewer.components.IbisEditHistorisch", {
     config: {
         allowNew: false,
         allowCopy: false,
+        allowReject: false,
         showEditLinkInFeatureInfo: false,
         showVorigeDefintiefVersie: false
     },

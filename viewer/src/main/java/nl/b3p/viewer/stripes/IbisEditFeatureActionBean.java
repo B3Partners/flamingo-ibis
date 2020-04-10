@@ -67,6 +67,9 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
     @Validate
     private boolean historisch;
 
+    @Validate
+    private boolean reject;
+
     @Override
     protected String addNewFeature() throws Exception {
         String kavelID = super.addNewFeature();
@@ -92,7 +95,9 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
     protected void deleteFeature(String fid) throws IOException, Exception {
         if(this.isHistorisch()){
             this.deleteFeatureHistorisch(fid);
-        } else {
+        } else if (this.isReject()){
+            this.rejectFeature(fid);
+        } else{
             log.debug("ibis deleteFeature: " + fid);
 
             Transaction transaction = new DefaultTransaction("ibis_delete");
@@ -189,6 +194,38 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
 
     }
 
+    /** voor "afkeur" van een bewerkt kavel.
+     *
+     * @param fid feature to remove
+     * @throws Exception if any
+     */
+    private void rejectFeature(String fid) throws Exception {
+        log.debug("ibis rejectFeature: " + fid);
+
+        Transaction transaction = new DefaultTransaction("ibis_reject");
+        this.getStore().setTransaction(transaction);
+        Filter filter = CommonFactoryFinder.getFilterFactory2().id(new FeatureIdImpl(fid));
+
+        try {
+            SimpleFeature original = this.getStore().getFeatures(filter).features().next();
+            if (!(original.getAttribute(WORKFLOW_FIELDNAME).toString().equalsIgnoreCase(WorkflowStatus.bewerkt.label()) &&
+                    this.getLayer().getName().equalsIgnoreCase(KAVEL_LAYER_NAME))) {
+                throw new IllegalArgumentException("Alleen 'bewerkt' kavels kunnen worden afgekeurd.");
+            }
+            Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);
+            this.getStore().removeFeatures(filter);
+            transaction.commit();
+
+            if (terreinID != null) {
+                WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), this.getLayer(), WorkflowStatus.afgevoerd, this.getApplication(), Stripersist.getEntityManager());
+            }
+        } catch (Exception e) {
+            transaction.rollback();
+            throw e;
+        } finally {
+            transaction.close();
+        }
+    }
     /**
      * Override the method from the base class to process our workflow.
      *
@@ -430,5 +467,13 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
 
     public void setHistorisch(boolean historisch) {
         this.historisch = historisch;
+    }
+
+    public boolean isReject() {
+        return reject;
+    }
+
+    public void setReject(boolean reject) {
+        this.reject = reject;
     }
 }

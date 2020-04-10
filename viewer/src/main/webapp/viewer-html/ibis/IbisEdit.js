@@ -24,9 +24,11 @@ Ext.define("viewer.components.IbisEdit", {
     workflowStore: null,
     tabbedFormPanels: {},
     addedTabPanels: [],
+    rejectButton: null,
     config: {
         prefixConfig: [],
-        showVorigeDefintiefVersie: false
+        showVorigeDefintiefVersie: false,
+        allowReject: false
     },
     newID: null,
     /**
@@ -54,20 +56,23 @@ Ext.define("viewer.components.IbisEdit", {
     },
     /** @override */
     loadWindow: function () {
-        //this.superclass.loadWindow.call(this);
         this.callParent();
         this.maincontainer.add([{
             id: this.name + "workflowLabel",
             margin: 5,
             text: '',
-            xtype: "label"}
-        ]);
+            xtype: "label"
+        }]);
+
+        if (this.config.allowReject){
+            this.savebutton.up().add(this.createButton("rejectButton","Afkeuren", this.rejectFeature, true));
+        }
+        this.rejectButton = this.maincontainer.down("#rejectButton");
     },
     initAttributeInputs: function (appLayer) {
         if (this.config.prefixConfig.length !== 0) {
             this.inputContainer.getLayout().multi = true;
         }
-        //this.superclass.initAttributeInputs.call(this, appLayer);
         this.callParent(arguments);
         this.groupInputsByPrefix(appLayer);
         var _user = FlamingoAppLoader.get('user');
@@ -183,7 +188,6 @@ Ext.define("viewer.components.IbisEdit", {
         return true;
     },
     handleFeature: function (feature) {
-        //this.superclass.handleFeature.call(this, feature);
         this.callParent(arguments);
 
         if (this.inputContainer.getForm().findField(this.workflow_fieldname) === undefined) {
@@ -199,6 +203,12 @@ Ext.define("viewer.components.IbisEdit", {
                 value: this.workflowStore.getById('bewerkt'),
                 store: 'IbisWorkflowStore'
             });
+        }
+        if (this.config.allowReject && feature[workflowFieldName] === 'bewerkt' && this.layerSelector.getSelectedAppLayer().layerName === 'bedrijvenkavels'){
+            if (this.rejectButton) this.rejectButton.setDisabled(false);
+            //if (this.rejectButton) this.rejectButton.setDisabled(!this.config.allowReject);
+        } else {
+            if (this.rejectButton) this.rejectButton.setDisabled(true);
         }
 
         if (feature[workflowFieldName] === 'bewerkt'){
@@ -251,7 +261,6 @@ Ext.define("viewer.components.IbisEdit", {
         if (button) {
             button.show();
         }
-        //this.superclass.showWindow.call(this);
         this.callParent();
     },
 
@@ -407,13 +416,11 @@ Ext.define("viewer.components.IbisEdit", {
         return header;
     },
     resetForm: function () {
-        //this.superclass.resetForm.call(this);
         this.callParent();
         this.popup.popupWin.setTitle(this.config.title);
         this.savebutton.setDisabled(false);
     },
     createNew: function () {
-        //this.superclass.createNew.call(this);
         this.callParent();
         // generate a new, pseudo-unique id for this feature
         // millisecond precision requires database schema update to swith id from integer to bigint
@@ -436,11 +443,36 @@ Ext.define("viewer.components.IbisEdit", {
         }
     },
     deleteFeature: function () {
-        //this.superclass.deleteFeature.call(this);
         this.callParent();
         setNextIbisWorkflowStatus(FlamingoAppLoader.get('user').roles, 'afgevoerd', this.inputContainer.getForm().findField(this.workflow_fieldname));
         var s = this.workflowStore.getById('afgevoerd').get('label');
         Ext.getCmp(this.name + "workflowLabel").setText("Huidige workflow status: " + s);
+    },
+    rejectFeature: function(){
+        if (!this.config.allowReject) {
+            Ext.Msg.alert('Mislukt', "Afkeuren is niet toegestaan.");
+            return;
+        }
+
+        var feature = this.inputContainer.getValues();
+        feature.__fid = this.currentFID;
+
+        var me = this;
+        me.editingLayer = this.config.viewerController.getLayer(this.layerSelector.getValue());
+        Ext.create("viewer.EditFeature", {
+            viewerController: this.config.viewerController,
+            actionbeanUrl: contextPath + '/action/feature/ibisedit?delete'
+        }).remove(
+            me.editingLayer,
+            feature,
+            function (fid) {
+                me.deleteSucces();
+            }, function (error) {
+                me.failed(error);
+            },{
+                reject: true
+            }
+        );
     },
     /**
      * copied from superclass Edit to override the actionbeanUrl.
@@ -546,6 +578,10 @@ Ext.define("viewer.components.IbisEdit", {
         }
 
         return feature;
+    },
+    deleteSucces:function(fid){
+        this.currentFID = null;
+        this.saveSucces();
     },
     saveSucces: function (fid) {
         var me = this;
