@@ -49,6 +49,8 @@ ${project.name} ${project.version} Release Notes
 
   * IBPV-042: Historische records van kavels aanpassen ({{{https://github.com/B3Partners/flamingo-ibis/issues/137}#137}})
 
+  * IBPV-073: Bij bedrijventerreinen de Internet faciliteiten updaten ({{{https://github.com/B3Partners/flamingo-ibis/issues/143}#143}})
+
   []
 
 
