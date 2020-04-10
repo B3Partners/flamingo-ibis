@@ -120,6 +120,13 @@
                         </xsl:for-each>
                     </fo:block-container>
 
+                    <fo:block-container width="6.5cm" height="4.0cm" top="13.7cm" left="13.2cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
+                        <xsl:for-each select="extra/info[@classname='viewer.components.IbisFactsheet.internetFaciliteiten']/root">
+                            <fo:block xsl:use-attribute-sets="subtitle-font">Internetfaciliteiten</fo:block>
+                            <xsl:call-template name="ibis-tabel-2column"/>
+                        </xsl:for-each>
+                    </fo:block-container>
+
                     <!-- bedrijvigheid -->
                     <fo:block-container overflow="hidden" width="19.7cm" height="7.3cm" top="17.8cm" left="0cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
                         <fo:block xsl:use-attribute-sets="subtitle-font">Aantal gevestigde bedrijven en bijbehorend aantal banen</fo:block>
