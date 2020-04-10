@@ -111,6 +111,8 @@ digraph G {
 <tr><td align="left" balign="left"> # isAttributeUserEditingDisabled(attrName : String) : boolean </td></tr>
 <tr><td align="left" balign="left"> + isHistorisch() : boolean </td></tr>
 <tr><td align="left" balign="left"> + setHistorisch(historisch : boolean) </td></tr>
+<tr><td align="left" balign="left"> + isReject() : boolean </td></tr>
+<tr><td align="left" balign="left"> + setReject(reject : boolean) </td></tr>
 		</table></td></tr>
 		</table>>, URL="../../stripes/IbisEditFeatureActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean

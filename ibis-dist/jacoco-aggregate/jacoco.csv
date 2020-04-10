@@ -14,7 +14,7 @@ IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisFeatureInfoActionBean,159
 IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisAttributeListActionBean.ReportType,34,0,0,0,2,0,1,0,1,0
 IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisFeatureInfoUtilsActionBean.new AbstractFeatureVisitor() {...},60,0,2,0,8,0,3,0,2,0
 IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisAttributeListActionBean.QueryArea,34,0,0,0,2,0,1,0,1,0
-IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisEditFeatureActionBean,939,0,68,0,184,0,48,0,12,0
+IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisEditFeatureActionBean,1042,0,76,0,207,0,55,0,15,0
 IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisReportsActionBean.new StreamingResolution() {...},22,0,0,0,5,0,2,0,2,0
 IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisMergeFeaturesActionBean,231,0,12,0,44,0,11,0,5,0
 IBIS distributie/ibis-viewer,nl.b3p.viewer.stripes,IbisAttributeListActionBean,2138,0,152,0,474,0,125,0,44,0

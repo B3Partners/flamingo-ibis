@@ -67,16 +67,19 @@ import org.stripesstuff.stripersist.Stripersist;
     @Validate
     private boolean historisch;
 
+    @Validate
+    private boolean reject;
+
     @Override
     protected String addNewFeature() throws Exception {
-<span class="nc" id="L72">        String kavelID = super.addNewFeature();</span>
+<span class="nc" id="L75">        String kavelID = super.addNewFeature();</span>
         //update  terrein
-<span class="nc" id="L74">        Object terreinID = this.getJsonFeature().optString(KAVEL_TERREIN_ID_FIELDNAME, null);</span>
-<span class="nc" id="L75">        WorkflowStatus status = WorkflowStatus.valueOf(this.getJsonFeature().optString(WORKFLOW_FIELDNAME, WorkflowStatus.bewerkt.name()));</span>
-<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (terreinID != null) {</span>
-<span class="nc" id="L77">            WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), this.getLayer(), status, this.getApplication(), Stripersist.getEntityManager());</span>
+<span class="nc" id="L77">        Object terreinID = this.getJsonFeature().optString(KAVEL_TERREIN_ID_FIELDNAME, null);</span>
+<span class="nc" id="L78">        WorkflowStatus status = WorkflowStatus.valueOf(this.getJsonFeature().optString(WORKFLOW_FIELDNAME, WorkflowStatus.bewerkt.name()));</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        if (terreinID != null) {</span>
+<span class="nc" id="L80">            WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), this.getLayer(), status, this.getApplication(), Stripersist.getEntityManager());</span>
         }
-<span class="nc" id="L79">        return kavelID;</span>
+<span class="nc" id="L82">        return kavelID;</span>
     }
 
     /**
@@ -90,33 +93,35 @@ import org.stripesstuff.stripersist.Stripersist;
      */
     @Override
     protected void deleteFeature(String fid) throws IOException, Exception {
-<span class="nc bnc" id="L93" title="All 2 branches missed.">        if(this.isHistorisch()){</span>
-<span class="nc" id="L94">            this.deleteFeatureHistorisch(fid);</span>
-        } else {
-<span class="nc" id="L96">            log.debug(&quot;ibis deleteFeature: &quot; + fid);</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        if(this.isHistorisch()){</span>
+<span class="nc" id="L97">            this.deleteFeatureHistorisch(fid);</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        } else if (this.isReject()){</span>
+<span class="nc" id="L99">            this.rejectFeature(fid);</span>
+        } else{
+<span class="nc" id="L101">            log.debug(&quot;ibis deleteFeature: &quot; + fid);</span>
 
-<span class="nc" id="L98">            Transaction transaction = new DefaultTransaction(&quot;ibis_delete&quot;);</span>
-<span class="nc" id="L99">            this.getStore().setTransaction(transaction);</span>
+<span class="nc" id="L103">            Transaction transaction = new DefaultTransaction(&quot;ibis_delete&quot;);</span>
+<span class="nc" id="L104">            this.getStore().setTransaction(transaction);</span>
 
-<span class="nc" id="L101">            FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();</span>
-<span class="nc" id="L102">            Filter filter = ff.id(new FeatureIdImpl(fid));</span>
+<span class="nc" id="L106">            FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();</span>
+<span class="nc" id="L107">            Filter filter = ff.id(new FeatureIdImpl(fid));</span>
 
             try {
-<span class="nc" id="L105">                this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd, filter);</span>
-<span class="nc" id="L106">                SimpleFeature original = this.getStore().getFeatures(filter).features().next();</span>
-<span class="nc" id="L107">                transaction.commit();</span>
-<span class="nc" id="L108">                Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);</span>
-<span class="nc bnc" id="L109" title="All 2 branches missed.">                if (terreinID != null) {</span>
-<span class="nc" id="L110">                    WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), this.getLayer(), WorkflowStatus.afgevoerd, this.getApplication(), Stripersist.getEntityManager());</span>
+<span class="nc" id="L110">                this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd, filter);</span>
+<span class="nc" id="L111">                SimpleFeature original = this.getStore().getFeatures(filter).features().next();</span>
+<span class="nc" id="L112">                transaction.commit();</span>
+<span class="nc" id="L113">                Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">                if (terreinID != null) {</span>
+<span class="nc" id="L115">                    WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), this.getLayer(), WorkflowStatus.afgevoerd, this.getApplication(), Stripersist.getEntityManager());</span>
                 }
-<span class="nc" id="L112">            } catch (Exception e) {</span>
-<span class="nc" id="L113">                transaction.rollback();</span>
-<span class="nc" id="L114">                throw e;</span>
+<span class="nc" id="L117">            } catch (Exception e) {</span>
+<span class="nc" id="L118">                transaction.rollback();</span>
+<span class="nc" id="L119">                throw e;</span>
             } finally {
-<span class="nc" id="L116">                transaction.close();</span>
+<span class="nc" id="L121">                transaction.close();</span>
             }
         }
-<span class="nc" id="L119">    }</span>
+<span class="nc" id="L124">    }</span>
 
     /**
      * verwijder historische record.
@@ -129,66 +134,98 @@ import org.stripesstuff.stripersist.Stripersist;
      * @throws Exception if any
      */
     private void deleteFeatureHistorisch(String fid) throws IOException, Exception {
-<span class="nc" id="L132">        log.debug(&quot;ibis deleteFeatureHistorisch: &quot; + fid);</span>
+<span class="nc" id="L137">        log.debug(&quot;ibis deleteFeatureHistorisch: &quot; + fid);</span>
 
-<span class="nc" id="L134">        Transaction transaction = new DefaultTransaction(&quot;ibis_delete_historisch&quot;);</span>
-<span class="nc" id="L135">        this.getStore().setTransaction(transaction);</span>
+<span class="nc" id="L139">        Transaction transaction = new DefaultTransaction(&quot;ibis_delete_historisch&quot;);</span>
+<span class="nc" id="L140">        this.getStore().setTransaction(transaction);</span>
 
-<span class="nc" id="L137">        FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();</span>
-<span class="nc" id="L138">        Filter fidFilter = ff.id(new FeatureIdImpl(fid));</span>
+<span class="nc" id="L142">        FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();</span>
+<span class="nc" id="L143">        Filter fidFilter = ff.id(new FeatureIdImpl(fid));</span>
 
-<span class="nc" id="L140">        Filter hist = ff.or(</span>
-<span class="nc" id="L141">                ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.archief.name()), false),</span>
-<span class="nc" id="L142">                ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.afgevoerd.name()), false)</span>
+<span class="nc" id="L145">        Filter hist = ff.or(</span>
+<span class="nc" id="L146">                ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.archief.name()), false),</span>
+<span class="nc" id="L147">                ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.afgevoerd.name()), false)</span>
         );
 
         try {
-<span class="nc" id="L146">            SimpleFeature original = this.getStore().getFeatures(fidFilter).features().next();</span>
-<span class="nc" id="L147">            Number ibisId = (Number) original.getAttribute(ID_FIELDNAME);</span>
-<span class="nc" id="L148">            Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);</span>
+<span class="nc" id="L151">            SimpleFeature original = this.getStore().getFeatures(fidFilter).features().next();</span>
+<span class="nc" id="L152">            Number ibisId = (Number) original.getAttribute(ID_FIELDNAME);</span>
+<span class="nc" id="L153">            Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);</span>
 
-<span class="nc" id="L150">            log.debug(String.format(&quot;Delete from feature source #%d fid=%s&quot;,</span>
-<span class="nc" id="L151">                    this.getLayer().getFeatureType().getId(), fid));</span>
+<span class="nc" id="L155">            log.debug(String.format(&quot;Delete from feature source #%d fid=%s&quot;,</span>
+<span class="nc" id="L156">                    this.getLayer().getFeatureType().getId(), fid));</span>
 
-<span class="nc bnc" id="L153" title="All 3 branches missed.">            switch (WorkflowStatus.valueOf( original.getAttribute(WORKFLOW_FIELDNAME).toString()) ) {</span>
+<span class="nc bnc" id="L158" title="All 3 branches missed.">            switch (WorkflowStatus.valueOf( original.getAttribute(WORKFLOW_FIELDNAME).toString()) ) {</span>
                 case archief:
                     // archief record gewoon verwijderen
-<span class="nc" id="L156">                    this.getStore().removeFeatures(fidFilter);</span>
-<span class="nc" id="L157">                    break;</span>
+<span class="nc" id="L161">                    this.getStore().removeFeatures(fidFilter);</span>
+<span class="nc" id="L162">                    break;</span>
                 case afgevoerd:
                     // zoek alle historische kavels voor dit kavel nummer
-<span class="nc" id="L160">                    SimpleFeatureCollection histRecords = this.getStore().getFeatures(</span>
-<span class="nc" id="L161">                            ff.and(</span>
+<span class="nc" id="L165">                    SimpleFeatureCollection histRecords = this.getStore().getFeatures(</span>
+<span class="nc" id="L166">                            ff.and(</span>
                                     hist,
-<span class="nc" id="L163">                                    ff.equals(ff.property(ID_FIELDNAME), ff.literal(ibisId))</span>
+<span class="nc" id="L168">                                    ff.equals(ff.property(ID_FIELDNAME), ff.literal(ibisId))</span>
                             ));
-<span class="nc bnc" id="L165" title="All 2 branches missed.">                    if (histRecords.size() &gt; 1) {</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">                    if (histRecords.size() &gt; 1) {</span>
                         // als er naast deze afgevoerd nog andere zijn
-<span class="nc" id="L167">                        histRecords.sort(ff.sort(MUTATIEDATUM_FIELDNAME, SortOrder.DESCENDING));</span>
+<span class="nc" id="L172">                        histRecords.sort(ff.sort(MUTATIEDATUM_FIELDNAME, SortOrder.DESCENDING));</span>
                         // dan de jongste daarvan (eerste uit de lijst) op afgevoerd zetten
-<span class="nc" id="L169">                        String updateFid = histRecords.features().next().getID();</span>
-<span class="nc" id="L170">                        this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd, ff.id(new FeatureIdImpl(updateFid)));</span>
+<span class="nc" id="L174">                        String updateFid = histRecords.features().next().getID();</span>
+<span class="nc" id="L175">                        this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.afgevoerd, ff.id(new FeatureIdImpl(updateFid)));</span>
                         // en gevraagde verwijderen uit database
-<span class="nc" id="L172">                        this.getStore().removeFeatures(fidFilter);</span>
-<span class="nc" id="L173">                    }</span>
+<span class="nc" id="L177">                        this.getStore().removeFeatures(fidFilter);</span>
+<span class="nc" id="L178">                    }</span>
                     break;
                 default:
-<span class="nc" id="L176">                    throw new UnsupportedOperationException(&quot;Historische record met status anders dan 'archief' of 'afgevoerd' kan niet worden verwijderd.&quot;);</span>
+<span class="nc" id="L181">                    throw new UnsupportedOperationException(&quot;Historische record met status anders dan 'archief' of 'afgevoerd' kan niet worden verwijderd.&quot;);</span>
             }
-<span class="nc" id="L178">            transaction.commit();</span>
+<span class="nc" id="L183">            transaction.commit();</span>
             // update terrein van kavel
-<span class="nc bnc" id="L180" title="All 2 branches missed.">            if (terreinID != null) {</span>
-<span class="nc" id="L181">                WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), this.getLayer(), WorkflowStatus.afgevoerd, this.getApplication(), Stripersist.getEntityManager());</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">            if (terreinID != null) {</span>
+<span class="nc" id="L186">                WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), this.getLayer(), WorkflowStatus.afgevoerd, this.getApplication(), Stripersist.getEntityManager());</span>
             }
-<span class="nc" id="L183">        } catch (Exception e) {</span>
-<span class="nc" id="L184">            transaction.rollback();</span>
-<span class="nc" id="L185">            throw e;</span>
+<span class="nc" id="L188">        } catch (Exception e) {</span>
+<span class="nc" id="L189">            transaction.rollback();</span>
+<span class="nc" id="L190">            throw e;</span>
         } finally {
-<span class="nc" id="L187">            transaction.close();</span>
+<span class="nc" id="L192">            transaction.close();</span>
         }
 
-<span class="nc" id="L190">    }</span>
+<span class="nc" id="L195">    }</span>
 
+    /** voor &quot;afkeur&quot; van een bewerkt kavel.
+     *
+     * @param fid feature to remove
+     * @throws Exception if any
+     */
+    private void rejectFeature(String fid) throws Exception {
+<span class="nc" id="L203">        log.debug(&quot;ibis rejectFeature: &quot; + fid);</span>
+
+<span class="nc" id="L205">        Transaction transaction = new DefaultTransaction(&quot;ibis_reject&quot;);</span>
+<span class="nc" id="L206">        this.getStore().setTransaction(transaction);</span>
+<span class="nc" id="L207">        Filter filter = CommonFactoryFinder.getFilterFactory2().id(new FeatureIdImpl(fid));</span>
+
+        try {
+<span class="nc" id="L210">            SimpleFeature original = this.getStore().getFeatures(filter).features().next();</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">            if (!(original.getAttribute(WORKFLOW_FIELDNAME).toString().equalsIgnoreCase(WorkflowStatus.bewerkt.label()) &amp;&amp;</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">                    this.getLayer().getName().equalsIgnoreCase(KAVEL_LAYER_NAME))) {</span>
+<span class="nc" id="L213">                throw new IllegalArgumentException(&quot;Alleen 'bewerkt' kavels kunnen worden afgekeurd.&quot;);</span>
+            }
+<span class="nc" id="L215">            Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);</span>
+<span class="nc" id="L216">            this.getStore().removeFeatures(filter);</span>
+<span class="nc" id="L217">            transaction.commit();</span>
+
+<span class="nc bnc" id="L219" title="All 2 branches missed.">            if (terreinID != null) {</span>
+<span class="nc" id="L220">                WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), this.getLayer(), WorkflowStatus.afgevoerd, this.getApplication(), Stripersist.getEntityManager());</span>
+            }
+<span class="nc" id="L222">        } catch (Exception e) {</span>
+<span class="nc" id="L223">            transaction.rollback();</span>
+<span class="nc" id="L224">            throw e;</span>
+        } finally {
+<span class="nc" id="L226">            transaction.close();</span>
+        }
+<span class="nc" id="L228">    }</span>
     /**
      * Override the method from the base class to process our workflow.
      *
@@ -197,158 +234,158 @@ import org.stripesstuff.stripersist.Stripersist;
      */
     @Override
     protected void editFeature(String fid) throws Exception {
-<span class="nc" id="L200">        log.debug(&quot;ibis editFeature:&quot; + fid);</span>
-<span class="nc" id="L201">        FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();</span>
-<span class="nc" id="L202">        Filter fidFilter = ff.id(new FeatureIdImpl(fid));</span>
+<span class="nc" id="L237">        log.debug(&quot;ibis editFeature:&quot; + fid);</span>
+<span class="nc" id="L238">        FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();</span>
+<span class="nc" id="L239">        Filter fidFilter = ff.id(new FeatureIdImpl(fid));</span>
 
-<span class="nc" id="L204">        List&lt;String&gt; attributes = new ArrayList();</span>
-<span class="nc" id="L205">        List values = new ArrayList();</span>
-<span class="nc" id="L206">        WorkflowStatus incomingWorkflowStatus = null;</span>
+<span class="nc" id="L241">        List&lt;String&gt; attributes = new ArrayList();</span>
+<span class="nc" id="L242">        List values = new ArrayList();</span>
+<span class="nc" id="L243">        WorkflowStatus incomingWorkflowStatus = null;</span>
         // parse json
-<span class="nc bnc" id="L208" title="All 2 branches missed.">        for (Iterator&lt;String&gt; it = this.getJsonFeature().keys(); it.hasNext();) {</span>
-<span class="nc" id="L209">            String attribute = it.next();</span>
-<span class="nc bnc" id="L210" title="All 2 branches missed.">            if (!this.getFID().equals(attribute)) {</span>
-<span class="nc" id="L211">                AttributeDescriptor ad = this.getStore().getSchema().getDescriptor(attribute);</span>
-<span class="nc bnc" id="L212" title="All 2 branches missed.">                if (ad != null) {</span>
-<span class="nc bnc" id="L213" title="All 2 branches missed.">                    if (!isAttributeUserEditingDisabled(attribute)) {</span>
-<span class="nc" id="L214">                        attributes.add(attribute);</span>
-<span class="nc bnc" id="L215" title="All 2 branches missed.">                        if (ad.getType() instanceof GeometryType) {</span>
-<span class="nc" id="L216">                            String wkt = this.getJsonFeature().getString(ad.getLocalName());</span>
-<span class="nc" id="L217">                            Geometry g = null;</span>
-<span class="nc bnc" id="L218" title="All 2 branches missed.">                            if (wkt != null) {</span>
-<span class="nc" id="L219">                                g = new WKTReader().read(wkt);</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">        for (Iterator&lt;String&gt; it = this.getJsonFeature().keys(); it.hasNext();) {</span>
+<span class="nc" id="L246">            String attribute = it.next();</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">            if (!this.getFID().equals(attribute)) {</span>
+<span class="nc" id="L248">                AttributeDescriptor ad = this.getStore().getSchema().getDescriptor(attribute);</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">                if (ad != null) {</span>
+<span class="nc bnc" id="L250" title="All 2 branches missed.">                    if (!isAttributeUserEditingDisabled(attribute)) {</span>
+<span class="nc" id="L251">                        attributes.add(attribute);</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">                        if (ad.getType() instanceof GeometryType) {</span>
+<span class="nc" id="L253">                            String wkt = this.getJsonFeature().getString(ad.getLocalName());</span>
+<span class="nc" id="L254">                            Geometry g = null;</span>
+<span class="nc bnc" id="L255" title="All 2 branches missed.">                            if (wkt != null) {</span>
+<span class="nc" id="L256">                                g = new WKTReader().read(wkt);</span>
                             }
-<span class="nc" id="L221">                            values.add(g);</span>
-<span class="nc" id="L222">                        } else {</span>
-<span class="nc" id="L223">                            String v = this.getJsonFeature().getString(attribute);</span>
-<span class="nc" id="L224">                            values.add(StringUtils.defaultIfBlank(v, null));</span>
+<span class="nc" id="L258">                            values.add(g);</span>
+<span class="nc" id="L259">                        } else {</span>
+<span class="nc" id="L260">                            String v = this.getJsonFeature().getString(attribute);</span>
+<span class="nc" id="L261">                            values.add(StringUtils.defaultIfBlank(v, null));</span>
                             // remember the incoming workflow status
-<span class="nc bnc" id="L226" title="All 2 branches missed.">                            if (attribute.equals(WORKFLOW_FIELDNAME)) {</span>
-<span class="nc" id="L227">                                incomingWorkflowStatus = WorkflowStatus.valueOf(v);</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">                            if (attribute.equals(WORKFLOW_FIELDNAME)) {</span>
+<span class="nc" id="L264">                                incomingWorkflowStatus = WorkflowStatus.valueOf(v);</span>
                             }
-<span class="nc" id="L229">                        }</span>
+<span class="nc" id="L266">                        }</span>
                     } else {
-<span class="nc" id="L231">                        log.info(String.format(&quot;Attribute \&quot;%s\&quot; not user editable; ignoring&quot;, attribute));</span>
+<span class="nc" id="L268">                        log.info(String.format(&quot;Attribute \&quot;%s\&quot; not user editable; ignoring&quot;, attribute));</span>
                     }
                 } else {
-<span class="nc" id="L234">                    log.warn(String.format(&quot;Attribute \&quot;%s\&quot; not in feature type; ignoring&quot;, attribute));</span>
+<span class="nc" id="L271">                    log.warn(String.format(&quot;Attribute \&quot;%s\&quot; not in feature type; ignoring&quot;, attribute));</span>
                 }
             }
-<span class="nc" id="L237">        }</span>
-<span class="nc" id="L238">        log.debug(String.format(&quot;Modifying feature source #%d fid=%s, attributes=%s, values=%s&quot;,</span>
-<span class="nc" id="L239">                this.getLayer().getFeatureType().getId(), fid, attributes.toString(), values.toString()));</span>
+<span class="nc" id="L274">        }</span>
+<span class="nc" id="L275">        log.debug(String.format(&quot;Modifying feature source #%d fid=%s, attributes=%s, values=%s&quot;,</span>
+<span class="nc" id="L276">                this.getLayer().getFeatureType().getId(), fid, attributes.toString(), values.toString()));</span>
 
-<span class="nc" id="L241">        Transaction editTransaction = new DefaultTransaction(&quot;ibis_edit&quot;);</span>
-<span class="nc" id="L242">        this.getStore().setTransaction(editTransaction);</span>
+<span class="nc" id="L278">        Transaction editTransaction = new DefaultTransaction(&quot;ibis_edit&quot;);</span>
+<span class="nc" id="L279">        this.getStore().setTransaction(editTransaction);</span>
         try {
-<span class="nc bnc" id="L244" title="All 2 branches missed.">            if (incomingWorkflowStatus == null) {</span>
-<span class="nc" id="L245">                throw new IllegalArgumentException(&quot;Workflow status van edit feature is null, dit wordt niet ondersteund.&quot;);</span>
+<span class="nc bnc" id="L281" title="All 2 branches missed.">            if (incomingWorkflowStatus == null) {</span>
+<span class="nc" id="L282">                throw new IllegalArgumentException(&quot;Workflow status van edit feature is null, dit wordt niet ondersteund.&quot;);</span>
             }
-<span class="nc" id="L247">            SimpleFeature original = this.getStore().getFeatures(fidFilter).features().next();</span>
-<span class="nc" id="L248">            Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);</span>
-<span class="nc" id="L249">            WorkflowStatus originalWorkflowStatus = WorkflowStatus.valueOf(original.getAttribute(WORKFLOW_FIELDNAME).toString());</span>
+<span class="nc" id="L284">            SimpleFeature original = this.getStore().getFeatures(fidFilter).features().next();</span>
+<span class="nc" id="L285">            Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);</span>
+<span class="nc" id="L286">            WorkflowStatus originalWorkflowStatus = WorkflowStatus.valueOf(original.getAttribute(WORKFLOW_FIELDNAME).toString());</span>
 
             // make a copy of the original feature and set (new) attribute values on the copy
-<span class="nc" id="L252">            SimpleFeature editedNewFeature = createCopy(original);</span>
-<span class="nc bnc" id="L253" title="All 2 branches missed.">            for (int i = 0; i &lt; attributes.size(); i++) {</span>
-<span class="nc" id="L254">                editedNewFeature.setAttribute(attributes.get(i), values.get(i));</span>
+<span class="nc" id="L289">            SimpleFeature editedNewFeature = createCopy(original);</span>
+<span class="nc bnc" id="L290" title="All 2 branches missed.">            for (int i = 0; i &lt; attributes.size(); i++) {</span>
+<span class="nc" id="L291">                editedNewFeature.setAttribute(attributes.get(i), values.get(i));</span>
             }
 
-<span class="nc" id="L257">            Filter definitief = ff.and(</span>
-<span class="nc" id="L258">                    ff.equals(ff.property(ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME))),</span>
-<span class="nc" id="L259">                    ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false)</span>
+<span class="nc" id="L294">            Filter definitief = ff.and(</span>
+<span class="nc" id="L295">                    ff.equals(ff.property(ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME))),</span>
+<span class="nc" id="L296">                    ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.definitief.name()), false)</span>
             );
-<span class="nc bnc" id="L261" title="All 2 branches missed.">            boolean definitiefExists = (this.getStore().getFeatures(definitief).size() &gt; 0);</span>
+<span class="nc bnc" id="L298" title="All 2 branches missed.">            boolean definitiefExists = (this.getStore().getFeatures(definitief).size() &gt; 0);</span>
 
-<span class="nc" id="L263">            Filter bewerkt = ff.and(</span>
-<span class="nc" id="L264">                    ff.equals(ff.property(ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME))),</span>
-<span class="nc" id="L265">                    ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.name()), false)</span>
+<span class="nc" id="L300">            Filter bewerkt = ff.and(</span>
+<span class="nc" id="L301">                    ff.equals(ff.property(ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME))),</span>
+<span class="nc" id="L302">                    ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.bewerkt.name()), false)</span>
             );
-<span class="nc" id="L267">            int aantalBewerkt = this.getStore().getFeatures(bewerkt).size();</span>
-<span class="nc bnc" id="L268" title="All 2 branches missed.">            boolean bewerktExists = (aantalBewerkt &gt; 0);</span>
+<span class="nc" id="L304">            int aantalBewerkt = this.getStore().getFeatures(bewerkt).size();</span>
+<span class="nc bnc" id="L305" title="All 2 branches missed.">            boolean bewerktExists = (aantalBewerkt &gt; 0);</span>
 
-<span class="nc bnc" id="L270" title="All 5 branches missed.">            switch (incomingWorkflowStatus) {</span>
+<span class="nc bnc" id="L307" title="All 5 branches missed.">            switch (incomingWorkflowStatus) {</span>
                 case bewerkt:
-<span class="nc bnc" id="L272" title="All 2 branches missed.">                    if (originalWorkflowStatus.equals(WorkflowStatus.definitief)) {</span>
+<span class="nc bnc" id="L309" title="All 2 branches missed.">                    if (originalWorkflowStatus.equals(WorkflowStatus.definitief)) {</span>
                         // definitief -&gt; bewerkt
-<span class="nc bnc" id="L274" title="All 2 branches missed.">                        if (bewerktExists) {</span>
+<span class="nc bnc" id="L311" title="All 2 branches missed.">                        if (bewerktExists) {</span>
                             // delete existing bewerkt
-<span class="nc" id="L276">                            this.getStore().removeFeatures(bewerkt);</span>
+<span class="nc" id="L313">                            this.getStore().removeFeatures(bewerkt);</span>
                         }
                         // insert new record with original id and workflowstatus &quot;bewerkt&quot;, leave original &quot;definitief&quot;
-<span class="nc" id="L279">                        this.getStore().addFeatures(DataUtilities.collection(editedNewFeature));</span>
-<span class="nc bnc" id="L280" title="All 2 branches missed.">                    } else if (originalWorkflowStatus.equals(WorkflowStatus.bewerkt)) {</span>
+<span class="nc" id="L316">                        this.getStore().addFeatures(DataUtilities.collection(editedNewFeature));</span>
+<span class="nc bnc" id="L317" title="All 2 branches missed.">                    } else if (originalWorkflowStatus.equals(WorkflowStatus.bewerkt)) {</span>
                         // bewerkt -&gt; bewerkt, overwrite, only one 'bewerkt' is allowed
-<span class="nc bnc" id="L282" title="All 2 branches missed.">                        if (aantalBewerkt &gt; 1) {</span>
-<span class="nc" id="L283">                            log.error(&quot;Er is meer dan 1 bewerkt kavel/terrein voor &quot; + ID_FIELDNAME + &quot;=&quot; + original.getAttribute(ID_FIELDNAME));</span>
+<span class="nc bnc" id="L319" title="All 2 branches missed.">                        if (aantalBewerkt &gt; 1) {</span>
+<span class="nc" id="L320">                            log.error(&quot;Er is meer dan 1 bewerkt kavel/terrein voor &quot; + ID_FIELDNAME + &quot;=&quot; + original.getAttribute(ID_FIELDNAME));</span>
                             // more than 1 bewerkt, move them to archief
-<span class="nc" id="L285">                            this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, bewerkt);</span>
+<span class="nc" id="L322">                            this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, bewerkt);</span>
                         }
-<span class="nc" id="L287">                        this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);</span>
+<span class="nc" id="L324">                        this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);</span>
                     } else {
                         // other behaviour not documented eg. archief -&gt; bewerkt, afgevoerd -&gt; bewerkt
                         //  and not possible to occur in the application as only definitief and bewerkt can be edited
-<span class="nc" id="L291">                        throw new IllegalArgumentException(String.format(</span>
+<span class="nc" id="L328">                        throw new IllegalArgumentException(String.format(</span>
                                 &quot;Niet ondersteunde workflow stap van %s naar %s&quot;,
-<span class="nc" id="L293">                                originalWorkflowStatus.label(),</span>
-<span class="nc" id="L294">                                incomingWorkflowStatus.label()));</span>
+<span class="nc" id="L330">                                originalWorkflowStatus.label(),</span>
+<span class="nc" id="L331">                                incomingWorkflowStatus.label()));</span>
                     }
                     break;
                 case definitief:
-<span class="nc bnc" id="L298" title="All 2 branches missed.">                    if (definitiefExists) {</span>
+<span class="nc bnc" id="L335" title="All 2 branches missed.">                    if (definitiefExists) {</span>
                         // check if any &quot;definitief&quot; exists for this id and move that to &quot;archief&quot;
-<span class="nc" id="L300">                        this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, definitief);</span>
+<span class="nc" id="L337">                        this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, definitief);</span>
                     }
-<span class="nc bnc" id="L302" title="All 2 branches missed.">                    if (originalWorkflowStatus.equals(WorkflowStatus.definitief)) {</span>
+<span class="nc bnc" id="L339" title="All 2 branches missed.">                    if (originalWorkflowStatus.equals(WorkflowStatus.definitief)) {</span>
                         // if the original was &quot;definitief&quot; insert a new &quot;definitief&quot;
-<span class="nc" id="L304">                        this.getStore().addFeatures(DataUtilities.collection(editedNewFeature));</span>
-<span class="nc bnc" id="L305" title="All 2 branches missed.">                    } else if (originalWorkflowStatus.equals(WorkflowStatus.bewerkt)) {</span>
+<span class="nc" id="L341">                        this.getStore().addFeatures(DataUtilities.collection(editedNewFeature));</span>
+<span class="nc bnc" id="L342" title="All 2 branches missed.">                    } else if (originalWorkflowStatus.equals(WorkflowStatus.bewerkt)) {</span>
                         // if original was &quot;bewerkt&quot; update this to &quot;definitief&quot; with the edits
-<span class="nc" id="L307">                        this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);</span>
+<span class="nc" id="L344">                        this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);</span>
                     } else {
                         // other behaviour not documented eg. archief -&gt; definitief, afgevoerd -&gt; definitief
                         //  and not possible to occur in the application as only definitief and bewerkt can be edited
-<span class="nc" id="L311">                        throw new IllegalArgumentException(String.format(</span>
+<span class="nc" id="L348">                        throw new IllegalArgumentException(String.format(</span>
                                 &quot;Niet ondersteunde workflow stap van %s naar %s&quot;,
-<span class="nc" id="L313">                                originalWorkflowStatus.label(),</span>
-<span class="nc" id="L314">                                incomingWorkflowStatus.label()));</span>
+<span class="nc" id="L350">                                originalWorkflowStatus.label(),</span>
+<span class="nc" id="L351">                                incomingWorkflowStatus.label()));</span>
                     }
                     break;
                 case afgevoerd:
-<span class="nc bnc" id="L318" title="All 2 branches missed.">                    if (definitiefExists) {</span>
+<span class="nc bnc" id="L355" title="All 2 branches missed.">                    if (definitiefExists) {</span>
                         // update any &quot;definitief&quot; for this id to &quot;archief&quot;
-<span class="nc" id="L320">                        this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, definitief);</span>
+<span class="nc" id="L357">                        this.getStore().modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.archief, definitief);</span>
                     }
                     // update original with the new/edited data including &quot;afgevoerd&quot;
-<span class="nc" id="L323">                    this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);</span>
+<span class="nc" id="L360">                    this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);</span>
 
-<span class="nc bnc" id="L325" title="All 2 branches missed.">                    if (terreinID == null) {</span>
+<span class="nc bnc" id="L362" title="All 2 branches missed.">                    if (terreinID == null) {</span>
                         // find any kavels related to this terrein and also set them to &quot;afgevoerd&quot;
-<span class="nc" id="L327">                        Filter kavelFilter = ff.equals(ff.property(KAVEL_TERREIN_ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME)));</span>
-<span class="nc" id="L328">                        this.updateKavelWorkflowForTerrein(kavelFilter, WorkflowStatus.afgevoerd);</span>
-<span class="nc" id="L329">                    }</span>
+<span class="nc" id="L364">                        Filter kavelFilter = ff.equals(ff.property(KAVEL_TERREIN_ID_FIELDNAME), ff.literal(original.getAttribute(ID_FIELDNAME)));</span>
+<span class="nc" id="L365">                        this.updateKavelWorkflowForTerrein(kavelFilter, WorkflowStatus.afgevoerd);</span>
+<span class="nc" id="L366">                    }</span>
                     break;
                 case archief: {
                     // not described, for now just edit the feature
-<span class="nc" id="L333">                    this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);</span>
-<span class="nc" id="L334">                    break;</span>
+<span class="nc" id="L370">                    this.getStore().modifyFeatures(attributes.toArray(new String[attributes.size()]), values.toArray(), fidFilter);</span>
+<span class="nc" id="L371">                    break;</span>
                 }
                 default:
-<span class="nc" id="L337">                    throw new IllegalArgumentException(&quot;Workflow status van edit feature is null, dit wordt niet ondersteund.&quot;);</span>
+<span class="nc" id="L374">                    throw new IllegalArgumentException(&quot;Workflow status van edit feature is null, dit wordt niet ondersteund.&quot;);</span>
             }
 
-<span class="nc" id="L340">            editTransaction.commit();</span>
-<span class="nc" id="L341">            editTransaction.close();</span>
+<span class="nc" id="L377">            editTransaction.commit();</span>
+<span class="nc" id="L378">            editTransaction.close();</span>
             // update terrein geometry
-<span class="nc bnc" id="L343" title="All 2 branches missed.">            if (terreinID != null) {</span>
-<span class="nc" id="L344">                WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), this.getLayer(), incomingWorkflowStatus, this.getApplication(), Stripersist.getEntityManager());</span>
+<span class="nc bnc" id="L380" title="All 2 branches missed.">            if (terreinID != null) {</span>
+<span class="nc" id="L381">                WorkflowUtil.updateTerreinGeometry(Integer.parseInt(terreinID.toString()), this.getLayer(), incomingWorkflowStatus, this.getApplication(), Stripersist.getEntityManager());</span>
             }
-<span class="nc" id="L346">        } catch (IllegalArgumentException | IOException | NoSuchElementException e) {</span>
-<span class="nc" id="L347">            editTransaction.rollback();</span>
-<span class="nc" id="L348">            log.error(&quot;Ibis editFeature error&quot;, e);</span>
-<span class="nc" id="L349">            throw e;</span>
-<span class="nc" id="L350">        }</span>
-<span class="nc" id="L351">    }</span>
+<span class="nc" id="L383">        } catch (IllegalArgumentException | IOException | NoSuchElementException e) {</span>
+<span class="nc" id="L384">            editTransaction.rollback();</span>
+<span class="nc" id="L385">            log.error(&quot;Ibis editFeature error&quot;, e);</span>
+<span class="nc" id="L386">            throw e;</span>
+<span class="nc" id="L387">        }</span>
+<span class="nc" id="L388">    }</span>
 
     /**
      * Make a copy of the original, but with a new fid.
@@ -357,9 +394,9 @@ import org.stripesstuff.stripersist.Stripersist;
      * @return copy having same attribute values as original and a new fid
      */
     private SimpleFeature createCopy(SimpleFeature copyFrom) {
-<span class="nc" id="L360">        SimpleFeatureBuilder builder = new SimpleFeatureBuilder(copyFrom.getFeatureType());</span>
-<span class="nc" id="L361">        builder.init(copyFrom);</span>
-<span class="nc" id="L362">        return builder.buildFeature(null);</span>
+<span class="nc" id="L397">        SimpleFeatureBuilder builder = new SimpleFeatureBuilder(copyFrom.getFeatureType());</span>
+<span class="nc" id="L398">        builder.init(copyFrom);</span>
+<span class="nc" id="L399">        return builder.buildFeature(null);</span>
     }
 
     /**
@@ -369,35 +406,35 @@ import org.stripesstuff.stripersist.Stripersist;
      * @param newStatus de nieuwe status
      */
     private void updateKavelWorkflowForTerrein(Filter kavelFilter, WorkflowStatus newStatus) {
-<span class="nc" id="L372">        SimpleFeatureStore kavelStore = null;</span>
-<span class="nc" id="L373">        try (Transaction kavelTransaction = new DefaultTransaction(&quot;get-related-kavel-geom&quot;)) {</span>
-<span class="nc" id="L374">            EntityManager em = Stripersist.getEntityManager();</span>
-<span class="nc" id="L375">            log.debug(&quot;updating kavels voor terrein met filter: &quot; + kavelFilter);</span>
+<span class="nc" id="L409">        SimpleFeatureStore kavelStore = null;</span>
+<span class="nc" id="L410">        try (Transaction kavelTransaction = new DefaultTransaction(&quot;get-related-kavel-geom&quot;)) {</span>
+<span class="nc" id="L411">            EntityManager em = Stripersist.getEntityManager();</span>
+<span class="nc" id="L412">            log.debug(&quot;updating kavels voor terrein met filter: &quot; + kavelFilter);</span>
             // find kavel appLayer
-<span class="nc" id="L377">            ApplicationLayer kavelAppLyr = null;</span>
-<span class="nc" id="L378">            List&lt;ApplicationLayer&gt; lyrs = this.getApplication().loadTreeCache(em).getApplicationLayers();</span>
-<span class="nc bnc" id="L379" title="All 2 branches missed.">            for (ListIterator&lt;ApplicationLayer&gt; it = lyrs.listIterator(); it.hasNext();) {</span>
-<span class="nc" id="L380">                kavelAppLyr = it.next();</span>
-<span class="nc bnc" id="L381" title="All 2 branches missed.">                if (kavelAppLyr.getLayerName().equalsIgnoreCase(KAVEL_LAYER_NAME)) {</span>
-<span class="nc" id="L382">                    break;</span>
+<span class="nc" id="L414">            ApplicationLayer kavelAppLyr = null;</span>
+<span class="nc" id="L415">            List&lt;ApplicationLayer&gt; lyrs = this.getApplication().loadTreeCache(em).getApplicationLayers();</span>
+<span class="nc bnc" id="L416" title="All 2 branches missed.">            for (ListIterator&lt;ApplicationLayer&gt; it = lyrs.listIterator(); it.hasNext();) {</span>
+<span class="nc" id="L417">                kavelAppLyr = it.next();</span>
+<span class="nc bnc" id="L418" title="All 2 branches missed.">                if (kavelAppLyr.getLayerName().equalsIgnoreCase(KAVEL_LAYER_NAME)) {</span>
+<span class="nc" id="L419">                    break;</span>
                 }
             }
-<span class="nc" id="L385">            Layer l = kavelAppLyr.getService().getLayer(KAVEL_LAYER_NAME, em);</span>
-<span class="nc" id="L386">            kavelStore = (SimpleFeatureStore) l.getFeatureType().openGeoToolsFeatureSource();</span>
-<span class="nc" id="L387">            kavelStore.setTransaction(kavelTransaction);</span>
+<span class="nc" id="L422">            Layer l = kavelAppLyr.getService().getLayer(KAVEL_LAYER_NAME, em);</span>
+<span class="nc" id="L423">            kavelStore = (SimpleFeatureStore) l.getFeatureType().openGeoToolsFeatureSource();</span>
+<span class="nc" id="L424">            kavelStore.setTransaction(kavelTransaction);</span>
             // update kavels
-<span class="nc" id="L389">            kavelStore.modifyFeatures(WORKFLOW_FIELDNAME, newStatus, kavelFilter);</span>
-<span class="nc" id="L390">            kavelTransaction.commit();</span>
-<span class="nc" id="L391">            kavelTransaction.close();</span>
-<span class="nc" id="L392">        } catch (Exception e) {</span>
-<span class="nc" id="L393">            log.error(String.format(&quot;Bijwerken van kavel workflow status naar %s voor terrein met %s is mislukt.&quot;,</span>
+<span class="nc" id="L426">            kavelStore.modifyFeatures(WORKFLOW_FIELDNAME, newStatus, kavelFilter);</span>
+<span class="nc" id="L427">            kavelTransaction.commit();</span>
+<span class="nc" id="L428">            kavelTransaction.close();</span>
+<span class="nc" id="L429">        } catch (Exception e) {</span>
+<span class="nc" id="L430">            log.error(String.format(&quot;Bijwerken van kavel workflow status naar %s voor terrein met %s is mislukt.&quot;,</span>
                     newStatus, kavelFilter), e);
         } finally {
-<span class="nc bnc" id="L396" title="All 2 branches missed.">            if (kavelStore != null) {</span>
-<span class="nc" id="L397">                kavelStore.getDataStore().dispose();</span>
+<span class="nc bnc" id="L433" title="All 2 branches missed.">            if (kavelStore != null) {</span>
+<span class="nc" id="L434">                kavelStore.getDataStore().dispose();</span>
             }
         }
-<span class="nc" id="L400">    }</span>
+<span class="nc" id="L437">    }</span>
 
     /**
      * Check that if {@code disableUserEdit} flag is set on the attribute.
@@ -410,26 +447,34 @@ import org.stripesstuff.stripersist.Stripersist;
      */
     @Override
     protected boolean isAttributeUserEditingDisabled(String attrName) {
-<span class="nc" id="L413">        boolean isAttributeUserEditingDisabled = super.isAttributeUserEditingDisabled(attrName);</span>
+<span class="nc" id="L450">        boolean isAttributeUserEditingDisabled = super.isAttributeUserEditingDisabled(attrName);</span>
 
-<span class="nc bnc" id="L415" title="All 2 branches missed.">        if (attrName.equalsIgnoreCase(WORKFLOW_FIELDNAME)) {</span>
-<span class="nc" id="L416">            isAttributeUserEditingDisabled = false;</span>
+<span class="nc bnc" id="L452" title="All 2 branches missed.">        if (attrName.equalsIgnoreCase(WORKFLOW_FIELDNAME)) {</span>
+<span class="nc" id="L453">            isAttributeUserEditingDisabled = false;</span>
         }
 
-<span class="nc" id="L419">        return isAttributeUserEditingDisabled;</span>
+<span class="nc" id="L456">        return isAttributeUserEditingDisabled;</span>
     }
 
     private boolean isSameMutatiedatum(Object datum1, Object datum2) {
-<span class="nc" id="L423">        SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-mm-dd&quot;);</span>
-<span class="nc" id="L424">        return sdf.format(datum1).equals(sdf.format(datum2));</span>
+<span class="nc" id="L460">        SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-mm-dd&quot;);</span>
+<span class="nc" id="L461">        return sdf.format(datum1).equals(sdf.format(datum2));</span>
     }
 
     public boolean isHistorisch() {
-<span class="nc" id="L428">        return historisch;</span>
+<span class="nc" id="L465">        return historisch;</span>
     }
 
     public void setHistorisch(boolean historisch) {
-<span class="nc" id="L432">        this.historisch = historisch;</span>
-<span class="nc" id="L433">    }</span>
+<span class="nc" id="L469">        this.historisch = historisch;</span>
+<span class="nc" id="L470">    }</span>
+
+    public boolean isReject() {
+<span class="nc" id="L473">        return reject;</span>
+    }
+
+    public void setReject(boolean reject) {
+<span class="nc" id="L477">        this.reject = reject;</span>
+<span class="nc" id="L478">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
