@@ -53,6 +53,8 @@ ${project.name} ${project.version} Release Notes
 
   * IBPV-205: Aanvullende gegevens toevoegen aan bedrijventerrein ({{{https://github.com/B3Partners/flamingo-ibis/issues/146}#146}})
 
+  * IBPV-201: mutatie van een gemeente weggooien zonder deze te bewerken  ({{{https://github.com/B3Partners/flamingo-ibis/issues/144}#144}})
+
   []
 
 
