@@ -68,6 +68,7 @@ Ext.define("viewer.components.IbisFactsheet", {
 
         me.createForm();
         me.registerExtraInfo(me, me.kenmerkenTerrein);
+        me.registerExtraInfo(me, me.verouderingsGegevens);
         me.registerExtraInfo(me, me.gegevensKavelPand);
         me.registerExtraInfo(me, me.ontsluitingTerrein);
         me.registerExtraInfo(me, me.internetFaciliteiten);
@@ -336,6 +337,18 @@ Ext.define("viewer.components.IbisFactsheet", {
         }
         if (Ext.Object.isEmpty(result)) {
             result['faciliteiten'] = 'onbekend';
+        }
+        return result;
+    },
+    verouderingsGegevens: function(factsheetFeature) {
+        var result = {}, key;
+        for (key in factsheetFeature.indexedAttributes) {
+            if (key.indexOf("v_") > -1) {
+                result[key] = factsheetFeature.indexedAttributes[key];
+            }
+        }
+        if (Ext.Object.isEmpty(result)) {
+            result['verouderingsgegevens'] = 'onbekend';
         }
         return result;
     },
