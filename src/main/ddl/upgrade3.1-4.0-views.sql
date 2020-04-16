@@ -38,6 +38,30 @@ ALTER TABLE bedrijventerrein ADD COLUMN p_parkmanagementorganisatie_email    VAR
 ALTER TABLE bedrijventerrein ADD COLUMN p_parkmanagementorganisatie_website  VARCHAR(50);
 ALTER TABLE bedrijventerrein ADD COLUMN p_parkmanagementorganisatie_taak     VARCHAR(50);
 
+-- veroudering
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_1_omschrijving VARCHAR(50);
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_1_toelichting  VARCHAR;
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_1_bruto_opp    NUMERIC(5,1);
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_1_netto_opp    NUMERIC(5,1);
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_1_isverouderd  VARCHAR(60) DEFAULT 'Nee, gebied is niet verouderd' CHECK (v_deelgebied_1_isverouderd IN ('Nee, gebied is niet verouderd', 'Ja, gebied is verouderd nog geen acties', 'Ja, gebied is verouderd, wordt momenteel geherstructureerd', 'Gebied is inmiddels opgeknapt')) NOT NULL;
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_1_oorzaak      VARCHAR(30) DEFAULT 'Niet van toepassing' CHECK (v_deelgebied_1_oorzaak IN ('Niet van toepassing', 'Technische veroudering', 'Economische veroudering', 'Maatschappelijk veroudering', 'Ruimtelijke veroudering')) NOT NULL;
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_1_herstructureringsplan VARCHAR(30) DEFAULT 'Nee' CHECK (v_deelgebied_1_herstructureringsplan IN('Nee', 'Onbekend', 'Ja, voor een facelift', 'Ja, voor revitalisering', 'Ja, voor zware revitalisering', 'Ja, voor herprofilering', 'Ja, voor transformatie')) NOT NULL;
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_1_planfase     VARCHAR(30) DEFAULT 'Er is nog geen plan' CHECK(v_deelgebied_1_planfase IN ('Er is nog geen plan', 'Plan van aanpak/startnotitie', 'Masterplan', 'Revitaliseringsplan', 'Financieringsfase', 'Voorbereidingsfase', 'Uitvoeringsfase', 'Plan is afgerond')) NOT NULL;
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_1_start_jaar   int4 NULL;
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_1_eind_jaar    int4 NULL;
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_2_omschrijving VARCHAR(50);
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_2_toelichting  VARCHAR;
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_2_bruto_opp    NUMERIC(5,1);
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_2_netto_opp    NUMERIC(5,1);
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_2_isverouderd  VARCHAR(60) DEFAULT 'Nee, gebied is niet verouderd' CHECK (v_deelgebied_2_isverouderd IN ('Nee, gebied is niet verouderd', 'Ja, gebied is verouderd nog geen acties', 'Ja, gebied is verouderd, wordt momenteel geherstructureerd', 'Gebied is inmiddels opgeknapt')) NOT NULL;
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_2_oorzaak      VARCHAR(30) DEFAULT 'Niet van toepassing' CHECK (v_deelgebied_2_oorzaak IN ('Niet van toepassing', 'Technische veroudering', 'Economische veroudering', 'Maatschappelijk veroudering', 'Ruimtelijke veroudering')) NOT NULL;
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_2_herstructureringsplan VARCHAR(30) DEFAULT 'Nee' CHECK (v_deelgebied_2_herstructureringsplan IN('Nee', 'Onbekend', 'Ja, voor een facelift', 'Ja, voor revitalisering', 'Ja, voor zware revitalisering', 'Ja, voor herprofilering', 'Ja, voor transformatie')) NOT NULL;
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_2_planfase     VARCHAR(30) DEFAULT 'Er is nog geen plan' CHECK(v_deelgebied_2_planfase IN ('Er is nog geen plan', 'Plan van aanpak/startnotitie', 'Masterplan', 'Revitaliseringsplan', 'Financieringsfase', 'Voorbereidingsfase', 'Uitvoeringsfase', 'Plan is afgerond')) NOT NULL;
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_2_start_jaar   INT4 NULL;
+ALTER TABLE bedrijventerrein ADD COLUMN v_deelgebied_2_eind_jaar    INT4 NULL;
+ALTER TABLE bedrijventerrein ADD COLUMN v_netto_nieuw_uitgeefbaar   NUMERIC(5,1);
+ALTER TABLE bedrijventerrein ADD COLUMN v_uitgifte_vanaf            NUMERIC(5,1);
+
 -- hernoemen van deze 3 bestaande zodat ze in de juiste edit tab terecht komen in flamingo
 ALTER TABLE bedrijventerrein RENAME COLUMN o_collbeheer TO p_collbeheer;
 ALTER TABLE bedrijventerrein RENAME COLUMN o_collinkoop TO p_collinkoop;
@@ -112,6 +136,28 @@ AS SELECT bedrijventerrein.ibis_id,
     bedrijventerrein.o_waterontsluiting,
     bedrijventerrein.o_wegontsluiting,
     bedrijventerrein.geom,
+    bedrijventerrein.v_deelgebied_1_omschrijving,
+    bedrijventerrein.v_deelgebied_1_toelichting,
+    bedrijventerrein.v_deelgebied_1_bruto_opp,
+    bedrijventerrein.v_deelgebied_1_netto_opp,
+    bedrijventerrein.v_deelgebied_1_isverouderd,
+    bedrijventerrein.v_deelgebied_1_oorzaak,
+    bedrijventerrein.v_deelgebied_1_herstructureringsplan,
+    bedrijventerrein.v_deelgebied_1_planfase,
+    bedrijventerrein.v_deelgebied_1_start_jaar,
+    bedrijventerrein.v_deelgebied_1_eind_jaar,
+    bedrijventerrein.v_deelgebied_2_omschrijving,
+    bedrijventerrein.v_deelgebied_2_toelichting,
+    bedrijventerrein.v_deelgebied_2_bruto_opp,
+    bedrijventerrein.v_deelgebied_2_netto_opp,
+    bedrijventerrein.v_deelgebied_2_isverouderd,
+    bedrijventerrein.v_deelgebied_2_oorzaak,
+    bedrijventerrein.v_deelgebied_2_herstructureringsplan,
+    bedrijventerrein.v_deelgebied_2_planfase,
+    bedrijventerrein.v_deelgebied_2_start_jaar,
+    bedrijventerrein.v_deelgebied_2_eind_jaar,
+    bedrijventerrein.v_netto_nieuw_uitgeefbaar,
+    bedrijventerrein.v_uitgifte_vanaf,
     bedrijventerrein.gt_pkey,
     bedrijventerrein.gemeente_naam,
     bedrijventerrein.o_milieuwet_code
@@ -322,6 +368,28 @@ AS SELECT t.ibis_id,
           t.o_waterontsluiting,
           t.o_wegontsluiting,
           t.geom,
+          t.v_deelgebied_1_omschrijving,
+          t.v_deelgebied_1_toelichting,
+          t.v_deelgebied_1_bruto_opp,
+          t.v_deelgebied_1_netto_opp,
+          t.v_deelgebied_1_isverouderd,
+          t.v_deelgebied_1_oorzaak,
+          t.v_deelgebied_1_herstructureringsplan,
+          t.v_deelgebied_1_planfase,
+          t.v_deelgebied_1_start_jaar,
+          t.v_deelgebied_1_eind_jaar,
+          t.v_deelgebied_2_omschrijving,
+          t.v_deelgebied_2_toelichting,
+          t.v_deelgebied_2_bruto_opp,
+          t.v_deelgebied_2_netto_opp,
+          t.v_deelgebied_2_isverouderd,
+          t.v_deelgebied_2_oorzaak,
+          t.v_deelgebied_2_herstructureringsplan,
+          t.v_deelgebied_2_planfase,
+          t.v_deelgebied_2_start_jaar,
+          t.v_deelgebied_2_eind_jaar,
+          t.v_netto_nieuw_uitgeefbaar,
+          t.v_uitgifte_vanaf,
           t.gt_pkey,
           t.gemeente_naam,
           t.o_milieuwet_code
@@ -814,19 +882,6 @@ AS SELECT r.vvr_naam,
   GROUP BY r.vvr_naam, g.naam, b.a_plannaam, b.a_planfase, b.rin_nr
   ORDER BY r.vvr_naam, g.naam, b.a_plannaam;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 CREATE OR REPLACE VIEW v_component_ibis_report
 AS SELECT t.ibis_id,
           t.rin_nr,
@@ -901,6 +956,28 @@ AS SELECT bedrijventerrein.ibis_id AS terreinid,
     bedrijventerrein.o_wegontsluiting,
     bedrijventerrein.gemeente_naam,
     bedrijventerrein.geom,
+    bedrijventerrein.v_deelgebied_1_omschrijving,
+    bedrijventerrein.v_deelgebied_1_toelichting,
+    bedrijventerrein.v_deelgebied_1_bruto_opp,
+    bedrijventerrein.v_deelgebied_1_netto_opp,
+    bedrijventerrein.v_deelgebied_1_isverouderd,
+    bedrijventerrein.v_deelgebied_1_oorzaak,
+    bedrijventerrein.v_deelgebied_1_herstructureringsplan,
+    bedrijventerrein.v_deelgebied_1_planfase,
+    bedrijventerrein.v_deelgebied_1_start_jaar,
+    bedrijventerrein.v_deelgebied_1_eind_jaar,
+    bedrijventerrein.v_deelgebied_2_omschrijving,
+    bedrijventerrein.v_deelgebied_2_toelichting,
+    bedrijventerrein.v_deelgebied_2_bruto_opp,
+    bedrijventerrein.v_deelgebied_2_netto_opp,
+    bedrijventerrein.v_deelgebied_2_isverouderd,
+    bedrijventerrein.v_deelgebied_2_oorzaak,
+    bedrijventerrein.v_deelgebied_2_herstructureringsplan,
+    bedrijventerrein.v_deelgebied_2_planfase,
+    bedrijventerrein.v_deelgebied_2_start_jaar,
+    bedrijventerrein.v_deelgebied_2_eind_jaar,
+    bedrijventerrein.v_netto_nieuw_uitgeefbaar,
+    bedrijventerrein.v_uitgifte_vanaf,
     'tijdelijk niet beschikbaar'::character varying AS beschikbare_panden,
     round(v_terrein_oppervlakte.opp_geom, 2)::character varying AS opp_geom_ha,
     round(v_terrein_oppervlakte.opp_woonbebouwing, 2)::character varying AS opp_woonbebouwing_ha,
