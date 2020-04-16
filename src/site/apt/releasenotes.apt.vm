@@ -55,6 +55,8 @@ ${project.name} ${project.version} Release Notes
 
   * IBPV-201: mutatie van een gemeente weggooien zonder deze te bewerken  ({{{https://github.com/B3Partners/flamingo-ibis/issues/144}#144}})
 
+  * IBPV-052: Kavels muteren terwijl een terrein op afgevoerd staat ({{{https://github.com/B3Partners/flamingo-ibis/issues/140}#140}})
+
   []
 
 
