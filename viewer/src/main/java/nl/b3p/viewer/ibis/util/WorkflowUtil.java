@@ -59,14 +59,17 @@ public class WorkflowUtil implements IbisConstants {
 
     /**
      * Update the geometry of the TERREIN. Must be called after the kavels
-     * transaction. voor definitief terrein definitief kavels gebruiken, voor
-     * bewerkt terrein definitef en bewerkt kavel gebruiken
+     * transaction. Voor definitief terrein definitief kavels gebruiken, voor
+     * bewerkt terrein definitief en bewerkt kavel gebruiken.
+     * <p>
+     * Als een terrein "per ongeluk" is afgevoerd moet het terugkomen mits kavel definitief is
+     * De meest recente terrein versie - per definitie (workflow) is dat het "afgevoerde" - moet dan definitief worden.
      *
-     * @param terreinID feature id van het terrein
-     * @param layer kavels layer
+     * @param terreinID   feature id van het terrein
+     * @param layer       kavels layer
      * @param kavelStatus workflow status van te gebruiken kavels
      * @param application flamingo applicatie
-     * @param em persistence manager
+     * @param em          persistence manager
      */
     public static void updateTerreinGeometry(Integer terreinID, Layer layer, WorkflowStatus kavelStatus, Application application, EntityManager em) {
         log.debug("Updating terrein geometry for " + terreinID);
@@ -132,9 +135,9 @@ public class WorkflowUtil implements IbisConstants {
             // zie https://github.com/B3Partners/flamingo-ibis/issues/64
             log.debug("terrein geom : " + newTerreinGeom);
             newTerreinGeom = newTerreinGeom.buffer(.001, 1);
-            log.debug("buffer+.001   : " + newTerreinGeom);
+            log.trace("buffer+.001   : " + newTerreinGeom);
             newTerreinGeom = newTerreinGeom.buffer(-.001, 1);
-            log.debug("buffer-.001   : " + newTerreinGeom);
+            log.trace("buffer-.001   : " + newTerreinGeom);
             // en ook nog een snap-to-self met een centimeter tolerantie
             newTerreinGeom = GeometrySnapper.snapToSelf(newTerreinGeom, .01, true);
             log.debug("snapped+clean: " + newTerreinGeom);
@@ -176,6 +179,16 @@ public class WorkflowUtil implements IbisConstants {
                     break;
                 default:
                 // won't do anything
+            }
+
+            if (kavelStatus.equals(WorkflowStatus.definitief)) {
+                // check of terrein "per ongeluk" afgevoerd, maar kavel definitief
+                final Filter perOngelukFilter = ff.and(
+                        ff.equals(ff.property(ID_FIELDNAME), ff.literal(terreinID)),
+                        ff.equal(ff.property(WORKFLOW_FIELDNAME), ff.literal(WorkflowStatus.afgevoerd.name()), false)
+                );
+                log.debug("Herstel 'per ongeluk' 'afgevoerd' terrein naar 'definitief' met filter: " + terreinFilter);
+                terreinStore.modifyFeatures(WORKFLOW_FIELDNAME, WorkflowStatus.definitief.name(), perOngelukFilter);
             }
 
             // update terrein with new geom
