@@ -57,12 +57,13 @@ Ext.define("viewer.components.IbisEdit", {
     /** @override */
     loadWindow: function () {
         this.callParent();
-        this.maincontainer.add([{
+        this.geomlabel.up()
+            .insert(4,{
             id: this.name + "workflowLabel",
             margin: 5,
             text: '',
             xtype: "label"
-        }]);
+        });
 
         if (this.config.allowReject){
             this.savebutton.up().add(this.createButton("rejectButton","Afkeuren", this.rejectFeature, true));
