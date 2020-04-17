@@ -16,6 +16,65 @@ DROP VIEW IF EXISTS v_publieke_terreinen;
 DROP VIEW IF EXISTS v_terrein_oppervlakte;
 DROP VIEW IF EXISTS v_actuele_terreinen;
 
+CREATE TABLE list_verouderd (
+    waarde VARCHAR(60)
+);
+
+INSERT INTO list_verouderd VALUES
+    ('Nee, gebied is niet verouderd'),
+    ('Ja, gebied is verouderd nog geen acties'),
+    ('Ja, gebied is verouderd, wordt momenteel geherstructureerd'),
+    ('Gebied is inmiddels opgeknapt');
+
+
+CREATE TABLE list_verouderd_oorzaak (
+    waarde VARCHAR(30)
+);
+
+INSERT INTO list_verouderd_oorzaak VALUES
+    ('Niet van toepassing'),
+    ('Technische veroudering'),
+    ('Economische veroudering'),
+    ('Maatschappelijk veroudering'),
+    ('Ruimtelijke veroudering');
+
+CREATE TABLE list_verouderd_plan (
+    waarde VARCHAR(30)
+);
+
+INSERT INTO list_verouderd_plan VALUES
+    ('Nee'),
+    ('Onbekend'),
+    ('Ja, voor een facelift'),
+    ('Ja, voor revitalisering'),
+    ('Ja, voor zware revitalisering'),
+    ('Ja, voor herprofilering'),
+    ('Ja, voor transformatie');
+
+CREATE TABLE list_plan_fase (
+    waarde VARCHAR(30)
+);
+
+INSERT INTO list_plan_fase VALUES
+    ('Er is nog geen plan'),
+    ('Plan van aanpak/startnotitie'),
+    ('Masterplan'),
+    ('Revitaliseringsplan'),
+    ('Financieringsfase'),
+    ('Voorbereidingsfase'),
+    ('Uitvoeringsfase'),
+    ('Plan is afgerond');
+
+GRANT ALL ON list_verouderd TO geoedit;
+GRANT ALL ON list_verouderd_oorzaak TO geoedit;
+GRANT ALL ON list_verouderd_plan TO geoedit;
+GRANT ALL ON list_plan_fase TO geoedit;
+
+GRANT SELECT ON list_verouderd TO geolees;
+GRANT SELECT ON list_verouderd_oorzaak TO geolees;
+GRANT SELECT ON list_verouderd_plan TO geolees;
+GRANT SELECT ON list_plan_fase TO geolees;
+
 ALTER TABLE bedrijventerrein DROP COLUMN o_internet;
 
 -- internet
