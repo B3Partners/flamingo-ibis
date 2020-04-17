@@ -1,6 +1,6 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 IBIS distributie/ibis-viewer,nl.b3p.viewer.ibis.util,WorkflowUtil.new AbstractFeatureVisitor() {...},19,0,2,0,5,0,3,0,2,0
-IBIS distributie/ibis-viewer,nl.b3p.viewer.ibis.util,WorkflowUtil,398,0,18,0,80,0,12,0,2,0
+IBIS distributie/ibis-viewer,nl.b3p.viewer.ibis.util,WorkflowUtil,439,0,20,0,86,0,13,0,2,0
 IBIS distributie/ibis-viewer,nl.b3p.viewer.ibis.util,WorkflowStatus,59,0,0,0,9,0,3,0,3,0
 IBIS distributie/ibis-viewer,nl.b3p.viewer.ibis.util,DateUtils,5,124,7,13,3,28,7,8,0,5
 IBIS distributie/ibis-viewer,nl.b3p.viewer.util,IbisFeatureToJson,1405,0,172,0,280,0,97,0,11,0
