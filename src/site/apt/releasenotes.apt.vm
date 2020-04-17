@@ -28,6 +28,14 @@ ${project.name} ${project.version} Release Notes
   *  migratie naar Flamingo {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v5.7.3}5.7.3}} en verwijderen
      van Flash componenten ({{{https://mantis.b3p.nl/view.php?id=14455}mantis-14455}})
 
+  * IBPV-042: Historische records van kavels aanpassen ({{{https://github.com/B3Partners/flamingo-ibis/issues/137}#137}})
+
+  * IBPV-205: Aanvullende gegevens toevoegen aan bedrijventerrein ({{{https://github.com/B3Partners/flamingo-ibis/issues/146}#146}})
+
+  * IBPV-052: Kavels muteren terwijl een terrein op afgevoerd staat ({{{https://github.com/B3Partners/flamingo-ibis/issues/140}#140}})
+
+  * IBPV-072: veroudering toevoegen aan systeem ({{{https://github.com/B3Partners/flamingo-ibis/issues/138}#138}})
+
   []
 
 
@@ -47,17 +55,11 @@ ${project.name} ${project.version} Release Notes
 
   * IBPV-206: Factsheet: toevoegen hindercategorie, prijs max, min ({{{https://github.com/B3Partners/flamingo-ibis/issues/147}#147}})
 
-  * IBPV-042: Historische records van kavels aanpassen ({{{https://github.com/B3Partners/flamingo-ibis/issues/137}#137}})
-
   * IBPV-073: Bij bedrijventerreinen de Internet faciliteiten updaten ({{{https://github.com/B3Partners/flamingo-ibis/issues/143}#143}})
-
-  * IBPV-205: Aanvullende gegevens toevoegen aan bedrijventerrein ({{{https://github.com/B3Partners/flamingo-ibis/issues/146}#146}})
 
   * IBPV-201: mutatie van een gemeente weggooien zonder deze te bewerken  ({{{https://github.com/B3Partners/flamingo-ibis/issues/144}#144}})
 
-  * IBPV-052: Kavels muteren terwijl een terrein op afgevoerd staat ({{{https://github.com/B3Partners/flamingo-ibis/issues/140}#140}})
-
-  * IBPV-072: veroudering toevoegen aan systeem ({{{https://github.com/B3Partners/flamingo-ibis/issues/138}#138}})
+  * IBPV-035: Eigendom van een overheidsinstantie of een bedrijf ({{{https://github.com/B3Partners/flamingo-ibis/issues/142}#142}})
 
   []
 
