@@ -9,39 +9,8 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean
-	c276 [label=<<table title="nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisMergeFeaturesActionBean.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> IbisMergeFeaturesActionBean </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + IbisMergeFeaturesActionBean() </td></tr>
-<tr><td align="left" balign="left"> # handleExtraData(features : List&lt;SimpleFeature&gt;) : List&lt;SimpleFeature&gt; </td></tr>
-<tr><td align="left" balign="left"> # handleStrategy(featureA : SimpleFeature, featureB : SimpleFeature, newGeom : Geometry, filterA : Filter, filterB : Filter, localStore : SimpleFeatureStore, localStrategy : String) : List&lt;FeatureId&gt; </td></tr>
-<tr><td align="left" balign="left"> # afterMerge(ids : List&lt;FeatureId&gt;) </td></tr>
-		</table></td></tr>
-		</table>>, URL="./IbisMergeFeaturesActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// nl.b3p.viewer.ibis.util.WorkflowStatus
-	c281 [label=<<table title="nl.b3p.viewer.ibis.util.WorkflowStatus" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/WorkflowStatus.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
-<tr><td align="center" balign="center"> WorkflowStatus </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> bewerkt </td></tr>
-<tr><td align="left" balign="left"> definitief </td></tr>
-<tr><td align="left" balign="left"> archief </td></tr>
-<tr><td align="left" balign="left"> afgevoerd </td></tr>
-		</table></td></tr>
-		</table>>, URL="../ibis/util/WorkflowStatus.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.ibis.util.IbisConstants
-	c282 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
+	c270 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> IbisConstants </td></tr>
@@ -58,12 +27,43 @@ digraph G {
 <tr><td align="left" balign="left">  </td></tr>
 		</table></td></tr>
 		</table>>, URL="../ibis/util/IbisConstants.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// nl.b3p.viewer.ibis.util.WorkflowStatus
+	c271 [label=<<table title="nl.b3p.viewer.ibis.util.WorkflowStatus" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/WorkflowStatus.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
+<tr><td align="center" balign="center"> WorkflowStatus </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> bewerkt </td></tr>
+<tr><td align="left" balign="left"> definitief </td></tr>
+<tr><td align="left" balign="left"> archief </td></tr>
+<tr><td align="left" balign="left"> afgevoerd </td></tr>
+		</table></td></tr>
+		</table>>, URL="../ibis/util/WorkflowStatus.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean
+	c280 [label=<<table title="nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisMergeFeaturesActionBean.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> IbisMergeFeaturesActionBean </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + IbisMergeFeaturesActionBean() </td></tr>
+<tr><td align="left" balign="left"> # handleExtraData(features : List&lt;SimpleFeature&gt;) : List&lt;SimpleFeature&gt; </td></tr>
+<tr><td align="left" balign="left"> # handleStrategy(featureA : SimpleFeature, featureB : SimpleFeature, newGeom : Geometry, filterA : Filter, filterB : Filter, localStore : SimpleFeatureStore, localStrategy : String) : List&lt;FeatureId&gt; </td></tr>
+<tr><td align="left" balign="left"> # afterMerge(ids : List&lt;FeatureId&gt;) </td></tr>
+		</table></td></tr>
+		</table>>, URL="./IbisMergeFeaturesActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean extends nl.b3p.viewer.stripes.MergeFeaturesActionBean
-	c284:p -> c276:p [dir=back,arrowtail=empty];
+	c284:p -> c280:p [dir=back,arrowtail=empty];
 	//nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean implements nl.b3p.viewer.ibis.util.IbisConstants
-	c282:p -> c276:p [dir=back,arrowtail=empty,style=dashed];
+	c270:p -> c280:p [dir=back,arrowtail=empty,style=dashed];
 	// nl.b3p.viewer.stripes.IbisMergeFeaturesActionBean NAVASSOC nl.b3p.viewer.ibis.util.WorkflowStatus
-	c276:p -> c281:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c280:p -> c271:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.MergeFeaturesActionBean
 	c284 [label=<<table title="nl.b3p.viewer.stripes.MergeFeaturesActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">

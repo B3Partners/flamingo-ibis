@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// nl.b3p.viewer.ibis.util.WorkflowUtil
-	c346 [label=<<table title="nl.b3p.viewer.ibis.util.WorkflowUtil" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./WorkflowUtil.html">
+	c335 [label=<<table title="nl.b3p.viewer.ibis.util.WorkflowUtil" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./WorkflowUtil.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> WorkflowUtil </td></tr>
 		</table></td></tr>
@@ -22,7 +22,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./WorkflowUtil.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.ibis.util.IbisConstants
-	c348 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisConstants.html">
+	c336 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisConstants.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> IbisConstants </td></tr>
@@ -40,6 +40,6 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./IbisConstants.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//nl.b3p.viewer.ibis.util.WorkflowUtil implements nl.b3p.viewer.ibis.util.IbisConstants
-	c348:p -> c346:p [dir=back,arrowtail=empty,style=dashed];
+	c336:p -> c335:p [dir=back,arrowtail=empty,style=dashed];
 }
 
