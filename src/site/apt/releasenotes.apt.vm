@@ -57,6 +57,8 @@ ${project.name} ${project.version} Release Notes
 
   * IBPV-052: Kavels muteren terwijl een terrein op afgevoerd staat ({{{https://github.com/B3Partners/flamingo-ibis/issues/140}#140}})
 
+  * IBPV-072: veroudering toevoegen aan systeem ({{{https://github.com/B3Partners/flamingo-ibis/issues/138}#138}})
+
   []
 
 
