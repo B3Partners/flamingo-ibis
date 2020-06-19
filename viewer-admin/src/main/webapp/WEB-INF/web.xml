@@ -110,7 +110,8 @@
             The url on where the solr server is to be found.
         </description>
         <param-name>flamingo.solr.url</param-name>
-        <param-value>${ibis-flamingo-solr-name}</param-value>
+        <!-- test -->
+        <param-value>http://ibistest.flamingo5.nl:8081/solr/</param-value>
     </context-param>
     <listener>
         <listener-class>nl.b3p.viewer.components.ComponentRegistryInitializer</listener-class>

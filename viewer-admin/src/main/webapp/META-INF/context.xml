@@ -3,9 +3,14 @@
     <Parameter name="componentregistry.path" override="false" value="/viewer-html/components"/>
     <!-- Customized context parameters; see web.xml -->
     <Parameter name="viewer.url" override="false" value=""/>
+    <!-- test -->
+<!--    <Parameter name="flamingo.data.dir" value="/opt/flamingo_data_ibistest" override="false"/>-->
     <Parameter name="flamingo.data.dir" value="/opt/flamingo_data" override="false"/>
     <!-- every day at 08:00 -->
     <Parameter name="flamingo.solr.schedule" value="0 0 8 1/1 * ? *" override="false" />
+    <!-- test -->
+    <Parameter name="flamingo.solr.url" override="false" value="http://ibistest.flamingo5.nl:8081/solr/" />
+    <!-- prod -->
     <Parameter name="flamingo.solr.url" override="false" value="https://bedrijventerreinen.gelderland.nl/solr/"/>
 <!--     <ResourceLink global="jdbc/${ibis-flamingo-ds-name}" name="jdbc/geo_viewer" type="javax.sql.DataSource"/>-->
     <ResourceLink global="jdbc/geo_viewer" name="jdbc/geo_viewer" type="javax.sql.DataSource"/>
