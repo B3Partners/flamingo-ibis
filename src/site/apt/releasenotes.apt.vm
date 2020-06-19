@@ -14,7 +14,7 @@ ${project.name} ${project.version} Release Notes
   Dit zijn de release notes voor ${project.name} versie ${project.version}.
 
   Releases zijn beschikbaar op: {{{https://github.com/B3Partners/flamingo-ibis/releases/}github releases}}, de laatste snapshots
-  zijn beschikbaar in de {{{http://repo.b3p.nl/nexus/#nexus-search;gav~~ibis-dist~~~} Maven repository}}.
+  zijn beschikbaar in de {{{https://repo.b3p.nl/nexus/#browse/search/maven=attributes.maven2.artifactId%3Dibis-dist} Maven repository}}.
 
 %{toc|section=1|fromDepth=2|toDepth=2}
 
@@ -32,12 +32,15 @@ ${project.name} ${project.version} Release Notes
 
 ** Verbeteringen en oplossingen
 
-  * ...
+  * Fix ophalen van kaartlaag voor IbisFactsheet config component ({{{https://github.com/B3Partners/flamingo-ibis/issues/165}#165}})
 
    []
 
 
-* Versie 3.1
+* Versie 4.0
+
+  De complete lijst met issues voor deze release is beschikbaar in de tracker:
+  {{{${project.issueManagement.url}?q=milestone%3A4.0+is%3Aclosed}milestone 4.0 issues}}.
 
 ** Nieuw
 
