@@ -47,9 +47,8 @@ Ext.define("viewer.components.CustomConfiguration", {
      */
     addLayerSelector: function () {
         var me = this;
-
         Ext.Ajax.request({
-            url: this.getContextpath() + "/action/componentConfigLayerList",
+            url: me.requestPath,
             params: {
                 appId: this.getApplicationId(),
                 filterable: true

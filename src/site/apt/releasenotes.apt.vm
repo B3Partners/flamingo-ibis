@@ -14,7 +14,7 @@ ${project.name} ${project.version} Release Notes
   Dit zijn de release notes voor ${project.name} versie ${project.version}.
 
   Releases zijn beschikbaar op: {{{https://github.com/B3Partners/flamingo-ibis/releases/}github releases}}, de laatste snapshots
-  zijn beschikbaar in de {{{http://repo.b3p.nl/nexus/#nexus-search;gav~~ibis-dist~~~} Maven repository}}.
+  zijn beschikbaar in de {{{https://repo.b3p.nl/nexus/#browse/search/maven=attributes.maven2.artifactId%3Dibis-dist} Maven repository}}.
 
 %{toc|section=1|fromDepth=2|toDepth=2}
 
@@ -25,19 +25,24 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
-   * Upgrade naar Flamingo {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v5.7.6}5.7.6}}
+  * Upgrade naar Flamingo {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v5.7.6}5.7.6}}
 
-   []
+  []
 
 
 ** Verbeteringen en oplossingen
 
-  * maak label breedte op editformulieren instelbaar  ({{{https://github.com/B3Partners/flamingo-ibis/issues/168}#168}})
+ * maak label breedte op editformulieren instelbaar  ({{{https://github.com/B3Partners/flamingo-ibis/issues/168}#168}})
 
-   []
+ * Fix ophalen van kaartlaag voor IbisFactsheet config component ({{{https://github.com/B3Partners/flamingo-ibis/issues/165}#165}})
+
+ []
 
 
-* Versie 3.1
+* Versie 4.0
+
+  De complete lijst met issues voor deze release is beschikbaar in de tracker:
+  {{{${project.issueManagement.url}?q=milestone%3A4.0+is%3Aclosed}milestone 4.0 issues}}.
 
 ** Nieuw
 
