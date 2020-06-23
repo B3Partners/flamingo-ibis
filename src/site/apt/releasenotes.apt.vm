@@ -25,16 +25,18 @@ ${project.name} ${project.version} Release Notes
 
 ** Nieuw
 
-   * Upgrade naar Flamingo {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v5.7.5}5.7.5}}
+  * Upgrade naar Flamingo {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v5.7.6}5.7.6}}
 
-   []
+  []
 
 
 ** Verbeteringen en oplossingen
 
-  * Fix ophalen van kaartlaag voor IbisFactsheet config component ({{{https://github.com/B3Partners/flamingo-ibis/issues/165}#165}})
+ * maak label breedte op editformulieren instelbaar  ({{{https://github.com/B3Partners/flamingo-ibis/issues/168}#168}})
 
-   []
+ * Fix ophalen van kaartlaag voor IbisFactsheet config component ({{{https://github.com/B3Partners/flamingo-ibis/issues/165}#165}})
+
+ []
 
 
 * Versie 4.0

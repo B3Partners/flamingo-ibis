@@ -11,10 +11,10 @@
     <parent>
         <groupId>org.flamingo-mc</groupId>
         <artifactId>flamingo-mc</artifactId>
-        <version>5.7.5</version>
+        <version>5.7.6-SNAPSHOT</version>
     </parent>
     <properties>
-        <flamingo.version>5.7.5</flamingo.version>
+        <flamingo.version>5.7.6-SNAPSHOT</flamingo.version>
         <project.build.sourceVersion>1.8</project.build.sourceVersion>
         <project.build.targetVersion>1.8</project.build.targetVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

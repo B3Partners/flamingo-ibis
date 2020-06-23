@@ -66,6 +66,19 @@ Ext.define("viewer.components.CustomConfiguration", {
             //     hidden: true
             // },
             {
+                xtype: 'numberfield',
+                fieldLabel: i18next.t('edit_config_editLabelWidth'),
+                minValue: 100,
+                maxValue: 500,
+                step: 10,
+                name: 'editLabelWidth',
+                value: this.configObject.editLabelWidth !== undefined ? this.configObject.editLabelWidth : 150,
+                labelWidth: this.labelWidth,
+                style: {
+                    marginRight: "70px"
+                }
+            },
+            {
                 itemId: 'prefixLabels',
                 xtype: 'panel',
                 collapsible: true,
