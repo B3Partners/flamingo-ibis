@@ -93,7 +93,7 @@ Ext.define("viewer.components.CustomConfiguration", {
         });
     },
     getConfiguration: function () {
-        var config = new Object();
+        var config = {};
         if (this.checkBoxes != null) {
             config.legendLayers = this.checkBoxes.getChecked();
         }

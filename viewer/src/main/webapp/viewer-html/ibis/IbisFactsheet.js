@@ -391,7 +391,7 @@ Ext.define("viewer.components.IbisFactsheet", {
             appId: appId
         };
         // Process registered extra info callbacks
-        var extraInfos = new Array();
+        var extraInfos = {};
         for (var i = 0; i < this.extraInfoCallbacks.length; i++) {
             var entry = this.extraInfoCallbacks[i];
             var extraInfo = {
