@@ -137,6 +137,7 @@ Ext.define("viewer.components.IbisFactsheet", {
         } else {
             result.push('Naam' + DELIM + 'Hoofdactiviteit' + DELIM + 'Grootteklasse');
             // reverse sort lijst on grootte_klasse
+            //  deepcode ignore UseArrowFunction: arrow functie werkt niet in IE 11 of lager
             lijst = lijst.sort(function (a, b) {
                 if (a.grootte_klasse < b.grootte_klasse)
                     return 1;
