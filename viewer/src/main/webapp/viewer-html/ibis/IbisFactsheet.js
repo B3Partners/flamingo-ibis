@@ -391,7 +391,7 @@ Ext.define("viewer.components.IbisFactsheet", {
             appId: appId
         };
         // Process registered extra info callbacks
-        var extraInfos = {};
+        var extraInfos = [];
         for (var i = 0; i < this.extraInfoCallbacks.length; i++) {
             var entry = this.extraInfoCallbacks[i];
             var extraInfo = {
@@ -408,7 +408,7 @@ Ext.define("viewer.components.IbisFactsheet", {
             if (overviews.length > 0) {
                 var overview = overviews[0];
                 var url = overview.config.url;
-                properties.overview = new Object();
+                properties.overview = {};
                 properties.overview.overviewUrl = url;
                 properties.overview.extent = overview.config.lox + "," + overview.config.loy + "," + overview.config.rbx + "," + overview.config.rby;
                 properties.overview.protocol = url.toLowerCase().indexOf("getmap") > 0 ? 'WMS' : 'IMAGE';
