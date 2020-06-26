@@ -36,6 +36,8 @@ ${project.name} ${project.version} Release Notes
 
  * Fix ophalen van kaartlaag voor IbisFactsheet config component ({{{https://github.com/B3Partners/flamingo-ibis/issues/165}#165}})
 
+ * Codestyle verbeteringen ({{{https://github.com/B3Partners/flamingo-ibis/issues/166}#166}})
+
  []
 
 

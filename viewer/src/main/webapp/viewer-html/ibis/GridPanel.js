@@ -13,6 +13,7 @@
  see: https://druckit.wordpress.com/2014/12/26/converting-an-ext-5-grid-to-excel-spreadsheet/
 
  */
+// file deepcode ignore UseStrictEquality: niet onze code...
 Ext.define('viewer.components.GridPanel', {
     override: 'Ext.grid.GridPanel',
     requires: 'Ext.form.action.StandardSubmit',

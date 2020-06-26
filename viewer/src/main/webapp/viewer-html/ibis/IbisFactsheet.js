@@ -137,6 +137,7 @@ Ext.define("viewer.components.IbisFactsheet", {
         } else {
             result.push('Naam' + DELIM + 'Hoofdactiviteit' + DELIM + 'Grootteklasse');
             // reverse sort lijst on grootte_klasse
+            //  deepcode ignore UseArrowFunction: arrow functie werkt niet in IE 11 of lager
             lijst = lijst.sort(function (a, b) {
                 if (a.grootte_klasse < b.grootte_klasse)
                     return 1;
@@ -391,7 +392,7 @@ Ext.define("viewer.components.IbisFactsheet", {
             appId: appId
         };
         // Process registered extra info callbacks
-        var extraInfos = new Array();
+        var extraInfos = [];
         for (var i = 0; i < this.extraInfoCallbacks.length; i++) {
             var entry = this.extraInfoCallbacks[i];
             var extraInfo = {
@@ -408,7 +409,7 @@ Ext.define("viewer.components.IbisFactsheet", {
             if (overviews.length > 0) {
                 var overview = overviews[0];
                 var url = overview.config.url;
-                properties.overview = new Object();
+                properties.overview = {};
                 properties.overview.overviewUrl = url;
                 properties.overview.extent = overview.config.lox + "," + overview.config.loy + "," + overview.config.rbx + "," + overview.config.rby;
                 properties.overview.protocol = url.toLowerCase().indexOf("getmap") > 0 ? 'WMS' : 'IMAGE';

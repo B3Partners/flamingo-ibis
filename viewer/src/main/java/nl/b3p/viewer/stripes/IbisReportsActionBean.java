@@ -168,8 +168,7 @@ public class IbisReportsActionBean implements ActionBean, IbisConstants {
         }
 
         if (json.getBoolean("success")) {
-            final FileInputStream fis = new FileInputStream(output);
-            try {
+            try (FileInputStream fis = new FileInputStream(output)){
                 StreamingResolution res = new StreamingResolution(MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(output)) {
                     @Override
                     public void stream(HttpServletResponse response) throws Exception {
