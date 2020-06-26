@@ -250,6 +250,13 @@ Ext.define("viewer.components.IbisEdit", {
                 button.hide();
             }
         }
+        // verberg lege tabbladen, nodig omdat er nu altijd was/wordt kolom in zit
+        for (var i = 0; i < this.config.prefixConfig.length; i++) {
+            prefix = this.getPrefix(this.config.prefixConfig[i].prefix);
+            if (this.tabbedFormPanels[prefix].items.length < 2) {
+                this.tabbedFormPanels[prefix].hide();
+            }
+        }
     },
     /**
      * herstel de delete button, die is mogelijk verborgen door #handleFeature.
