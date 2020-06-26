@@ -138,7 +138,7 @@ Ext.define("viewer.components.IbisEditHistorisch", {
         me.editingLayer = this.config.viewerController.getLayer(this.layerSelector.getValue());
         Ext.create("viewer.EditFeature", {
             viewerController: this.config.viewerController,
-            actionbeanUrl: contextPath + '/action/feature/ibisedit' + "?delete"
+            actionbeanUrl: FlamingoAppLoader.get('contextPath') + '/action/feature/ibisedit' + "?delete"
         }).remove(
             me.editingLayer,
             feature,
@@ -173,7 +173,7 @@ Ext.define("viewer.components.IbisEditHistorisch", {
         me.editingLayer = this.config.viewerController.getLayer(this.layerSelector.getValue());
         Ext.create("viewer.EditFeature", {
             viewerController: this.config.viewerController,
-            actionbeanUrl: contextPath + '/action/feature/ibisedit'
+            actionbeanUrl: FlamingoAppLoader.get('contextPath') + '/action/feature/ibisedit'
         }).edit(
             me.editingLayer,
             feature,
