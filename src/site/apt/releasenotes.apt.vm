@@ -40,6 +40,8 @@ ${project.name} ${project.version} Release Notes
 
  * Codestyle verbeteringen ({{{https://github.com/B3Partners/flamingo-ibis/issues/166}#166}})
 
+ * SVG ikoon voor IbisEditHistorisch component ({{{https://github.com/B3Partners/flamingo-ibis/pull/171}#171}})
+
  []
 
 
