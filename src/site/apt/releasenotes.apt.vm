@@ -42,6 +42,8 @@ ${project.name} ${project.version} Release Notes
 
  * SVG ikoon voor IbisEditHistorisch component ({{{https://github.com/B3Partners/flamingo-ibis/pull/171}#171}})
 
+ * Hernoem kolommen van bedrijventerrein met prijzen zodat ze in aparte editor tab kunnen worden geladen  ({{{https://github.com/B3Partners/flamingo-ibis/pull/174}#174}})
+
  []
 
 
