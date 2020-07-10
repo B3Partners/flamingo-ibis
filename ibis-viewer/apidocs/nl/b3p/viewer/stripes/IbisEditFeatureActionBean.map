@@ -1,7 +1,7 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="../ibis/util/IbisConstants.html" title="nl.b3p.viewer.ibis.util.IbisConstants" alt="" coords="16,184,308,364"/>
-<area shape="rect" id="node1" href="../ibis/util/IbisConstants.html" title="&lt;TABLE&gt;" alt="" coords="5,179,319,369"/>
-<area shape="rect" id="node2_1" href="./IbisEditFeatureActionBean.html" title="nl.b3p.viewer.stripes.IbisEditFeatureActionBean" alt="" coords="157,596,530,811"/>
-<area shape="rect" id="node2" href="./IbisEditFeatureActionBean.html" title="&lt;TABLE&gt;" alt="" coords="146,591,541,816"/>
-<area shape="rect" id="node3" href="null" title="&lt;TABLE&gt;" alt="" coords="343,5,709,543"/>
+<area shape="rect" id="node1_0" href="./IbisEditFeatureActionBean.html" title="nl.b3p.viewer.stripes.IbisEditFeatureActionBean" alt="" coords="156,596,529,811"/>
+<area shape="rect" id="node1" href="./IbisEditFeatureActionBean.html" title="&lt;TABLE&gt;" alt="" coords="145,591,540,816"/>
+<area shape="rect" id="node2_1" href="../ibis/util/IbisConstants.html" title="nl.b3p.viewer.ibis.util.IbisConstants" alt="" coords="16,184,307,364"/>
+<area shape="rect" id="node2" href="../ibis/util/IbisConstants.html" title="&lt;TABLE&gt;" alt="" coords="5,179,317,369"/>
+<area shape="rect" id="node3" href="null" title="&lt;TABLE&gt;" alt="" coords="341,5,707,543"/>
 </map>

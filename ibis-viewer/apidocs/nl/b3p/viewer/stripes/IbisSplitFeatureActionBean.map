@@ -1,9 +1,9 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="../ibis/util/IbisConstants.html" title="nl.b3p.viewer.ibis.util.IbisConstants" alt="" coords="19,175,311,355"/>
-<area shape="rect" id="node1" href="../ibis/util/IbisConstants.html" title="&lt;TABLE&gt;" alt="" coords="8,170,321,361"/>
-<area shape="rect" id="node3_1" href="./IbisSplitFeatureActionBean.html" title="nl.b3p.viewer.stripes.IbisSplitFeatureActionBean" alt="" coords="16,579,881,776"/>
-<area shape="rect" id="node3" href="./IbisSplitFeatureActionBean.html" title="&lt;TABLE&gt;" alt="" coords="5,573,892,781"/>
-<area shape="rect" id="node2_2" href="../ibis/util/WorkflowStatus.html" title="nl.b3p.viewer.ibis.util.WorkflowStatus" alt="" coords="393,835,505,980"/>
-<area shape="rect" id="node2" href="../ibis/util/WorkflowStatus.html" title="&lt;TABLE&gt;" alt="" coords="382,829,515,985"/>
-<area shape="rect" id="node4" href="null" title="&lt;TABLE&gt;" alt="" coords="346,5,1119,525"/>
+<area shape="rect" id="node1_0" href="./IbisSplitFeatureActionBean.html" title="nl.b3p.viewer.stripes.IbisSplitFeatureActionBean" alt="" coords="16,579,880,776"/>
+<area shape="rect" id="node1" href="./IbisSplitFeatureActionBean.html" title="&lt;TABLE&gt;" alt="" coords="5,573,891,781"/>
+<area shape="rect" id="node2_1" href="../ibis/util/WorkflowStatus.html" title="nl.b3p.viewer.ibis.util.WorkflowStatus" alt="" coords="392,835,504,980"/>
+<area shape="rect" id="node2" href="../ibis/util/WorkflowStatus.html" title="&lt;TABLE&gt;" alt="" coords="381,829,515,985"/>
+<area shape="rect" id="node3_2" href="../ibis/util/IbisConstants.html" title="nl.b3p.viewer.ibis.util.IbisConstants" alt="" coords="20,175,311,355"/>
+<area shape="rect" id="node3" href="../ibis/util/IbisConstants.html" title="&lt;TABLE&gt;" alt="" coords="9,170,321,361"/>
+<area shape="rect" id="node4" href="null" title="&lt;TABLE&gt;" alt="" coords="345,5,1119,525"/>
 </map>
