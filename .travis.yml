@@ -23,6 +23,8 @@ before_install:
   - psql -U postgres -d ibis -c 'SELECT PostGIS_full_version();'
   - ls -l ./src/main/ddl/
   - psql -U postgres -w -d ibis -a -f ./src/main/ddl/create_ibis_database.sql
+  - psql -U postgres -w -d ibis -a -f ./src/main/ddl/upgrade3.1-4.0-views.sql
+  - psql -U postgres -w -d ibis -a -f ./src/main/ddl/upgrade4.0-4.1-views.sql
 
 install:
   # install without any testing

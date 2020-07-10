@@ -32,17 +32,17 @@ ${project.name} ${project.version} Release Notes
 
 ** Verbeteringen en oplossingen
 
- * maak label breedte op editformulieren instelbaar  ({{{https://github.com/B3Partners/flamingo-ibis/issues/168}#168}})
+  * Hernoem kolommen van tabel <<<bedrijventerrein>>> met prijzen zodat ze in aparte editor tab kunnen worden geladen  ({{{https://github.com/B3Partners/flamingo-ibis/pull/174}#174}})
 
- * Fix ophalen van kaartlaag voor IbisFactsheet config component ({{{https://github.com/B3Partners/flamingo-ibis/issues/165}#165}})
+  * Maak label breedte op editformulieren instelbaar  ({{{https://github.com/B3Partners/flamingo-ibis/issues/168}#168}})
 
- * Fix tonen tabbladen zonder inhoud ({{{https://github.com/B3Partners/flamingo-ibis/issues/169}#169}})
+  * Fix ophalen van kaartlaag voor IbisFactsheet config component ({{{https://github.com/B3Partners/flamingo-ibis/issues/165}#165}})
 
- * Codestyle verbeteringen ({{{https://github.com/B3Partners/flamingo-ibis/issues/166}#166}})
+  * Fix tonen tabbladen zonder inhoud ({{{https://github.com/B3Partners/flamingo-ibis/issues/169}#169}})
 
- * SVG ikoon voor IbisEditHistorisch component ({{{https://github.com/B3Partners/flamingo-ibis/pull/171}#171}})
+  * Codestyle verbeteringen ({{{https://github.com/B3Partners/flamingo-ibis/issues/166}#166}})
 
- * Hernoem kolommen van bedrijventerrein met prijzen zodat ze in aparte editor tab kunnen worden geladen  ({{{https://github.com/B3Partners/flamingo-ibis/pull/174}#174}})
+  * SVG ikoon voor IbisEditHistorisch component ({{{https://github.com/B3Partners/flamingo-ibis/pull/171}#171}})
 
  []
 
