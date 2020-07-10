@@ -211,9 +211,7 @@ Ext.define("viewer.components.IbisFactsheet", {
             maxPrijs = result['b_maxverkoop'] /*+ ' €/m2'*/;
             delete result['b_maxverkoop'];
         }
-       result['Indicatie_kavelprijs_euro-m2'] = minPrijs + ' - ' + maxPrijs;
-        // result['Indicatie_kavelprijs'] = minPrijs + ' - ' + maxPrijs;
-
+        result['indicatie_kavelprijs_euro-m2'] = minPrijs + ' - ' + maxPrijs;
         return result;
     },
     beschikbarePanden: function (factsheetFeature) {
@@ -333,7 +331,12 @@ Ext.define("viewer.components.IbisFactsheet", {
         var result = {}, key;
         for (key in factsheetFeature.indexedAttributes) {
             if (key.indexOf("i_") > -1) {
-                result[key] = factsheetFeature.indexedAttributes[key];
+                if (/\d/.test(key)) {
+                    // 3g -> 3G
+                    result[key.toUpperCase()] = factsheetFeature.indexedAttributes[key];
+                } else {
+                    result[key] = factsheetFeature.indexedAttributes[key];
+                }
             }
         }
         if (Ext.Object.isEmpty(result)) {
