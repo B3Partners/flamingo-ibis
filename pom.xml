@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.flamingo-mc</groupId>
     <artifactId>ibis-flamingo-mc</artifactId>
-    <version>4.1-SNAPSHOT</version>
+    <version>4.1</version>
     <packaging>pom</packaging>
     <name>IBIS Flamingo-mc</name>
     <description>A Flamingo based project to provide for busines park development.</description>
@@ -31,7 +31,7 @@
         tijdens bouwen van de .war -->
         <ibis-flamingo-solr-host>bedrijventerreinen.gelderland.nl</ibis-flamingo-solr-host>
         <ibis-flamingo-solr-name>https://${ibis-flamingo-solr-host}/solr/</ibis-flamingo-solr-name>
-        <project.build.outputTimestamp></project.build.outputTimestamp>
+        <project.build.outputTimestamp />
         <maven.changes-plugin.version>2.12.1</maven.changes-plugin.version>
         <maven.taglist-plugin.version>2.4</maven.taglist-plugin.version>
         <maven.versions-plugin.version>2.7</maven.versions-plugin.version>
@@ -44,7 +44,7 @@
         <connection>scm:git:git@github.com:B3Partners/flamingo-ibis.git</connection>
         <developerConnection>scm:git:git@github.com:B3Partners/flamingo-ibis.git</developerConnection>
         <url>https://github.com/B3Partners/flamingo-ibis/</url>
-        <tag>HEAD</tag>
+        <tag>ibis-flamingo-mc-4.1</tag>
     </scm>
     <ciManagement>
         <system>Travis-CI</system>
