@@ -31,6 +31,7 @@
         tijdens bouwen van de .war -->
         <ibis-flamingo-solr-host>bedrijventerreinen.gelderland.nl</ibis-flamingo-solr-host>
         <ibis-flamingo-solr-name>https://${ibis-flamingo-solr-host}/solr/</ibis-flamingo-solr-name>
+        <project.build.outputTimestamp></project.build.outputTimestamp>
         <maven.changes-plugin.version>2.12.1</maven.changes-plugin.version>
         <maven.taglist-plugin.version>2.4</maven.taglist-plugin.version>
         <maven.versions-plugin.version>2.7</maven.versions-plugin.version>
@@ -126,7 +127,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>3.0.0-M2</version>
+                    <version>3.0.0-M1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-war-plugin</artifactId>
