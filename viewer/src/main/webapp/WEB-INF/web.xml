@@ -226,6 +226,7 @@
 
     <session-config>
         <session-timeout>240</session-timeout>
+        <tracking-mode>COOKIE</tracking-mode>
     </session-config>
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>

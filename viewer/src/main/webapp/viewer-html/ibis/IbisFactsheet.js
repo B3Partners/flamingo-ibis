@@ -162,8 +162,8 @@ Ext.define("viewer.components.IbisFactsheet", {
                     key.indexOf("kaveloppervlak_ha") > -1 ||
                     key.indexOf("kaveloppervlak_m2") > -1 ||
                     key.indexOf("kaveloppervlak") > -1 ||
-                    key.indexOf("o_minverkoop") > -1 ||
-                    key.indexOf("o_maxverkoop") > -1 ||
+                    key.indexOf("b_minverkoop") > -1 ||
+                    key.indexOf("b_maxverkoop") > -1 ||
                     key.indexOf("o_milieuwet_code") > -1 ||
                     key.indexOf("milieuwet_waarde") > -1 ||
                     (key.lastIndexOf("status", 0) === 0)
@@ -203,17 +203,15 @@ Ext.define("viewer.components.IbisFactsheet", {
 
         var minPrijs = 'Onbekend';
         var maxPrijs = 'Onbekend';
-        if (result['o_minverkoop']) {
-            minPrijs = result['o_minverkoop'];
-            delete result['o_minverkoop'];
+        if (result['b_minverkoop']) {
+            minPrijs = result['b_minverkoop'];
+            delete result['b_minverkoop'];
         }
-        if (result['o_maxverkoop']) {
-            maxPrijs = result['o_maxverkoop'] /*+ ' €/m2'*/;
-            delete result['o_maxverkoop'];
+        if (result['b_maxverkoop']) {
+            maxPrijs = result['b_maxverkoop'] /*+ ' €/m2'*/;
+            delete result['b_maxverkoop'];
         }
-       result['Indicatie_kavelprijs_euro-m2'] = minPrijs + ' - ' + maxPrijs;
-        // result['Indicatie_kavelprijs'] = minPrijs + ' - ' + maxPrijs;
-
+        result['indicatie_kavelprijs_euro-m2'] = minPrijs + ' - ' + maxPrijs;
         return result;
     },
     beschikbarePanden: function (factsheetFeature) {
@@ -333,7 +331,12 @@ Ext.define("viewer.components.IbisFactsheet", {
         var result = {}, key;
         for (key in factsheetFeature.indexedAttributes) {
             if (key.indexOf("i_") > -1) {
-                result[key] = factsheetFeature.indexedAttributes[key];
+                if (/\d/.test(key)) {
+                    // 3g -> 3G
+                    result[key.toUpperCase()] = factsheetFeature.indexedAttributes[key];
+                } else {
+                    result[key] = factsheetFeature.indexedAttributes[key];
+                }
             }
         }
         if (Ext.Object.isEmpty(result)) {

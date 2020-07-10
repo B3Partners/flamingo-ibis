@@ -106,7 +106,10 @@
                     <fo:block-container width="6.5cm" height="4.0cm" top="9.6cm" left="13.2cm" margin-left="0.1cm" xsl:use-attribute-sets="column-block-border">
                         <xsl:for-each select="extra/info[@classname='viewer.components.IbisFactsheet.gegevensKavelPand']/root">
                             <fo:block xsl:use-attribute-sets="subtitle-font">Gegevens geselecteerde kavel</fo:block>
-                            <xsl:call-template name="ibis-tabel-2column"/>
+                            <xsl:call-template name="ibis-tabel-2column">
+                                <xsl:with-param name="tWidthLeft" select="35" />
+                                <xsl:with-param name="tWidthRight" select="30" />
+                            </xsl:call-template>
                         </xsl:for-each>
                     </fo:block-container>
 
