@@ -23,11 +23,19 @@ ${project.name} ${project.version} Release Notes
   De complete lijst met issues voor deze release is beschikbaar in de tracker:
   {{{${project.issueManagement.url}?q=milestone%3A${project.version}+is%3Aclosed}milestone ${project.version} issues}}.
 
+
+** Nieuw
+
+  * Upgrade naar Flamingo {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v5.7.7}5.7.7}}
+
+  []
+
 ** Verbeteringen en oplossingen
 
   * aanpassen knop afbeelding voor "bewerken uitgifte historie"  ({{{https://github.com/B3Partners/flamingo-ibis/issues/178}#178}})
 
   []
+
 
 * Versie 4.1
 
