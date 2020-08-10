@@ -32,7 +32,9 @@ ${project.name} ${project.version} Release Notes
 
 ** Verbeteringen en oplossingen
 
-  * aanpassen knop afbeelding voor "bewerken uitgifte historie"  ({{{https://github.com/B3Partners/flamingo-ibis/issues/178}#178}})
+  * aanpassen knop afbeelding voor "bewerken uitgifte historie" ({{{https://github.com/B3Partners/flamingo-ibis/issues/178}#178}})
+
+  * verberg velden in "EditHistorisch" component die niet bewerkt mogen worden ({{{https://github.com/B3Partners/flamingo-ibis/issues/180}#180}})
 
   []
 

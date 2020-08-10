@@ -130,6 +130,11 @@ Ext.define("viewer.components.IbisEditHistorisch", {
                 button.show();
             }
         }
+        // verberg velden die niet bewerkt mogen worden
+        this.inputContainer.getForm().findField(gemeenteFieldNameFull).setVisible(false);
+        this.inputContainer.getForm().findField(idFieldName).setVisible(false);
+        this.inputContainer.getForm().findField(terreinidFieldName).setVisible(false);
+        this.inputContainer.getForm().findField(workflowFieldName).setVisible(false);
     },
     createNew: function () {
         // kan/mag niet
@@ -196,13 +201,5 @@ Ext.define("viewer.components.IbisEditHistorisch", {
                 historisch: true
             }
         );
-    },
-    // /**
-    //  * Return the name of the superclass to inherit the css property.
-    //  * @returns {String} base class name
-    //  * @override
-    //  */
-    // getBaseClass: function () {
-    //     return this.superclass.getBaseClass.call(this.superclass);
-    // }
+    }
 });
