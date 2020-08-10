@@ -27,6 +27,7 @@ var terreinidFieldName = "terreinid";
 var planNaamFieldName = "a_plannaam";
 var bboxTerreinFieldName = "bbox_terrein";
 var gemeenteFieldName = "naam";
+var gemeenteFieldNameFull = "gemeentenaam";
 var bboxGemeenteFieldName = "bbox_gemeente";
 var regioFieldName = "vvr_naam";
 var bboxRegioFieldName = "bbox_regio";
