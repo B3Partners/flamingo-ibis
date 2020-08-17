@@ -290,6 +290,7 @@ digraph G {
 <tr><td align="left" balign="left"> + getDisplayName(arg0 : EntityManager) : String </td></tr>
 <tr><td align="left" balign="left"> + toJSONObject(arg0 : EntityManager) : JSONObject </td></tr>
 <tr><td align="left" balign="left"> + toJSONObject(arg0 : boolean, arg1 : boolean, arg2 : EntityManager, arg3 : Application) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + addLayerListDetails(arg0 : JSONObject, arg1 : Layer) </td></tr>
 <tr><td align="left" balign="left"> + addAttributesJSON(arg0 : JSONObject, arg1 : boolean, arg2 : EntityManager) </td></tr>
 <tr><td align="left" balign="left"> + getRelationsJSON(arg0 : EntityManager) : JSONArray </td></tr>
 <tr><td align="left" balign="left"> ~ processStartLayers(arg0 : Application, arg1 : ApplicationLayer, arg2 : Application) </td></tr>
