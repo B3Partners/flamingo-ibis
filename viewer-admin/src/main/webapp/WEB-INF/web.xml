@@ -103,7 +103,7 @@
     <context-param>
         <description>minimum length of password</description>
         <param-name>password.length</param-name>
-        <param-value>12</param-value>
+        <param-value>8</param-value>
     </context-param>
     <context-param>
         <description>
