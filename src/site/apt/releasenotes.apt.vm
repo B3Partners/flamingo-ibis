@@ -23,6 +23,11 @@ ${project.name} ${project.version} Release Notes
   De complete lijst met issues voor deze release is beschikbaar in de tracker:
   {{{${project.issueManagement.url}?q=milestone%3A${project.version}+is%3Aclosed}milestone ${project.version} issues}}.
 
+** Verbeteringen en oplossingen
+
+  * "afkeuren" knop ook voor bedrijventerrein activeren ({{{https://github.com/B3Partners/flamingo-ibis/issues/189}#189}})
+
+  []
 
 * Versie 4.2
 
