@@ -24,6 +24,11 @@ ${project.name} ${project.version} Release Notes
   {{{${project.issueManagement.url}?q=milestone%3A${project.version}+is%3Aclosed}milestone ${project.version} issues}}.
 
 
+* Versie 4.2
+
+  De complete lijst met issues voor deze release is beschikbaar in de tracker:
+  {{{${project.issueManagement.url}?q=milestone%3A4.2+is%3Aclosed}milestone 4.2 issues}}.
+
 ** Nieuw
 
   * Upgrade naar Flamingo {{{https://github.com/flamingo-geocms/flamingo/releases/tag/v5.7.7}5.7.7}}
@@ -40,6 +45,9 @@ ${project.name} ${project.version} Release Notes
 
 
 * Versie 4.1
+
+  De complete lijst met issues voor deze release is beschikbaar in de tracker:
+  {{{${project.issueManagement.url}?q=milestone%3A4.1+is%3Aclosed}milestone 4.1 issues}}.
 
 ** Nieuw
 
