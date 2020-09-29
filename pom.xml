@@ -5,8 +5,8 @@
     <artifactId>ibis-flamingo-mc</artifactId>
     <version>4.3-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>IBIS Flamingo-mc</name>
-    <description>A Flamingo based project to provide for busines park development.</description>
+    <name>IBIS Flamingo-MC</name>
+    <description>A Flamingo based project to provide for business park development.</description>
     <url>https://github.com/B3Partners/flamingo-ibis/</url>
     <parent>
         <groupId>org.flamingo-mc</groupId>
