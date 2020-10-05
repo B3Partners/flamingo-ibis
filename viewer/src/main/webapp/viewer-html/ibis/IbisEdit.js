@@ -205,9 +205,9 @@ Ext.define("viewer.components.IbisEdit", {
                 store: 'IbisWorkflowStore'
             });
         }
-        if (this.config.allowReject && feature[workflowFieldName] === 'bewerkt' && this.layerSelector.getSelectedAppLayer().layerName === 'bedrijvenkavels'){
+        if (this.config.allowReject && feature[workflowFieldName] === 'bewerkt' &&
+            (this.layerSelector.getSelectedAppLayer().layerName === 'bedrijvenkavels' || this.layerSelector.getSelectedAppLayer().layerName === 'bedrijventerrein')) {
             if (this.rejectButton) this.rejectButton.setDisabled(false);
-            //if (this.rejectButton) this.rejectButton.setDisabled(!this.config.allowReject);
         } else {
             if (this.rejectButton) this.rejectButton.setDisabled(true);
         }
