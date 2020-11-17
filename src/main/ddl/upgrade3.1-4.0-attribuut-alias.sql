@@ -16,9 +16,9 @@ UPDATE attribute_descriptor SET name_alias='Emailadres' WHERE name='p_parkmanage
 UPDATE attribute_descriptor SET name_alias='Website' WHERE name='p_parkmanagementorganisatie_website' AND name_alias IS NULL;
 UPDATE attribute_descriptor SET name_alias='Wat is hoofdtaak van deze organisatie' WHERE name='p_parkmanagementorganisatie_taak' AND name_alias IS NULL;
 
-UPDATE attribute_descriptor SET name_alias='Collectief beheer' WHERE name='p_collbeheer;' AND name_alias IS NULL;
-UPDATE attribute_descriptor SET name_alias='Collectieve inkoop' WHERE name='p_collinkoop;' AND name_alias IS NULL;
-UPDATE attribute_descriptor SET name_alias='Collectieve voorzieningen' WHERE name='p_collvoorz;' AND name_alias IS NULL;
+UPDATE attribute_descriptor SET name_alias='Collectief beheer' WHERE name='p_collbeheer' AND name_alias IS NULL;
+UPDATE attribute_descriptor SET name_alias='Collectieve inkoop' WHERE name='p_collinkoop' AND name_alias IS NULL;
+UPDATE attribute_descriptor SET name_alias='Collectieve voorzieningen' WHERE name='p_collvoorz' AND name_alias IS NULL;
 
 UPDATE attribute_descriptor SET name_alias='Is er collectieve beveiliging' WHERE name='p_collbeveiliging' AND name_alias IS NULL;
 UPDATE attribute_descriptor SET name_alias='Is er cameratoezicht' WHERE name='p_cameratoezicht' AND name_alias IS NULL;
