@@ -1,0 +1,79 @@
+name: Maven build
+
+on: [ push ]
+
+env:
+  PGPASSWORD: password
+
+jobs:
+  build:
+    name: Java ${{ matrix.java }} build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 8, 11 ]
+
+    services:
+      postgres:
+        image: postgis/postgis:10-2.5
+        env:
+          # must specify password for PG Docker container image, see: https://registry.hub.docker.com/_/postgres?tab=description&page=1&name=10
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Set up JDK for build
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+
+      - name: Set up database
+        run: |
+          cat <<EOT >> ~/.pgpass
+          *:*:*:postgres:password
+          EOT
+          psql --version
+          psql -U postgres -h localhost -c 'SELECT version();'
+          psql -U postgres -h localhost -c 'CREATE ROLE ibis LOGIN NOSUPERUSER INHERIT CREATEDB NOCREATEROLE NOREPLICATION;'
+          psql -U postgres -h localhost -c 'CREATE ROLE geo LOGIN NOSUPERUSER INHERIT CREATEDB NOCREATEROLE NOREPLICATION;'
+          psql -U postgres -h localhost -c 'CREATE ROLE geolees LOGIN NOSUPERUSER INHERIT CREATEDB NOCREATEROLE NOREPLICATION;'
+          psql -U postgres -h localhost -c 'CREATE ROLE geoedit LOGIN NOSUPERUSER INHERIT CREATEDB NOCREATEROLE NOREPLICATION;'
+          psql -U postgres -h localhost -c 'create database ibis WITH OWNER = ibis'
+          psql -U postgres -h localhost -c 'create schema "IBIS" AUTHORIZATION ibis';
+          psql -U postgres -h localhost -c 'ALTER DATABASE "ibis" SET search_path = "IBIS", public;'
+          psql -U postgres -h localhost -d ibis -c 'create extension postgis;'
+          psql -U postgres -h localhost -d ibis -c 'SELECT PostGIS_full_version();'
+          psql -U postgres -h localhost -w -d ibis -a -f ./src/main/ddl/create_ibis_database.sql
+          psql -U postgres -h localhost -w -d ibis -a -f ./src/main/ddl/upgrade3.1-4.0-views.sql
+          psql -U postgres -h localhost -w -d ibis -a -f ./src/main/ddl/upgrade4.0-4.1-views.sql
+
+      - name: Build
+        run: mvn install -Dmaven.test.skip=true -B -V -fae -q -pl '!dist'
+
+      - name: Test
+        run: mvn -e test integration-test -B -pl '!dist'
+
+      - name: Javadoc
+        if: ${{ matrix.java == '8' }}
+        run: |
+          mvn javadoc:javadoc
+          mvn javadoc:test-javadoc
+
+#      - name: Site
+#        if: ${{ matrix.java == '8' }}
+#        run: mvn -B -e site site:stage
+
+      - name: Remove SNAPSHOT jars from repository
+        run: |
+          find ~/.m2/repository -name "*SNAPSHOT*" -type d | xargs rm -rf {}
