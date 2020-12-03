@@ -1,32 +1,22 @@
 package nl.b3p.viewer.stripes;
 
-import com.google.gson.JsonObject;
 import net.sourceforge.stripes.action.*;
 import net.sourceforge.stripes.controller.LifecycleStage;
-import net.sourceforge.stripes.validation.DateTypeConverter;
 import net.sourceforge.stripes.validation.Validate;
-import nl.b3p.geotools.filter.visitor.RemoveDistanceUnit;
-import nl.b3p.viewer.config.ClobElement;
 import nl.b3p.viewer.config.app.Application;
 import nl.b3p.viewer.config.app.ApplicationLayer;
-import nl.b3p.viewer.config.app.ConfiguredAttribute;
 import nl.b3p.viewer.config.security.Authorizations;
-import nl.b3p.viewer.config.services.*;
+import nl.b3p.viewer.config.services.Layer;
 import nl.b3p.viewer.ibis.util.DateUtils;
 import nl.b3p.viewer.ibis.util.IbisConstants;
-import nl.b3p.viewer.util.ChangeMatchCase;
-import nl.b3p.viewer.util.FeatureToJson;
-import nl.b3p.viewer.util.FlamingoCQL;
 import nl.b3p.viewer.util.IbisFeatureToJson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureSource;
 import org.geotools.data.Query;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.feature.collection.AbstractFeatureVisitor;
-
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.json.JSONException;
@@ -41,8 +31,9 @@ import org.stripesstuff.stripersist.Stripersist;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @UrlBinding("/action/ibisfeatureinfoutil")
 @StrictBinding

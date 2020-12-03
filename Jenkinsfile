@@ -13,7 +13,7 @@ timestamps {
              checkout scm
         }
 
-        final def jdks = ['OpenJDK11','JDK8']
+        final def jdks = ['OpenJDK11','OpenJDK8']
 
         jdks.eachWithIndex { jdk, indexOfJdk ->
             final String jdkTestName = jdk.toString()
