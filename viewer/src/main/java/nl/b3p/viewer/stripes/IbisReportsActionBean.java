@@ -168,7 +168,9 @@ public class IbisReportsActionBean implements ActionBean, IbisConstants {
         }
 
         if (json.getBoolean("success")) {
-            try (FileInputStream fis = new FileInputStream(output)){
+            // geen try-with-resources of close() in finally gebruiken, dan werkt het niet meer.
+            FileInputStream fis = new FileInputStream(output);
+            try {
                 StreamingResolution res = new StreamingResolution(MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(output)) {
                     @Override
                     public void stream(HttpServletResponse response) throws Exception {
