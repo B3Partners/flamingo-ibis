@@ -286,7 +286,9 @@ digraph G {
 <tr><td align="left" balign="left"> + loadTreeCache(arg0 : EntityManager) : Application.TreeCache </td></tr>
 <tr><td align="left" balign="left"> + authorizationsModified() </td></tr>
 <tr><td align="left" balign="left"> + toJSON(arg0 : HttpServletRequest, arg1 : boolean, arg2 : boolean, arg3 : EntityManager) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + toJSON(arg0 : HttpServletRequest, arg1 : boolean, arg2 : boolean, arg3 : EntityManager, arg4 : boolean) : JSONObject </td></tr>
 <tr><td align="left" balign="left"> + toJSON(arg0 : HttpServletRequest, arg1 : boolean, arg2 : boolean, arg3 : boolean, arg4 : boolean, arg5 : EntityManager, arg6 : boolean) : JSONObject </td></tr>
+<tr><td align="left" balign="left"> + toJSON(arg0 : HttpServletRequest, arg1 : boolean, arg2 : boolean, arg3 : boolean, arg4 : boolean, arg5 : EntityManager, arg6 : boolean, arg7 : boolean) : JSONObject </td></tr>
 <tr><td align="left" balign="left"> + isMashup() : Boolean </td></tr>
 <tr><td align="left" balign="left"> + isMashup(arg0 : Session) : Boolean </td></tr>
 <tr><td align="left" balign="left"> + createMashup(arg0 : String, arg1 : EntityManager, arg2 : boolean) : Application </td></tr>

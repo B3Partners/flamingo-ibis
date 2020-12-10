@@ -168,111 +168,113 @@ import org.stripesstuff.stripersist.Stripersist;
 <span class="nc" id="L168">        }</span>
 
 <span class="nc bnc" id="L170" title="All 2 branches missed.">        if (json.getBoolean(&quot;success&quot;)) {</span>
-<span class="nc" id="L171">            try (FileInputStream fis = new FileInputStream(output)){</span>
-<span class="nc" id="L172">                StreamingResolution res = new StreamingResolution(MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(output)) {</span>
+            // geen try-with-resources of close() in finally gebruiken, dan werkt het niet meer.
+<span class="nc" id="L172">            FileInputStream fis = new FileInputStream(output);</span>
+            try {
+<span class="nc" id="L174">                StreamingResolution res = new StreamingResolution(MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(output)) {</span>
                     @Override
                     public void stream(HttpServletResponse response) throws Exception {
-<span class="nc" id="L175">                        OutputStream out = response.getOutputStream();</span>
-<span class="nc" id="L176">                        IOUtils.copy(fis, out);</span>
-<span class="nc" id="L177">                        fis.close();</span>
-<span class="nc" id="L178">                    }</span>
+<span class="nc" id="L177">                        OutputStream out = response.getOutputStream();</span>
+<span class="nc" id="L178">                        IOUtils.copy(fis, out);</span>
+<span class="nc" id="L179">                        fis.close();</span>
+<span class="nc" id="L180">                    }</span>
                 };
-<span class="nc" id="L180">                String name = output.getName();</span>
-<span class="nc" id="L181">                String extension = name.substring(name.lastIndexOf(&quot;.&quot;));</span>
-<span class="nc" id="L182">                SimpleDateFormat today = new SimpleDateFormat(&quot;yyyy_MM_dd&quot;);</span>
-<span class="nc" id="L183">                String newName = &quot;download-&quot; + report + &quot;-&quot; + today.format(new Date()) + extension;</span>
-<span class="nc" id="L184">                res.setFilename(newName);</span>
-<span class="nc" id="L185">                res.setAttachment(true);</span>
-<span class="nc" id="L186">                return res;</span>
+<span class="nc" id="L182">                String name = output.getName();</span>
+<span class="nc" id="L183">                String extension = name.substring(name.lastIndexOf(&quot;.&quot;));</span>
+<span class="nc" id="L184">                SimpleDateFormat today = new SimpleDateFormat(&quot;yyyy_MM_dd&quot;);</span>
+<span class="nc" id="L185">                String newName = &quot;download-&quot; + report + &quot;-&quot; + today.format(new Date()) + extension;</span>
+<span class="nc" id="L186">                res.setFilename(newName);</span>
+<span class="nc" id="L187">                res.setAttachment(true);</span>
+<span class="nc" id="L188">                return res;</span>
             } finally {
-<span class="nc" id="L188">                output.delete();</span>
+<span class="nc" id="L190">                output.delete();</span>
             }
         } else {
-<span class="nc" id="L191">            return new ErrorMessageResolution(json.getString(&quot;message&quot;));</span>
+<span class="nc" id="L193">            return new ErrorMessageResolution(json.getString(&quot;message&quot;));</span>
         }
     }
 
     @DefaultHandler
     public Resolution execute() throws Exception {
-<span class="nc" id="L197">        JSONObject json = new JSONObject();</span>
-<span class="nc" id="L198">        json.put(&quot;success&quot;, Boolean.FALSE);</span>
+<span class="nc" id="L199">        JSONObject json = new JSONObject();</span>
+<span class="nc" id="L200">        json.put(&quot;success&quot;, Boolean.FALSE);</span>
         // initial metadata
-<span class="nc" id="L200">        JSONObject metadata = new JSONObject()</span>
-<span class="nc" id="L201">                .put(&quot;root&quot;, &quot;data&quot;).put(&quot;totalProperty&quot;, &quot;total&quot;)</span>
-<span class="nc" id="L202">                .put(&quot;successProperty&quot;, &quot;success&quot;)</span>
-<span class="nc" id="L203">                .put(&quot;messageProperty&quot;, &quot;message&quot;)</span>
-<span class="nc" id="L204">                .put(&quot;idProperty&quot;, &quot;rownum&quot;);</span>
-<span class="nc" id="L205">        json.put(JSON_METADATA, metadata);</span>
+<span class="nc" id="L202">        JSONObject metadata = new JSONObject()</span>
+<span class="nc" id="L203">                .put(&quot;root&quot;, &quot;data&quot;).put(&quot;totalProperty&quot;, &quot;total&quot;)</span>
+<span class="nc" id="L204">                .put(&quot;successProperty&quot;, &quot;success&quot;)</span>
+<span class="nc" id="L205">                .put(&quot;messageProperty&quot;, &quot;message&quot;)</span>
+<span class="nc" id="L206">                .put(&quot;idProperty&quot;, &quot;rownum&quot;);</span>
+<span class="nc" id="L207">        json.put(JSON_METADATA, metadata);</span>
 
-<span class="nc" id="L207">        String error = null;</span>
-<span class="nc bnc" id="L208" title="All 2 branches missed.">        if (attrSource == null) {</span>
-<span class="nc" id="L209">            error = &quot;Invalid parameters.&quot;;</span>
-<span class="nc bnc" id="L210" title="All 2 branches missed.">        } else if (unauthorized) {</span>
-<span class="nc" id="L211">            error = &quot;Not authorized.&quot;;</span>
-<span class="nc bnc" id="L212" title="All 2 branches missed.">        } else if (report == null) {</span>
-<span class="nc" id="L213">            error = &quot;Report type is required.&quot;;</span>
+<span class="nc" id="L209">        String error = null;</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">        if (attrSource == null) {</span>
+<span class="nc" id="L211">            error = &quot;Invalid parameters.&quot;;</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">        } else if (unauthorized) {</span>
+<span class="nc" id="L213">            error = &quot;Not authorized.&quot;;</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">        } else if (report == null) {</span>
+<span class="nc" id="L215">            error = &quot;Report type is required.&quot;;</span>
         }
-<span class="nc" id="L215">        SimpleFeatureType sft = attrSource.getFeatureType(report);</span>
-<span class="nc" id="L216">        List&lt;AttributeDescriptor&gt; attrs = sft.getAttributes();</span>
+<span class="nc" id="L217">        SimpleFeatureType sft = attrSource.getFeatureType(report);</span>
+<span class="nc" id="L218">        List&lt;AttributeDescriptor&gt; attrs = sft.getAttributes();</span>
 
-<span class="nc" id="L218">        SimpleFeatureSource fs = null;</span>
+<span class="nc" id="L220">        SimpleFeatureSource fs = null;</span>
         try {
-<span class="nc" id="L220">            fs = (SimpleFeatureSource) sft.openGeoToolsFeatureSource();</span>
+<span class="nc" id="L222">            fs = (SimpleFeatureSource) sft.openGeoToolsFeatureSource();</span>
 
-<span class="nc" id="L222">            final Query q = new Query(fs.getName().toString());</span>
-<span class="nc" id="L223">            q.setFilter(createFilters(sft));</span>
-<span class="nc" id="L224">            log.debug(q);</span>
+<span class="nc" id="L224">            final Query q = new Query(fs.getName().toString());</span>
+<span class="nc" id="L225">            q.setFilter(createFilters(sft));</span>
+<span class="nc" id="L226">            log.debug(q);</span>
 
-<span class="nc" id="L226">            SimpleFeatureCollection sfc = fs.getFeatures(q);</span>
+<span class="nc" id="L228">            SimpleFeatureCollection sfc = fs.getFeatures(q);</span>
 
-<span class="nc" id="L228">            featuresToJson(sfc, json, attrs/*attribuutnamen*/);</span>
+<span class="nc" id="L230">            featuresToJson(sfc, json, attrs/*attribuutnamen*/);</span>
 
-<span class="nc" id="L230">            json.put(&quot;message&quot;, &quot;OK&quot;);</span>
-<span class="nc" id="L231">            json.put(&quot;success&quot;, Boolean.TRUE);</span>
-<span class="nc" id="L232">        } catch (Exception e) {</span>
-<span class="nc" id="L233">            log.error(&quot;Error generating report data.&quot;, e);</span>
-<span class="nc" id="L234">            error = e.getLocalizedMessage();</span>
+<span class="nc" id="L232">            json.put(&quot;message&quot;, &quot;OK&quot;);</span>
+<span class="nc" id="L233">            json.put(&quot;success&quot;, Boolean.TRUE);</span>
+<span class="nc" id="L234">        } catch (Exception e) {</span>
+<span class="nc" id="L235">            log.error(&quot;Error generating report data.&quot;, e);</span>
+<span class="nc" id="L236">            error = e.getLocalizedMessage();</span>
         } finally {
-<span class="nc bnc" id="L236" title="All 2 branches missed.">            if (fs != null) {</span>
-<span class="nc" id="L237">                fs.getDataStore().dispose();</span>
+<span class="nc bnc" id="L238" title="All 2 branches missed.">            if (fs != null) {</span>
+<span class="nc" id="L239">                fs.getDataStore().dispose();</span>
             }
         }
-<span class="nc bnc" id="L240" title="All 2 branches missed.">        if (error != null) {</span>
-<span class="nc" id="L241">            json.put(&quot;success&quot;, Boolean.FALSE);</span>
-<span class="nc" id="L242">            json.put(&quot;message&quot;, error);</span>
+<span class="nc bnc" id="L242" title="All 2 branches missed.">        if (error != null) {</span>
+<span class="nc" id="L243">            json.put(&quot;success&quot;, Boolean.FALSE);</span>
+<span class="nc" id="L244">            json.put(&quot;message&quot;, error);</span>
         }
 
-<span class="nc" id="L245">        log.debug(&quot;returning json:&quot; + json);</span>
-<span class="nc" id="L246">        return new StreamingResolution(&quot;application/json&quot;, new StringReader(json.toString()));</span>
+<span class="nc" id="L247">        log.debug(&quot;returning json:&quot; + json);</span>
+<span class="nc" id="L248">        return new StreamingResolution(&quot;application/json&quot;, new StringReader(json.toString()));</span>
     }
 
     private Filter createFilters(SimpleFeatureType sft) {
-<span class="nc" id="L250">        FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2(GeoTools.getDefaultHints());</span>
-<span class="nc" id="L251">        List&lt;Filter&gt; filters = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L252">        FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2(GeoTools.getDefaultHints());</span>
+<span class="nc" id="L253">        List&lt;Filter&gt; filters = new ArrayList&lt;&gt;();</span>
         // regio
-<span class="nc bnc" id="L253" title="All 4 branches missed.">        if (this.regio != null &amp;&amp; sft.getAttribute(&quot;vvr_naam&quot;) != null) {</span>
-<span class="nc" id="L254">            filters.add(ff.equals(ff.property(&quot;vvr_naam&quot;), ff.literal(regio)));</span>
+<span class="nc bnc" id="L255" title="All 4 branches missed.">        if (this.regio != null &amp;&amp; sft.getAttribute(&quot;vvr_naam&quot;) != null) {</span>
+<span class="nc" id="L256">            filters.add(ff.equals(ff.property(&quot;vvr_naam&quot;), ff.literal(regio)));</span>
         }
         // regio
-<span class="nc bnc" id="L257" title="All 4 branches missed.">        if (this.regio != null &amp;&amp; sft.getAttribute(&quot;wgr_naam&quot;) != null) {</span>
-<span class="nc" id="L258">            filters.add(ff.equals(ff.property(&quot;wgr_naam&quot;), ff.literal(regio)));</span>
+<span class="nc bnc" id="L259" title="All 4 branches missed.">        if (this.regio != null &amp;&amp; sft.getAttribute(&quot;wgr_naam&quot;) != null) {</span>
+<span class="nc" id="L260">            filters.add(ff.equals(ff.property(&quot;wgr_naam&quot;), ff.literal(regio)));</span>
         }
-<span class="nc bnc" id="L260" title="All 4 branches missed.">        if (this.gemeente != null &amp;&amp; sft.getAttribute(&quot;gemeentenaam&quot;) != null) {</span>
-<span class="nc" id="L261">            filters.add(ff.equals(ff.property(&quot;gemeentenaam&quot;), ff.literal(gemeente)));</span>
+<span class="nc bnc" id="L262" title="All 4 branches missed.">        if (this.gemeente != null &amp;&amp; sft.getAttribute(&quot;gemeentenaam&quot;) != null) {</span>
+<span class="nc" id="L263">            filters.add(ff.equals(ff.property(&quot;gemeentenaam&quot;), ff.literal(gemeente)));</span>
         }
-<span class="nc bnc" id="L263" title="All 4 branches missed.">        if (this.toDate != null &amp;&amp; sft.getAttribute(&quot;datum&quot;) != null) {</span>
-<span class="nc" id="L264">            filters.add(ff.before(ff.property(&quot;datum&quot;), ff.literal(toDate)));</span>
+<span class="nc bnc" id="L265" title="All 4 branches missed.">        if (this.toDate != null &amp;&amp; sft.getAttribute(&quot;datum&quot;) != null) {</span>
+<span class="nc" id="L266">            filters.add(ff.before(ff.property(&quot;datum&quot;), ff.literal(toDate)));</span>
         }
-<span class="nc bnc" id="L266" title="All 4 branches missed.">        if (this.fromDate != null &amp;&amp; sft.getAttribute(&quot;datum&quot;) != null) {</span>
-<span class="nc" id="L267">            filters.add(ff.after(ff.property(&quot;datum&quot;), ff.literal(fromDate)));</span>
+<span class="nc bnc" id="L268" title="All 4 branches missed.">        if (this.fromDate != null &amp;&amp; sft.getAttribute(&quot;datum&quot;) != null) {</span>
+<span class="nc" id="L269">            filters.add(ff.after(ff.property(&quot;datum&quot;), ff.literal(fromDate)));</span>
         }
 
-<span class="nc bnc" id="L270" title="All 2 branches missed.">        if (filters.size() &gt; 1) {</span>
-<span class="nc" id="L271">            return ff.and(filters);</span>
-<span class="nc bnc" id="L272" title="All 2 branches missed.">        } else if (filters.size() == 1) {</span>
-<span class="nc" id="L273">            return filters.get(0);</span>
+<span class="nc bnc" id="L272" title="All 2 branches missed.">        if (filters.size() &gt; 1) {</span>
+<span class="nc" id="L273">            return ff.and(filters);</span>
+<span class="nc bnc" id="L274" title="All 2 branches missed.">        } else if (filters.size() == 1) {</span>
+<span class="nc" id="L275">            return filters.get(0);</span>
         } else {
-<span class="nc" id="L275">            return Filter.INCLUDE;</span>
+<span class="nc" id="L277">            return Filter.INCLUDE;</span>
         }
     }
 
@@ -289,176 +291,176 @@ import org.stripesstuff.stripersist.Stripersist;
             List&lt;AttributeDescriptor&gt; featureTypeAttributes) throws JSONException {
 
         // metadata for fData fields
-<span class="nc" id="L292">        JSONArray fields = new JSONArray();</span>
+<span class="nc" id="L294">        JSONArray fields = new JSONArray();</span>
         // columns for grid
-<span class="nc" id="L294">        JSONArray columns = new JSONArray();</span>
+<span class="nc" id="L296">        JSONArray columns = new JSONArray();</span>
         // fData payload
-<span class="nc" id="L296">        JSONArray datas = new JSONArray();</span>
+<span class="nc" id="L298">        JSONArray datas = new JSONArray();</span>
 
-<span class="nc" id="L298">        boolean getMetadataFromFirstFeature = true;</span>
-<span class="nc" id="L299">        try (SimpleFeatureIterator sfIter = sfc.features()) {</span>
-<span class="nc bnc" id="L300" title="All 2 branches missed.">            while (sfIter.hasNext()) {</span>
-<span class="nc" id="L301">                SimpleFeature feature = sfIter.next();</span>
-<span class="nc" id="L302">                JSONObject fData = new JSONObject();</span>
+<span class="nc" id="L300">        boolean getMetadataFromFirstFeature = true;</span>
+<span class="nc" id="L301">        try (SimpleFeatureIterator sfIter = sfc.features()) {</span>
+<span class="nc bnc" id="L302" title="All 2 branches missed.">            while (sfIter.hasNext()) {</span>
+<span class="nc" id="L303">                SimpleFeature feature = sfIter.next();</span>
+<span class="nc" id="L304">                JSONObject fData = new JSONObject();</span>
 
-<span class="nc bnc" id="L304" title="All 2 branches missed.">                for (AttributeDescriptor attr : featureTypeAttributes) {</span>
-<span class="nc" id="L305">                    String name = attr.getName();</span>
-<span class="nc bnc" id="L306" title="All 2 branches missed.">                    if (getMetadataFromFirstFeature) {</span>
+<span class="nc bnc" id="L306" title="All 2 branches missed.">                for (AttributeDescriptor attr : featureTypeAttributes) {</span>
+<span class="nc" id="L307">                    String name = attr.getName();</span>
+<span class="nc bnc" id="L308" title="All 2 branches missed.">                    if (getMetadataFromFirstFeature) {</span>
                         // only load metadata into json this for first feature
-<span class="nc" id="L308">                        JSONObject field = new JSONObject().put(&quot;name&quot;, name).put(&quot;type&quot;, attr.getExtJSType());</span>
-<span class="nc bnc" id="L309" title="All 2 branches missed.">                        if (attr.getType().equals(AttributeDescriptor.TYPE_DATE)) {</span>
-<span class="nc" id="L310">                            field.put(&quot;dateFormat&quot;, &quot;Y-m&quot;);</span>
+<span class="nc" id="L310">                        JSONObject field = new JSONObject().put(&quot;name&quot;, name).put(&quot;type&quot;, attr.getExtJSType());</span>
+<span class="nc bnc" id="L311" title="All 2 branches missed.">                        if (attr.getType().equals(AttributeDescriptor.TYPE_DATE)) {</span>
+<span class="nc" id="L312">                            field.put(&quot;dateFormat&quot;, &quot;Y-m&quot;);</span>
                         }
-<span class="nc" id="L312">                        fields.put(field);</span>
-<span class="nc bnc" id="L313" title="All 2 branches missed.">                        columns.put(new JSONObject().put(&quot;text&quot;, (attr.getAlias() != null ? attr.getAlias() : name)).put(&quot;dataIndex&quot;, name));</span>
+<span class="nc" id="L314">                        fields.put(field);</span>
+<span class="nc bnc" id="L315" title="All 2 branches missed.">                        columns.put(new JSONObject().put(&quot;text&quot;, (attr.getAlias() != null ? attr.getAlias() : name)).put(&quot;dataIndex&quot;, name));</span>
                     }
-<span class="nc" id="L315">                    fData.put(attr.getName(), feature.getAttribute(attr.getName()));</span>
-<span class="nc" id="L316">                }</span>
-<span class="nc" id="L317">                datas.put(fData);</span>
-<span class="nc" id="L318">                getMetadataFromFirstFeature = false;</span>
-<span class="nc" id="L319">            }</span>
+<span class="nc" id="L317">                    fData.put(attr.getName(), feature.getAttribute(attr.getName()));</span>
+<span class="nc" id="L318">                }</span>
+<span class="nc" id="L319">                datas.put(fData);</span>
+<span class="nc" id="L320">                getMetadataFromFirstFeature = false;</span>
+<span class="nc" id="L321">            }</span>
 
-<span class="nc" id="L321">            json.getJSONObject(JSON_METADATA).put(&quot;fields&quot;, fields);</span>
-<span class="nc" id="L322">            json.getJSONObject(JSON_METADATA).put(&quot;columns&quot;, columns);</span>
-<span class="nc" id="L323">            json.put(&quot;data&quot;, datas);</span>
-<span class="nc" id="L324">            json.put(&quot;total&quot;, datas.length());</span>
+<span class="nc" id="L323">            json.getJSONObject(JSON_METADATA).put(&quot;fields&quot;, fields);</span>
+<span class="nc" id="L324">            json.getJSONObject(JSON_METADATA).put(&quot;columns&quot;, columns);</span>
+<span class="nc" id="L325">            json.put(&quot;data&quot;, datas);</span>
+<span class="nc" id="L326">            json.put(&quot;total&quot;, datas.length());</span>
         }
-<span class="nc" id="L326">    }</span>
+<span class="nc" id="L328">    }</span>
 
     private File convert(SimpleFeatureType ft, FeatureSource fs, Query q, List&lt;ConfiguredAttribute&gt; attributes,
             Map&lt;String, AttributeDescriptor&gt; featureTypeAttributes) throws IOException {
 
-<span class="nc" id="L331">        Map&lt;String, String&gt; attributeAliases = new HashMap&lt;&gt;();</span>
-<span class="nc bnc" id="L332" title="All 2 branches missed.">        for (AttributeDescriptor ad : ft.getAttributes()) {</span>
-<span class="nc bnc" id="L333" title="All 2 branches missed.">            if (ad.getAlias() != null) {</span>
-<span class="nc" id="L334">                attributeAliases.put(ad.getName(), ad.getAlias());</span>
+<span class="nc" id="L333">        Map&lt;String, String&gt; attributeAliases = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L334" title="All 2 branches missed.">        for (AttributeDescriptor ad : ft.getAttributes()) {</span>
+<span class="nc bnc" id="L335" title="All 2 branches missed.">            if (ad.getAlias() != null) {</span>
+<span class="nc" id="L336">                attributeAliases.put(ad.getName(), ad.getAlias());</span>
             } else {
-<span class="nc" id="L336">                attributeAliases.put(ad.getName(), ad.getName());</span>
+<span class="nc" id="L338">                attributeAliases.put(ad.getName(), ad.getName());</span>
             }
-<span class="nc" id="L338">        }</span>
+<span class="nc" id="L340">        }</span>
 
-<span class="nc" id="L340">        SimpleFeatureCollection fc = (SimpleFeatureCollection) fs.getFeatures(q);</span>
-<span class="nc" id="L341">        File f = null;</span>
+<span class="nc" id="L342">        SimpleFeatureCollection fc = (SimpleFeatureCollection) fs.getFeatures(q);</span>
+<span class="nc" id="L343">        File f = null;</span>
         // alle kolommen autosizen op inhoud
-<span class="nc" id="L343">        StringBuilder autosizeAttr = new StringBuilder(&quot;,autoSize=&quot;);</span>
-<span class="nc bnc" id="L344" title="All 2 branches missed.">        for (ConfiguredAttribute configuredAttribute : attributes) {</span>
-<span class="nc" id="L345">            autosizeAttr.append(configuredAttribute.getAttributeName()).append(&quot;|&quot;);</span>
-<span class="nc" id="L346">        }</span>
-<span class="nc" id="L347">        params = params + autosizeAttr;</span>
+<span class="nc" id="L345">        StringBuilder autosizeAttr = new StringBuilder(&quot;,autoSize=&quot;);</span>
+<span class="nc bnc" id="L346" title="All 2 branches missed.">        for (ConfiguredAttribute configuredAttribute : attributes) {</span>
+<span class="nc" id="L347">            autosizeAttr.append(configuredAttribute.getAttributeName()).append(&quot;|&quot;);</span>
+<span class="nc" id="L348">        }</span>
+<span class="nc" id="L349">        params = params + autosizeAttr;</span>
 
-<span class="nc" id="L349">        FeatureDownloader downloader = null;</span>
-<span class="nc bnc" id="L350" title="All 2 branches missed.">        if (type.equalsIgnoreCase(&quot;SHP&quot;)) {</span>
-<span class="nc" id="L351">            downloader = new ShapeDownloader(attributes, (SimpleFeatureSource) fs, featureTypeAttributes, attributeAliases, params);</span>
-<span class="nc bnc" id="L352" title="All 2 branches missed.">        } else if (type.equalsIgnoreCase(&quot;XLS&quot;)) {</span>
-<span class="nc" id="L353">            downloader = new ExcelDownloader(attributes, (SimpleFeatureSource) fs, featureTypeAttributes, attributeAliases, params);</span>
-<span class="nc bnc" id="L354" title="All 2 branches missed.">        } else if (type.equals(&quot;CSV&quot;)) {</span>
-<span class="nc" id="L355">            downloader = new CSVDownloader(attributes, (SimpleFeatureSource) fs, featureTypeAttributes, attributeAliases, params);</span>
+<span class="nc" id="L351">        FeatureDownloader downloader = null;</span>
+<span class="nc bnc" id="L352" title="All 2 branches missed.">        if (type.equalsIgnoreCase(&quot;SHP&quot;)) {</span>
+<span class="nc" id="L353">            downloader = new ShapeDownloader(attributes, (SimpleFeatureSource) fs, featureTypeAttributes, attributeAliases, params);</span>
+<span class="nc bnc" id="L354" title="All 2 branches missed.">        } else if (type.equalsIgnoreCase(&quot;XLS&quot;)) {</span>
+<span class="nc" id="L355">            downloader = new ExcelDownloader(attributes, (SimpleFeatureSource) fs, featureTypeAttributes, attributeAliases, params);</span>
+<span class="nc bnc" id="L356" title="All 2 branches missed.">        } else if (type.equals(&quot;CSV&quot;)) {</span>
+<span class="nc" id="L357">            downloader = new CSVDownloader(attributes, (SimpleFeatureSource) fs, featureTypeAttributes, attributeAliases, params);</span>
         } else {
-<span class="nc" id="L357">            throw new IllegalArgumentException(&quot;No suitable type given: &quot; + type);</span>
+<span class="nc" id="L359">            throw new IllegalArgumentException(&quot;No suitable type given: &quot; + type);</span>
         }
 
         try {
-<span class="nc" id="L361">            downloader.init();</span>
-<span class="nc" id="L362">            try (SimpleFeatureIterator it = fc.features()) {</span>
-<span class="nc bnc" id="L363" title="All 2 branches missed.">                while (it.hasNext()) {</span>
-<span class="nc" id="L364">                    SimpleFeature feature = it.next();</span>
-<span class="nc" id="L365">                    downloader.processFeature(feature);</span>
-<span class="nc" id="L366">                }</span>
+<span class="nc" id="L363">            downloader.init();</span>
+<span class="nc" id="L364">            try (SimpleFeatureIterator it = fc.features()) {</span>
+<span class="nc bnc" id="L365" title="All 2 branches missed.">                while (it.hasNext()) {</span>
+<span class="nc" id="L366">                    SimpleFeature feature = it.next();</span>
+<span class="nc" id="L367">                    downloader.processFeature(feature);</span>
+<span class="nc" id="L368">                }</span>
             }
-<span class="nc" id="L368">            f = downloader.write();</span>
-<span class="nc" id="L369">        } catch (IOException ex) {</span>
-<span class="nc" id="L370">            log.error(&quot;Cannot create outputfile: &quot;, ex);</span>
-<span class="nc" id="L371">            throw ex;</span>
+<span class="nc" id="L370">            f = downloader.write();</span>
+<span class="nc" id="L371">        } catch (IOException ex) {</span>
+<span class="nc" id="L372">            log.error(&quot;Cannot create outputfile: &quot;, ex);</span>
+<span class="nc" id="L373">            throw ex;</span>
         } finally {
-<span class="nc" id="L373">            fs.getDataStore().dispose();</span>
+<span class="nc" id="L375">            fs.getDataStore().dispose();</span>
         }
-<span class="nc" id="L375">        log.debug(&quot;returning file &quot; + f);</span>
-<span class="nc" id="L376">        return f;</span>
+<span class="nc" id="L377">        log.debug(&quot;returning file &quot; + f);</span>
+<span class="nc" id="L378">        return f;</span>
     }
 
     //&lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;getters en setters&quot;&gt;
     @Override
     public ActionBeanContext getContext() {
-<span class="nc" id="L382">        return context;</span>
+<span class="nc" id="L384">        return context;</span>
     }
 
     @Override
     public void setContext(ActionBeanContext context) {
-<span class="nc" id="L387">        this.context = context;</span>
-<span class="nc" id="L388">    }</span>
+<span class="nc" id="L389">        this.context = context;</span>
+<span class="nc" id="L390">    }</span>
 
     public Date getFromDate() {
-<span class="nc" id="L391">        return fromDate;</span>
+<span class="nc" id="L393">        return fromDate;</span>
     }
 
     public void setFromDate(Date fromDate) {
-<span class="nc" id="L395">        this.fromDate = fromDate;</span>
-<span class="nc" id="L396">    }</span>
+<span class="nc" id="L397">        this.fromDate = fromDate;</span>
+<span class="nc" id="L398">    }</span>
 
     public Date getToDate() {
-<span class="nc" id="L399">        return toDate;</span>
+<span class="nc" id="L401">        return toDate;</span>
     }
 
     public void setToDate(Date toDate) {
-<span class="nc" id="L403">        this.toDate = toDate;</span>
-<span class="nc" id="L404">    }</span>
+<span class="nc" id="L405">        this.toDate = toDate;</span>
+<span class="nc" id="L406">    }</span>
 
     public String getRegio() {
-<span class="nc" id="L407">        return regio;</span>
+<span class="nc" id="L409">        return regio;</span>
     }
 
     public void setRegio(String regio) {
-<span class="nc" id="L411">        this.regio = regio;</span>
-<span class="nc" id="L412">    }</span>
+<span class="nc" id="L413">        this.regio = regio;</span>
+<span class="nc" id="L414">    }</span>
 
     public String getGemeente() {
-<span class="nc" id="L415">        return gemeente;</span>
+<span class="nc" id="L417">        return gemeente;</span>
     }
 
     public void setGemeente(String gemeente) {
-<span class="nc" id="L419">        this.gemeente = gemeente;</span>
-<span class="nc" id="L420">    }</span>
+<span class="nc" id="L421">        this.gemeente = gemeente;</span>
+<span class="nc" id="L422">    }</span>
 
     public String getType() {
-<span class="nc" id="L423">        return type;</span>
+<span class="nc" id="L425">        return type;</span>
     }
 
     public void setType(String type) {
-<span class="nc" id="L427">        this.type = type;</span>
-<span class="nc" id="L428">    }</span>
+<span class="nc" id="L429">        this.type = type;</span>
+<span class="nc" id="L430">    }</span>
 
     public String getReport() {
-<span class="nc" id="L431">        return report;</span>
+<span class="nc" id="L433">        return report;</span>
     }
 
     public void setReport(String report) {
-<span class="nc" id="L435">        this.report = report;</span>
-<span class="nc" id="L436">    }</span>
+<span class="nc" id="L437">        this.report = report;</span>
+<span class="nc" id="L438">    }</span>
 
     public Application getApplication() {
-<span class="nc" id="L439">        return application;</span>
+<span class="nc" id="L441">        return application;</span>
     }
 
     public void setApplication(Application application) {
-<span class="nc" id="L443">        this.application = application;</span>
-<span class="nc" id="L444">    }</span>
+<span class="nc" id="L445">        this.application = application;</span>
+<span class="nc" id="L446">    }</span>
 
     public JDBCFeatureSource getAttrSource() {
-<span class="nc" id="L447">        return attrSource;</span>
+<span class="nc" id="L449">        return attrSource;</span>
     }
 
     public void setAttrSource(JDBCFeatureSource attrSource) {
-<span class="nc" id="L451">        this.attrSource = attrSource;</span>
-<span class="nc" id="L452">    }</span>
+<span class="nc" id="L453">        this.attrSource = attrSource;</span>
+<span class="nc" id="L454">    }</span>
 
     
     public String getParams() {
-<span class="nc" id="L456">        return params;</span>
+<span class="nc" id="L458">        return params;</span>
     }
 
     public void setParams(String params) {
-<span class="nc" id="L460">        this.params = params;</span>
-<span class="nc" id="L461">    }</span>
+<span class="nc" id="L462">        this.params = params;</span>
+<span class="nc" id="L463">    }</span>
     //&lt;/editor-fold&gt;
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

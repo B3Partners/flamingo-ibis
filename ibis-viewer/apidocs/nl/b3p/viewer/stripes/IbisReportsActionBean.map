@@ -1,10 +1,10 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./IbisReportsActionBean.html" title="nl.b3p.viewer.stripes.IbisReportsActionBean" alt="" coords="648,249,960,724"/>
-<area shape="rect" id="node1" href="./IbisReportsActionBean.html" title="&lt;TABLE&gt;" alt="" coords="637,244,971,729"/>
-<area shape="rect" id="node4" href="null" title="&lt;TABLE&gt;" alt="" coords="5,1193,317,1557"/>
-<area shape="rect" id="node5" href="null" title="&lt;TABLE&gt;" alt="" coords="342,777,1266,1973"/>
-<area shape="rect" id="node6" href="null" title="&lt;TABLE&gt;" alt="" coords="1291,1237,1840,1514"/>
-<area shape="rect" id="node2_1" href="../ibis/util/IbisConstants.html" title="nl.b3p.viewer.ibis.util.IbisConstants" alt="" coords="500,11,791,191"/>
-<area shape="rect" id="node2" href="../ibis/util/IbisConstants.html" title="&lt;TABLE&gt;" alt="" coords="489,5,801,196"/>
-<area shape="rect" id="node3" href="null" title="&lt;TABLE&gt;" alt="" coords="826,40,1099,161"/>
+<area shape="rect" id="node1_0" href="./IbisReportsActionBean.html" title="nl.b3p.viewer.stripes.IbisReportsActionBean" alt="" coords="692,249,1004,724"/>
+<area shape="rect" id="node1" href="./IbisReportsActionBean.html" title="&lt;TABLE&gt;" alt="" coords="681,244,1015,729"/>
+<area shape="rect" id="node4" href="null" title="&lt;TABLE&gt;" alt="" coords="5,1211,317,1575"/>
+<area shape="rect" id="node5" href="null" title="&lt;TABLE&gt;" alt="" coords="341,777,1355,2008"/>
+<area shape="rect" id="node6" href="null" title="&lt;TABLE&gt;" alt="" coords="1379,1254,1928,1531"/>
+<area shape="rect" id="node2_1" href="../ibis/util/IbisConstants.html" title="nl.b3p.viewer.ibis.util.IbisConstants" alt="" coords="544,11,835,191"/>
+<area shape="rect" id="node2" href="../ibis/util/IbisConstants.html" title="&lt;TABLE&gt;" alt="" coords="533,5,845,196"/>
+<area shape="rect" id="node3" href="null" title="&lt;TABLE&gt;" alt="" coords="870,40,1143,161"/>
 </map>
