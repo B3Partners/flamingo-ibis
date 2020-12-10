@@ -25,6 +25,18 @@ ${project.name} ${project.version} Release Notes
 
 ** Verbeteringen en oplossingen
 
+   * revert {{{https://github.com/B3Partners/flamingo-ibis/commit/1bbd3cb78ac47aa550fe91a03c697c596860a6c1}1bbd3cb78ac47aa550fe91a03c697c596860a6c1}}
+     welke voor een regressie met downloaden van rapporten zorgde ({{{https://mantis.b3p.nl/view.php?id=15718}mantis-15718}})
+
+   []
+
+* Versie 4.3
+
+  De complete lijst met issues voor deze release is beschikbaar in de tracker:
+  {{{${project.issueManagement.url}?q=milestone%3A4.3+is%3Aclosed}milestone 4.3 issues}}.
+
+** Verbeteringen en oplossingen
+
   * "afkeuren" knop ook voor bedrijventerrein activeren ({{{https://github.com/B3Partners/flamingo-ibis/issues/189}#189}})
 
   []
