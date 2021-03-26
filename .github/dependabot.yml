@@ -9,6 +9,6 @@ updates:
     timezone: Europe/Amsterdam
   open-pull-requests-limit: 25
   ignore:
-    - dependency-name: org.flamingo-mc:flamingo-mc
-        versions:
-          - ">= 5.9.x"
+  - dependency-name: org.flamingo-mc:flamingo-mc
+    versions:
+    - ">= 5.9.x"
