@@ -33,7 +33,7 @@
         <ibis-flamingo-solr-name>https://${ibis-flamingo-solr-host}/solr/</ibis-flamingo-solr-name>
         <project.build.outputTimestamp />
         <maven.changes-plugin.version>2.12.1</maven.changes-plugin.version>
-        <maven.taglist-plugin.version>2.4</maven.taglist-plugin.version>
+        <maven.taglist-plugin.version>3.0.0</maven.taglist-plugin.version>
         <maven.versions-plugin.version>2.9.0</maven.versions-plugin.version>
         <maven.javadoc-plugin.version>3.3.1</maven.javadoc-plugin.version>
         <maven.surefire.version>3.0.0-M5</maven.surefire.version>
