@@ -10,11 +10,11 @@
     <parent>
         <groupId>org.flamingo-mc</groupId>
         <artifactId>flamingo-mc</artifactId>
-        <version>5.8.4</version>
+        <version>5.8.5</version>
     </parent>
     <properties>
         <java.version>1.8</java.version>
-        <flamingo.version>5.8.4</flamingo.version>
+        <flamingo.version>5.8.5</flamingo.version>
         <project.build.sourceVersion>1.8</project.build.sourceVersion>
         <project.build.targetVersion>1.8</project.build.targetVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -325,7 +325,6 @@
                         <link>http://www.slf4j.org/apidocs</link>
                         <link>http://download.oracle.com/javaee/7/api</link>
                         <link>http://docs.geotools.org/stable/javadocs/</link>
-                        <link>https://logging.apache.org/log4j/1.2/apidocs/</link>
                     </links>
                     <author>true</author>
                     <defaultAuthor />
