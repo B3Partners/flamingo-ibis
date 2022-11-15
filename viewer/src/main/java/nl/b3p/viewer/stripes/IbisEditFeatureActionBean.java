@@ -209,8 +209,8 @@ public class IbisEditFeatureActionBean extends EditFeatureActionBean implements 
         try {
             SimpleFeature original = this.getStore().getFeatures(filter).features().next();
             if (!(original.getAttribute(WORKFLOW_FIELDNAME).toString().equalsIgnoreCase(WorkflowStatus.bewerkt.label()) &&
-                    this.getLayer().getName().equalsIgnoreCase(KAVEL_LAYER_NAME))) {
-                throw new IllegalArgumentException("Alleen 'bewerkt' kavels kunnen worden afgekeurd.");
+                    (this.getLayer().getName().equalsIgnoreCase(KAVEL_LAYER_NAME) || this.getLayer().getName().equalsIgnoreCase(TERREIN_LAYER_NAME)))) {
+                throw new IllegalArgumentException("Alleen 'bewerkt' kavels en terreinen kunnen worden afgekeurd.");
             }
             Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);
             this.getStore().removeFeatures(filter);
