@@ -9,20 +9,8 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// nl.b3p.viewer.ibis.util.WorkflowUtil
-	c46 [label=<<table title="nl.b3p.viewer.ibis.util.WorkflowUtil" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./WorkflowUtil.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> WorkflowUtil </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + updateTerreinGeometry(terreinID : Integer, layer : Layer, kavelStatus : WorkflowStatus, application : Application, em : EntityManager) </td></tr>
-		</table></td></tr>
-		</table>>, URL="./WorkflowUtil.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.ibis.util.WorkflowStatus
-	c47 [label=<<table title="nl.b3p.viewer.ibis.util.WorkflowStatus" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./WorkflowStatus.html">
+	c0 [label=<<table title="nl.b3p.viewer.ibis.util.WorkflowStatus" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./WorkflowStatus.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> WorkflowStatus </td></tr>
@@ -37,8 +25,24 @@ digraph G {
 <tr><td align="left" balign="left"> afgevoerd </td></tr>
 		</table></td></tr>
 		</table>>, URL="./WorkflowStatus.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// nl.b3p.viewer.ibis.util.DateUtils
+	c1 [label=<<table title="nl.b3p.viewer.ibis.util.DateUtils" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DateUtils.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> DateUtils </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + differenceInMonths(beginningDate : Date, endingDate : Date) : int </td></tr>
+<tr><td align="left" balign="left"> + differenceInMonths(beginningDate : Calendar, endingDate : Calendar) : int </td></tr>
+<tr><td align="left" balign="left"> + addMonth(addTo : Date) : Date </td></tr>
+<tr><td align="left" balign="left"> + getAfterDate(dateList : List&lt;Date&gt;, refDate : Date) : Date </td></tr>
+<tr><td align="left" balign="left"> + getBeforeDate(dateList : List&lt;Date&gt;, refDate : Date) : Date </td></tr>
+		</table></td></tr>
+		</table>>, URL="./DateUtils.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.ibis.util.IbisConstants
-	c48 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisConstants.html">
+	c2 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisConstants.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> IbisConstants </td></tr>
@@ -55,23 +59,19 @@ digraph G {
 <tr><td align="left" balign="left">  </td></tr>
 		</table></td></tr>
 		</table>>, URL="./IbisConstants.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// nl.b3p.viewer.ibis.util.DateUtils
-	c49 [label=<<table title="nl.b3p.viewer.ibis.util.DateUtils" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DateUtils.html">
+	// nl.b3p.viewer.ibis.util.WorkflowUtil
+	c3 [label=<<table title="nl.b3p.viewer.ibis.util.WorkflowUtil" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./WorkflowUtil.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> DateUtils </td></tr>
+<tr><td align="center" balign="center"> WorkflowUtil </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left">  </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + differenceInMonths(beginningDate : Date, endingDate : Date) : int </td></tr>
-<tr><td align="left" balign="left"> + differenceInMonths(beginningDate : Calendar, endingDate : Calendar) : int </td></tr>
-<tr><td align="left" balign="left"> + addMonth(addTo : Date) : Date </td></tr>
-<tr><td align="left" balign="left"> + getAfterDate(dateList : List&lt;Date&gt;, refDate : Date) : Date </td></tr>
-<tr><td align="left" balign="left"> + getBeforeDate(dateList : List&lt;Date&gt;, refDate : Date) : Date </td></tr>
+<tr><td align="left" balign="left"> + updateTerreinGeometry(terreinID : Integer, layer : Layer, kavelStatus : WorkflowStatus, application : Application, em : EntityManager) </td></tr>
 		</table></td></tr>
-		</table>>, URL="./DateUtils.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./WorkflowUtil.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//nl.b3p.viewer.ibis.util.WorkflowUtil implements nl.b3p.viewer.ibis.util.IbisConstants
-	c48:p -> c46:p [dir=back,arrowtail=empty,style=dashed];
+	c2:p -> c3:p [dir=back,arrowtail=empty,style=dashed];
 }
 

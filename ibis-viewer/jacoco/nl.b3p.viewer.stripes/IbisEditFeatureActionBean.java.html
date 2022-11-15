@@ -209,8 +209,8 @@ import org.stripesstuff.stripersist.Stripersist;
         try {
 <span class="nc" id="L210">            SimpleFeature original = this.getStore().getFeatures(filter).features().next();</span>
 <span class="nc bnc" id="L211" title="All 2 branches missed.">            if (!(original.getAttribute(WORKFLOW_FIELDNAME).toString().equalsIgnoreCase(WorkflowStatus.bewerkt.label()) &amp;&amp;</span>
-<span class="nc bnc" id="L212" title="All 2 branches missed.">                    this.getLayer().getName().equalsIgnoreCase(KAVEL_LAYER_NAME))) {</span>
-<span class="nc" id="L213">                throw new IllegalArgumentException(&quot;Alleen 'bewerkt' kavels kunnen worden afgekeurd.&quot;);</span>
+<span class="nc bnc" id="L212" title="All 4 branches missed.">                    (this.getLayer().getName().equalsIgnoreCase(KAVEL_LAYER_NAME) || this.getLayer().getName().equalsIgnoreCase(TERREIN_LAYER_NAME)))) {</span>
+<span class="nc" id="L213">                throw new IllegalArgumentException(&quot;Alleen 'bewerkt' kavels en terreinen kunnen worden afgekeurd.&quot;);</span>
             }
 <span class="nc" id="L215">            Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);</span>
 <span class="nc" id="L216">            this.getStore().removeFeatures(filter);</span>
@@ -477,4 +477,4 @@ import org.stripesstuff.stripersist.Stripersist;
 <span class="nc" id="L477">        this.reject = reject;</span>
 <span class="nc" id="L478">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

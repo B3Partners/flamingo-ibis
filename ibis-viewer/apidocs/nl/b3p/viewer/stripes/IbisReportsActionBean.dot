@@ -9,8 +9,26 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
+	// nl.b3p.viewer.ibis.util.IbisConstants
+	c287 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> IbisConstants </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + KAVEL_LAYER_NAME : String </td></tr>
+<tr><td align="left" balign="left"> + TERREIN_LAYER_NAME : String </td></tr>
+<tr><td align="left" balign="left"> + KAVEL_TERREIN_ID_FIELDNAME : String </td></tr>
+<tr><td align="left" balign="left"> + ID_FIELDNAME : String </td></tr>
+<tr><td align="left" balign="left"> + WORKFLOW_FIELDNAME : String </td></tr>
+<tr><td align="left" balign="left"> + MUTATIEDATUM_FIELDNAME : String </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		</table>>, URL="../ibis/util/IbisConstants.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisReportsActionBean
-	c293 [label=<<table title="nl.b3p.viewer.stripes.IbisReportsActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisReportsActionBean.html">
+	c292 [label=<<table title="nl.b3p.viewer.stripes.IbisReportsActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisReportsActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisReportsActionBean </td></tr>
 		</table></td></tr>
@@ -44,34 +62,16 @@ digraph G {
 <tr><td align="left" balign="left"> + setParams(params : String) </td></tr>
 		</table></td></tr>
 		</table>>, URL="./IbisReportsActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// nl.b3p.viewer.ibis.util.IbisConstants
-	c298 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
-<tr><td align="center" balign="center"> IbisConstants </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + KAVEL_LAYER_NAME : String </td></tr>
-<tr><td align="left" balign="left"> + TERREIN_LAYER_NAME : String </td></tr>
-<tr><td align="left" balign="left"> + KAVEL_TERREIN_ID_FIELDNAME : String </td></tr>
-<tr><td align="left" balign="left"> + ID_FIELDNAME : String </td></tr>
-<tr><td align="left" balign="left"> + WORKFLOW_FIELDNAME : String </td></tr>
-<tr><td align="left" balign="left"> + MUTATIEDATUM_FIELDNAME : String </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
-		</table></td></tr>
-		</table>>, URL="../ibis/util/IbisConstants.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//nl.b3p.viewer.stripes.IbisReportsActionBean implements net.sourceforge.stripes.action.ActionBean
-	c300:p -> c293:p [dir=back,arrowtail=empty,style=dashed];
+	c300:p -> c292:p [dir=back,arrowtail=empty,style=dashed];
 	//nl.b3p.viewer.stripes.IbisReportsActionBean implements nl.b3p.viewer.ibis.util.IbisConstants
-	c298:p -> c293:p [dir=back,arrowtail=empty,style=dashed];
+	c287:p -> c292:p [dir=back,arrowtail=empty,style=dashed];
 	// nl.b3p.viewer.stripes.IbisReportsActionBean NAVASSOC net.sourceforge.stripes.action.ActionBeanContext
-	c293:p -> c301:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c292:p -> c301:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisReportsActionBean NAVASSOC nl.b3p.viewer.config.app.Application
-	c293:p -> c302:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c292:p -> c302:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisReportsActionBean NAVASSOC nl.b3p.viewer.config.services.JDBCFeatureSource
-	c293:p -> c303:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c292:p -> c303:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// net.sourceforge.stripes.action.ActionBeanContext
 	c301 [label=<<table title="net.sourceforge.stripes.action.ActionBeanContext" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">

@@ -217,8 +217,8 @@
 <a class="jxr_linenumber" name="L209" href="#L209">209</a>         <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L210" href="#L210">210</a>             SimpleFeature original = <strong class="jxr_keyword">this</strong>.getStore().getFeatures(filter).features().next();
 <a class="jxr_linenumber" name="L211" href="#L211">211</a>             <strong class="jxr_keyword">if</strong> (!(original.getAttribute(WORKFLOW_FIELDNAME).toString().equalsIgnoreCase(WorkflowStatus.bewerkt.label()) &amp;&amp;
-<a class="jxr_linenumber" name="L212" href="#L212">212</a>                     <strong class="jxr_keyword">this</strong>.getLayer().getName().equalsIgnoreCase(KAVEL_LAYER_NAME))) {
-<a class="jxr_linenumber" name="L213" href="#L213">213</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Alleen 'bewerkt' kavels kunnen worden afgekeurd."</span>);
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>                     (<strong class="jxr_keyword">this</strong>.getLayer().getName().equalsIgnoreCase(KAVEL_LAYER_NAME) || <strong class="jxr_keyword">this</strong>.getLayer().getName().equalsIgnoreCase(TERREIN_LAYER_NAME)))) {
+<a class="jxr_linenumber" name="L213" href="#L213">213</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Alleen 'bewerkt' kavels en terreinen kunnen worden afgekeurd."</span>);
 <a class="jxr_linenumber" name="L214" href="#L214">214</a>             }
 <a class="jxr_linenumber" name="L215" href="#L215">215</a>             Object terreinID = original.getAttribute(KAVEL_TERREIN_ID_FIELDNAME);
 <a class="jxr_linenumber" name="L216" href="#L216">216</a>             <strong class="jxr_keyword">this</strong>.getStore().removeFeatures(filter);
@@ -487,6 +487,6 @@
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2020 <a href="http://www.b3partners.nl/">B3partners</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2022 <a href="https://www.b3partners.nl/">B3partners</a>. All rights reserved.</div>
 </body>
 </html>

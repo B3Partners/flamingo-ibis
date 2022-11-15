@@ -9,8 +9,26 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
+	// nl.b3p.viewer.ibis.util.IbisConstants
+	c236 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> IbisConstants </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + KAVEL_LAYER_NAME : String </td></tr>
+<tr><td align="left" balign="left"> + TERREIN_LAYER_NAME : String </td></tr>
+<tr><td align="left" balign="left"> + KAVEL_TERREIN_ID_FIELDNAME : String </td></tr>
+<tr><td align="left" balign="left"> + ID_FIELDNAME : String </td></tr>
+<tr><td align="left" balign="left"> + WORKFLOW_FIELDNAME : String </td></tr>
+<tr><td align="left" balign="left"> + MUTATIEDATUM_FIELDNAME : String </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		</table>>, URL="../ibis/util/IbisConstants.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean
-	c239 [label=<<table title="nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisFeatureInfoUtilsActionBean.html">
+	c248 [label=<<table title="nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisFeatureInfoUtilsActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisFeatureInfoUtilsActionBean </td></tr>
 		</table></td></tr>
@@ -34,36 +52,18 @@ digraph G {
 <tr><td align="left" balign="left"> + setIbisId(ibisId : String) </td></tr>
 		</table></td></tr>
 		</table>>, URL="./IbisFeatureInfoUtilsActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// nl.b3p.viewer.ibis.util.IbisConstants
-	c247 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
-<tr><td align="center" balign="center"> IbisConstants </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + KAVEL_LAYER_NAME : String </td></tr>
-<tr><td align="left" balign="left"> + TERREIN_LAYER_NAME : String </td></tr>
-<tr><td align="left" balign="left"> + KAVEL_TERREIN_ID_FIELDNAME : String </td></tr>
-<tr><td align="left" balign="left"> + ID_FIELDNAME : String </td></tr>
-<tr><td align="left" balign="left"> + WORKFLOW_FIELDNAME : String </td></tr>
-<tr><td align="left" balign="left"> + MUTATIEDATUM_FIELDNAME : String </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
-		</table></td></tr>
-		</table>>, URL="../ibis/util/IbisConstants.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean extends nl.b3p.viewer.stripes.LocalizableApplicationActionBean
-	c249:p -> c239:p [dir=back,arrowtail=empty];
+	c249:p -> c248:p [dir=back,arrowtail=empty];
 	//nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean implements nl.b3p.viewer.ibis.util.IbisConstants
-	c247:p -> c239:p [dir=back,arrowtail=empty,style=dashed];
+	c236:p -> c248:p [dir=back,arrowtail=empty,style=dashed];
 	// nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean NAVASSOC nl.b3p.viewer.config.app.Application
-	c239:p -> c250:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c248:p -> c250:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean NAVASSOC nl.b3p.viewer.config.app.ApplicationLayer
-	c239:p -> c251:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c248:p -> c251:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean NAVASSOC nl.b3p.viewer.config.services.Layer
-	c239:p -> c252:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c248:p -> c252:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean NAVASSOC net.sourceforge.stripes.action.ActionBeanContext
-	c239:p -> c253:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c248:p -> c253:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.config.services.Layer
 	c252 [label=<<table title="nl.b3p.viewer.config.services.Layer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
@@ -79,6 +79,11 @@ digraph G {
 <tr><td align="left" balign="left"> + DETAIL_WMS_STYLES : String </td></tr>
 <tr><td align="left" balign="left"> + DETAIL_ALL_CHILDREN : String </td></tr>
 <tr><td align="left" balign="left"> + DETAIL_ALTERNATE_LEGEND_IMAGE_URL : String </td></tr>
+<tr><td align="left" balign="left"> + DETAIL_USERLAYER_FILTER : String </td></tr>
+<tr><td align="left" balign="left"> + DETAIL_USERLAYER_ORIGINAL_LAYERNAME : String </td></tr>
+<tr><td align="left" balign="left"> + DETAIL_USERLAYER_ORIGINAL_LAYER_ID : String </td></tr>
+<tr><td align="left" balign="left"> + DETAIL_USERLAYER_DATE_ADDED : String </td></tr>
+<tr><td align="left" balign="left"> + DETAIL_USERLAYER_USER : String </td></tr>
 <tr><td align="left" balign="left"> + writers : Set&lt;String&gt; </td></tr>
 <tr><td align="left" balign="left"> + preventGeomEditors : Set&lt;String&gt; </td></tr>
 		</table></td></tr>
@@ -141,6 +146,8 @@ digraph G {
 <tr><td align="left" balign="left"> + setBoundingBoxes(arg0 : Map&lt;CoordinateReferenceSystem, BoundingBox&gt;) </td></tr>
 <tr><td align="left" balign="left"> + getMatrixSets() : List&lt;TileMatrixSet&gt; </td></tr>
 <tr><td align="left" balign="left"> + setMatrixSets(arg0 : List&lt;TileMatrixSet&gt;) </td></tr>
+<tr><td align="left" balign="left"> + isUserlayer() : Boolean </td></tr>
+<tr><td align="left" balign="left"> + setUserlayer(arg0 : boolean) </td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.sourceforge.stripes.action.ActionBeanContext
@@ -205,9 +212,11 @@ digraph G {
 <tr><td align="left" balign="left"> + toJSONObject(arg0 : boolean, arg1 : boolean, arg2 : EntityManager, arg3 : Application) : JSONObject </td></tr>
 <tr><td align="left" balign="left"> + addLayerListDetails(arg0 : JSONObject, arg1 : Layer) </td></tr>
 <tr><td align="left" balign="left"> + addAttributesJSON(arg0 : JSONObject, arg1 : boolean, arg2 : EntityManager) </td></tr>
-<tr><td align="left" balign="left"> + getRelationsJSON(arg0 : EntityManager) : JSONArray </td></tr>
+<tr><td align="left" balign="left"> + getRelationsJSON(arg0 : Layer) : JSONArray </td></tr>
+<tr><td align="left" balign="left"> + getInvertedRelationsJSON(arg0 : Layer, arg1 : EntityManager) : JSONArray </td></tr>
 <tr><td align="left" balign="left"> ~ processStartLayers(arg0 : Application, arg1 : ApplicationLayer, arg2 : Application) </td></tr>
 <tr><td align="left" balign="left"> ~ deepCopy(arg0 : Map&lt;&gt;, arg1 : Application, arg2 : boolean) : ApplicationLayer </td></tr>
+<tr><td align="left" balign="left"> + synchronizeFeaturetype(arg0 : EntityManager, arg1 : ActionBeanContext, arg2 : ResourceBundle, arg3 : Map&lt;String, String&gt;, arg4 : boolean) </td></tr>
 <tr><td align="left" balign="left"> + toString() : String </td></tr>
 		</table></td></tr>
 		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];

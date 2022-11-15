@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean
-	c135 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.html">
+	c143 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisAttributeListActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisAttributeListActionBean </td></tr>
 		</table></td></tr>
@@ -56,7 +56,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./IbisAttributeListActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean.AggregationLevelDate
-	c138 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.AggregationLevelDate" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisAttributeListActionBean.AggregationLevelDate.html">
+	c146 [label=<<table title="nl.b3p.viewer.stripes.IbisAttributeListActionBean.AggregationLevelDate" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisAttributeListActionBean.AggregationLevelDate.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> AggregationLevelDate </td></tr>
@@ -70,6 +70,6 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./IbisAttributeListActionBean.AggregationLevelDate.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisAttributeListActionBean NAVASSOC nl.b3p.viewer.stripes.IbisAttributeListActionBean.AggregationLevelDate
-	c135:p -> c138:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c143:p -> c146:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 }
 
