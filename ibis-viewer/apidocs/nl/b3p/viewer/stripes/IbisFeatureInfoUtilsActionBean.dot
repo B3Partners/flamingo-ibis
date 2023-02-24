@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// nl.b3p.viewer.ibis.util.IbisConstants
-	c236 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
+	c235 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ibis/util/IbisConstants.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> IbisConstants </td></tr>
@@ -28,7 +28,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="../ibis/util/IbisConstants.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean
-	c248 [label=<<table title="nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisFeatureInfoUtilsActionBean.html">
+	c240 [label=<<table title="nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IbisFeatureInfoUtilsActionBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IbisFeatureInfoUtilsActionBean </td></tr>
 		</table></td></tr>
@@ -53,17 +53,17 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./IbisFeatureInfoUtilsActionBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean extends nl.b3p.viewer.stripes.LocalizableApplicationActionBean
-	c249:p -> c248:p [dir=back,arrowtail=empty];
+	c249:p -> c240:p [dir=back,arrowtail=empty];
 	//nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean implements nl.b3p.viewer.ibis.util.IbisConstants
-	c236:p -> c248:p [dir=back,arrowtail=empty,style=dashed];
+	c235:p -> c240:p [dir=back,arrowtail=empty,style=dashed];
 	// nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean NAVASSOC nl.b3p.viewer.config.app.Application
-	c248:p -> c250:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c240:p -> c250:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean NAVASSOC nl.b3p.viewer.config.app.ApplicationLayer
-	c248:p -> c251:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c240:p -> c251:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean NAVASSOC nl.b3p.viewer.config.services.Layer
-	c248:p -> c252:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c240:p -> c252:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.stripes.IbisFeatureInfoUtilsActionBean NAVASSOC net.sourceforge.stripes.action.ActionBeanContext
-	c248:p -> c253:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c240:p -> c253:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// nl.b3p.viewer.config.services.Layer
 	c252 [label=<<table title="nl.b3p.viewer.config.services.Layer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">

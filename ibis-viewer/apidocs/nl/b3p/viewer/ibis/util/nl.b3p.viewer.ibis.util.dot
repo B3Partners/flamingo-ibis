@@ -9,24 +9,8 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// nl.b3p.viewer.ibis.util.WorkflowStatus
-	c0 [label=<<table title="nl.b3p.viewer.ibis.util.WorkflowStatus" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./WorkflowStatus.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
-<tr><td align="center" balign="center"> WorkflowStatus </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> bewerkt </td></tr>
-<tr><td align="left" balign="left"> definitief </td></tr>
-<tr><td align="left" balign="left"> archief </td></tr>
-<tr><td align="left" balign="left"> afgevoerd </td></tr>
-		</table></td></tr>
-		</table>>, URL="./WorkflowStatus.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.ibis.util.DateUtils
-	c1 [label=<<table title="nl.b3p.viewer.ibis.util.DateUtils" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DateUtils.html">
+	c0 [label=<<table title="nl.b3p.viewer.ibis.util.DateUtils" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DateUtils.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DateUtils </td></tr>
 		</table></td></tr>
@@ -42,7 +26,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./DateUtils.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.ibis.util.IbisConstants
-	c2 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisConstants.html">
+	c1 [label=<<table title="nl.b3p.viewer.ibis.util.IbisConstants" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IbisConstants.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> IbisConstants </td></tr>
@@ -60,7 +44,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./IbisConstants.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// nl.b3p.viewer.ibis.util.WorkflowUtil
-	c3 [label=<<table title="nl.b3p.viewer.ibis.util.WorkflowUtil" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./WorkflowUtil.html">
+	c2 [label=<<table title="nl.b3p.viewer.ibis.util.WorkflowUtil" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./WorkflowUtil.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> WorkflowUtil </td></tr>
 		</table></td></tr>
@@ -71,7 +55,23 @@ digraph G {
 <tr><td align="left" balign="left"> + updateTerreinGeometry(terreinID : Integer, layer : Layer, kavelStatus : WorkflowStatus, application : Application, em : EntityManager) </td></tr>
 		</table></td></tr>
 		</table>>, URL="./WorkflowUtil.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// nl.b3p.viewer.ibis.util.WorkflowStatus
+	c3 [label=<<table title="nl.b3p.viewer.ibis.util.WorkflowStatus" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./WorkflowStatus.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
+<tr><td align="center" balign="center"> WorkflowStatus </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> bewerkt </td></tr>
+<tr><td align="left" balign="left"> definitief </td></tr>
+<tr><td align="left" balign="left"> archief </td></tr>
+<tr><td align="left" balign="left"> afgevoerd </td></tr>
+		</table></td></tr>
+		</table>>, URL="./WorkflowStatus.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//nl.b3p.viewer.ibis.util.WorkflowUtil implements nl.b3p.viewer.ibis.util.IbisConstants
-	c2:p -> c3:p [dir=back,arrowtail=empty,style=dashed];
+	c1:p -> c2:p [dir=back,arrowtail=empty,style=dashed];
 }
 
