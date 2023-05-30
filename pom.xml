@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ibis-flamingo-mc</artifactId>
-    <version>4.7</version>
+    <version>4.8-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>IBIS Flamingo-MC</name>
     <description>A Flamingo based project to provide for business park development.</description>
@@ -44,7 +44,7 @@
         <connection>scm:git:git@github.com:B3Partners/flamingo-ibis.git</connection>
         <developerConnection>scm:git:git@github.com:B3Partners/flamingo-ibis.git</developerConnection>
         <url>https://github.com/B3Partners/flamingo-ibis/</url>
-        <tag>ibis-flamingo-mc-4.7</tag>
+        <tag>HEAD</tag>
     </scm>
     <ciManagement>
         <system>Jenkins</system>
