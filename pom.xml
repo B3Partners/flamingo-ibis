@@ -14,7 +14,7 @@
     </parent>
     <properties>
         <java.version>1.8</java.version>
-        <flamingo.version>5.8.14</flamingo.version>
+        <flamingo.version>5.9.1</flamingo.version>
         <project.build.sourceVersion>1.8</project.build.sourceVersion>
         <project.build.targetVersion>1.8</project.build.targetVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
